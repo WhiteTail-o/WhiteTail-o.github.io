@@ -1,417 +1,341 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>Games101_17_18 Materials | WhiteTail&#39;s Blog</title>
-  <meta name="description" content="Lecture 17 Materials and Appearances Material &#x3D;&#x3D; BRDF  a). Diffuse &#x2F; Lambertian Material    对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 Irradiance入 和出去的 ***Irradiance出 ***相同">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Lecture 17 Materials and AppearancesMaterial &#x3D;&#x3D; BRDF a). Diffuse &#x2F; Lambertian Material  对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 Irradiance入 和出去的 Irradiance出 相同；   二重积分">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Games101_17_18 Materials">
-<meta property="og:url" content="http://example.com/2022/10/03/Games101_17_18_Materials/index.html">
+<meta property="og:url" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/index.html">
 <meta property="og:site_name" content="WhiteTail&#39;s Blog">
-<meta property="og:description" content="Lecture 17 Materials and Appearances Material &#x3D;&#x3D; BRDF  a). Diffuse &#x2F; Lambertian Material    对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 Irradiance入 和出去的 ***Irradiance出 ***相同">
+<meta property="og:description" content="Lecture 17 Materials and AppearancesMaterial &#x3D;&#x3D; BRDF a). Diffuse &#x2F; Lambertian Material  对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 Irradiance入 和出去的 Irradiance出 相同；   二重积分">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat02.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/%E5%8D%8A%E7%90%83%E7%A7%AF%E5%88%86.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/%E5%8D%8A%E7%90%83%E7%A7%AF%E5%88%862.jpg">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Glossy_Mat.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Reflective_Refractive_Mat.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Perfect_Specular_Reflection.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/%E7%BB%9D%E7%BC%98%E4%BD%93_Fresnel.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/%E5%AF%BC%E4%BD%93(%E9%87%91%E5%B1%9E)_Fresnel.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/FresnelTerm.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/MicrofacetTheory.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/NormalDistribution.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/MicrofacetBRDF.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Isotropic_Anisotropic_Mat.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Anisotropic_Mat_BRDF.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/BRDF_Linearity.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/BRDF_Reciprocity_principle.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/BRDF_Is_vs_ani.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/BDPT.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/BDPT02.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/MLT_00.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/MLT_01.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/MLT_02.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/PhotonMapping.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/PhotonMapping01.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/PhotonMapping02.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/PM_biased.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/VCM00.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/IR00.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/IR01.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/ParticipatingMedia00.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/ParticipatingMedia01.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/ParticipatingMedia_Rendering.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Kajiya_Kay_Model.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model_02.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model_03.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/SSS.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/BSSRDF.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Cloth.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Cloth_BRDF.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Cloth_ParticipatingMedia.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/%E5%8D%8A%E7%90%83%E7%A7%AF%E5%88%86.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/%E5%8D%8A%E7%90%83%E7%A7%AF%E5%88%862.jpg">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Glossy_Mat.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Reflective_Refractive_Mat.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Perfect_Specular_Reflection.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Specular%20Refraction.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Snell%20Law.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Snell%20Law_02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/%E7%BB%9D%E7%BC%98%E4%BD%93_Fresnel.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/%E5%AF%BC%E4%BD%93(%E9%87%91%E5%B1%9E)_Fresnel.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/FresnelTerm.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/MicrofacetTheory.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/NormalDistribution.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/MicrofacetBRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Isotropic_Anisotropic_Mat.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Anisotropic_Mat_BRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/BRDF_Linearity.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/BRDF_Reciprocity_principle.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/BRDF_Is_vs_ani.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Advanced%20Light%20Transport_00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/BDPT.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/BDPT02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/MLT_00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/MLT_01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/MLT_02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/PhotonMapping.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/PhotonMapping01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/PhotonMapping02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/PM_biased.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/VCM00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/IR00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/IR01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Advanced%20Appearance%20Modeling.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/ParticipatingMedia00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/ParticipatingMedia01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/ParticipatingMedia_Rendering.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Kajiya_Kay_Model.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Marschner%20Model.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Marschner%20Model01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model_02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model_03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Granular%20Material.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/SSS.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/BSSRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Dipole%20Approximation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Cloth.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Cloth_BRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Cloth_ParticipatingMedia.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Detailed%20Appearance.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Detailed%20Appearance_Dn.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Detailed%20Appearance_Dn02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Detailed%20Appearance_Result.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Detailed%20Appearance_p_NDFs.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Procedural%20Appearance.png">
 <meta property="article:published_time" content="2022-10-03T10:20:10.000Z">
-<meta property="article:modified_time" content="2023-02-03T14:44:45.414Z">
+<meta property="article:modified_time" content="2023-02-03T18:05:56.348Z">
 <meta property="article:author" content="WhiteTail">
 <meta property="article:tag" content="Games101">
 <meta property="article:tag" content="图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png">
-  <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2022/10/03/Games101_17_18_Materials/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="WhiteTail&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="twitter:image" content="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png">
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/WhiteTail-o" target="_blank">
-          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+<link rel="canonical" href="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/","path":"2022/10/03/Games101_17_18_Materials/","title":"Games101_17_18 Materials"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games101_17_18 Materials | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
+      </li>
+  </ul>
+</nav>
 
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="搜索" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
   </div>
 </div>
 
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
     </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
-        
-        
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">标签</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-    </ul>
-
-    </nav>
   </div>
+
 </header>
-
+        
   
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-17-Materials-and-Appearances"><span class="nav-text">Lecture 17 Materials and Appearances</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Diffuse-Lambertian-Material"><span class="nav-text">a). Diffuse &#x2F; Lambertian Material</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Glossy-material"><span class="nav-text">b). Glossy material</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Ideal-reflective-refractive-material-BSDF"><span class="nav-text">c). Ideal reflective &#x2F; refractive material(BSDF)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1-Specular-Refraction"><span class="nav-text">c.1). Specular Refraction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-Fresnel-Reflection-%E8%8F%B2%E6%B6%85%E5%B0%94"><span class="nav-text">c.2). Fresnel Reflection(菲涅尔)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-Microfacet-Material-%E5%BE%AE%E8%A1%A8%E9%9D%A2%E6%9D%90%E8%B4%A8"><span class="nav-text">d). Microfacet Material(微表面材质)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#d-1-Microfacet-BRDF"><span class="nav-text">d.1). Microfacet BRDF</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-Isotropic-Anisotropic-Materials-BRDFs"><span class="nav-text">e). Isotropic &#x2F; Anisotropic Materials (BRDFs)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#e-1-Anisotropic-BRDFs"><span class="nav-text">e.1). Anisotropic BRDFs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#f-Properties-of-BRDFs-BRDF%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="nav-text">f). Properties of BRDFs(BRDF的性质)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-18-Advanced-Topics-in-Rendering"><span class="nav-text">Lecture 18 Advanced Topics in Rendering</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Advanced-Light-Transport"><span class="nav-text">a). Advanced Light Transport</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-1-%E5%88%86%E7%B1%BB"><span class="nav-text">a.1). 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-Bidirectional-Path-Tracing-BDPT"><span class="nav-text">a.2). Bidirectional Path Tracing(BDPT)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-3-Metropolis-Light-Transport-MLT"><span class="nav-text">a.3). Metropolis Light Transport(MLT)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-4-Photon-Mapping-%E5%85%89%E5%AD%90%E6%98%A0%E5%B0%84"><span class="nav-text">a.4). Photon Mapping(光子映射)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-5-Vertex-Connection-Merging-VCM"><span class="nav-text">a.5). Vertex Connection Merging(VCM)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-6-Instant-Radiosity-%E5%AE%9E%E6%97%B6%E8%BE%90%E5%B0%84%E5%BA%A6"><span class="nav-text">a.6). Instant Radiosity(实时辐射度)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Advanced-Appearance-Modeling"><span class="nav-text">b). Advanced Appearance Modeling</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-1-%E5%88%86%E7%B1%BB"><span class="nav-text">b.1). 分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-2-Non-surface-models"><span class="nav-text">b.2). Non-surface models</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#b-2-1-Participation-media"><span class="nav-text">b.2.1). Participation media</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-2-2-Hair-Fur-Appearance"><span class="nav-text">b.2.2). Hair&#x2F;Fur Appearance</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-2-3-Granular-Material%EF%BC%88%E9%A2%97%E7%B2%92%E6%9D%90%E8%B4%A8%EF%BC%89"><span class="nav-text">b.2.3). Granular Material（颗粒材质）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-3-Surface-models"><span class="nav-text">b.3). Surface models</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#b-3-1-Translucent-%E5%8D%8A%E9%80%8F%E6%98%8E-Material"><span class="nav-text">b.3.1). Translucent(半透明) Material</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-3-2-Cloth"><span class="nav-text">b.3.2). Cloth</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#b-3-3-Detailed-Appearance-Motivation"><span class="nav-text">b.3.3). Detailed Appearance: Motivation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-4-Procedural-Appearance"><span class="nav-text">b.4). Procedural Appearance</span></a></li></ol></li></ol></li></ol></div>
         </div>
-    </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games101/" rel="tag">Games101</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games202/" rel="tag">Games202</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Games101/" style="font-size: 13.5px;">Games101</a> <a href="/tags/Games202/" style="font-size: 13px;">Games202</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 14px;">图形学</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games101/">Games101</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Games101_17_18_Materials" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Games101_17_18 Materials
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/10/03/Games101_17_18_Materials/" class="article-date">
-	  <time datetime="2022-10-03T10:20:10.000Z" itemprop="datePublished">2022-10-03</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Games101/">Games101</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Games101/" rel="tag">Games101</a>, <a class="article-tag-link-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/03/Games101_17_18_Materials/#comments" class="article-comment-link">评论</a></span>
-        
+        </div>
       </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h1 id="lecture-17-materials-and-appearances"><a class="markdownIt-Anchor" href="#lecture-17-materials-and-appearances"></a> Lecture 17 Materials and Appearances</h1>
-<p><strong>Material == BRDF</strong></p>
-<h2 id="a-diffuse-lambertian-material"><a class="markdownIt-Anchor" href="#a-diffuse-lambertian-material"></a> a). Diffuse / Lambertian Material</h2>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png" alt="Diffuse_Lambertian_Mat"></p>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games101_17_18 Materials | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games101_17_18 Materials
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 02:05:56" itemprop="dateModified" datetime="2023-02-04T02:05:56+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Lecture-17-Materials-and-Appearances"><a href="#Lecture-17-Materials-and-Appearances" class="headerlink" title="Lecture 17 Materials and Appearances"></a>Lecture 17 Materials and Appearances</h1><p><strong>Material == BRDF</strong></p>
+<h2 id="a-Diffuse-Lambertian-Material"><a href="#a-Diffuse-Lambertian-Material" class="headerlink" title="a). Diffuse / Lambertian Material"></a>a). Diffuse / Lambertian Material</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png" alt="Diffuse_Lambertian_Mat"></p>
 <ul>
-<li>
-<p>对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 <em><strong>Irradiance<sub>入</sub></strong></em> 和出去的 ***Irradiance<sub>出 </sub>***相同；</p>
+<li><p>对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 <strong><em>Irradiance<sub>入</sub></em></strong> 和出去的 <strong><em>Irradiance<sub>出 </sub></em></strong>相同；</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat02.png" alt="Diffuse_Lambertian_Mat02"></p>
 <ul>
-<li>
-<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Bt41187ZF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=627aabb12e63b6a55ebc4e4799bb0408"><em>二重积分</em></a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Bt41187ZF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=627aabb12e63b6a55ebc4e4799bb0408"><em>二重积分</em></a></p>
 <table frame="void">
-	<tr>
+    <tr>
     <td><center><img src="/2022/10/03/Games101_17_18_Materials/半球积分.png" alt="半球积分" height="250"></center></td>
     <td><center><img src="/2022/10/03/Games101_17_18_Materials/半球积分2.jpg" alt="半球积分2" height="250"></center></td>
     </tr>
 </table>
+
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="b-glossy-material"><a class="markdownIt-Anchor" href="#b-glossy-material"></a> b). Glossy material</h2>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Glossy_Mat.png" alt="Glossy_Mat"></p>
-<h2 id="c-ideal-reflective-refractive-materialbsdf"><a class="markdownIt-Anchor" href="#c-ideal-reflective-refractive-materialbsdf"></a> c). Ideal reflective / refractive material(BSDF)</h2>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Reflective_Refractive_Mat.png" alt="Reflective_Refractive_Mat"></p>
+<h2 id="b-Glossy-material"><a href="#b-Glossy-material" class="headerlink" title="b). Glossy material"></a>b). Glossy material</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Glossy_Mat.png" alt="Glossy_Mat"></p>
+<h2 id="c-Ideal-reflective-refractive-material-BSDF"><a href="#c-Ideal-reflective-refractive-material-BSDF" class="headerlink" title="c). Ideal reflective / refractive material(BSDF)"></a>c). Ideal reflective / refractive material(BSDF)</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Reflective_Refractive_Mat.png" alt="Reflective_Refractive_Mat"></p>
 <ul>
-<li>
-<p>计算镜面反射方向</p>
+<li><p>计算镜面反射方向</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/Perfect_Specular_Reflection.png" alt="Perfect_Specular_Reflection"></p>
 <ul>
 <li>几何</li>
@@ -419,454 +343,306 @@
 </ul>
 </li>
 </ul>
-<h3 id="c1-specular-refraction"><a class="markdownIt-Anchor" href="#c1-specular-refraction"></a> c.1). Specular Refraction</h3>
-<p>![Specular Refraction](Specular Refraction.png)</p>
+<h3 id="c-1-Specular-Refraction"><a href="#c-1-Specular-Refraction" class="headerlink" title="c.1). Specular Refraction"></a>c.1). Specular Refraction</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Specular Refraction.png" alt="Specular Refraction"></p>
 <ul>
-<li>
-<p>现象：色散、Caustic等</p>
+<li><p>现象：色散、Caustic等</p>
 </li>
-<li>
-<p><strong>Snell’s Law</strong></p>
-<p>![Snell Law](Snell Law.png)</p>
+<li><p><strong>Snell’s Law</strong></p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Snell Law.png" alt="Snell Law"></p>
 <ul>
-<li>
-<p>可推出只有当光密到光疏介质时，才有可能发生折射；（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msub><mi>n</mi><mi>i</mi></msub><msub><mi>n</mi><mi>t</mi></msub></mfrac><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">{n_i\over n_t}&gt;1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1565919999999998em;vertical-align:-0.44509999999999994em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7114919999999999em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.29634285714285713em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4101em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3280857142857143em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.44509999999999994em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>）</p>
-<p>![Snell Law_02](Snell Law_02.png)</p>
+<li><p>可推出只有当光密到光疏介质时，才有可能发生折射；（${n_i\over n_t}&gt;1$）</p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Snell Law_02.png" alt="Snell Law_02"></p>
 </li>
 </ul>
 </li>
-<li>
-<p>折射属于BT(Transmit)DF;</p>
+<li><p>折射属于BT(Transmit)DF;</p>
 <ul>
-<li><strong>BTDF + BRDF = BSDF</strong></li>
+<li><strong>BTDF + BRDF = BSDF</strong> </li>
 </ul>
 </li>
 </ul>
-<h3 id="c2-fresnel-reflection菲涅尔"><a class="markdownIt-Anchor" href="#c2-fresnel-reflection菲涅尔"></a> c.2). Fresnel Reflection(菲涅尔)</h3>
-<ul>
+<h3 id="c-2-Fresnel-Reflection-菲涅尔"><a href="#c-2-Fresnel-Reflection-菲涅尔" class="headerlink" title="c.2). Fresnel Reflection(菲涅尔)"></a>c.2). Fresnel Reflection(菲涅尔)</h3><ul>
 <li>反应了特定方向的入射光的反射和折射的比例；</li>
 </ul>
 <table frame="void">
-	<tr>
+    <tr>
     <td><center><img src="/2022/10/03/Games101_17_18_Materials/绝缘体_Fresnel.png" alt="绝缘体_Fresnel" height="250"></center></td>
     <td><center><img src="/2022/10/03/Games101_17_18_Materials/导体(金属)_Fresnel.png" alt="导体(金属)_Fresnel" height="250"></center></td>
     </tr>
 </table>
+
 <ul>
 <li>左图是绝缘体的菲涅尔项，右图是导体（金属）的菲涅尔项</li>
 </ul>
 <p><img src="/2022/10/03/Games101_17_18_Materials/FresnelTerm.png" alt="FresnelTerm"></p>
-<h2 id="d-microfacet-material微表面材质"><a class="markdownIt-Anchor" href="#d-microfacet-material微表面材质"></a> d). Microfacet Material(微表面材质)</h2>
-<p><img src="/2022/10/03/Games101_17_18_Materials/MicrofacetTheory.png" alt="MicrofacetTheory"></p>
+<h2 id="d-Microfacet-Material-微表面材质"><a href="#d-Microfacet-Material-微表面材质" class="headerlink" title="d). Microfacet Material(微表面材质)"></a>d). Microfacet Material(微表面材质)</h2><p> <img src="/2022/10/03/Games101_17_18_Materials/MicrofacetTheory.png" alt="MicrofacetTheory"></p>
 <ul>
-<li>
-<p><strong>关键：</strong> 微表面的**<font color="red">法线分布</font>**</p>
+<li><p><strong>关键：</strong> 微表面的<strong><font color="red">法线分布</font></strong></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/NormalDistribution.png" alt="NormalDistribution"></p>
 </li>
 </ul>
-<h3 id="d1-microfacet-brdf"><a class="markdownIt-Anchor" href="#d1-microfacet-brdf"></a> d.1). Microfacet BRDF</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
+<h3 id="d-1-Microfacet-BRDF"><a href="#d-1-Microfacet-BRDF" class="headerlink" title="d.1). Microfacet BRDF"></a>d.1). Microfacet BRDF</h3><p><img src="/2022/10/03/Games101_17_18_Materials/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
 <ul>
 <li>菲涅尔项；</li>
-<li>Shadowing-masking term
-<ul>
+<li>Shadowing-masking term<ul>
 <li>考虑微表面之间的遮挡和阴影；</li>
 <li>当光线几乎平行与表面入射时(Grazing angle)，微表面之间遮挡变多</li>
 </ul>
 </li>
 <li>Disterbution of normals</li>
 </ul>
-<h2 id="e-isotropic-anisotropic-materials-brdfs"><a class="markdownIt-Anchor" href="#e-isotropic-anisotropic-materials-brdfs"></a> e). Isotropic / Anisotropic Materials (BRDFs)</h2>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Isotropic_Anisotropic_Mat.png" alt="Isotropic_Anisotropic_Mat"></p>
+<h2 id="e-Isotropic-Anisotropic-Materials-BRDFs"><a href="#e-Isotropic-Anisotropic-Materials-BRDFs" class="headerlink" title="e). Isotropic / Anisotropic Materials (BRDFs)"></a>e). Isotropic / Anisotropic Materials (BRDFs)</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Isotropic_Anisotropic_Mat.png" alt="Isotropic_Anisotropic_Mat"></p>
 <ul>
 <li>Key:  <strong><font color="red">directionality</font></strong> of underlying surface</li>
 </ul>
-<h3 id="e1-anisotropic-brdfs"><a class="markdownIt-Anchor" href="#e1-anisotropic-brdfs"></a> e.1). Anisotropic BRDFs</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Anisotropic_Mat_BRDF.png" alt="Anisotropic_Mat_BRDF"></p>
+<h3 id="e-1-Anisotropic-BRDFs"><a href="#e-1-Anisotropic-BRDFs" class="headerlink" title="e.1). Anisotropic BRDFs"></a>e.1). Anisotropic BRDFs</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Anisotropic_Mat_BRDF.png" alt="Anisotropic_Mat_BRDF"></p>
 <ul>
 <li>如尼龙、天鹅绒等</li>
 </ul>
-<h2 id="f-properties-of-brdfsbrdf的性质"><a class="markdownIt-Anchor" href="#f-properties-of-brdfsbrdf的性质"></a> f). Properties of BRDFs(BRDF的性质)</h2>
-<ul>
-<li>
-<p>非负性</p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>f</mi><mi>r</mi></msub><mrow><mo fence="true">(</mo><msub><mi>ω</mi><mi>i</mi></msub><mo>→</mo><msub><mi>ω</mi><mi>r</mi></msub><mo fence="true">)</mo></mrow><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f_{r}\left(\omega_{i} \rightarrow \omega_{r}\right) \geq 0
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></span></p>
-</li>
-<li>
-<p>线性性质</p>
+<h2 id="f-Properties-of-BRDFs-BRDF的性质"><a href="#f-Properties-of-BRDFs-BRDF的性质" class="headerlink" title="f). Properties of BRDFs(BRDF的性质)"></a>f). Properties of BRDFs(BRDF的性质)</h2><ul>
+<li><p>非负性</p>
+<script type="math/tex; mode=display">
+f_{r}\left(\omega_{i} \rightarrow \omega_{r}\right) \geq 0</script></li>
+<li><p>线性性质</p>
 <ul>
 <li>如 高光、漫反射、环境光等的BRDF分开计算最后再求和，和用整体的BRDF和整体的光线一起计算结果相等</li>
 </ul>
 <p><img src="/2022/10/03/Games101_17_18_Materials/BRDF_Linearity.png" alt="BRDF_Linearity"></p>
 </li>
-<li>
-<p>可逆性</p>
+<li><p>可逆性</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/BRDF_Reciprocity_principle.png" alt="BRDF_Reciprocity_principle"></p>
 </li>
-<li>
-<p>能量守恒</p>
+<li><p>能量守恒</p>
 </li>
-<li>
-<p><img src="/2022/10/03/Games101_17_18_Materials/BRDF_Is_vs_ani.png" alt="BRDF_Is_vs_ani"></p>
+<li><p><img src="/2022/10/03/Games101_17_18_Materials/BRDF_Is_vs_ani.png" alt="BRDF_Is_vs_ani"></p>
 <ul>
 <li>各向同性时，BRDF可转为三维(两个俯仰角，及方位角之差)</li>
 </ul>
 </li>
 </ul>
-<h1 id="lecture-18-advanced-topics-in-rendering"><a class="markdownIt-Anchor" href="#lecture-18-advanced-topics-in-rendering"></a> Lecture 18 Advanced Topics in Rendering</h1>
-<h2 id="a-advanced-light-transport"><a class="markdownIt-Anchor" href="#a-advanced-light-transport"></a> a). Advanced Light Transport</h2>
-<h3 id="a1-分类"><a class="markdownIt-Anchor" href="#a1-分类"></a> a.1). 分类</h3>
-<p>![Advanced Light Transport_00](Advanced Light Transport_00.png)</p>
+<h1 id="Lecture-18-Advanced-Topics-in-Rendering"><a href="#Lecture-18-Advanced-Topics-in-Rendering" class="headerlink" title="Lecture 18 Advanced Topics in Rendering"></a>Lecture 18 Advanced Topics in Rendering</h1><h2 id="a-Advanced-Light-Transport"><a href="#a-Advanced-Light-Transport" class="headerlink" title="a). Advanced Light Transport"></a>a). Advanced Light Transport</h2><h3 id="a-1-分类"><a href="#a-1-分类" class="headerlink" title="a.1). 分类"></a>a.1). 分类</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Advanced Light Transport_00.png" alt="Advanced Light Transport_00"></p>
 <ul>
 <li><strong>Unbiased（无偏）：</strong> 无论采样多少次，其数学期望和正确的值相同；</li>
-<li>否则，则为<strong>biased（有偏）</strong>
-<ul>
-<li>在某种情况下（如采样数增大），其数学期望逐渐向正确的值收敛，则称为<strong>consistent</strong>（一致的）</li>
+<li>否则，则为<strong>biased（有偏）</strong><ul>
+<li>在某种情况下（如采样数增大），其数学期望逐渐向正确的值收敛，则称为<strong>consistent</strong>（一致的） </li>
 </ul>
 </li>
 </ul>
-<h3 id="a2-bidirectional-path-tracingbdpt"><a class="markdownIt-Anchor" href="#a2-bidirectional-path-tracingbdpt"></a> a.2). Bidirectional Path Tracing(BDPT)</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/BDPT.png" alt="BDPT"></p>
+<h3 id="a-2-Bidirectional-Path-Tracing-BDPT"><a href="#a-2-Bidirectional-Path-Tracing-BDPT" class="headerlink" title="a.2). Bidirectional Path Tracing(BDPT)"></a>a.2). Bidirectional Path Tracing(BDPT)</h3><p><img src="/2022/10/03/Games101_17_18_Materials/BDPT.png" alt="BDPT"></p>
 <ul>
-<li>
-<p>当使用PT，摄影机出发的光线的第一次Bounce大部分是Diffuse时，其不容易得到光线强的方向的贡献，此时BDPT效率更高（<em>语言待优化</em>）</p>
+<li><p>当使用PT，摄影机出发的光线的第一次Bounce大部分是Diffuse时，其不容易得到光线强的方向的贡献，此时BDPT效率更高（<em>语言待优化</em>）</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/BDPT02.png" alt="BDPT02"></p>
 </li>
 </ul>
-<h3 id="a3-metropolis-light-transportmlt"><a class="markdownIt-Anchor" href="#a3-metropolis-light-transportmlt"></a> a.3). Metropolis Light Transport(MLT)</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/MLT_00.png" alt="MLT_00"></p>
+<h3 id="a-3-Metropolis-Light-Transport-MLT"><a href="#a-3-Metropolis-Light-Transport-MLT" class="headerlink" title="a.3). Metropolis Light Transport(MLT)"></a>a.3). Metropolis Light Transport(MLT)</h3><p><img src="/2022/10/03/Games101_17_18_Materials/MLT_00.png" alt="MLT_00"></p>
 <ul>
-<li>
-<p>通过<em>马尔科夫链</em> 在已有样本周围形成新样本，其得到的PDF的形状与被积函数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span> 形状一致（此时）方差最小；</p>
+<li><p>通过<em>马尔科夫链</em> 在已有样本周围形成新样本，其得到的PDF的形状与被积函数 $f(x)$ 形状一致（此时）方差最小；</p>
 </li>
-<li>
-<p>**优点：**适合复杂、困难的光线传播</p>
+<li><p><strong>优点：</strong>适合复杂、困难的光线传播</p>
 <ul>
 <li>如：图一和图二SDS(Specular-Diffuse-Specular)</li>
 </ul>
 <p><img src="/2022/10/03/Games101_17_18_Materials/MLT_01.png" alt="MLT_01"></p>
 </li>
-<li>
-<p>**缺点：**难以估计何时收敛，不知道采样到什么程度才可以没噪声，造成Dirty；</p>
+<li><p><strong>缺点：</strong>难以估计何时收敛，不知道采样到什么程度才可以没噪声，造成Dirty；</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/MLT_02.png" alt="MLT_02"></p>
 </li>
 </ul>
-<h3 id="a4-photon-mapping光子映射"><a class="markdownIt-Anchor" href="#a4-photon-mapping光子映射"></a> a.4). Photon Mapping(光子映射)</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/PhotonMapping.png" alt="PhotonMapping"></p>
+<h3 id="a-4-Photon-Mapping-光子映射"><a href="#a-4-Photon-Mapping-光子映射" class="headerlink" title="a.4). Photon Mapping(光子映射)"></a>a.4). Photon Mapping(光子映射)</h3><p> <img src="/2022/10/03/Games101_17_18_Materials/PhotonMapping.png" alt="PhotonMapping"></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/PhotonMapping01.png" alt="PhotonMapping01"></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/PhotonMapping02.png" alt="PhotonMapping02"></p>
 <ul>
-<li>
-<p><strong>做法之一：</strong></p>
+<li><p><strong>做法之一：</strong></p>
 <ol>
-<li>
-<p>光源发射光子，弹射数次后最终停留在<strong>Diffuse</strong>表面</p>
+<li><p>光源发射光子，弹射数次后最终停留在<strong>Diffuse</strong>表面</p>
 </li>
-<li>
-<p>摄影机发射光子，弹射数次后最终停留在<strong>Diffuse</strong>表面</p>
+<li><p>摄影机发射光子，弹射数次后最终停留在<strong>Diffuse</strong>表面</p>
 </li>
-<li>
-<p>局部密度估值（光子密度越大，该点越亮）；</p>
-<ul>
+<li>局部密度估值（光子密度越大，该点越亮）；<ul>
 <li>可使用KD-Tree等加速结构</li>
 </ul>
 </li>
 </ol>
 </li>
-<li>
-<p>biased会导致模糊</p>
+<li><p>biased会导致模糊</p>
 </li>
 </ul>
 <p><img src="/2022/10/03/Games101_17_18_Materials/PM_biased.png" alt="PM_biased"></p>
-<h3 id="a5-vertex-connection-mergingvcm"><a class="markdownIt-Anchor" href="#a5-vertex-connection-mergingvcm"></a> a.5). Vertex Connection Merging(VCM)</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/VCM00.png" alt="VCM00"></p>
+<h3 id="a-5-Vertex-Connection-Merging-VCM"><a href="#a-5-Vertex-Connection-Merging-VCM" class="headerlink" title="a.5). Vertex Connection Merging(VCM)"></a>a.5). Vertex Connection Merging(VCM)</h3><p><img src="/2022/10/03/Games101_17_18_Materials/VCM00.png" alt="VCM00"></p>
 <ul>
 <li>使用BDPT后，对于临近的端点使用Photon Mapping</li>
-<li><em><strong>电影常用</strong></em></li>
+<li><strong><em>电影常用</em></strong></li>
 </ul>
-<h3 id="a6-instant-radiosity实时辐射度"><a class="markdownIt-Anchor" href="#a6-instant-radiosity实时辐射度"></a> a.6). Instant Radiosity(实时辐射度)</h3>
-<p><img src="/2022/10/03/Games101_17_18_Materials/IR00.png" alt="IR00"></p>
+<h3 id="a-6-Instant-Radiosity-实时辐射度"><a href="#a-6-Instant-Radiosity-实时辐射度" class="headerlink" title="a.6). Instant Radiosity(实时辐射度)"></a>a.6). Instant Radiosity(实时辐射度)</h3><p><img src="/2022/10/03/Games101_17_18_Materials/IR00.png" alt="IR00"></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/IR01.png" alt="IR01"></p>
 <ul>
-<li><strong>出现亮点原因：</strong>
-<ul>
+<li><strong>出现亮点原因：</strong><ul>
 <li>计算直接光照时，换元成了dA，而此处换元依赖于，面积A和立体角w的计算，其中分母是距离的平方，如果距离很接近，那么就会除以一个极小值，使得结果变过大</li>
 </ul>
 </li>
 </ul>
-<h2 id="b-advanced-appearance-modeling"><a class="markdownIt-Anchor" href="#b-advanced-appearance-modeling"></a> b). Advanced Appearance Modeling</h2>
-<h3 id="b1-分类"><a class="markdownIt-Anchor" href="#b1-分类"></a> b.1). 分类</h3>
-<p>![Advanced Appearance Modeling](Advanced Appearance Modeling.png)</p>
-<h3 id="b2-non-surface-models"><a class="markdownIt-Anchor" href="#b2-non-surface-models"></a> b.2). Non-surface models</h3>
-<h4 id="b21-participation-media"><a class="markdownIt-Anchor" href="#b21-participation-media"></a> b.2.1). Participation media</h4>
-<ul>
-<li>
-<p>光在传播过程中，有穿过一个Participation medium，那么它会被<strong>吸收、散射</strong></p>
+<h2 id="b-Advanced-Appearance-Modeling"><a href="#b-Advanced-Appearance-Modeling" class="headerlink" title="b). Advanced Appearance Modeling"></a>b). Advanced Appearance Modeling</h2><h3 id="b-1-分类"><a href="#b-1-分类" class="headerlink" title="b.1). 分类"></a>b.1). 分类</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Advanced Appearance Modeling.png" alt="Advanced Appearance Modeling"></p>
+<h3 id="b-2-Non-surface-models"><a href="#b-2-Non-surface-models" class="headerlink" title="b.2). Non-surface models"></a>b.2). Non-surface models</h3><h4 id="b-2-1-Participation-media"><a href="#b-2-1-Participation-media" class="headerlink" title="b.2.1). Participation media"></a>b.2.1). Participation media</h4><ul>
+<li><p>光在传播过程中，有穿过一个Participation medium，那么它会被<strong>吸收、散射</strong></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/ParticipatingMedia00.png" alt="ParticipatingMedia00"></p>
 </li>
 </ul>
 <p><img src="/2022/10/03/Games101_17_18_Materials/ParticipatingMedia01.png" alt="ParticipatingMedia01"></p>
 <ul>
-<li>
-<p><strong>Rendering</strong></p>
+<li><p><strong>Rendering</strong></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/ParticipatingMedia_Rendering.png" alt="ParticipatingMedia_Rendering"></p>
 </li>
 </ul>
-<h4 id="b22-hairfur-appearance"><a class="markdownIt-Anchor" href="#b22-hairfur-appearance"></a> b.2.2). Hair/Fur Appearance</h4>
-<ul>
-<li>
-<p><strong>Kajiya_Kay_Model</strong></p>
+<h4 id="b-2-2-Hair-Fur-Appearance"><a href="#b-2-2-Hair-Fur-Appearance" class="headerlink" title="b.2.2). Hair/Fur Appearance"></a>b.2.2). Hair/Fur Appearance</h4><ul>
+<li><p><strong>Kajiya_Kay_Model</strong></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/Kajiya_Kay_Model.png" alt="Kajiya_Kay_Model"></p>
 </li>
-<li>
-<p><strong>Marschner Model</strong></p>
-<p>![Marschner Model](Marschner Model.png)</p>
+<li><p><strong>Marschner Model</strong></p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Marschner Model.png" alt="Marschner Model"></p>
 <ul>
-<li>
-<p>认为毛发表面类似玻璃柱，其中分为Cuticle（表皮）、Cortex（皮质，吸收光）</p>
-<p>![Marschner Model01](Marschner Model01.png)</p>
+<li><p>认为毛发表面类似玻璃柱，其中分为Cuticle（表皮）、Cortex（皮质，吸收光）</p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Marschner Model01.png" alt="Marschner Model01"></p>
 <ul>
 <li>光经过毛发被分为3项，R、TT、TRT</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>
-<p><strong>Double Cylinder Model</strong></p>
+<li><p><strong>Double Cylinder Model</strong></p>
 <ul>
-<li>
-<p>考虑了髓质（Medulla，散射光线）</p>
+<li><p>考虑了髓质（Medulla，散射光线）</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model.png" alt="Double_Cylinder_Model"></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model_02.png" alt="Double_Cylinder_Model_02"></p>
 </li>
-<li>
-<p>光经过毛发被分为5项，R、TT、TRT、TTs、TRTs</p>
+<li><p>光经过毛发被分为5项，R、TT、TRT、TTs、TRTs</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/Double_Cylinder_Model_03.png" alt="Double_Cylinder_Model_03"></p>
 </li>
 </ul>
 </li>
 </ul>
-<h4 id="b23-granular-material颗粒材质"><a class="markdownIt-Anchor" href="#b23-granular-material颗粒材质"></a> b.2.3). Granular Material（颗粒材质）</h4>
-<p>![Granular Material](Granular Material.png)</p>
-<h3 id="b3-surface-models"><a class="markdownIt-Anchor" href="#b3-surface-models"></a> b.3). Surface models</h3>
-<h4 id="b31-translucent半透明-material"><a class="markdownIt-Anchor" href="#b31-translucent半透明-material"></a> b.3.1). Translucent(半透明) Material</h4>
-<ul>
-<li>
-<p>**概念：**Translucent实际上和半透明有一定区分，它还涉及到吸收、散射（SSS）等现象。Translucent只是表示光从表面一个地方进入，再从表面一个地方射出（如玉石、人的皮肤、水母等）；</p>
+<h4 id="b-2-3-Granular-Material（颗粒材质）"><a href="#b-2-3-Granular-Material（颗粒材质）" class="headerlink" title="b.2.3). Granular Material（颗粒材质）"></a>b.2.3). Granular Material（颗粒材质）</h4><p><img src="/2022/10/03/Games101_17_18_Materials/Granular Material.png" alt="Granular Material"></p>
+<h3 id="b-3-Surface-models"><a href="#b-3-Surface-models" class="headerlink" title="b.3). Surface models"></a>b.3). Surface models</h3><h4 id="b-3-1-Translucent-半透明-Material"><a href="#b-3-1-Translucent-半透明-Material" class="headerlink" title="b.3.1). Translucent(半透明) Material"></a>b.3.1). Translucent(半透明) Material</h4><ul>
+<li><p><strong>概念：</strong>Translucent实际上和半透明有一定区分，它还涉及到吸收、散射（SSS）等现象。Translucent只是表示光从表面一个地方进入，再从表面一个地方射出（如玉石、人的皮肤、水母等）；</p>
 </li>
-<li>
-<p><strong><font color="red">Subsurface Scattering</font></strong></p>
+<li><p><strong><font color="red">Subsurface Scattering</font></strong></p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/SSS.png" alt="SSS"></p>
 <ul>
-<li>
-<p><strong>BSSRDF：</strong> 对BRDF的延伸，一点出射方向的贡献不止有该点，还有周围点的贡献（多了对面积的积分）</p>
+<li><p><strong>BSSRDF：</strong> 对BRDF的延伸，一点出射方向的贡献不止有该点，还有周围点的贡献（多了对面积的积分）</p>
 <p><img src="/2022/10/03/Games101_17_18_Materials/BSSRDF.png" alt="BSSRDF"></p>
 </li>
 </ul>
 </li>
-<li>
-<p><strong>Dipole Approximation</strong>（模拟次表面散射的一种方法）</p>
+<li><p><strong>Dipole Approximation</strong>（模拟次表面散射的一种方法）</p>
 <ul>
-<li>
-<p>材质下加入一个光源，材质上也加入一个虚拟光源</p>
-<p>![Dipole Approximation](Dipole Approximation.png)</p>
+<li><p>材质下加入一个光源，材质上也加入一个虚拟光源</p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Dipole Approximation.png" alt="Dipole Approximation"></p>
 </li>
 </ul>
 </li>
 </ul>
-<h4 id="b32-cloth"><a class="markdownIt-Anchor" href="#b32-cloth"></a> b.3.2). Cloth</h4>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Cloth.png" alt="Cloth"></p>
+<h4 id="b-3-2-Cloth"><a href="#b-3-2-Cloth" class="headerlink" title="b.3.2). Cloth"></a>b.3.2). Cloth</h4><p><img src="/2022/10/03/Games101_17_18_Materials/Cloth.png" alt="Cloth"></p>
 <ul>
-<li><strong>Rendering</strong>
-<ul>
+<li><strong>Rendering</strong><ul>
 <li>BRDF<img src="/2022/10/03/Games101_17_18_Materials/Cloth_BRDF.png" alt="Cloth_BRDF"></li>
 <li>分块，每一块都是Participating Media<img src="/2022/10/03/Games101_17_18_Materials/Cloth_ParticipatingMedia.png" alt="Cloth_ParticipatingMedia"></li>
 </ul>
 </li>
 </ul>
-<h4 id="b33-detailed-appearance-motivation"><a class="markdownIt-Anchor" href="#b33-detailed-appearance-motivation"></a> b.3.3). Detailed Appearance: Motivation</h4>
-<p>![Detailed Appearance](Detailed Appearance.png)</p>
-<p>![Detailed Appearance_Dn](Detailed Appearance_Dn.png)</p>
+<h4 id="b-3-3-Detailed-Appearance-Motivation"><a href="#b-3-3-Detailed-Appearance-Motivation" class="headerlink" title="b.3.3). Detailed Appearance: Motivation"></a>b.3.3). Detailed Appearance: Motivation</h4><p><img src="/2022/10/03/Games101_17_18_Materials/Detailed Appearance.png" alt="Detailed Appearance"></p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Detailed Appearance_Dn.png" alt="Detailed Appearance_Dn"></p>
 <ul>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">D(h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span> 过于简单，无法模拟细节</p>
-<p>![Detailed Appearance_Dn02](Detailed Appearance_Dn02.png)</p>
+<li><p>$D(h)$ 过于简单，无法模拟细节</p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Detailed Appearance_Dn02.png" alt="Detailed Appearance_Dn02"></p>
 </li>
-<li>
-<p>Result</p>
-<p>![Detailed Appearance_Result](Detailed Appearance_Result.png)</p>
+<li><p>Result</p>
+<p><img src="/2022/10/03/Games101_17_18_Materials/Detailed Appearance_Result.png" alt="Detailed Appearance_Result"></p>
 </li>
-<li>
-<p>![Detailed Appearance_p_NDFs](Detailed Appearance_p_NDFs.png)</p>
+<li><p><img src="/2022/10/03/Games101_17_18_Materials/Detailed Appearance_p_NDFs.png" alt="Detailed Appearance_p_NDFs"></p>
 </li>
 </ul>
-<h3 id="b4-procedural-appearance"><a class="markdownIt-Anchor" href="#b4-procedural-appearance"></a> b.4). Procedural Appearance</h3>
-<p>![Procedural Appearance](Procedural Appearance.png)</p>
-
-      
-    </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="http://example.com/2022/10/03/Games101_17_18_Materials/" title="Games101_17_18 Materials" target="_blank" rel="external">http://example.com/2022/10/03/Games101_17_18_Materials/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
-
-
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/WhiteTail-o" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/WhiteTail-o" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
+<h3 id="b-4-Procedural-Appearance"><a href="#b-4-Procedural-Appearance" class="headerlink" title="b.4). Procedural Appearance"></a>b.4). Procedural Appearance</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Procedural Appearance.png" alt="Procedural Appearance"></p>
 
     </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
 
+    
+    
+    
 
-  
-</div>
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Games101/" rel="tag"># Games101</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          </div>
 
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2022/10/03/Games101_21_22_Animation/" title="Games101_21_22 Animation"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
-    
-    
-    <li class="next">
-      <a href="/2022/10/03/Games101_13_16_RayTracing/" title="Games101-13-16 RayTracing"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
-    
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
-
-
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
         
-    </ul>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/03/Games101_21_22_Animation/" rel="prev" title="Games101_21_22 Animation">
+                  <i class="fa fa-chevron-left"></i> Games101_21_22 Animation
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" rel="next" title="Games101_19_20 Cameras Lenses and Light Fileds">
+                  Games101_19_20 Cameras Lenses and Light Fileds <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+
+
+
     </div>
-</footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
+  </footer>
 
-<script src="/js/plugin.min.js"></script>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
-<script src="/js/application.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: '文章',
-            PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
-            UNTITLED: '(未命名)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
 
 
-
-   
-
-
-
-
-   
-    
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
-
-
+  
 
 
 

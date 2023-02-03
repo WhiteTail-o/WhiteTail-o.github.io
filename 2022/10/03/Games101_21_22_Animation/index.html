@@ -1,379 +1,298 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>Games101_21_22 Animation | WhiteTail&#39;s Blog</title>
-  <meta name="description" content="Lecture 21 Animation  a). History  b). Keyframe  c). Physical Simualtion   c.1). Mass Spring System    Idealized spring   但永远不会停止，因此加入摩擦力        中间项为相对速度在向量ababab方向的投影，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那f">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Lecture 21 Animationa). Historyb). Keyframec). Physical Simualtion c.1). Mass Spring System  Idealized spring   但永远不会停止，因此加入摩擦力       中间项为相对速度在向量$ab$方向的投影，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b&#x3D;0$；  但是无法表">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Games101_21_22 Animation">
-<meta property="og:url" content="http://example.com/2022/10/03/Games101_21_22_Animation/index.html">
+<meta property="og:url" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/index.html">
 <meta property="og:site_name" content="WhiteTail&#39;s Blog">
-<meta property="og:description" content="Lecture 21 Animation  a). History  b). Keyframe  c). Physical Simualtion   c.1). Mass Spring System    Idealized spring   但永远不会停止，因此加入摩擦力        中间项为相对速度在向量ababab方向的投影，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那f">
+<meta property="og:description" content="Lecture 21 Animationa). Historyb). Keyframec). Physical Simualtion c.1). Mass Spring System  Idealized spring   但永远不会停止，因此加入摩擦力       中间项为相对速度在向量$ab$方向的投影，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b&#x3D;0$；  但是无法表">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/DampSpring.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/FK.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/JointTypes.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/IK_eg.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/IK00.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/Rigging.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/%E9%BE%99%E6%A0%BC%E5%BA%93%E5%A1%94.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/Position-Based.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png">
-<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MPM.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/DampSpring.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/FK.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/JointTypes.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/IK_eg.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/IK00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Rigging.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Blend%20Shapes.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Oridinary%20Differential%20Equation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Euler%E2%80%99s%20Method.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Euler%E2%80%99s%20Method_Errors01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Euler%E2%80%99s%20Method_Errors02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Combating%20Instability.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Midpoint%20Method.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Midpoint%20Method02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Implicit%20Euler%20Method.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/%E9%BE%99%E6%A0%BC%E5%BA%93%E5%A1%94.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Position-Based.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/Eulerian%20vs.%20Lagrangian.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/MPM.png">
 <meta property="article:published_time" content="2022-10-03T10:20:10.000Z">
-<meta property="article:modified_time" content="2023-02-03T14:45:02.075Z">
+<meta property="article:modified_time" content="2023-02-03T18:06:01.821Z">
 <meta property="article:author" content="WhiteTail">
 <meta property="article:tag" content="Games101">
 <meta property="article:tag" content="图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png">
-  <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2022/10/03/Games101_21_22_Animation/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="WhiteTail&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="twitter:image" content="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png">
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/WhiteTail-o" target="_blank">
-          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+<link rel="canonical" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/","path":"2022/10/03/Games101_21_22_Animation/","title":"Games101_21_22 Animation"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games101_21_22 Animation | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
+      </li>
+  </ul>
+</nav>
 
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="搜索" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
   </div>
 </div>
 
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
     </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
-        
-        
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">标签</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-    </ul>
-
-    </nav>
   </div>
+
 </header>
-
+        
   
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-21-Animation"><span class="nav-text">Lecture 21 Animation</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-History"><span class="nav-text">a). History</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Keyframe"><span class="nav-text">b). Keyframe</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Physical-Simualtion"><span class="nav-text">c). Physical Simualtion</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1-Mass-Spring-System"><span class="nav-text">c.1). Mass Spring System</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-Particle-System"><span class="nav-text">c.2). Particle System</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-Forward-Kinematics-FK"><span class="nav-text">d). Forward Kinematics(FK)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-Inverse-Kinematics-IK"><span class="nav-text">e). Inverse Kinematics(IK)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#f-Rigging"><span class="nav-text">f). Rigging</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#g-Motion-Capture-Facial-Motion-Capture"><span class="nav-text">g). Motion Capture &#x2F; Facial Motion Capture</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-22"><span class="nav-text">Lecture 22</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Single-Particle-Simulation"><span class="nav-text">a). Single Particle Simulation</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-1-Euler%E2%80%99s-Method"><span class="nav-text">a.1). Euler’s Method</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-Combating-Instability"><span class="nav-text">a.2). Combating Instability</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#a-2-1-Midpoint-Method"><span class="nav-text">a.2.1). Midpoint Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#a-2-2-Adaptive-Step-Size"><span class="nav-text">a.2.2). Adaptive Step Size</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#a-2-3-Implicit-Euler-Method"><span class="nav-text">a.2.3). Implicit Euler Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#a-2-4-Position-Based-Verlet-Integration"><span class="nav-text">a.2.4). Position-Based &#x2F; Verlet Integration</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Rigid-Body-Simulation"><span class="nav-text">b). Rigid Body Simulation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Fluid-Simulation"><span class="nav-text">c). Fluid Simulation</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#c-1-A-Simple-Position-Based-Method"><span class="nav-text">c.1). A Simple Position-Based Method</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-Eulerian-vs-Lagrangian"><span class="nav-text">c.2). Eulerian vs. Lagrangian</span></a></li></ol></li></ol></li></ol></div>
         </div>
-    </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games101/" rel="tag">Games101</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games202/" rel="tag">Games202</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Games101/" style="font-size: 13.5px;">Games101</a> <a href="/tags/Games202/" style="font-size: 13px;">Games202</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 14px;">图形学</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games101/">Games101</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Games101_21_22_Animation" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Games101_21_22 Animation
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/10/03/Games101_21_22_Animation/" class="article-date">
-	  <time datetime="2022-10-03T10:20:10.000Z" itemprop="datePublished">2022-10-03</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Games101/">Games101</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Games101/" rel="tag">Games101</a>, <a class="article-tag-link-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/03/Games101_21_22_Animation/#comments" class="article-comment-link">评论</a></span>
-        
+        </div>
       </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h1 id="lecture-21-animation"><a class="markdownIt-Anchor" href="#lecture-21-animation"></a> Lecture 21 Animation</h1>
-<h2 id="a-history"><a class="markdownIt-Anchor" href="#a-history"></a> a). History</h2>
-<h2 id="b-keyframe"><a class="markdownIt-Anchor" href="#b-keyframe"></a> b). Keyframe</h2>
-<h2 id="c-physical-simualtion"><a class="markdownIt-Anchor" href="#c-physical-simualtion"></a> c). Physical Simualtion</h2>
-<p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
-<h3 id="c1-mass-spring-system"><a class="markdownIt-Anchor" href="#c1-mass-spring-system"></a> c.1). Mass Spring System</h3>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games101_21_22 Animation | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games101_21_22 Animation
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 02:06:01" itemprop="dateModified" datetime="2023-02-04T02:06:01+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
 <ul>
-<li>
-<p><strong>Idealized spring</strong></p>
+<li><p><strong>Idealized spring</strong></p>
 <p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
 <ul>
 <li>但永远不会停止，因此加入摩擦力</li>
@@ -383,315 +302,198 @@
 <hr>
 <p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
 <ul>
-<li>
-<p>中间项为<strong>相对速度在向量<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">ab</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal">b</span></span></span></span>方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>b</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f_b=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>；</p>
+<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
 <ul>
-<li>
-<p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
 <p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
 </li>
 </ul>
 </li>
-<li>
-<p>加入两条对角线，以及skip connection</p>
+<li><p>加入两条对角线，以及skip connection</p>
 <p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
 <ul>
 <li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
 </ul>
 </li>
-<li>
-<p>**其他方式：**FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
 </li>
 </ul>
 <hr>
-<h3 id="c2-particle-system"><a class="markdownIt-Anchor" href="#c2-particle-system"></a> c.2). Particle System</h3>
-<p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
 <ul>
-<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；
-<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
 <li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
 <li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
 </ul>
 </li>
 </ul>
-<h2 id="d-forward-kinematicsfk"><a class="markdownIt-Anchor" href="#d-forward-kinematicsfk"></a> d). Forward Kinematics(FK)</h2>
-<p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
 <ul>
-<li>
-<p>关节（Joint）分类：</p>
+<li><p>关节（Joint）分类：</p>
 <p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
 </li>
 </ul>
-<h2 id="e-inverse-kinematicsik"><a class="markdownIt-Anchor" href="#e-inverse-kinematicsik"></a> e). Inverse Kinematics(IK)</h2>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
 <p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
 <ul>
 <li>解决多个解的方法：梯度下降</li>
 </ul>
-<h2 id="f-rigging"><a class="markdownIt-Anchor" href="#f-rigging"></a> f). Rigging</h2>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
 <ul>
-<li>
-<p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
-<p>![Blend Shapes](Blend Shapes.png)</p>
+<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
 </li>
 </ul>
-<h2 id="g-motion-capture-facial-motion-capture"><a class="markdownIt-Anchor" href="#g-motion-capture-facial-motion-capture"></a> g). Motion Capture / Facial Motion Capture</h2>
-<hr>
-<h1 id="lecture-22"><a class="markdownIt-Anchor" href="#lecture-22"></a> Lecture 22</h1>
-<h2 id="a-single-particle-simulation"><a class="markdownIt-Anchor" href="#a-single-particle-simulation"></a> a). Single Particle Simulation</h2>
-<p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
+<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><hr>
+<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
 <ul>
-<li>
-<p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
+<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
 </li>
-<li>
-<p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
-<p>![Oridinary Differential Equation](Oridinary Differential Equation.png)</p>
+<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
 <ul>
-<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；
-<ul>
+<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
 <li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h3 id="a1-eulers-method"><a class="markdownIt-Anchor" href="#a1-eulers-method"></a> a.1). Euler’s Method</h3>
-<p>![Euler’s Method](Euler’s Method.png)</p>
+<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
 <ul>
-<li>
-<p><strong>缺点：</strong></p>
+<li><p><strong>缺点：</strong></p>
 <ol>
-<li>
-<p>存在误差，可通过减小步长（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Delta t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span></span></span></span>）来减少误差；</p>
-<p>![Euler’s Method_Errors01](Euler’s Method_Errors01.png)</p>
+<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
 </li>
-<li>
-<p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
-<p>![Euler’s Method_Errors02](Euler’s Method_Errors02.png)</p>
+<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
 </li>
 </ol>
 </li>
 </ul>
-<h3 id="a2-combating-instability"><a class="markdownIt-Anchor" href="#a2-combating-instability"></a> a.2). Combating Instability</h3>
-<p>![Combating Instability](Combating Instability.png)</p>
-<h4 id="a21-midpoint-method"><a class="markdownIt-Anchor" href="#a21-midpoint-method"></a> a.2.1). Midpoint Method</h4>
-<p>![Midpoint Method](Midpoint Method.png)</p>
+<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
+<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
 <ul>
 <li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
 </ul>
-<p>![Midpoint Method02](Midpoint Method02.png)</p>
-<h4 id="a22-adaptive-step-size"><a class="markdownIt-Anchor" href="#a22-adaptive-step-size"></a> a.2.2). Adaptive Step Size</h4>
-<p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
-<h4 id="a23-implicit-euler-method"><a class="markdownIt-Anchor" href="#a23-implicit-euler-method"></a> a.2.3). Implicit Euler Method</h4>
-<p>![Implicit Euler Method](Implicit Euler Method.png)</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
+<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
+<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
 <ul>
 <li>使用下一时刻的速度和加速度，并求解</li>
 </ul>
 <p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
 <ul>
-<li>
-<p><strong>龙格库塔</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/%E9%BE%99%E6%A0%BC%E5%BA%93%E5%A1%94.png" alt="龙格库塔"></p>
+<li><p><strong>龙格库塔</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
 </li>
 </ul>
-<h4 id="a24-position-based-verlet-integration"><a class="markdownIt-Anchor" href="#a24-position-based-verlet-integration"></a> a.2.4). Position-Based / Verlet Integration</h4>
-<ul>
-<li>非基于物理
-<ul>
+<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
+<li>非基于物理<ul>
 <li>时间快</li>
 </ul>
 </li>
 </ul>
 <p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
 <hr>
-<h2 id="b-rigid-body-simulation"><a class="markdownIt-Anchor" href="#b-rigid-body-simulation"></a> b). Rigid Body Simulation</h2>
-<p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
+<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
 <ul>
 <li>与单粒子类似</li>
 </ul>
-<h2 id="c-fluid-simulation"><a class="markdownIt-Anchor" href="#c-fluid-simulation"></a> c). Fluid Simulation</h2>
-<h4 id="c1-a-simple-position-based-method"><a class="markdownIt-Anchor" href="#c1-a-simple-position-based-method"></a> c.1). A Simple Position-Based Method</h4>
-<p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
-<h3 id="c2-eulerian-vs-lagrangian"><a class="markdownIt-Anchor" href="#c2-eulerian-vs-lagrangian"></a> c.2). Eulerian vs. Lagrangian</h3>
-<p>![Eulerian vs. Lagrangian](Eulerian vs. Lagrangian.png)</p>
+<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
+<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
 <ul>
-<li>
-<p>拉格朗日（质点法）：考虑单个粒子的运动</p>
+<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
 </li>
-<li>
-<p>欧拉（网格法）：考虑不同位置的网格</p>
+<li><p>欧拉（网格法）：考虑不同位置的网格</p>
 </li>
-<li>
-<p>Material Point Method (MPM ，混合上两种方法)</p>
+<li><p>Material Point Method (MPM ，混合上两种方法)</p>
 <p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
 </li>
 </ul>
 
-      
     </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="http://example.com/2022/10/03/Games101_21_22_Animation/" title="Games101_21_22 Animation" target="_blank" rel="external">http://example.com/2022/10/03/Games101_21_22_Animation/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
 
-
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/WhiteTail-o" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/WhiteTail-o" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
-
-    </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" title="Games101_19_20 Cameras Lenses and Light Fileds"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
     
     
-    <li class="next">
-      <a href="/2022/10/03/Games101_17_18_Materials/" title="Games101_17_18 Materials"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
     
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
 
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Games101/" rel="tag"># Games101</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          </div>
 
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
         
-    </ul>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/03/Games101_13_16_RayTracing/" rel="prev" title="Games101-13-16 RayTracing">
+                  <i class="fa fa-chevron-left"></i> Games101-13-16 RayTracing
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/03/Games101_17_18_Materials/" rel="next" title="Games101_17_18 Materials">
+                  Games101_17_18 Materials <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+
+
+
     </div>
-</footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
+  </footer>
 
-<script src="/js/plugin.min.js"></script>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
-<script src="/js/application.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: '文章',
-            PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
-            UNTITLED: '(未命名)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
 
 
-
-   
-
-
-
-
-   
-    
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
-
-
+  
 
 
 

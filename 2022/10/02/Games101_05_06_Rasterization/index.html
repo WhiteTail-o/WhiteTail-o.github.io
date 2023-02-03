@@ -1,411 +1,324 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>Games101-5-6 Rasterization | WhiteTail&#39;s Blog</title>
-  <meta name="description" content="Lecture 05 Rasterization(Triangles)  a). Perspective Projection  如何定义一个frustum：  近平面宽度、高度（得到宽高比） FOV(Field of View)     b). Viewport transformation  经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Lecture 05 Rasterization(Triangles)a). Perspective Projection 如何定义一个frustum：   近平面宽度、高度（得到宽高比） FOV(Field of View)    b). Viewport transformation 经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]）中。之后">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Games101-5-6 Rasterization">
-<meta property="og:url" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/index.html">
+<meta property="og:url" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/index.html">
 <meta property="og:site_name" content="WhiteTail&#39;s Blog">
-<meta property="og:description" content="Lecture 05 Rasterization(Triangles)  a). Perspective Projection  如何定义一个frustum：  近平面宽度、高度（得到宽高比） FOV(Field of View)     b). Viewport transformation  经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]">
+<meta property="og:description" content="Lecture 05 Rasterization(Triangles)a). Perspective Projection 如何定义一个frustum：   近平面宽度、高度（得到宽高比） FOV(Field of View)    b). Viewport transformation 经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]）中。之后">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Frustum.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Difine_the_screen_space.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/ScreenSpace_transformation.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Triangles.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/T2PV.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/if_PinT.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Top_left_rule.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/BoundingBox.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Incremental_Triangle_Traversal.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/AS.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Aliases.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/K_space.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Low_pass_filter.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/F_Low_and_high.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/convolution.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Convolution_Theorem.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/BoxFilter.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/BoxF_LP.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/WiderFK.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Sampling.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/MixedFrequencyContents.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/AA.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Pre-Filter.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Avertage_Pixel_Value.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/SSAA.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/MSAA.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Painters_Algorithm.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Z-Buffer.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/PCode.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Z-Buffer_Algorithm.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Frustum.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Difine_the_screen_space.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/ScreenSpace_transformation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Triangles.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/T2PV.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/if_PinT.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Top_left_rule.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/BoundingBox.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Incremental_Triangle_Traversal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/AS.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Aliases.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/K_space.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/High_pass%20filter.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Low_pass_filter.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/F_Low_and_high.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/convolution.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Convolution_Theorem.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/BoxFilter.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/BoxF_LP.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/WiderFK.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Sampling.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/MixedFrequencyContents.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/AA.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Pre-Filter.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Avertage_Pixel_Value.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/SSAA.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/MSAA.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Painters_Algorithm.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Z-Buffer.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/PCode.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Z-Buffer_Algorithm.png">
 <meta property="article:published_time" content="2022-10-02T08:20:10.000Z">
-<meta property="article:modified_time" content="2023-02-03T14:44:25.987Z">
+<meta property="article:modified_time" content="2023-02-03T18:17:03.082Z">
 <meta property="article:author" content="WhiteTail">
 <meta property="article:tag" content="Games101">
 <meta property="article:tag" content="图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/10/02/Games101_05_06_Rasterization/Frustum.png">
-  <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2022/10/02/Games101_05_06_Rasterization/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="WhiteTail&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="twitter:image" content="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/Frustum.png">
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/WhiteTail-o" target="_blank">
-          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+<link rel="canonical" href="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/","path":"2022/10/02/Games101_05_06_Rasterization/","title":"Games101-5-6 Rasterization"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games101-5-6 Rasterization | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
+      </li>
+  </ul>
+</nav>
 
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="搜索" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
   </div>
 </div>
 
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
     </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
-        
-        
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">标签</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-    </ul>
-
-    </nav>
   </div>
+
 </header>
-
+        
   
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-05-Rasterization-Triangles"><span class="nav-text">Lecture 05 Rasterization(Triangles)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Perspective-Projection"><span class="nav-text">a). Perspective Projection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Viewport-transformation"><span class="nav-text">b). Viewport transformation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Rasterization"><span class="nav-text">c). Rasterization</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-6-Rasterization-2-Antialiasing-and-Z-Buffering"><span class="nav-text">Lecture 6: Rasterization 2(Antialiasing and Z-Buffering)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Sampling-Artifacts-Errors-Mistakes-Inaccuracies-in-Computer-Graphics"><span class="nav-text">a). Sampling Artifacts(Errors &#x2F; Mistakes &#x2F; Inaccuracies) in Computer Graphics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Antialiasing-Idea-Blurring-Pre-Filtering-Before-Sampling"><span class="nav-text">b). Antialiasing Idea:Blurring (Pre-Filtering) Before Sampling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Frequency-Domain"><span class="nav-text">c). Frequency Domain</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1-Fundamental"><span class="nav-text">c.1). Fundamental</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-Filtering-Getting-rid-of-certain-frequency-contents"><span class="nav-text">c.2). Filtering: Getting rid of certain frequency contents</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-3-Convolution"><span class="nav-text">c.3). Convolution</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-4-Sampling-Repeating-Frequency-Contents"><span class="nav-text">c.4). Sampling &#x3D; Repeating Frequency Contents</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-Antialiasing"><span class="nav-text">d). Antialiasing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-SSAA-Super-Sampling-Antialiasing"><span class="nav-text">e). SSAA(Super Sampling Antialiasing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#f-MSAA-Multi-Sampling-Antialiasing"><span class="nav-text">f). MSAA(Multi-Sampling Antialiasing)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#g-Other-AA"><span class="nav-text">g). Other AA</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#h-Z-buffer"><span class="nav-text">h). Z-buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#h-0-Painter%E2%80%99s-Algorithm"><span class="nav-text">h.0). Painter’s Algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#h-1-Z-buffer"><span class="nav-text">h.1). Z-buffer</span></a></li></ol></li></ol></li></ol></div>
         </div>
-    </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games101/" rel="tag">Games101</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games202/" rel="tag">Games202</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Games101/" style="font-size: 13.5px;">Games101</a> <a href="/tags/Games202/" style="font-size: 13px;">Games202</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 14px;">图形学</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games101/">Games101</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Games101_05_06_Rasterization" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Games101-5-6 Rasterization
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/10/02/Games101_05_06_Rasterization/" class="article-date">
-	  <time datetime="2022-10-02T08:20:10.000Z" itemprop="datePublished">2022-10-02</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Games101/">Games101</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Games101/" rel="tag">Games101</a>, <a class="article-tag-link-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/Games101_05_06_Rasterization/#comments" class="article-comment-link">评论</a></span>
-        
+        </div>
       </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h1 id="lecture-05-rasterizationtriangles"><a class="markdownIt-Anchor" href="#lecture-05-rasterizationtriangles"></a> Lecture 05 Rasterization(Triangles)</h1>
-<h2 id="a-perspective-projection"><a class="markdownIt-Anchor" href="#a-perspective-projection"></a> a). Perspective Projection</h2>
-<ul>
-<li>如何定义一个<strong>frustum</strong>：<img src="/2022/10/02/Games101_05_06_Rasterization/Frustum.png" alt="Frustum">
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games101-5-6 Rasterization | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games101-5-6 Rasterization
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-02 16:20:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:20:10+08:00">2022-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 02:17:03" itemprop="dateModified" datetime="2023-02-04T02:17:03+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Lecture-05-Rasterization-Triangles"><a href="#Lecture-05-Rasterization-Triangles" class="headerlink" title="Lecture 05 Rasterization(Triangles)"></a>Lecture 05 Rasterization(Triangles)</h1><h2 id="a-Perspective-Projection"><a href="#a-Perspective-Projection" class="headerlink" title="a). Perspective Projection"></a>a). Perspective Projection</h2><ul>
+<li><p>如何定义一个<strong>frustum</strong>：</p>
+<p><img src="/2022/10/02/Games101_05_06_Rasterization/Frustum.png" alt="Frustum"></p>
 <ul>
 <li>近平面宽度、高度（得到宽高比）</li>
 <li>FOV(Field of View)</li>
 </ul>
 </li>
 </ul>
-<h2 id="b-viewport-transformation"><a class="markdownIt-Anchor" href="#b-viewport-transformation"></a> b). Viewport transformation</h2>
-<ul>
-<li>经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]）中。之后就需要进行视口变换（Viewport transformation）</li>
-<li><strong>定义屏幕空间</strong><img src="/2022/10/02/Games101_05_06_Rasterization/Difine_the_screen_space.png" alt="Difine_the_screen_space">
+<h2 id="b-Viewport-transformation"><a href="#b-Viewport-transformation" class="headerlink" title="b). Viewport transformation"></a>b). Viewport transformation</h2><ul>
+<li><p>经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]）中。之后就需要进行视口变换（Viewport transformation）</p>
+</li>
+<li><p><strong>定义屏幕空间</strong></p>
+<p><img src="/2022/10/02/Games101_05_06_Rasterization/Difine_the_screen_space.png" alt="Difine_the_screen_space"></p>
 <ul>
 <li>OpenGL屏幕空间坐标原点为左下（上图），DX坐标原点为左上</li>
-<li>像素位置该像素（方块）左下角的坐标，如左下角像素坐标为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(0, 0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span>，但像素中心为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>0.5</mn><mo separator="true">,</mo><mn>0.5</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(0.5, 0.5)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span><span class="mclose">)</span></span></span></span></li>
+<li>像素位置该像素（方块）左下角的坐标，如左下角像素坐标为$(0, 0)$，但像素中心为$(0.5, 0.5)$</li>
 </ul>
 </li>
-<li><strong>Viewport transformation</strong><img src="/2022/10/02/Games101_05_06_Rasterization/ScreenSpace_transformation.png" alt="ScreenSpace_transformation"></li>
-</ul>
-<h2 id="c-rasterization"><a class="markdownIt-Anchor" href="#c-rasterization"></a> c). Rasterization</h2>
-<ul>
-<li>
-<p><strong>Frame Buffer</strong>: Memory for a Raster Display</p>
-<ul>
-<li>
-<p>显存中的一块区域</p>
+<li><p><strong>Viewport transformation</strong></p>
+<p><img src="/2022/10/02/Games101_05_06_Rasterization/ScreenSpace_transformation.png" alt="ScreenSpace_transformation"></p>
 </li>
-<li>
-<p>补充：Render texture（详情见Other/Note）</p>
+</ul>
+<h2 id="c-Rasterization"><a href="#c-Rasterization" class="headerlink" title="c). Rasterization"></a>c). Rasterization</h2><ul>
+<li><p><strong>Frame Buffer</strong>: Memory for a Raster Display</p>
 <ul>
-<li>
-<blockquote>
+<li><p>显存中的一块区域</p>
+</li>
+<li><p>补充：Render texture（详情见Other/Note）</p>
+<ul>
+<li><blockquote>
 <p>以下以Unity为例：</p>
 <p>渲染过程中，贴图最开始在CPU内存，这时的贴图被称为client-side的texture，最后被送到GPU，这时叫server-side的texture；</p>
 <p>Render texture是将FrameBufferObject连接到一个server-side的texture；</p>
@@ -419,8 +332,9 @@
 </li>
 </ul>
 </li>
-<li>
-<p><strong>Triangles - Fundamental Shape Primitives</strong></p>
+</ul>
+<ul>
+<li><p><strong>Triangles - Fundamental Shape Primitives</strong></p>
 <ul>
 <li>无法分割为其他多边形</li>
 <li>保证是一个平面</li>
@@ -429,109 +343,83 @@
 <li><img src="/2022/10/02/Games101_05_06_Rasterization/Triangles.png" alt="Triangles"></li>
 </ul>
 </li>
-<li>
-<p><strong>Fundament：</strong> <em>What Pixel Values Approximate a Triangle?<img src="/2022/10/02/Games101_05_06_Rasterization/T2PV.png" alt="T2PV"></em></p>
+<li><p><strong>Fundament：</strong> <em>What Pixel Values Approximate a Triangle?<img src="/2022/10/02/Games101_05_06_Rasterization/T2PV.png" alt="T2PV"></em></p>
 <ul>
-<li>
-<p>Sampling（采样）：逐像素中心采样，判断像素是否在三角形内</p>
+<li><p>Sampling（采样）：逐像素中心采样，判断像素是否在三角形内</p>
 <ul>
-<li>
-<pre class="highlight"><code class>for (int x = 0; x &lt; xmax; ++x)
- output[x] = f(x); 
-</code></pre>
-</li>
-<li>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/if_PinT.png" alt="if_PinT"></p>
+<li><pre><code>for (int x = 0; x &lt; xmax; ++x)
+ output[x] = f(x);
+</code></pre></li>
+<li><p><img src="/2022/10/02/Games101_05_06_Rasterization/if_PinT.png" alt="if_PinT"></p>
 </li>
 </ul>
 </li>
-<li>
-<p>**判断<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span>是否在三角形内：**做三次叉乘，看正负符号是否相同，相同则在三角形内；</p>
+<li><p><strong>判断$(x,y)$是否在三角形内：</strong>做三次叉乘，看正负符号是否相同，相同则在三角形内；</p>
 </li>
-<li>
-<p>Edge Cases：要么不做处理，要么特殊处理（OpenGL，DX里规定落于左边和上边算三角形中的点，而落于右边和下边的不算**“<em>Top</em>-<em>Left</em> <em>Rule</em>”**）<img src="/2022/10/02/Games101_05_06_Rasterization/Top_left_rule.png" alt="Top_left_rule"></p>
+<li><p>Edge Cases：要么不做处理，要么特殊处理（OpenGL，DX里规定落于左边和上边算三角形中的点，而落于右边和下边的不算<strong>“<em>Top</em>-<em>Left</em> <em>Rule</em>“</strong>）<img src="/2022/10/02/Games101_05_06_Rasterization/Top_left_rule.png" alt="Top_left_rule"></p>
 </li>
 </ul>
 </li>
-<li>
-<p><strong>光栅化加速</strong></p>
+<li><p><strong>光栅化加速</strong></p>
 <ul>
-<li>光栅化中，对每一个像素都判断是否在三角形中性能浪费过大。因此，加入**Bounding Box（包围盒）**来限定需要进行判断的区域<img src="/2022/10/02/Games101_05_06_Rasterization/BoundingBox.png" alt="BoundingBox"></li>
+<li>光栅化中，对每一个像素都判断是否在三角形中性能浪费过大。因此，加入<strong>Bounding Box（包围盒）</strong>来限定需要进行判断的区域<img src="/2022/10/02/Games101_05_06_Rasterization/BoundingBox.png" alt="BoundingBox"></li>
 <li>Incremental Triangle Traversal（找到三角形中每一行最左和最右的像素，但实际上没那么容易，是用于细长并旋转的三角形）<img src="/2022/10/02/Games101_05_06_Rasterization/Incremental_Triangle_Traversal.png" alt="Incremental_Triangle_Traversal"></li>
 </ul>
 </li>
 </ul>
-<h1 id="lecture-6-rasterization-2antialiasing-and-z-buffering"><a class="markdownIt-Anchor" href="#lecture-6-rasterization-2antialiasing-and-z-buffering"></a> Lecture 6: Rasterization 2(Antialiasing and Z-Buffering)</h1>
-<h2 id="a-sampling-artifactserrors-mistakes-inaccuracies-in-computer-graphics"><a class="markdownIt-Anchor" href="#a-sampling-artifactserrors-mistakes-inaccuracies-in-computer-graphics"></a> a). Sampling Artifacts(Errors / Mistakes / Inaccuracies) in Computer Graphics</h2>
-<ul>
-<li>由于采样造成的“Artifacts“
-<ul>
+<h1 id="Lecture-6-Rasterization-2-Antialiasing-and-Z-Buffering"><a href="#Lecture-6-Rasterization-2-Antialiasing-and-Z-Buffering" class="headerlink" title="Lecture 6: Rasterization 2(Antialiasing and Z-Buffering)"></a>Lecture 6: Rasterization 2(Antialiasing and Z-Buffering)</h1><h2 id="a-Sampling-Artifacts-Errors-Mistakes-Inaccuracies-in-Computer-Graphics"><a href="#a-Sampling-Artifacts-Errors-Mistakes-Inaccuracies-in-Computer-Graphics" class="headerlink" title="a). Sampling Artifacts(Errors / Mistakes / Inaccuracies) in Computer Graphics"></a>a). Sampling Artifacts(Errors / Mistakes / Inaccuracies) in Computer Graphics</h2><ul>
+<li>由于采样造成的“Artifacts“<ul>
 <li>锯齿（ <em>Jaggies</em>）——空间上采样</li>
 <li>摩尔纹（<em>Moire</em>）——欠采样图像</li>
 <li>车轮错觉（<em>Wagon wheel effect</em>）——时间上采样</li>
 <li>……</li>
 </ul>
 </li>
-<li>**造成错误的原因：<strong>信号频率高，而采样频率低（可联系</strong>奈奎斯特定理：**当采样频率大于信号中最高频率的2倍时(fs&gt;2f)，采样之后的数字信号完整地保留了原始信号中的信息）</li>
+<li><strong>造成错误的原因：</strong>信号频率高，而采样频率低（可联系<strong>奈奎斯特定理：</strong>当采样频率大于信号中最高频率的2倍时(fs&gt;2f)，采样之后的数字信号完整地保留了原始信号中的信息）</li>
 </ul>
-<h2 id="b-antialiasing-ideablurring-pre-filtering-before-sampling"><a class="markdownIt-Anchor" href="#b-antialiasing-ideablurring-pre-filtering-before-sampling"></a> b). Antialiasing Idea:Blurring (Pre-Filtering) Before Sampling</h2>
+<h2 id="b-Antialiasing-Idea-Blurring-Pre-Filtering-Before-Sampling"><a href="#b-Antialiasing-Idea-Blurring-Pre-Filtering-Before-Sampling" class="headerlink" title="b). Antialiasing Idea:Blurring (Pre-Filtering) Before Sampling"></a>b). Antialiasing Idea:Blurring (Pre-Filtering) Before Sampling</h2><ul>
+<li><p>抗锯齿的思路就是在采样前”模糊“；</p>
+<p><img src="/2022/10/02/Games101_05_06_Rasterization/AS.png" alt="AS"></p>
 <ul>
-<li>抗锯齿的思路就是在采样前”模糊“；<img src="/2022/10/02/Games101_05_06_Rasterization/AS.png" alt="AS">
-<ul>
-<li>**注意：**先模糊，后采样。对应频域上先低通滤波（或其他操作，如卷积、超采样，FSAA那种图像层面的抗锯齿暂不考虑），后采样（**卷积定理：**时域信号与冲激信号相乘，等于两者对应的频域信号卷积。反之，也成立）；</li>
+<li><strong>注意：</strong>先模糊，后采样。对应频域上先低通滤波（或其他操作，如卷积、超采样，FSAA那种图像层面的抗锯齿暂不考虑），后采样（<strong>卷积定理：</strong>时域信号与冲激信号相乘，等于两者对应的频域信号卷积。反之，也成立）；</li>
 </ul>
 </li>
 </ul>
-<h2 id="c-frequency-domain"><a class="markdownIt-Anchor" href="#c-frequency-domain"></a> c). Frequency Domain</h2>
-<h3 id="c1-fundamental"><a class="markdownIt-Anchor" href="#c1-fundamental"></a> c.1). Fundamental</h3>
-<ul>
-<li>
-<p>傅里叶变换</p>
+<h2 id="c-Frequency-Domain"><a href="#c-Frequency-Domain" class="headerlink" title="c). Frequency Domain"></a>c). Frequency Domain</h2><h3 id="c-1-Fundamental"><a href="#c-1-Fundamental" class="headerlink" title="c.1). Fundamental"></a>c.1). Fundamental</h3><ul>
+<li><p>傅里叶变换</p>
 </li>
-<li>
-<p>**卷积定理：**时域中乘积等于频域上卷积，反之也成立。（时域信号与冲激信号相乘，等于两者对应的频域信号卷积。反之，也成立。）</p>
+<li><p><strong>卷积定理：</strong>时域中乘积等于频域上卷积，反之也成立。（时域信号与冲激信号相乘，等于两者对应的频域信号卷积。反之，也成立。）</p>
 </li>
-<li>
-<p><strong>Aliases:</strong> 在给定的采样率下，无法区分两个不同频率<img src="/2022/10/02/Games101_05_06_Rasterization/Aliases.png" alt="Aliases"></p>
+<li><p><strong>Aliases:</strong> 在给定的采样率下，无法区分两个不同频率<img src="/2022/10/02/Games101_05_06_Rasterization/Aliases.png" alt="Aliases"></p>
 </li>
 </ul>
-<h3 id="c2-filtering-getting-rid-of-certain-frequency-contents"><a class="markdownIt-Anchor" href="#c2-filtering-getting-rid-of-certain-frequency-contents"></a> c.2). Filtering: Getting rid of certain frequency contents</h3>
-<ul>
-<li>K空间：反应图像进过二维傅里叶变换后的结果，越靠中间，频率越小；<img src="/2022/10/02/Games101_05_06_Rasterization/K_space.png" alt="K_space">
-<ul>
+<h3 id="c-2-Filtering-Getting-rid-of-certain-frequency-contents"><a href="#c-2-Filtering-Getting-rid-of-certain-frequency-contents" class="headerlink" title="c.2). Filtering: Getting rid of certain frequency contents"></a>c.2). Filtering: Getting rid of certain frequency contents</h3><ul>
+<li>K空间：反应图像进过二维傅里叶变换后的结果，越靠中间，频率越小；<img src="/2022/10/02/Games101_05_06_Rasterization/K_space.png" alt="K_space"><ul>
 <li>出现十字星的原因：把图像看成类似Wrap Mode的Repeat，即重复的图像。使得其四个方向的高频内容增加，形成十字星；</li>
 </ul>
 </li>
-<li><strong>Filter（滤波器）：</strong>
-<ul>
-<li><strong>High-pass filter</strong>![High_pass filter](High_pass filter.png)</li>
+<li><strong>Filter（滤波器）：</strong><ul>
+<li><strong>High-pass filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/High_pass filter.png" alt="High_pass filter"></li>
 <li><strong>Low-pass filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/Low_pass_filter.png" alt="Low_pass_filter"></li>
 <li>Filter Out Low and High Frequencies<img src="/2022/10/02/Games101_05_06_Rasterization/F_Low_and_high.png" alt="F_Low_and_high"></li>
 </ul>
 </li>
 </ul>
-<h3 id="c3-convolution"><a class="markdownIt-Anchor" href="#c3-convolution"></a> c.3). Convolution</h3>
-<ul>
-<li>
-<p><strong>Filtering = Convolution (= Averaging)</strong></p>
-<ul>
+<h3 id="c-3-Convolution"><a href="#c-3-Convolution" class="headerlink" title="c.3). Convolution"></a>c.3). Convolution</h3><ul>
+<li><strong>Filtering = Convolution (= Averaging)</strong><ul>
 <li>注意：只是在这里相等，而滤波和卷积概念上不相同；</li>
 </ul>
 </li>
-<li>
-<p><strong>对信号进行滤波，就是用卷积核和信号做卷积；</strong></p>
-<ul>
+<li><strong>对信号进行滤波，就是用卷积核和信号做卷积；</strong><ul>
 <li>Point-wise local averaging in a “sliding window”<img src="/2022/10/02/Games101_05_06_Rasterization/convolution.png" alt="convolution"></li>
 </ul>
 </li>
-<li>
-<p>**卷积定理：**在空域（时域）做卷积，等于在频域做乘积；反之亦然。</p>
+</ul>
 <ul>
-<li>因此，对图像滤波有两种处理方法；
-<ul>
-<li>**Option 1: **在空域上与滤波器（卷积核）做卷积；</li>
-<li>**Option 2: **
-<ol>
+<li><strong>卷积定理：</strong>在空域（时域）做卷积，等于在频域做乘积；反之亦然。<ul>
+<li>因此，对图像滤波有两种处理方法；<ul>
+<li><strong>Option 1: </strong>在空域上与滤波器（卷积核）做卷积；</li>
+<li><strong>Option 2: </strong><ol>
 <li>将图像和滤波器（卷积核）转换到频域（傅里叶变换）；</li>
 <li>两者在频域相乘；</li>
 <li>将得到的结果重新变换到空域（逆傅里叶变换）；<img src="/2022/10/02/Games101_05_06_Rasterization/Convolution_Theorem.png" alt="Convolution_Theorem"></li>
@@ -541,45 +429,35 @@
 </li>
 </ul>
 </li>
-<li>
-<p><strong>Box Filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/BoxFilter.png" alt="BoxFilter"></p>
-<ul>
+<li><strong>Box Filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/BoxFilter.png" alt="BoxFilter"><ul>
 <li>箱式滤波类似于低通滤波<img src="/2022/10/02/Games101_05_06_Rasterization/BoxF_LP.png" alt="BoxF_LP"></li>
 <li>更大的卷积核意味着更低的频率<img src="/2022/10/02/Games101_05_06_Rasterization/WiderFK.png" alt="WiderFK"></li>
 </ul>
 </li>
 </ul>
-<h3 id="c4-sampling-repeating-frequency-contents"><a class="markdownIt-Anchor" href="#c4-sampling-repeating-frequency-contents"></a> c.4). Sampling = Repeating Frequency Contents</h3>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/Sampling.png" alt="Sampling"></p>
+<h3 id="c-4-Sampling-Repeating-Frequency-Contents"><a href="#c-4-Sampling-Repeating-Frequency-Contents" class="headerlink" title="c.4). Sampling = Repeating Frequency Contents"></a>c.4). Sampling = Repeating Frequency Contents</h3><p><img src="/2022/10/02/Games101_05_06_Rasterization/Sampling.png" alt="Sampling"></p>
 <ul>
 <li>锯齿=混叠<img src="/2022/10/02/Games101_05_06_Rasterization/MixedFrequencyContents.png" alt="MixedFrequencyContents"></li>
 </ul>
-<h2 id="d-antialiasing"><a class="markdownIt-Anchor" href="#d-antialiasing"></a> d). Antialiasing</h2>
-<ul>
-<li>解决锯齿的选择：
-<ul>
-<li>提高采样率
-<ul>
+<h2 id="d-Antialiasing"><a href="#d-Antialiasing" class="headerlink" title="d). Antialiasing"></a>d). Antialiasing</h2><ul>
+<li>解决锯齿的选择：<ul>
+<li>提高采样率<ul>
 <li>增大冲激信号在频域的距离；</li>
 <li>更高分辨率的显示器；</li>
 <li>缺点：成本高，且需要很高的分辨率</li>
 </ul>
 </li>
-<li><strong>抗锯齿</strong>
-<ul>
+<li><strong>抗锯齿</strong><ul>
 <li>让信号在采样（重复，Repeat）前变“窄”，即<strong>在采样前过滤掉高频部分</strong></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><strong>Antialiasing = Limiting, then repeating</strong><img src="/2022/10/02/Games101_05_06_Rasterization/AA.png" alt="AA"></li>
-<li><img src="/2022/10/02/Games101_05_06_Rasterization/Pre-Filter.png" alt="Pre-Filter">
-<ul>
-<li>Solution:
-<ul>
-<li><strong>Convolve</strong> f(x,y) by a <strong>1-pixel box-blur</strong>
-<ul>
-<li>Recall: convolving = filtering = averaging</li>
+<li><img src="/2022/10/02/Games101_05_06_Rasterization/Pre-Filter.png" alt="Pre-Filter"><ul>
+<li>Solution: <ul>
+<li><strong>Convolve</strong> f(x,y) by a <strong>1-pixel box-blur</strong><ul>
+<li>Recall: convolving = filtering = averaging </li>
 </ul>
 </li>
 <li><strong>Then sample</strong> at every pixel’s center</li>
@@ -589,16 +467,14 @@
 </li>
 <li><strong>通过计算像素平均值来抗锯齿</strong><img src="/2022/10/02/Games101_05_06_Rasterization/Avertage_Pixel_Value.png" alt="Avertage_Pixel_Value"></li>
 </ul>
-<h2 id="e-ssaasuper-sampling-antialiasing"><a class="markdownIt-Anchor" href="#e-ssaasuper-sampling-antialiasing"></a> e). SSAA(Super Sampling Antialiasing)</h2>
-<ul>
+<h2 id="e-SSAA-Super-Sampling-Antialiasing"><a href="#e-SSAA-Super-Sampling-Antialiasing" class="headerlink" title="e). SSAA(Super Sampling Antialiasing)"></a>e). SSAA(Super Sampling Antialiasing)</h2><ul>
 <li>通过将一个像素分割成NxN个像素来进行采样和shading，最后将每个像素点内部所细分的采样点的颜色值全部加起来再求均值，作为该像素点的抗锯齿之后的颜色值<img src="/2022/10/02/Games101_05_06_Rasterization/SSAA.png" alt="SSAA"></li>
 </ul>
-<h2 id="f-msaamulti-sampling-antialiasing"><a class="markdownIt-Anchor" href="#f-msaamulti-sampling-antialiasing"></a> f). MSAA(Multi-Sampling Antialiasing)</h2>
-<ul>
+<h2 id="f-MSAA-Multi-Sampling-Antialiasing"><a href="#f-MSAA-Multi-Sampling-Antialiasing" class="headerlink" title="f). MSAA(Multi-Sampling Antialiasing)"></a>f). MSAA(Multi-Sampling Antialiasing)</h2><ul>
 <li>MSAA是对SSAA的改进。SSAA的计算量大，一个像素中会有多个点进行shading，而MSAA只是计算究竟有几个采样点会被三角形cover，计算颜色的时候只会利用像素中心坐标进行一次shading。<img src="/2022/10/02/Games101_05_06_Rasterization/MSAA.png" alt="MSAA"></li>
-<li>如图中大点所在的像素块，三角形只覆盖了其中的三个点（左下，右上，右下），则该像素的颜色为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>75</mn><mi mathvariant="normal">%</mi><mi>C</mi><mi>o</mi><mi>l</mi><mi>o</mi><msub><mi>r</mi><mrow><mi>o</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">75\%Color_{origin}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord">7</span><span class="mord">5</span><span class="mord">%</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">o</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>，<strong>之后，再对像素中心进行采样</strong></li>
-<li>**注意：**MSAA只是近似Blur，而没提高采样率。要注意和SSAA以及高分辨率的区分</li>
-<li>**在实际中，**子像素的划分并不是均匀划分为NxN，而是通过其他更有效的方法，而且有些样本还会得到复用；</li>
+<li>如图中大点所在的像素块，三角形只覆盖了其中的三个点（左下，右上，右下），则该像素的颜色为$75\%Color_{origin}$，<strong>之后，再对像素中心进行采样</strong></li>
+<li><strong>注意</strong>：MSAA只是近似Blur，而没提高采样率。要注意和SSAA以及高分辨率的区分</li>
+<li><strong>在实际中</strong>，子像素的划分并不是均匀划分为NxN，而是通过其他更有效的方法，而且有些样本还会得到复用；</li>
 </ul>
 <blockquote>
 <ul>
@@ -606,44 +482,34 @@
 <li><strong>MSAA中每个像素点有4个子采样点，每个三角形对每个像素点只在中心点着色1次</strong>，再把计算结果根据深度和覆盖信息保存到对应的子采样点，最后对4个采样点取均值作为最终的像素颜色；</li>
 </ul>
 </blockquote>
-<h2 id="g-other-aa"><a class="markdownIt-Anchor" href="#g-other-aa"></a> g). Other AA</h2>
-<ul>
-<li><strong>FXAA(Fast Approximate AA)</strong>
-<ul>
+<h2 id="g-Other-AA"><a href="#g-Other-AA" class="headerlink" title="g). Other AA"></a>g). Other AA</h2><ul>
+<li><strong>FXAA(Fast Approximate AA)</strong><ul>
 <li><strong>图像层面</strong>上进行处理，是一个后期处理，先得到有锯齿的图像，再通过图像匹配找到有锯齿的边界，之后，替换为没有锯齿的边界；</li>
 </ul>
 </li>
-<li><strong>TAA(Temporal AA)</strong>
-<ul>
+<li><strong>TAA(Temporal AA)</strong><ul>
 <li>可以联系UE_NOTE</li>
 <li>将空域采样点，均匀分布到时域上；</li>
 </ul>
 </li>
 </ul>
-<h2 id="h-z-buffer"><a class="markdownIt-Anchor" href="#h-z-buffer"></a> h). Z-buffer</h2>
-<h3 id="h0-painters-algorithm"><a class="markdownIt-Anchor" href="#h0-painters-algorithm"></a> h.0). Painter’s Algorithm</h3>
-<ul>
-<li>画家算法：
-<ul>
+<h2 id="h-Z-buffer"><a href="#h-Z-buffer" class="headerlink" title="h). Z-buffer"></a>h). Z-buffer</h2><h3 id="h-0-Painter’s-Algorithm"><a href="#h-0-Painter’s-Algorithm" class="headerlink" title="h.0). Painter’s Algorithm"></a>h.0). Painter’s Algorithm</h3><ul>
+<li>画家算法：<ul>
 <li>对三角形进行排序，先画远的，再画近的；</li>
 <li>不能解决相互遮挡问题，因此采用Z-buffer<img src="/2022/10/02/Games101_05_06_Rasterization/Painters_Algorithm.png" alt="Painters_Algorithm"></li>
 </ul>
 </li>
 </ul>
-<h3 id="h1-z-buffer"><a class="markdownIt-Anchor" href="#h1-z-buffer"></a> h.1). Z-buffer</h3>
-<ul>
-<li><strong>Idea：</strong>
-<ul>
-<li>储存**每个采样（像素）**中最小的深度值；</li>
+<h3 id="h-1-Z-buffer"><a href="#h-1-Z-buffer" class="headerlink" title="h.1). Z-buffer"></a>h.1). Z-buffer</h3><ul>
+<li><strong>Idea：</strong><ul>
+<li>储存<strong>每个采样（像素）</strong>中最小的深度值；</li>
 <li>储存深度值到缓存区（buffer）中；</li>
 </ul>
 </li>
 <li>为了简单起见，我们看作z是正数(smaller z -&gt; closer, larger z -&gt; further)；<img src="/2022/10/02/Games101_05_06_Rasterization/Z-Buffer.png" alt="Z-Buffer"></li>
-<li>深度缓存步骤：
-<ol>
+<li>深度缓存步骤：<ol>
 <li><strong>初始化深度缓存，将其中每个值初始化为∞</strong></li>
-<li><strong>遍历每个三角形面上的每一个像素点[x,y]，如果该像素点的深度值z，小于Z-buffer[x,y]中的值，则更新zbuffer[x,y]值为该点深度值z，并同时更新该像素点[x,y]的颜色为该三角形面上的该点的颜色。</strong>
-<ul>
+<li><strong>遍历每个三角形面上的每一个像素点[x,y]，如果该像素点的深度值z，小于Z-buffer[x,y]中的值，则更新zbuffer[x,y]值为该点深度值z，并同时更新该像素点[x,y]的颜色为该三角形面上的该点的颜色。</strong><ul>
 <li>伪代码：<img src="/2022/10/02/Games101_05_06_Rasterization/PCode.png" alt="PCode"></li>
 </ul>
 </li>
@@ -652,173 +518,91 @@
 </ul>
 <p><img src="/2022/10/02/Games101_05_06_Rasterization/Z-Buffer_Algorithm.png" alt="Z-Buffer_Algorithm"></p>
 <ul>
-<li>时间复杂度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>。Z-buffer并没有进行排序，只是求得最小（深度）值，因此时间复杂度为线性；</li>
+<li>时间复杂度$O(n)$。Z-buffer并没有进行排序，只是求得最小（深度）值，因此时间复杂度为线性；</li>
 <li>三角形的绘制顺序并不影响最终结果（不考虑不透明等情况）；</li>
 </ul>
 
-      
     </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="http://example.com/2022/10/02/Games101_05_06_Rasterization/" title="Games101-5-6 Rasterization" target="_blank" rel="external">http://example.com/2022/10/02/Games101_05_06_Rasterization/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
 
-
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/WhiteTail-o" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/WhiteTail-o" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
-
-    </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2022/10/02/Games101_07_09_Shading/" title="Games101-7-9 Shading"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
     
     
-    <li class="next">
-      <a href="/2022/10/02/Games101_02_04_Math/" title="Games101-2-4 Math"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
     
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
 
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Games101/" rel="tag"># Games101</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          </div>
 
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
         
-    </ul>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/02/Games101_02_04_Math/" rel="prev" title="Games101-2-4 Math">
+                  <i class="fa fa-chevron-left"></i> Games101-2-4 Math
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/02/Games101_07_09_Shading/" rel="next" title="Games101-7-9 Shading">
+                  Games101-7-9 Shading <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+
+
+
     </div>
-</footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
+  </footer>
 
-<script src="/js/plugin.min.js"></script>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
-<script src="/js/application.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: '文章',
-            PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
-            UNTITLED: '(未命名)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
 
 
-
-   
-
-
-
-
-   
-    
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
-
-
+  
 
 
 

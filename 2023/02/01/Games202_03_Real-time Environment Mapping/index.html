@@ -1,421 +1,329 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>Games202-3 Real-time Environment Mapping | WhiteTail&#39;s Blog</title>
-  <meta name="description" content="Mesh Distance Fields，Real Shading in Unreal Engine 4  a). Shading from Environment Lighting(IBL)   通过环境贴图着色的方式，又被命名为 Image-Based Lighting (IBL)   a.1). How    对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Mesh Distance Fields，Real Shading in Unreal Engine 4 a). Shading from Environment Lighting(IBL)  通过环境贴图着色的方式，又被命名为 Image-Based Lighting (IBL)  a.1). How  对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；   Ob">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Games202-3 Real-time Environment Mapping">
-<meta property="og:url" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/index.html">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/index.html">
 <meta property="og:site_name" content="WhiteTail&#39;s Blog">
-<meta property="og:description" content="Mesh Distance Fields，Real Shading in Unreal Engine 4  a). Shading from Environment Lighting(IBL)   通过环境贴图着色的方式，又被命名为 Image-Based Lighting (IBL)   a.1). How    对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；">
+<meta property="og:description" content="Mesh Distance Fields，Real Shading in Unreal Engine 4 a). Shading from Environment Lighting(IBL)  通过环境贴图着色的方式，又被命名为 Image-Based Lighting (IBL)  a.1). How  对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；   Ob">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/MicrofacetBRDF.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_3.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_4.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_0.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Shadow.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform_Freq.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Convolution.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/BasisFunc.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01a.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_BasisFunc.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading03.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading04.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01a.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase01.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02b.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_03.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase03.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_GlossyCase.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Summary.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Limitations.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet01.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet02.png">
-<meta property="og:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/MicrofacetBRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_3.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_4.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_0.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Shadow.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform_Freq.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Convolution.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/A%20general%20understanding_Basic.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/BasisFunc.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01a.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_BasisFunc.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading04.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01a.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02b.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_GlossyCase.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Summary.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Limitations.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet03.png">
 <meta property="article:published_time" content="2023-02-01T08:42:10.000Z">
-<meta property="article:modified_time" content="2023-02-03T14:45:10.669Z">
+<meta property="article:modified_time" content="2023-02-03T18:06:13.979Z">
 <meta property="article:author" content="WhiteTail">
 <meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Games202">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png">
-  <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="WhiteTail&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png">
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/WhiteTail-o" target="_blank">
-          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/","path":"2023/02/01/Games202_03_Real-time Environment Mapping/","title":"Games202-3 Real-time Environment Mapping"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games202-3 Real-time Environment Mapping | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
+      </li>
+  </ul>
+</nav>
 
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="搜索" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
   </div>
 </div>
 
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
     </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
-        
-        
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">标签</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-    </ul>
-
-    </nav>
   </div>
+
 </header>
-
+        
   
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-Shading-from-Environment-Lighting-IBL"><span class="nav-text">a). Shading from Environment Lighting(IBL)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-1-How"><span class="nav-text">a.1). How</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#We-can-safely-take-the-lighting-term-out"><span class="nav-text">We can safely take the lighting term out!</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-2-Lighting%EF%BC%88%E5%AF%B9Radiance%E7%A7%AF%E5%88%86%EF%BC%89"><span class="nav-text">a.2). Lighting（对Radiance积分）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-3-%E5%AF%B9BRDF%E7%A7%AF%E5%88%86%EF%BC%88Split-Sum%EF%BC%89"><span class="nav-text">a.3). 对BRDF积分（Split Sum）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E4%BD%BF%E7%94%A8%E5%BE%AE%E8%A1%A8%E9%9D%A2%E7%90%86%E8%AE%BA%E7%9A%84BRDF"><span class="nav-text">假设使用微表面理论的BRDF</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%87%E8%AE%BE%E4%BD%BF%E7%94%A8Lambert%E7%9A%84BRDF"><span class="nav-text">假设使用Lambert的BRDF</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-Shadow-from-Environment-Light"><span class="nav-text">b). Shadow from Environment Light</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-Spherical-Harmonics-SH-%E7%90%83%E9%9D%A2%E8%B0%90%E6%B3%A2%E5%87%BD%E6%95%B0"><span class="nav-text">c). Spherical Harmonics(SH, 球面谐波函数)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86"><span class="nav-text">c.1). 前置知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fourier-Transform"><span class="nav-text">Fourier Transform</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Convolution-Theorem"><span class="nav-text">Convolution Theorem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-general-understanding"><span class="nav-text">A general understanding</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Basis-Functions%EF%BC%88%E5%9F%BA%E5%87%BD%E6%95%B0%EF%BC%89"><span class="nav-text">Basis Functions（基函数）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-%E7%AE%80%E4%BB%8B"><span class="nav-text">c.2). 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What%EF%BC%9F"><span class="nav-text">What？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How%EF%BC%9F"><span class="nav-text">How？</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-3-%E6%80%A7%E8%B4%A8"><span class="nav-text">c.3). 性质</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#d-Shading-from-Environment-Lighting-SH-Diffuse%E9%A1%B9"><span class="nav-text">d). Shading from Environment Lighting(SH, Diffuse项)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#d-1-%E7%AE%80%E4%BB%8B"><span class="nav-text">d.1). 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-2-%E5%88%86%E6%9E%90Diffuse%E9%A1%B9%E7%9A%84BRDF"><span class="nav-text">d.2). 分析Diffuse项的BRDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-3-SH%E5%B1%95%E5%BC%80Environment-Map"><span class="nav-text">d.3). SH展开Environment Map</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#e-Precomputed-Radiance-Transfer"><span class="nav-text">e). Precomputed Radiance Transfer</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#e-1-PRT"><span class="nav-text">e.1). PRT</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-2-Diffuse-Case"><span class="nav-text">e.2). Diffuse Case</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#e-2-1-%E8%AE%A1%E7%AE%97"><span class="nav-text">e.2.1). 计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-3-Glossy-Case"><span class="nav-text">e.3). Glossy Case</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-4-%E6%80%BB%E7%BB%93%E5%92%8C%E9%99%90%E5%88%B6"><span class="nav-text">e.4). 总结和限制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#f-Wavelet-%E5%B0%8F%E6%B3%A2"><span class="nav-text">f). Wavelet(小波)</span></a></li></ol></div>
         </div>
-    </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games101/" rel="tag">Games101</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games202/" rel="tag">Games202</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Games101/" style="font-size: 13.5px;">Games101</a> <a href="/tags/Games202/" style="font-size: 13px;">Games202</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 14px;">图形学</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games101/">Games101</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Games202_03_Real-time Environment Mapping" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Games202-3 Real-time Environment Mapping
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="article-date">
-	  <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Games202/">Games202</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Games202/" rel="tag">Games202</a>, <a class="article-tag-link-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/#comments" class="article-comment-link">评论</a></span>
-        
+        </div>
       </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games202-3 Real-time Environment Mapping | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games202-3 Real-time Environment Mapping
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-01 16:42:10" itemprop="dateCreated datePublished" datetime="2023-02-01T16:42:10+08:00">2023-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 02:06:13" itemprop="dateModified" datetime="2023-02-04T02:06:13+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
         <p><a target="_blank" rel="noopener" href="https:/docs.unrealengine.com/en-US/BuildingWorlds/LightingAndShadows/MeshDistanceFields/index.html">Mesh Distance Fields</a>，<a target="_blank" rel="noopener" href="https:/cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf">Real Shading in Unreal Engine 4</a></p>
-<h1 id="a-shading-from-environment-lightingibl"><a class="markdownIt-Anchor" href="#a-shading-from-environment-lightingibl"></a> a). Shading from Environment Lighting(IBL)</h1>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png" alt="EnvironmentLight01a"></p>
+<h1 id="a-Shading-from-Environment-Lighting-IBL"><a href="#a-Shading-from-Environment-Lighting-IBL" class="headerlink" title="a). Shading from Environment Lighting(IBL)"></a>a). Shading from Environment Lighting(IBL)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png" alt="EnvironmentLight01a"></p>
 <ul>
 <li>通过环境贴图着色的方式，又被命名为 <strong>Image-Based Lighting (IBL)</strong></li>
 </ul>
-<h2 id="a1-how"><a class="markdownIt-Anchor" href="#a1-how"></a> a.1). How</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
+<h2 id="a-1-How"><a href="#a-1-How" class="headerlink" title="a.1). How"></a>a.1). How</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
 <ul>
-<li>
-<p>对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；</p>
-</li>
-<li>
-<p><strong>Observation：</strong></p>
+<li>对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；</li>
+</ul>
+<ul>
+<li><p><strong>Observation：</strong></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png" alt="IBL_BRDF"></p>
 <ul>
-<li>
-<p>对于Glossy，其BRDF支持集很小（Lobe范围小）；</p>
+<li><p>对于Glossy，其BRDF支持集很小（Lobe范围小）；</p>
 </li>
-<li>
-<p>对于Diffuse，其BRDF非常平滑；</p>
+<li><p>对于Diffuse，其BRDF非常平滑；</p>
 </li>
-<li>
-<p>联想到上节课渲染方程不等式成立的条件（拆出乘积积分的那个）</p>
+<li><p>联想到上节课渲染方程不等式成立的条件（拆出乘积积分的那个）</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png" alt="IBL_BRDF02"></p>
 <ul>
-<li>
-<p>这里<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Ω</mi><mi>G</mi></msub></mrow><annotation encoding="application/x-tex">\Omega_{G}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord">Ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">G</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 指积分域上，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">g(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>有值的区域。</p>
+<li><p>这里$\Omega_{G}$ 指积分域上，$g(x)$有值的区域。</p>
 <ul>
-<li>
-<p>如<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">g(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span> 为BRDF，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Ω</mi><mi>G</mi></msub></mrow><annotation encoding="application/x-tex">\Omega_{G}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord">Ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">G</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 即为原点向Lobe各点出发，与积分半球相交的区域集合</p>
+<li><p>如$g(x)$ 为BRDF，$\Omega_{G}$ 即为原点向Lobe各点出发，与积分半球相交的区域集合</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png" alt="IBL_BRDF02b"></p>
 </li>
 </ul>
@@ -426,35 +334,31 @@
 </li>
 </ul>
 <hr>
-<h3 id="we-can-safely-take-the-lighting-term-out"><a class="markdownIt-Anchor" href="#we-can-safely-take-the-lighting-term-out"></a> We can safely take the lighting term out!</h3>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png" alt="IBL_BRDF03"></p>
+<h3 id="We-can-safely-take-the-lighting-term-out"><a href="#We-can-safely-take-the-lighting-term-out" class="headerlink" title="We can safely take the lighting term out!"></a>We can safely take the lighting term out!</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png" alt="IBL_BRDF03"></p>
 <p>我们把渲染方程分为了两部分积分，分别是：</p>
 <ul>
-<li>在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Ω</mi><mrow><mi>f</mi><mi>r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Omega_{fr}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord">Ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>(即Lobe对应的半球区域)，对<strong>光照Radiance积分</strong></li>
+<li>在$\Omega_{fr}$(即Lobe对应的半球区域)，对<strong>光照Radiance积分</strong></li>
 <li>在半球内对BRDF积分；</li>
 </ul>
-<h2 id="a2-lighting对radiance积分"><a class="markdownIt-Anchor" href="#a2-lighting对radiance积分"></a> a.2). Lighting（对Radiance积分）</h2>
-<ul>
-<li>
-<p><strong>Lighting：</strong></p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><msub><mo>∫</mo><msub><mi mathvariant="normal">Ω</mi><msub><mi>f</mi><mi>r</mi></msub></msub></msub><msub><mi>L</mi><mi>i</mi></msub><mrow><mo fence="true">(</mo><mi>p</mi><mo separator="true">,</mo><msub><mi>ω</mi><mi>i</mi></msub><mo fence="true">)</mo></mrow><mi mathvariant="normal">d</mi><msub><mi>ω</mi><mi>i</mi></msub></mrow><mrow><msub><mo>∫</mo><msub><mi mathvariant="normal">Ω</mi><msub><mi>f</mi><mi>r</mi></msub></msub></msub><mrow><mtext> </mtext><mi mathvariant="normal">d</mi></mrow><msub><mi>ω</mi><mi>i</mi></msub></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\int_{\Omega_{f_{r}}} L_{i}\left(p, \omega_{i}\right) \mathrm{d} \omega_{i}}{\int_{\Omega_{f_{r}}} \mathrm{~d} \omega_{i}}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0133600000000005em;vertical-align:-1.25668em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.7566800000000002em;"><span style="top:-2.3049999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="margin-right:0.19445em;position:relative;top:-0.0005599999999999772em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.12251100000000004em;"><span style="top:-2.34418em;margin-left:-0.19445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight">Ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.23056em;"><span style="top:-2.3em;margin-left:-0.10764em;margin-right:0.1em;"><span class="pstrut" style="height:2.5em;"></span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2940857142857143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.56168em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mspace nobreak"> </span><span class="mord mathrm">d</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.95168em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="margin-right:0.19445em;position:relative;top:-0.0005599999999999772em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.12251100000000004em;"><span style="top:-2.34418em;margin-left:-0.19445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight">Ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.23056em;"><span style="top:-2.3em;margin-left:-0.10764em;margin-right:0.1em;"><span class="pstrut" style="height:2.5em;"></span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2940857142857143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.56168em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathnormal">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathrm">d</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.25668em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
-<ul>
-<li>
-<p>即在<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Ω</mi><mrow><mi>f</mi><mi>r</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Omega_{fr}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord">Ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10764em;">f</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>(即Lobe对应的半球区域)，对光照Radiance积分，再归一化（normalize，分母用于归一化）；</p>
+<h2 id="a-2-Lighting（对Radiance积分）"><a href="#a-2-Lighting（对Radiance积分）" class="headerlink" title="a.2). Lighting（对Radiance积分）"></a>a.2). Lighting（对Radiance积分）</h2><ul>
+<li><p><strong>Lighting：</strong> </p>
+<script type="math/tex; mode=display">
+\frac{\int_{\Omega_{f_{r}}} L_{i}\left(p, \omega_{i}\right) \mathrm{d} \omega_{i}}{\int_{\Omega_{f_{r}}} \mathrm{~d} \omega_{i}}</script><ul>
+<li><p>即在$\Omega_{fr}$(即Lobe对应的半球区域)，对光照Radiance积分，再归一化（normalize，分母用于归一化）；</p>
 </li>
-<li>
-<p>类比于PCF，就是对Environment Map做滤波；</p>
+<li><p>类比于PCF，就是对Environment Map做滤波；</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering.png" alt="IBL_Prefiltering"></p>
 <ul>
 <li><strong>滤波方法：Mipmap</strong></li>
 </ul>
 </li>
-<li>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering02.png" alt="IBL_Prefiltering02"></p>
+</ul>
+</li>
+</ul>
 <ul>
-<li>
-<p>在Shading中，需要获得Lighting项的值，只需要求得<strong>Environment Map对应Mipmap层</strong>，<strong>Lobe中点(镜面反射方向)方向</strong>的结果</p>
+<li><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering02.png" alt="IBL_Prefiltering02"></p>
+<ul>
+<li><p>在Shading中，需要获得Lighting项的值，只需要求得<strong>Environment Map对应Mipmap层</strong>，<strong>Lobe中点(镜面反射方向)方向</strong>的结果</p>
 <ul>
 <li>和百人计划图形2.5中，做Relief Mapping时在Unity用到的texCUBElod()，对Mipmap采样联系上了；</li>
 </ul>
@@ -463,98 +367,75 @@
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<h2 id="a3-对brdf积分split-sum"><a class="markdownIt-Anchor" href="#a3-对brdf积分split-sum"></a> a.3). 对BRDF积分（Split Sum）</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2.png" alt="SplitSum_2"></p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mo>∫</mo><msup><mi mathvariant="normal">Ω</mi><mo>+</mo></msup></msub><msub><mi>f</mi><mi>r</mi></msub><mo stretchy="false">(</mo><mi>p</mi><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>o</mi></msub><mo stretchy="false">)</mo><mi>c</mi><mi>o</mi><mi>s</mi><msub><mi>θ</mi><mi>i</mi></msub><mi>d</mi><msub><mi>ω</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.27195em;vertical-align:-0.9119499999999999em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011249999999999316em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:-0.42008499999999993em;"><span style="top:-1.7880500000000001em;margin-left:-0.44445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight">Ω</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7026642857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mbin mtight">+</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119499999999999em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord mathnormal">c</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
-<h3 id="假设使用微表面理论的brdf"><a class="markdownIt-Anchor" href="#假设使用微表面理论的brdf"></a> 假设使用<strong>微表面理论的BRDF</strong></h3>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
+<h2 id="a-3-对BRDF积分（Split-Sum）"><a href="#a-3-对BRDF积分（Split-Sum）" class="headerlink" title="a.3). 对BRDF积分（Split Sum）"></a>a.3). 对BRDF积分（Split Sum）</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2.png" alt="SplitSum_2"></p>
+<script type="math/tex; mode=display">
+\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i</script><h3 id="假设使用微表面理论的BRDF"><a href="#假设使用微表面理论的BRDF" class="headerlink" title="假设使用微表面理论的BRDF"></a>假设使用<strong>微表面理论的BRDF</strong></h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
 <ul>
-<li>
-<p><strong>做法：</strong> <strong>预计算</strong>考虑进所有变量（roughness、color等）的可能值的积分；</p>
-</li>
-<li>
-<p>但是，维度过高，存储成本过高，因此需要降维；</p>
-</li>
-<li>
-<p><strong>降维过程：</strong></p>
+<li><strong>做法：</strong> <strong>预计算</strong>考虑进所有变量（roughness、color等）的可能值的积分；</li>
+<li>但是，维度过高，存储成本过高，因此需要降维；</li>
+</ul>
+<ul>
+<li><p><strong>降维过程：</strong></p>
 <ol>
-<li>
-<p>对应微表面BRDF，只考虑Fresnel term(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo stretchy="false">(</mo><mi>i</mi><mo separator="true">,</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">F(i,h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span>)和distribution of normals(<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">D(h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mopen">(</span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span>)</p>
+<li><p>对应微表面BRDF，只考虑Fresnel term($F(i,h)$)和distribution of normals($D(h)$)</p>
 </li>
-<li>
-<p>Fresnel term采用<strong>the Schlick’s approximation</strong></p>
+<li><p>Fresnel term采用<strong>the Schlick’s approximation</strong></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2b.png" alt="SplitSum_2b"></p>
 <ul>
-<li>至此，积分降维为三维
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">R_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> ：零度菲涅尔值</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span> ：可表示为roughness，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span> 越大，越粗糙；</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo stretchy="false">(</mo><msub><mi>θ</mi><mi>h</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\theta(\theta_h)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">h</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> ：在实时渲染中，我们认为<strong>出射角</strong>、<strong>入射角</strong>以及<strong>入射角/出射角与半程向量的夹角</strong>，这三者是相同性质的（不是说值近似相等，而是<strong>指作为积分的元素效果相同</strong>）</li>
+<li>至此，积分降维为三维<ul>
+<li>$R_0$ ：零度菲涅尔值</li>
+<li>$\alpha$ ：可表示为roughness，$\alpha$ 越大，越粗糙；</li>
+<li>$\theta(\theta_h)$ ：在实时渲染中，我们认为<strong>出射角</strong>、<strong>入射角</strong>以及<strong>入射角/出射角与半程向量的夹角</strong>，这三者是相同性质的（不是说值近似相等，而是<strong>指作为积分的元素效果相同</strong>）</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>
-<p>在对BRDF的积分式中，通过Schlick’s approximation，将<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">R_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>拆出，即写成下列式子</p>
+<li><p>在对BRDF的积分式中，通过Schlick’s approximation，将$R_0$拆出，即写成下列式子</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_3.png" alt="SplitSum_3"></p>
 <ul>
-<li>积分现在被降维为二维（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">R_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>被拆出，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">f_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>中的菲涅尔项被分母抵消）
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span></li>
+<li>积分现在被降维为二维（$R_0$被拆出，$f_r$中的菲涅尔项被分母抵消）<ul>
+<li>$\alpha$ </li>
+<li>$\theta$ </li>
 </ul>
 </li>
 </ul>
 </li>
-<li>
-<p>至此，我们对积分的两项分别进行预计算，储存在表格或者图片中（R、G通道分别两项积分结果）通过LUT查询即可</p>
+<li><p>至此，我们对积分的两项分别进行预计算，储存在表格或者图片中（R、G通道分别两项积分结果）通过LUT查询即可</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_4.png" alt="SplitSum_4"></p>
 <ul>
-<li>而<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">R_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 则可通过BaseColor（Metallic Workflow）、Specular（Specular Workflow）贴图或软件内置（一般默认为4%）即可获得；（看百人计划美术 2.7 Metallic与Speculer流程）</li>
+<li>而$R_0$ 则可通过BaseColor（Metallic Workflow）、Specular（Specular Workflow）贴图或软件内置（一般默认为4%）即可获得；（看百人计划美术 2.7 Metallic与Speculer流程）</li>
 </ul>
 </li>
 </ol>
 </li>
-<li>
-<p><strong>名字由来：</strong> Split sum</p>
+<li><p><strong>名字由来：</strong> Split sum</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_0.png" alt="SplitSum_0"></p>
 </li>
 </ul>
-<h3 id="假设使用lambert的brdf"><a class="markdownIt-Anchor" href="#假设使用lambert的brdf"></a> 假设使用Lambert的BRDF</h3>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mo>∫</mo><msup><mi mathvariant="normal">Ω</mi><mo>+</mo></msup></msub><msub><mi>f</mi><mi>r</mi></msub><mo stretchy="false">(</mo><mi>p</mi><mo separator="true">,</mo><msub><mi>w</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>w</mi><mi>o</mi></msub><mo stretchy="false">)</mo><mi>c</mi><mi>o</mi><mi>s</mi><msub><mi>θ</mi><mi>i</mi></msub><mi>d</mi><msub><mi>ω</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.27195em;vertical-align:-0.9119499999999999em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011249999999999316em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:-0.42008499999999993em;"><span style="top:-1.7880500000000001em;margin-left:-0.44445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight">Ω</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7026642857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mbin mtight">+</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119499999999999em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord mathnormal">c</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></p>
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>r</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>π</mi></mfrac></mrow><annotation encoding="application/x-tex">f_r = {1\over \pi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">π</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∫</mo><msup><mi mathvariant="normal">Ω</mi><mo>+</mo></msup></msub><mi>c</mi><mi>o</mi><mi>s</mi><msub><mi>θ</mi><mi>i</mi></msub><mi>d</mi><msub><mi>ω</mi><mi>i</mi></msub><mo>=</mo><mi>π</mi></mrow><annotation encoding="application/x-tex">\int_{\Omega^+}cos\theta_i d\omega_i = \pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1608200000000002em;vertical-align:-0.35582em;"></span><span class="mop"><span class="mop op-symbol small-op" style="margin-right:0.19445em;position:relative;top:-0.0005599999999999772em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.13604499999999997em;"><span style="top:-2.34418em;margin-left:-0.19445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mtight">Ω</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7026642857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mbin mtight">+</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35582em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">c</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">d</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span> （看Games101 Lecture 17-18 Materials二重积分）</li>
+<h3 id="假设使用Lambert的BRDF"><a href="#假设使用Lambert的BRDF" class="headerlink" title="假设使用Lambert的BRDF"></a>假设使用Lambert的BRDF</h3><script type="math/tex; mode=display">
+\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i</script><ul>
+<li>$f_r = {1\over \pi}$</li>
+<li>$\int_{\Omega^+}cos\theta_i d\omega_i = \pi$ （看Games101 Lecture 17-18 Materials二重积分）</li>
 <li>所以正好BRDF积分为1</li>
 </ul>
 <hr>
-<h1 id="b-shadow-from-environment-light"><a class="markdownIt-Anchor" href="#b-shadow-from-environment-light"></a> b). Shadow from Environment Light</h1>
-<ul>
-<li>
-<p>在实时渲染中，没有完美的解决方案；</p>
+<h1 id="b-Shadow-from-Environment-Light"><a href="#b-Shadow-from-Environment-Light" class="headerlink" title="b). Shadow from Environment Light"></a>b). Shadow from Environment Light</h1><ul>
+<li><p>在实时渲染中，没有完美的解决方案；</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Shadow.png" alt="IBL_Shadow"></p>
 <ul>
-<li>难以用实时渲染方程（那个不等式）来近似：
-<ul>
+<li>难以用实时渲染方程（那个不等式）来近似：<ul>
 <li>Support大，为整个半球</li>
 <li>带有Gloosy项，不够smooth</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>
-<p><strong>工业界方法：</strong></p>
+<li><p><strong>工业界方法：</strong></p>
 <ul>
 <li>只计算最亮的灯光（如UE中HDRI带一个Direction Light）</li>
 </ul>
 </li>
-<li>
-<p>Related research</p>
-<ul>
+<li>Related research <ul>
 <li>Imperfect shadow maps</li>
 <li>Light cuts</li>
 <li>RTRT (Real-Time Ray Tracing, might be the ultimate solution)</li>
@@ -562,74 +443,54 @@
 </ul>
 </li>
 </ul>
-<h1 id="c-spherical-harmonicssh-球面谐波函数"><a class="markdownIt-Anchor" href="#c-spherical-harmonicssh-球面谐波函数"></a> c). Spherical Harmonics(SH, 球面谐波函数)</h1>
-<h2 id="c1-前置知识"><a class="markdownIt-Anchor" href="#c1-前置知识"></a> c.1). 前置知识</h2>
-<h3 id="fourier-transform"><a class="markdownIt-Anchor" href="#fourier-transform"></a> Fourier Transform</h3>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform.png" alt="FourierTransform"></p>
+<h1 id="c-Spherical-Harmonics-SH-球面谐波函数"><a href="#c-Spherical-Harmonics-SH-球面谐波函数" class="headerlink" title="c). Spherical Harmonics(SH, 球面谐波函数)"></a>c). Spherical Harmonics(SH, 球面谐波函数)</h1><h2 id="c-1-前置知识"><a href="#c-1-前置知识" class="headerlink" title="c.1). 前置知识"></a>c.1). 前置知识</h2><h3 id="Fourier-Transform"><a href="#Fourier-Transform" class="headerlink" title="Fourier Transform"></a>Fourier Transform</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform.png" alt="FourierTransform"></p>
 <ul>
-<li>
-<p>这里是偶函数，所以 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>i</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">sin</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span></span></span></span> 项系数都为0</p>
+<li><p>这里是偶函数，所以 $sin$ 项系数都为0</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform_Freq.png" alt="FourierTransform_Freq"></p>
 </li>
 </ul>
-<h3 id="convolution-theorem"><a class="markdownIt-Anchor" href="#convolution-theorem"></a> Convolution Theorem</h3>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Convolution.png" alt="Convolution"></p>
+<h3 id="Convolution-Theorem"><a href="#Convolution-Theorem" class="headerlink" title="Convolution Theorem"></a>Convolution Theorem</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Convolution.png" alt="Convolution"></p>
 <ul>
 <li><strong>时域卷积等于频域乘积</strong></li>
 </ul>
-<h3 id="a-general-understanding"><a class="markdownIt-Anchor" href="#a-general-understanding"></a> A general understanding</h3>
-<p>![A general understanding_Basic](A general understanding_Basic.png)</p>
+<h3 id="A-general-understanding"><a href="#A-general-understanding" class="headerlink" title="A general understanding"></a>A general understanding</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/A general understanding_Basic.png" alt="A general understanding_Basic"></p>
 <ul>
-<li>
-<p><strong>product intergral:</strong> 相乘后积分，对应离散的情况就是相乘后相加。如：</p>
+<li><p><strong>product intergral:</strong> 相乘后积分，对应离散的情况就是相乘后相加。如：</p>
 <ul>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>维向量<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">a</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>x</mi><mn>2</mn></msub><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\bold{a} = (x_1, x_2,...,x_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">a</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">b</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>y</mi><mn>2</mn></msub><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo separator="true">,</mo><msub><mi>y</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\bold{b} = (y_1, y_2,...,y_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">b</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 进行product intergral，即点乘</p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">a</mi><mo>⋅</mo><mi mathvariant="bold">b</mi><mo>=</mo><msub><mi>x</mi><mn>1</mn></msub><msub><mi>y</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><msub><mi>y</mi><mn>2</mn></msub><mo>+</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub><msub><mi>y</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">\bold{a} \cdot \bold{b} = x_1y_1+x_2y_2+...+x_ny_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44445em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">a</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">b</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></p>
+<li><p>$n$维向量$\bold{a} = (x_1, x_2,…,x_n)$ 和 $\bold{b} = (y_1, y_2,…,y_n)$ 进行product intergral，即点乘</p>
+<p>$\bold{a} \cdot \bold{b} = x_1y_1+x_2y_2+…+x_ny_n$</p>
 </li>
 </ul>
 </li>
-<li>
-<p>我们认为，<strong>函数相乘后积分（product intergral），就是滤波（卷积）</strong></p>
+<li><p>我们认为，<strong>函数相乘后积分（product intergral），就是滤波（卷积）</strong></p>
 </li>
-<li>
-<p>积分结果的频率，取决于频率最低的项（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x),g(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>）</p>
-</li>
+<li>积分结果的频率，取决于频率最低的项（$f(x),g(x)$）</li>
 </ul>
-<h3 id="basis-functions基函数"><a class="markdownIt-Anchor" href="#basis-functions基函数"></a> Basis Functions（基函数）</h3>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/BasisFunc.png" alt="BasisFunc"></p>
+<h3 id="Basis-Functions（基函数）"><a href="#Basis-Functions（基函数）" class="headerlink" title="Basis Functions（基函数）"></a>Basis Functions（基函数）</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/BasisFunc.png" alt="BasisFunc"></p>
 <ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 为系数</li>
+<li>$c_i$ 为系数</li>
 <li>如傅里叶变换中，各项就为正交基；</li>
 <li>或者多项式和泰勒展开等</li>
 </ul>
-<h2 id="c2-简介"><a class="markdownIt-Anchor" href="#c2-简介"></a> c.2). 简介</h2>
-<h3 id="what"><a class="markdownIt-Anchor" href="#what"></a> What？</h3>
-<ul>
-<li>
-<p><strong>球谐函数</strong> 是<strong>一系列</strong> <strong>二维球面函数的正交基函数</strong></p>
+<h2 id="c-2-简介"><a href="#c-2-简介" class="headerlink" title="c.2). 简介"></a>c.2). 简介</h2><h3 id="What？"><a href="#What？" class="headerlink" title="What？"></a>What？</h3><ul>
+<li><p><strong>球谐函数</strong> 是<strong>一系列</strong> <strong>二维球面函数的正交基函数</strong></p>
 <ul>
 <li><strong>球谐函数具有正交、归一、完备性</strong></li>
 </ul>
 <p>如</p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>ω</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>c</mi><mi>i</mi></msub><mo>⋅</mo><msub><mi>B</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>ω</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(\omega)=\sum_{i} c_{i} \cdot B_{i}(\omega)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.327674em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.0500050000000003em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05017em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mclose">)</span></span></span></span></span></p>
-<ul>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>ω</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(\omega)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mclose">)</span></span></span></span> 为球面函数，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span></span> 为向量</p>
+<script type="math/tex; mode=display">
+f(\omega)=\sum_{i} c_{i} \cdot B_{i}(\omega)</script><ul>
+<li><p>$f(\omega)$ 为球面函数，$\omega$ 为向量</p>
 </li>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 为系数</p>
+<li><p>$c_i$ 为系数</p>
 </li>
-<li>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>ω</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">B_{i}(\omega)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05017em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mclose">)</span></span></span></span> 则为球谐函数</p>
+<li><p>$B_{i}(\omega)$ 则为球谐函数</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01a.png" alt="SH_01a"></p>
 <ul>
-<li><strong>说明：</strong>
-<ol>
-<li>每一行（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">l=n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>），频率相同</li>
-<li>对于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">l=n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>行（第<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>阶），函数数量为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>l</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2l+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></li>
-<li>每一阶各SH都有编号，即<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi></mrow><annotation encoding="application/x-tex">m</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">m</span></span></span></span> 从<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mi>l</mi></mrow><annotation encoding="application/x-tex">-l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span> 到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span>；</li>
+<li><strong>说明：</strong><ol>
+<li>每一行（$l=n$），频率相同</li>
+<li>对于$l=n$行（第$n$阶），函数数量为$2l+1$</li>
+<li>每一阶各SH都有编号，即$m$ 从$-l$ 到 $l$；</li>
 </ol>
 </li>
 </ul>
@@ -637,16 +498,12 @@
 </ul>
 </li>
 </ul>
-<h3 id="how"><a class="markdownIt-Anchor" href="#how"></a> How？</h3>
-<ul>
-<li>
-<p>每一阶的SH函数，由<strong>勒让德多项式</strong>求得；</p>
+<h3 id="How？"><a href="#How？" class="headerlink" title="How？"></a>How？</h3><ul>
+<li><p>每一阶的SH函数，由<strong>勒让德多项式</strong>求得；</p>
 </li>
-<li>
-<p>如何求得<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">c_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></p>
+<li><p>如何求得$c_i$ </p>
 <ul>
-<li>
-<p>投影（Projection）</p>
+<li><p>投影（Projection）</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01b.png" alt="SH_01b"></p>
 <ul>
 <li>类似于傅里叶展开中，函数和各个正交基相乘求系数</li>
@@ -656,79 +513,65 @@
 </li>
 </ul>
 <hr>
-<h2 id="c3-性质"><a class="markdownIt-Anchor" href="#c3-性质"></a> c.3). 性质</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_BasisFunc.png" alt="SH_BasisFunc"></p>
+<h2 id="c-3-性质"><a href="#c-3-性质" class="headerlink" title="c.3). 性质"></a>c.3). 性质</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_BasisFunc.png" alt="SH_BasisFunc"></p>
 <ul>
 <li>正交性；</li>
 <li>投影性；</li>
-<li>旋转方便（旋转<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>，相当于旋转基函数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">B(i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span></span></span></span>）
-<ul>
+<li>旋转方便（旋转$f(x)$，相当于旋转基函数$B(i)$）<ul>
 <li>SH中，旋转后的基函数，可通过同阶的基函数线性组合得到；</li>
 </ul>
 </li>
 </ul>
-<h1 id="d-shading-from-environment-lightingsh-diffuse项"><a class="markdownIt-Anchor" href="#d-shading-from-environment-lightingsh-diffuse项"></a> d). Shading from Environment Lighting(SH, Diffuse项)</h1>
-<h2 id="d1-简介"><a class="markdownIt-Anchor" href="#d1-简介"></a> d.1). 简介</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
+<h1 id="d-Shading-from-Environment-Lighting-SH-Diffuse项"><a href="#d-Shading-from-Environment-Lighting-SH-Diffuse项" class="headerlink" title="d). Shading from Environment Lighting(SH, Diffuse项)"></a>d). Shading from Environment Lighting(SH, Diffuse项)</h1><h2 id="d-1-简介"><a href="#d-1-简介" class="headerlink" title="d.1). 简介"></a>d.1). 简介</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading.png" alt="SH_Shading"></p>
 <ul>
-<li>如果不通过IBL方式，计算shading，**那可以通过SH展开<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>p</mi><mo separator="true">,</mo><msub><mi>ω</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">L_i(p,\omega_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> ，即展开Environment Map（**Environment Map可以写成二维函数）</li>
+<li>如果不通过IBL方式，计算shading，<strong>那可以通过SH展开$L_i(p,\omega_i)$ ，即展开Environment Map（</strong>Environment Map可以写成二维函数）</li>
 </ul>
-<h2 id="d2-分析diffuse项的brdf"><a class="markdownIt-Anchor" href="#d2-分析diffuse项的brdf"></a> d.2). 分析Diffuse项的BRDF</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading02.png" alt="SH_Shading02"></p>
+<h2 id="d-2-分析Diffuse项的BRDF"><a href="#d-2-分析Diffuse项的BRDF" class="headerlink" title="d.2). 分析Diffuse项的BRDF"></a>d.2). 分析Diffuse项的BRDF</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading02.png" alt="SH_Shading02"></p>
 <ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">A_l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 就是基函数的系数；</li>
-<li>由图可见，通过SH分析Diffuse项的BRDF后，可得出结论
-<ul>
-<li>当<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>≥</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">l\geq3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83041em;vertical-align:-0.13597em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span> (即第四阶开始)，其 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">A_l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 接近0，说明Diffuse项的BRDF频率低，由SH前三阶表示即可；</li>
+<li>$A_l$ 就是基函数的系数；</li>
+<li>由图可见，通过SH分析Diffuse项的BRDF后，可得出结论<ul>
+<li>当$l\geq3$ (即第四阶开始)，其 $A_l$ 接近0，说明Diffuse项的BRDF频率低，由SH前三阶表示即可；</li>
 </ul>
 </li>
 </ul>
 <blockquote>
-<p>积分结果的频率，取决于频率最低的项（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x),g(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span>）</p>
+<p>积分结果的频率，取决于频率最低的项（$f(x),g(x)$）</p>
 </blockquote>
 <ul>
 <li><strong>Diffuse BRDF acts like a low-pass filter</strong></li>
 <li>因此，对于Environment Map的展开，只需要SH前三阶即可</li>
 </ul>
-<h2 id="d3-sh展开environment-map"><a class="markdownIt-Anchor" href="#d3-sh展开environment-map"></a> d.3). SH展开Environment Map</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading03.png" alt="SH_Shading03"></p>
+<h2 id="d-3-SH展开Environment-Map"><a href="#d-3-SH展开Environment-Map" class="headerlink" title="d.3). SH展开Environment Map"></a>d.3). SH展开Environment Map</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading03.png" alt="SH_Shading03"></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading04.png" alt="SH_Shading04"></p>
 <ul>
-<li>通过求得各球谐函数的结果后，再通过结果逆变换得到Shading结果
-<ul>
+<li>通过求得各球谐函数的结果后，再通过结果逆变换得到Shading结果<ul>
 <li>通过ShadingPoint法线，再经过一系列计算（？）得到shading</li>
 </ul>
 </li>
 </ul>
-<h1 id="e-precomputed-radiance-transfer"><a class="markdownIt-Anchor" href="#e-precomputed-radiance-transfer"></a> e). Precomputed Radiance Transfer</h1>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01a.png" alt="PRT_01a"></p>
+<h1 id="e-Precomputed-Radiance-Transfer"><a href="#e-Precomputed-Radiance-Transfer" class="headerlink" title="e). Precomputed Radiance Transfer"></a>e). Precomputed Radiance Transfer</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01a.png" alt="PRT_01a"></p>
 <ul>
-<li>对于渲染方程，如果我们把它每一项都进行Brute-force（蛮力）计算
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">L_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> : 二维，方位角<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi></mrow><annotation encoding="application/x-tex">\omega</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span></span></span></span>和俯仰角<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">V(i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mclose">)</span></span></span></span> : 二维，方位角和俯仰角</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo stretchy="false">(</mo><mi mathvariant="bold">i</mi><mo separator="true">,</mo><mi mathvariant="bold">o</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\rho(\mathbf{i}, \mathbf{o})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ρ</span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">i</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathbf">o</span></span><span class="mclose">)</span></span></span></span> : 四维，入射角和出射角的方位角和俯仰角</li>
+<li>对于渲染方程，如果我们把它每一项都进行Brute-force（蛮力）计算<ul>
+<li>$L_i$ : 二维，方位角$\omega$和俯仰角$\theta$</li>
+<li>$V(i)$ : 二维，方位角和俯仰角</li>
+<li>$\rho(\mathbf{i}, \mathbf{o})$ : 四维，入射角和出射角的方位角和俯仰角</li>
 </ul>
 </li>
 <li>存储压力过于大；</li>
 </ul>
-<h2 id="e1-prt"><a class="markdownIt-Anchor" href="#e1-prt"></a> e.1). PRT</h2>
-<ul>
+<h2 id="e-1-PRT"><a href="#e-1-PRT" class="headerlink" title="e.1). PRT"></a>e.1). PRT</h2><ul>
 <li><strong>前提：</strong> 假设场景中除了Lighting，其他都不变；</li>
 </ul>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01b.png" alt="PRT_01b"></p>
 <ul>
-<li>将RE分为两项，
-<ul>
+<li>将RE分为两项，<ul>
 <li>Lighting变化；</li>
-<li>light transport不变；
-<ul>
-<li>$V(i): $ 二维，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ω</mi><mo separator="true">,</mo><mi>θ</mi></mrow><annotation encoding="application/x-tex">\omega,\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span>，可烘焙为图像，如CubeMap（场景摆放固定）</li>
-<li>$\rho(\mathbf{i}, \mathbf{o}): $ <strong>BRDF</strong>
-<ul>
+<li>light transport不变；<ul>
+<li>$V(i): $ 二维，$\omega,\theta$，可烘焙为图像，如CubeMap（场景摆放固定）</li>
+<li>$\rho(\mathbf{i}, \mathbf{o}): $ <strong>BRDF</strong><ul>
 <li><strong>Diffuse Case:</strong> 常数</li>
-<li><strong>Gloosy Case:</strong> 四维，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ω</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>θ</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>ω</mi><mi>o</mi></msub><mo separator="true">,</mo><msub><mi>θ</mi><mi>o</mi></msub></mrow><annotation encoding="application/x-tex">\omega_{i},\theta_i, \omega_o,\theta_o</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">ω</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">o</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，入射和出射的方位角和俯仰角（相机固定，入射角固定）</li>
+<li><strong>Gloosy Case:</strong> 四维，$\omega_{i},\theta_i, \omega_o,\theta_o$，入射和出射的方位角和俯仰角（相机固定，入射角固定）</li>
 </ul>
 </li>
 </ul>
@@ -736,248 +579,156 @@
 </ul>
 </li>
 </ul>
-<h2 id="e2-diffuse-case"><a class="markdownIt-Anchor" href="#e2-diffuse-case"></a> e.2). Diffuse Case</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase01.png" alt="PRT_DiffuseCase01"></p>
+<h2 id="e-2-Diffuse-Case"><a href="#e-2-Diffuse-Case" class="headerlink" title="e.2). Diffuse Case"></a>e.2). Diffuse Case</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase01.png" alt="PRT_DiffuseCase01"></p>
 <ul>
-<li>
-<p>此处（图形学中，大部分情况都是），积分和求和位置可变；</p>
+<li><p>此处（图形学中，大部分情况都是），积分和求和位置可变；</p>
 </li>
-<li>
-<p>经过预计算后，求得Shading结果只需要<strong>在SH空间中，对向量进行点乘即可</strong>；</p>
+<li><p>经过预计算后，求得Shading结果只需要<strong>在SH空间中，对向量进行点乘即可</strong>；</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02b.png" alt="PRT_02b"></p>
 </li>
 </ul>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02.png" alt="PRT_02"></p>
 <hr>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_03.png" alt="PRT_03"></p>
-<h3 id="e21-计算"><a class="markdownIt-Anchor" href="#e21-计算"></a> e.2.1). 计算</h3>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase02.png" alt="PRT_DiffuseCase02"></p>
+<h3 id="e-2-1-计算"><a href="#e-2-1-计算" class="headerlink" title="e.2.1). 计算"></a>e.2.1). 计算</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase02.png" alt="PRT_DiffuseCase02"></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase03.png" alt="PRT_DiffuseCase03"></p>
 <ul>
-<li>
-<p><strong>注意：</strong> 此处两次求和复杂度仍然是<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span>，因为SH基函数具有正交性；</p>
-</li>
-<li>
-<p><strong>Runtime is independent of transport complexity</strong></p>
+<li><strong>注意：</strong> 此处两次求和复杂度仍然是$O(n)$，因为SH基函数具有正交性；</li>
+</ul>
+<ul>
+<li><p><strong>Runtime is independent of transport complexity</strong></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans.png" alt="PRT_LightTrans"></p>
 </li>
-<li>
-<p><strong>计算Light Transport简易理解：</strong> 积分形式和渲染方程相似，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi mathvariant="bold">i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">B_i(\bold{i})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.05017em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">i</span></span><span class="mclose">)</span></span></span></span> 类似于<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi mathvariant="bold">i</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">L_i(\bold{i})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathbf">i</span></span><span class="mclose">)</span></span></span></span> ，可看成是将球谐函数作为光照进行Shading得到Light Transport结果</p>
+</ul>
+<ul>
+<li><p><strong>计算Light Transport简易理解：</strong> 积分形式和渲染方程相似，$B_i(\bold{i})$ 类似于$L_i(\bold{i})$ ，可看成是将球谐函数作为光照进行Shading得到Light Transport结果</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans02.png" alt="PRT_LightTrans02"></p>
 </li>
 </ul>
-<h2 id="e3-glossy-case"><a class="markdownIt-Anchor" href="#e3-glossy-case"></a> e.3). Glossy Case</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_GlossyCase.png" alt="PRT_GlossyCase"></p>
+<h2 id="e-3-Glossy-Case"><a href="#e-3-Glossy-Case" class="headerlink" title="e.3). Glossy Case"></a>e.3). Glossy Case</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_GlossyCase.png" alt="PRT_GlossyCase"></p>
 <ul>
 <li>此时，BRDF是关于入射和出射的方位角和俯仰角的四维函数；</li>
-<li><strong>做法：</strong> 对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">o</mi></mrow><annotation encoding="application/x-tex">\bold{o}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">o</span></span></span></span></span> 也进行SH展开；（对于Gloosy不止展开到第三阶）
-<ul>
+<li><strong>做法：</strong> 对 $\bold{o}$ 也进行SH展开；（对于Gloosy不止展开到第三阶）<ul>
 <li>light coefficient与Diffuse Case相同，为SH空间的一维向量；</li>
-<li>transport matrix则是关于  <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">o</mi></mrow><annotation encoding="application/x-tex">\bold{o}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">o</span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">i</mi></mrow><annotation encoding="application/x-tex">\bold{i}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">i</span></span></span></span></span> 四维函数（入射和出射的方位角和俯仰角），为SH空间的二维矩阵；</li>
-<li>reflected radiance coefficient则是关于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">o</mi></mrow><annotation encoding="application/x-tex">\bold{o}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">o</span></span></span></span></span> 的二维函数（出射角的方位角和俯仰角），通过SH逆变换，即可得出相应视角（ <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">o</mi></mrow><annotation encoding="application/x-tex">\bold{o}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">o</span></span></span></span></span> ）下的Gloosy radiance；
-<ul>
-<li><font color="red">具体怎么变换的？待实现</font></li>
-</ul>
+<li>transport matrix则是关于  $\bold{o}$ 和 $\bold{i}$ 四维函数（入射和出射的方位角和俯仰角），为SH空间的二维矩阵；</li>
+<li>reflected radiance coefficient则是关于 $\bold{o}$ 的二维函数（出射角的方位角和俯仰角），通过SH逆变换，即可得出相应视角（ $\bold{o}$ ）下的Gloosy radiance；<ul>
+<li><font color="red">具体怎么变换的？待实现</font>
+
+
+
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="e4-总结和限制"><a class="markdownIt-Anchor" href="#e4-总结和限制"></a> e.4). 总结和限制</h2>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Summary.png" alt="PRT_Summary"></p>
+</li>
+</ul>
+<h2 id="e-4-总结和限制"><a href="#e-4-总结和限制" class="headerlink" title="e.4). 总结和限制"></a>e.4). 总结和限制</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Summary.png" alt="PRT_Summary"></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Limitations.png" alt="PRT_Limitations"></p>
 <hr>
-<h1 id="f-wavelet小波"><a class="markdownIt-Anchor" href="#f-wavelet小波"></a> f). Wavelet(小波)</h1>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet01.png" alt="Wavelet01"></p>
+<h1 id="f-Wavelet-小波"><a href="#f-Wavelet-小波" class="headerlink" title="f). Wavelet(小波)"></a>f). Wavelet(小波)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet01.png" alt="Wavelet01"></p>
 <ul>
-<li>
-<p>定义在二维平面上的一系列基函数</p>
+<li><p>定义在二维平面上的一系列基函数</p>
 </li>
-<li>
-<p><strong>A non-linear approximation:</strong> 二维函数经过小波变换后，大部分系数接近0，这时可采用只记录系数大于一定值的项来近似原函数；</p>
+<li><p><strong>A non-linear approximation:</strong> 二维函数经过小波变换后，大部分系数接近0，这时可采用只记录系数大于一定值的项来近似原函数；</p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet02.png" alt="Wavelet02"></p>
 <ul>
 <li>对于Environment Map，小波变换无法变换球面函数，因此展开为Cubemap后进行小波变换；</li>
 <li>每一个矩形经过小波变换后，把<strong>高频信息</strong>放在<strong>右上、右下、左下</strong>子块，剩下的<strong>低频信息</strong>放在<strong>左上</strong>，继续做小波变换；</li>
 </ul>
 </li>
-<li>
-<p>**其他应用：**JPG格式图片压缩， 使用类似与小波变换的DCT（Discrete cosine transform，离散余弦变换）、JPEG2000</p>
+<li><p><strong>其他应用：</strong>JPG格式图片压缩， 使用类似与小波变换的DCT（Discrete cosine transform，离散余弦变换）、JPEG2000</p>
 </li>
-<li>
-<p><strong>效果对比：</strong></p>
+<li><p><strong>效果对比：</strong></p>
 <p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet03.png" alt="Wavelet03"></p>
 </li>
-<li>
-<p><strong>缺点：</strong></p>
+<li><p><strong>缺点：</strong> </p>
 <ul>
 <li>旋转不方便（不同于SH基函数的旋转简易型，小波旋转需要从Wavelet展开，旋转后再做小波变换）</li>
 </ul>
 </li>
 </ul>
 
-      
     </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" title="Games202-3 Real-time Environment Mapping" target="_blank" rel="external">http://example.com/2023/02/01/Games202_03_Real-time Environment Mapping/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
 
-
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/WhiteTail-o" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/WhiteTail-o" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
-
-    </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" title="Games202-4 Real-time Global Illumination(in 3D)"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
     
     
-    <li class="next">
-      <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" title="Games202-2 Real-Time Shadow"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
     
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
 
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Games202/" rel="tag"># Games202</a>
+          </div>
 
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
         
-    </ul>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" rel="prev" title="Games202-2 Real-Time Shadow">
+                  <i class="fa fa-chevron-left"></i> Games202-2 Real-Time Shadow
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" rel="next" title="Games202-4 Real-time Global Illumination(in 3D)">
+                  Games202-4 Real-time Global Illumination(in 3D) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+
+
+
     </div>
-</footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
+  </footer>
 
-<script src="/js/plugin.min.js"></script>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
-<script src="/js/application.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: '文章',
-            PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
-            UNTITLED: '(未命名)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
 
 
-
-   
-
-
-
-
-   
-    
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
-
-
+  
 
 
 

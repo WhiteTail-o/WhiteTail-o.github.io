@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
+    <loc>https://whitetail-o.github.io/tags/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</loc>
+    <loc>https://whitetail-o.github.io/categories/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2023/02/01/Games202_02_Real-Time%20Shadow/</loc>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/</loc>
+    <loc>https://whitetail-o.github.io/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/03/Games101_21_22_Animation/</loc>
+    <loc>https://whitetail-o.github.io/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</loc>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/03/Games101_17_18_Materials/</loc>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_02_04_Math/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/03/Games101_13_16_RayTracing/</loc>
+    <loc>https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -74,7 +74,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/02/Games101_10_12_Geometry/</loc>
+    <loc>https://whitetail-o.github.io/2023/02/01/Games202_02_Real-Time%20Shadow/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -83,7 +83,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/02/Games101_07_09_Shading/</loc>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -92,7 +92,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/02/Games101_05_06_Rasterization/</loc>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -101,7 +101,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/02/Games101_02_04_Math/</loc>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -110,7 +110,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/test.html</loc>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_10_12_Geometry/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -119,7 +119,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/about/index.html</loc>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -128,7 +128,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/tags/index.html</loc>
+    <loc>https://whitetail-o.github.io/about/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -137,7 +137,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/books/index.html</loc>
+    <loc>https://whitetail-o.github.io/repository/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -146,7 +146,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/categories/index.html</loc>
+    <loc>https://whitetail-o.github.io/links/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -155,7 +155,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/repository/index.html</loc>
+    <loc>https://whitetail-o.github.io/books/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -164,16 +164,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/links/index.html</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/404.html</loc>
+    <loc>https://whitetail-o.github.io/404.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -183,7 +174,7 @@
   
 
   <url>
-    <loc>http://example.com/</loc>
+    <loc>https://whitetail-o.github.io/</loc>
     <lastmod>2023-02-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -191,21 +182,21 @@
 
   
   <url>
-    <loc>http://example.com/tags/Games101/</loc>
+    <loc>https://whitetail-o.github.io/tags/Games101/</loc>
     <lastmod>2023-02-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
+    <loc>https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
     <lastmod>2023-02-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/Games202/</loc>
+    <loc>https://whitetail-o.github.io/tags/Games202/</loc>
     <lastmod>2023-02-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -214,14 +205,14 @@
 
   
   <url>
-    <loc>http://example.com/categories/Games101/</loc>
+    <loc>https://whitetail-o.github.io/categories/Games101/</loc>
     <lastmod>2023-02-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://example.com/categories/Games202/</loc>
+    <loc>https://whitetail-o.github.io/categories/Games202/</loc>
     <lastmod>2023-02-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

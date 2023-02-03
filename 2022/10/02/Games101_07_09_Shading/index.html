@@ -1,413 +1,322 @@
 <!DOCTYPE html>
-<html lang=zh>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="Cache-Control" content="no-transform" />
-  <meta http-equiv="Cache-Control" content="no-siteapp" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no,email=no,adress=no">
-  <!-- Color theme for statusbar -->
-  <meta name="theme-color" content="#000000" />
-  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
-  <meta http-equiv="window-target" content="_top" />
-  
-  
-  <title>Games101-7-9 Shading | WhiteTail&#39;s Blog</title>
-  <meta name="description" content="Lecture 07&#x2F;08 Shading(Illumination, Shading and Graphics Pipeline)  a). Definition   b). A Simple Shading Model(Blinn-Phong Reflectance Model)  b.1). Fundamental   Blinn-Phong是一个经验模型，并不是严格基于物理的；   进入">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Lecture 07&#x2F;08 Shading(Illumination, Shading and Graphics Pipeline)a). Definition b). A Simple Shading Model(Blinn-Phong Reflectance Model)b.1). Fundamental Blinn-Phong是一个经验模型，并不是严格基于物理的；  进入视线内的光照一般有以">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Games101-7-9 Shading">
-<meta property="og:url" content="http://example.com/2022/10/02/Games101_07_09_Shading/index.html">
+<meta property="og:url" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/index.html">
 <meta property="og:site_name" content="WhiteTail&#39;s Blog">
-<meta property="og:description" content="Lecture 07&#x2F;08 Shading(Illumination, Shading and Graphics Pipeline)  a). Definition   b). A Simple Shading Model(Blinn-Phong Reflectance Model)  b.1). Fundamental   Blinn-Phong是一个经验模型，并不是严格基于物理的；   进入">
+<meta property="og:description" content="Lecture 07&#x2F;08 Shading(Illumination, Shading and Graphics Pipeline)a). Definition b). A Simple Shading Model(Blinn-Phong Reflectance Model)b.1). Fundamental Blinn-Phong是一个经验模型，并不是严格基于物理的；  进入视线内的光照一般有以">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Shading_Definition.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/ShadingInput.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/NoShadow.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Diffuse.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Lambert_cos_law.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/LightFalloff.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/LambertDiffuseShading.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Diffuse_kd.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Specular.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Half_vector.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Specular_Power.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Specular_Term.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/AmbientTerm.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Blinn-Phong.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/FlatShading.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/GouraudShading.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/PhongShading.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/ShadingFreq.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/VectorsNormal.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/PixelNormal.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/GraphicsPipeline.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/PipelineVertex.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Rasterization_in_pp.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Frag.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Shading_in_PP.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/TexMapping.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/ShaderEX.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Example.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath02.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath03.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath04.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath05.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/BilinearInterpolation.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/TexturePS.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/TexturePS02.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Mipmap.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Mipmap02.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/mipmap_level.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/mipmap_level02.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/TrilinearInterpolation.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel02.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/EnvironmentMap.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/SphericalEnvironmentMap.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/SphericalMap_Problem.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/CubeMap00.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/CubeMap.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/BumpMap01.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/BumpMap02.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/perturbNormal.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Bump_vs_Displacement.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/3DProceduralNoise.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/ProvidePrecomputedShading.png">
-<meta property="og:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/3DTexturesAndVolumeRendering.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Shading_Definition.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/ShadingInput.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/NoShadow.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Diffuse.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Lambert_cos_law.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/LightFalloff.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/LambertDiffuseShading.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Diffuse_kd.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Specular.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Half_vector.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Specular_Power.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Specular_Term.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/AmbientTerm.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Blinn-Phong.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/FlatShading.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/GouraudShading.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/PhongShading.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/ShadingFreq.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/VectorsNormal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/PixelNormal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/GraphicsPipeline.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/PipelineVertex.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Rasterization_in_pp.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Frag.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Shading_in_PP.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/TexMapping.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/ShaderEX.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Example.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath04.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath05.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/BilinearInterpolation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/TexturePS.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/TexturePS02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Mipmap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Mipmap02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/mipmap_level.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/mipmap_level02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/TrilinearInterpolation.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/EnvironmentMap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/SphericalEnvironmentMap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/SphericalMap_Problem.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/CubeMap00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/CubeMap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/BumpMap01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/BumpMap02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/perturbNormal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Bump_vs_Displacement.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/3DProceduralNoise.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/ProvidePrecomputedShading.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/3DTexturesAndVolumeRendering.png">
 <meta property="article:published_time" content="2022-10-02T08:25:10.000Z">
-<meta property="article:modified_time" content="2023-02-03T14:44:32.501Z">
+<meta property="article:modified_time" content="2023-02-03T18:05:48.762Z">
 <meta property="article:author" content="WhiteTail">
 <meta property="article:tag" content="Games101">
 <meta property="article:tag" content="图形学">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2022/10/02/Games101_07_09_Shading/Shading_Definition.png">
-  <!-- Canonical links -->
-  <link rel="canonical" href="http://example.com/2022/10/02/Games101_07_09_Shading/index.html">
-  
-    <link rel="alternate" href="/atom.xml" title="WhiteTail&#39;s Blog" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png" type="image/x-icon">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-  
-  
-<meta name="generator" content="Hexo 6.3.0"></head>
+<meta name="twitter:image" content="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/Shading_Definition.png">
 
 
-<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
-  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-  <div class="slimContent">
-    <div class="navbar-header">
-      
-      
-      <div class="profile-block text-center">
-        <a id="avatar" href="https://github.com/WhiteTail-o" target="_blank">
-          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+<link rel="canonical" href="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/","path":"2022/10/02/Games101_07_09_Shading/","title":"Games101-7-9 Shading"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games101-7-9 Shading | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
-        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
-        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
-        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
-      </div>
-      
-      <div class="search" id="search-form-wrap">
+      </li>
+  </ul>
+</nav>
 
-    <form class="search-form sidebar-form">
-        <div class="input-group">
-            <input type="text" class="search-form-input form-control" placeholder="搜索" />
-            <span class="input-group-btn">
-                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
-            </span>
-        </div>
-    </form>
-    <div class="ins-search">
-  <div class="ins-search-mask"></div>
-  <div class="ins-search-container">
-    <div class="ins-input-wrapper">
-      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
-      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-    </div>
-    <div class="ins-section-wrapper">
-      <div class="ins-section-container"></div>
-    </div>
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
   </div>
 </div>
 
-
-</div>
-      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
     </div>
-    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
-      <ul class="nav navbar-nav main-nav ">
-        
-        
-        <li class="menu-item menu-item-home">
-          <a href="/.">
-            
-            <i class="icon icon-home-fill"></i>
-            
-            <span class="menu-title">首页</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives">
-            
-            <i class="icon icon-archives-fill"></i>
-            
-            <span class="menu-title">归档</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-categories">
-          <a href="/categories">
-            
-            <i class="icon icon-folder"></i>
-            
-            <span class="menu-title">分类</span>
-          </a>
-        </li>
-        
-        
-        <li class="menu-item menu-item-tags">
-          <a href="/tags">
-            
-            <i class="icon icon-tags"></i>
-            
-            <span class="menu-title">标签</span>
-          </a>
-        </li>
-        
-      </ul>
-      
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
-        
-    </ul>
-
-    </nav>
   </div>
+
 </header>
-
+        
   
-    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
-  <div class="slimContent">
-    
-      <div class="widget">
-    <h3 class="widget-title">公告</h3>
-    <div class="widget-body">
-        <div id="board">
-            <div class="content">
-                <p>欢迎交流与分享经验!</p>
-            </div>
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline"><span class="nav-text">Lecture 07&#x2F;08 Shading(Illumination, Shading and Graphics Pipeline)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Definition"><span class="nav-text">a). Definition</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model"><span class="nav-text">b). A Simple Shading Model(Blinn-Phong Reflectance Model)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-1-Fundamental"><span class="nav-text">b.1). Fundamental</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-2-Diffuse-Reflection"><span class="nav-text">b.2). Diffuse Reflection</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-3-Specular-Term-Blinn-Phong"><span class="nav-text">b.3). Specular Term(Blinn-Phong)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-4-Ambient-Term"><span class="nav-text">b.4). Ambient Term</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Shading-Frequencies"><span class="nav-text">c). Shading Frequencies</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1-Flat-shading"><span class="nav-text">c.1). Flat shading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-Gouraud-shading"><span class="nav-text">c.2). Gouraud shading </span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-3-Phong-shading"><span class="nav-text">c.3). Phong shading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-4-%E5%AF%B9%E6%AF%94"><span class="nav-text">c.4). 对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-5-%E5%AE%9A%E4%B9%89%E9%A1%B6%E7%82%B9-%E5%83%8F%E7%B4%A0%E6%B3%95%E7%BA%BF"><span class="nav-text">c.5). 定义顶点&#x2F;像素法线</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-Graphics-Real-time-Rendering-Pipeline"><span class="nav-text">d). Graphics(Real-time Rendering) Pipeline</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lecture-08-09-Shading-Texture-Mapping"><span class="nav-text">Lecture 08&#x2F;09 Shading(Texture Mapping)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-Interpolation-Across-Triangles-Barycentric-Coordinates"><span class="nav-text">a). Interpolation Across Triangles: Barycentric Coordinates</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-Texture-Magnification-%E9%9C%80%E8%A6%81%E6%94%BE%E5%A4%A7%E7%BA%B9%E7%90%86%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-text">b). Texture Magnification(需要放大纹理的情况)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-1-Bilinear-Interpolation"><span class="nav-text">b.1). Bilinear Interpolation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Texture-Magnification-%E9%9C%80%E8%A6%81%E7%BC%A9%E5%B0%8F%E7%BA%B9%E7%90%86%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-text">c).  Texture Magnification(需要缩小纹理的情况)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1-Mipmap"><span class="nav-text">c.1). Mipmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-1-%E5%A6%82%E4%BD%95%E7%A1%AE%E5%AE%9AMipmap%E7%9A%84level%EF%BC%88%E5%8F%82%E8%80%83%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92%EF%BC%89%EF%BC%9A"><span class="nav-text">c.1). 如何确定Mipmap的level（参考百人计划）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-Mipmap%E4%B9%8B%E9%97%B4%E7%9A%84%E8%BF%87%E6%B8%A1"><span class="nav-text">c.2). Mipmap之间的过渡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-Applications-of-Textures"><span class="nav-text">d). Applications of Textures</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#d-1-Environment-Map"><span class="nav-text">d.1). Environment Map</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-2-Bump-Mapping"><span class="nav-text">d.2). Bump Mapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-3-3D-Procedural-Noise-Solid-Modeling"><span class="nav-text">d.3). 3D Procedural Noise + Solid Modeling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-4-Provide-Precomputed-Shading"><span class="nav-text">d.4). Provide Precomputed Shading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-5-3D-Textures-and-Volume-Rendering"><span class="nav-text">d.5). 3D Textures and Volume Rendering</span></a></li></ol></li></ol></li></ol></div>
         </div>
-    </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
 </div>
 
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget-body">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget-body">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games101/" rel="tag">Games101</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Games202/" rel="tag">Games202</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">标签云</h3>
-    <div class="widget-body tagcloud">
-      <a href="/tags/Games101/" style="font-size: 13.5px;">Games101</a> <a href="/tags/Games202/" style="font-size: 13px;">Games202</a> <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" style="font-size: 14px;">图形学</a>
-    </div>
-  </div>
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget-body">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
-    </div>
-  </div>
-
-
-    
-      
-  <div class="widget">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget-body">
-      <ul class="recent-post-list list-unstyled no-thumbnail">
-        
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games202/">Games202</a>
-              </p>
-              <p class="item-title">
-                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
-              </p>
-            </div>
-          </li>
-          
-          <li>
-            
-            <div class="item-inner">
-              <p class="item-category">
-                <a class="category-link" href="/categories/Games101/">Games101</a>
-              </p>
-              <p class="item-title">
-                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
-              </p>
-              <p class="item-date">
-                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
-              </p>
-            </div>
-          </li>
-          
-      </ul>
-    </div>
-  </div>
-  
-
-    
-  </div>
-</aside>
-
-  
-  
-<main class="main" role="main">
-  <div class="content">
-  <article id="post-Games101_07_09_Shading" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
-    
-    <div class="article-header">
-      
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Games101-7-9 Shading
-    </h1>
-  
-
-      
-      <div class="article-meta">
-        <span class="article-date">
-    <i class="icon icon-calendar-check"></i>
-	<a href="/2022/10/02/Games101_07_09_Shading/" class="article-date">
-	  <time datetime="2022-10-02T08:25:10.000Z" itemprop="datePublished">2022-10-02</time>
-	</a>
-</span>
-        
-  <span class="article-category">
-    <i class="icon icon-folder"></i>
-    <a class="article-category-link" href="/categories/Games101/">Games101</a>
-  </span>
-
-        
-  <span class="article-tag">
-    <i class="icon icon-tags"></i>
-	<a class="article-tag-link-link" href="/tags/Games101/" rel="tag">Games101</a>, <a class="article-tag-link-link" href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag">图形学</a>
-  </span>
-
-
-        
-
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/Games101_07_09_Shading/#comments" class="article-comment-link">评论</a></span>
-        
+        </div>
       </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
     </div>
-    <div class="article-entry marked-body" itemprop="articleBody">
-      
-        <h1 id="lecture-0708-shadingillumination-shading-and-graphics-pipeline"><a class="markdownIt-Anchor" href="#lecture-0708-shadingillumination-shading-and-graphics-pipeline"></a> Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)</h1>
-<h2 id="a-definition"><a class="markdownIt-Anchor" href="#a-definition"></a> a). Definition</h2>
-<p><img src="/2022/10/02/Games101_07_09_Shading/Shading_Definition.png" alt="Shading_Definition"></p>
-<h2 id="b-a-simple-shading-modelblinn-phong-reflectance-model"><a class="markdownIt-Anchor" href="#b-a-simple-shading-modelblinn-phong-reflectance-model"></a> b). A Simple Shading Model(Blinn-Phong Reflectance Model)</h2>
-<h3 id="b1-fundamental"><a class="markdownIt-Anchor" href="#b1-fundamental"></a> b.1). Fundamental</h3>
-<ul>
-<li>
-<p>Blinn-Phong是一个<strong>经验模型</strong>，并不是严格基于物理的；</p>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games101-7-9 Shading | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games101-7-9 Shading
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-02 16:25:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:25:10+08:00">2022-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 02:05:48" itemprop="dateModified" datetime="2023-02-04T02:05:48+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline"><a href="#Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline" class="headerlink" title="Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)"></a>Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)</h1><h2 id="a-Definition"><a href="#a-Definition" class="headerlink" title="a). Definition"></a>a). Definition</h2><p><img src="/2022/10/02/Games101_07_09_Shading/Shading_Definition.png" alt="Shading_Definition"></p>
+<h2 id="b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model"><a href="#b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model" class="headerlink" title="b). A Simple Shading Model(Blinn-Phong Reflectance Model)"></a>b). A Simple Shading Model(Blinn-Phong Reflectance Model)</h2><h3 id="b-1-Fundamental"><a href="#b-1-Fundamental" class="headerlink" title="b.1). Fundamental"></a>b.1). Fundamental</h3><ul>
+<li><p>Blinn-Phong是一个<strong>经验模型</strong>，并不是严格基于物理的；</p>
 </li>
-<li>
-<p><strong>进入视线内的光照一般有以下构成：</strong></p>
+<li><p><strong>进入视线内的光照一般有以下构成：</strong></p>
 <ul>
 <li>高光（Specualr）</li>
 <li>漫反射（Diffuse）</li>
@@ -415,11 +324,9 @@
 <li>自发光（Emissive）</li>
 </ul>
 </li>
-<li>
-<p>**Shading is Local: **Compute light reflected toward camera at a <font color="red"><strong>specific shading point</strong></font><img src="/2022/10/02/Games101_07_09_Shading/ShadingInput.png" alt="ShadingInput"></p>
+<li><p><strong>Shading is Local: </strong>Compute light reflected toward camera at a <font color="red"><strong>specific shading point</strong></font><img src="/2022/10/02/Games101_07_09_Shading/ShadingInput.png" alt="ShadingInput"></p>
 <ul>
-<li>
-<p>No shadows will be generated! <strong>(shading ≠ shadow)</strong></p>
+<li><p>No shadows will be generated! <strong>(shading ≠ shadow)</strong> </p>
 <ul>
 <li>阴影会由另外的Shadow Caster来着色；</li>
 </ul>
@@ -428,217 +335,162 @@
 </ul>
 </li>
 </ul>
-<h3 id="b2-diffuse-reflection"><a class="markdownIt-Anchor" href="#b2-diffuse-reflection"></a> b.2). Diffuse Reflection</h3>
-<ul>
-<li>
-<p>Blinn-Phong中，漫反射的光均匀散射到各个方向；<img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Diffuse.png" alt="Blinn-Phong_Diffuse"></p>
+<h3 id="b-2-Diffuse-Reflection"><a href="#b-2-Diffuse-Reflection" class="headerlink" title="b.2). Diffuse Reflection"></a>b.2). Diffuse Reflection</h3><ul>
+<li>Blinn-Phong中，漫反射的光均匀散射到各个方向；<img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Diffuse.png" alt="Blinn-Phong_Diffuse"></li>
+<li><p><strong>Lambert’s cosine law</strong>：接收到的能量与 $l·n$ 成正比例<img src="/2022/10/02/Games101_07_09_Shading/Lambert_cos_law.png" alt="Lambert_cos_law"></p>
 </li>
-<li>
-<p><strong>Lambert’s cosine law</strong>：接收到的能量与 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo separator="true">⋅</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">l·n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span></span></span></span> 成正比例<img src="/2022/10/02/Games101_07_09_Shading/Lambert_cos_law.png" alt="Lambert_cos_law"></p>
+<li><p><strong>Light Falloff</strong><img src="/2022/10/02/Games101_07_09_Shading/LightFalloff.png" alt="LightFalloff"></p>
 </li>
-<li>
-<p><strong>Light Falloff</strong><img src="/2022/10/02/Games101_07_09_Shading/LightFalloff.png" alt="LightFalloff"></p>
-</li>
-<li>
-<p><strong>漫反射最终的着色：</strong><img src="/2022/10/02/Games101_07_09_Shading/LambertDiffuseShading.png" alt="LambertDiffuseShading"><img src="/2022/10/02/Games101_07_09_Shading/Diffuse_kd.png" alt="Diffuse_kd"></p>
+<li><p><strong>漫反射最终的着色：</strong><img src="/2022/10/02/Games101_07_09_Shading/LambertDiffuseShading.png" alt="LambertDiffuseShading"><img src="/2022/10/02/Games101_07_09_Shading/Diffuse_kd.png" alt="Diffuse_kd"></p>
 </li>
 </ul>
-<h3 id="b3-specular-termblinn-phong"><a class="markdownIt-Anchor" href="#b3-specular-termblinn-phong"></a> b.3). Specular Term(Blinn-Phong)</h3>
-<ul>
-<li>
-<p>Intensity <strong>depends</strong> on view direction</p>
-<img src="/2022/10/02/Games101_07_09_Shading/Specular.png" alt="Specular" style="zoom: 33%;">
+<h3 id="b-3-Specular-Term-Blinn-Phong"><a href="#b-3-Specular-Term-Blinn-Phong" class="headerlink" title="b.3). Specular Term(Blinn-Phong)"></a>b.3). Specular Term(Blinn-Phong)</h3><ul>
+<li><p>Intensity <strong>depends</strong> on view direction</p>
+<p><img src="/2022/10/02/Games101_07_09_Shading/Specular.png" alt="Specular" style="zoom: 33%;"></p>
 </li>
-<li>
-<p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Half_vector.png" alt="Blinn-Phong_Half_vector"></p>
+<li><p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Half_vector.png" alt="Blinn-Phong_Half_vector"></p>
 <ul>
-<li>采用半程向量简化计算。采用半程向量<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">h</span></span></span></span>与<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span>点乘的是Blinn-Phong模型，而采用镜面反射方向<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span>和视线方向<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span>点乘的是Phong模型；</li>
-<li>**指数<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span>的作用：**Increasing p narrows the reflection lobe<img src="/2022/10/02/Games101_07_09_Shading/Specular_Power.png" alt="Specular_Power"></li>
+<li>采用半程向量简化计算。采用半程向量$h$与$n$点乘的是Blinn-Phong模型，而采用镜面反射方向$r$和视线方向$v$点乘的是Phong模型；</li>
+<li><strong>指数$p$的作用：</strong>Increasing p narrows the reflection lobe<img src="/2022/10/02/Games101_07_09_Shading/Specular_Power.png" alt="Specular_Power"></li>
 <li>效果总览：<img src="/2022/10/02/Games101_07_09_Shading/Specular_Term.png" alt="Specular_Term"></li>
 </ul>
 </li>
 </ul>
-<h3 id="b4-ambient-term"><a class="markdownIt-Anchor" href="#b4-ambient-term"></a> b.4). Ambient Term</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/AmbientTerm.png" alt="AmbientTerm"></p>
+<h3 id="b-4-Ambient-Term"><a href="#b-4-Ambient-Term" class="headerlink" title="b.4). Ambient Term"></a>b.4). Ambient Term</h3><p><img src="/2022/10/02/Games101_07_09_Shading/AmbientTerm.png" alt="AmbientTerm"></p>
 <p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong.png" alt="Blinn-Phong"></p>
-<h2 id="c-shading-frequencies"><a class="markdownIt-Anchor" href="#c-shading-frequencies"></a> c). Shading Frequencies</h2>
-<h3 id="c1-flat-shadingflatshading"><a class="markdownIt-Anchor" href="#c1-flat-shadingflatshading"></a> c.1). Flat shading<img src="/2022/10/02/Games101_07_09_Shading/FlatShading.png" alt="FlatShading"></h3>
-<h3 id="c2-gouraud-shading-gouraudshading"><a class="markdownIt-Anchor" href="#c2-gouraud-shading-gouraudshading"></a> c.2). Gouraud shading <img src="/2022/10/02/Games101_07_09_Shading/GouraudShading.png" alt="GouraudShading"></h3>
-<h3 id="c3-phong-shadingphongshading"><a class="markdownIt-Anchor" href="#c3-phong-shadingphongshading"></a> c.3). Phong shading<img src="/2022/10/02/Games101_07_09_Shading/PhongShading.png" alt="PhongShading"></h3>
-<h3 id="c4-对比"><a class="markdownIt-Anchor" href="#c4-对比"></a> c.4). 对比</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/ShadingFreq.png" alt="ShadingFreq"></p>
+<h2 id="c-Shading-Frequencies"><a href="#c-Shading-Frequencies" class="headerlink" title="c). Shading Frequencies"></a>c). Shading Frequencies</h2><h3 id="c-1-Flat-shading"><a href="#c-1-Flat-shading" class="headerlink" title="c.1). Flat shading"></a>c.1). Flat shading<img src="/2022/10/02/Games101_07_09_Shading/FlatShading.png" alt="FlatShading"></h3><h3 id="c-2-Gouraud-shading"><a href="#c-2-Gouraud-shading" class="headerlink" title="c.2). Gouraud shading "></a>c.2). Gouraud shading <img src="/2022/10/02/Games101_07_09_Shading/GouraudShading.png" alt="GouraudShading"></h3><h3 id="c-3-Phong-shading"><a href="#c-3-Phong-shading" class="headerlink" title="c.3). Phong shading"></a>c.3). Phong shading<img src="/2022/10/02/Games101_07_09_Shading/PhongShading.png" alt="PhongShading"></h3><h3 id="c-4-对比"><a href="#c-4-对比" class="headerlink" title="c.4). 对比"></a>c.4). 对比</h3><p><img src="/2022/10/02/Games101_07_09_Shading/ShadingFreq.png" alt="ShadingFreq"></p>
 <ul>
 <li>不一定Phong着色就比Flat优秀。在极高面数的一些情况下，Flat Shading性能开销比Phong Shading小，且呈现效果相差无几；</li>
 </ul>
-<h3 id="c5-定义顶点像素法线"><a class="markdownIt-Anchor" href="#c5-定义顶点像素法线"></a> c.5). 定义顶点/像素法线</h3>
-<ul>
-<li>
-<p><strong><font color="red">顶点法线</font>为相邻三角形的加权平均</strong>（<strong>权重与三角面的面积有关</strong>，当然也可简单平均，但效果较加权平均差）；<img src="/2022/10/02/Games101_07_09_Shading/VectorsNormal.png" alt="VectorsNormal"></p>
+<h3 id="c-5-定义顶点-像素法线"><a href="#c-5-定义顶点-像素法线" class="headerlink" title="c.5). 定义顶点/像素法线"></a>c.5). 定义顶点/像素法线</h3><ul>
+<li><p><strong><font color="red">顶点法线</font>为相邻三角形的加权平均</strong>（<strong>权重与三角面的面积有关</strong>，当然也可简单平均，但效果较加权平均差）；<img src="/2022/10/02/Games101_07_09_Shading/VectorsNormal.png" alt="VectorsNormal"></p>
 </li>
-<li>
-<p><strong><font color="red">逐像素的法线</font>通过对顶点法线进行<font color="red">重心插值（Barycentric interpolation）</font>后归一化（normalize）得到；</strong><img src="/2022/10/02/Games101_07_09_Shading/PixelNormal.png" alt="PixelNormal"></p>
+<li><p><strong><font color="red">逐像素的法线</font>通过对顶点法线进行<font color="red">重心插值（Barycentric interpolation）</font>后归一化（normalize）得到；</strong><img src="/2022/10/02/Games101_07_09_Shading/PixelNormal.png" alt="PixelNormal"></p>
 </li>
 </ul>
-<h2 id="d-graphicsreal-time-rendering-pipeline"><a class="markdownIt-Anchor" href="#d-graphicsreal-time-rendering-pipeline"></a> d). Graphics(Real-time Rendering) Pipeline</h2>
-<ul>
+<h2 id="d-Graphics-Real-time-Rendering-Pipeline"><a href="#d-Graphics-Real-time-Rendering-Pipeline" class="headerlink" title="d). Graphics(Real-time Rendering) Pipeline"></a>d). Graphics(Real-time Rendering) Pipeline</h2><ul>
 <li>这段可看冯的入门精要作为简单的补充</li>
 </ul>
 <p><img src="/2022/10/02/Games101_07_09_Shading/GraphicsPipeline.png" alt="GraphicsPipeline"></p>
 <ul>
-<li>
-<p>MVP矩阵相关的发生在顶点阶段；<img src="/2022/10/02/Games101_07_09_Shading/PipelineVertex.png" alt="PipelineVertex"></p>
+<li><p>MVP矩阵相关的发生在顶点阶段；<img src="/2022/10/02/Games101_07_09_Shading/PipelineVertex.png" alt="PipelineVertex"></p>
 </li>
-<li>
-<p>光栅化；<img src="/2022/10/02/Games101_07_09_Shading/Rasterization_in_pp.png" alt="Rasterization_in_pp"></p>
+<li><p>光栅化；<img src="/2022/10/02/Games101_07_09_Shading/Rasterization_in_pp.png" alt="Rasterization_in_pp"></p>
 </li>
-<li>
-<p><img src="/2022/10/02/Games101_07_09_Shading/Frag.png" alt="Frag"></p>
+<li><p><img src="/2022/10/02/Games101_07_09_Shading/Frag.png" alt="Frag"></p>
 </li>
-<li>
-<p>Shading可在Vertex Processing阶段，也可在Fragment Processing阶段；<img src="/2022/10/02/Games101_07_09_Shading/Shading_in_PP.png" alt="Shading_in_PP"></p>
+<li><p>Shading可在Vertex Processing阶段，也可在Fragment Processing阶段；<img src="/2022/10/02/Games101_07_09_Shading/Shading_in_PP.png" alt="Shading_in_PP"></p>
 </li>
-<li>
-<p>Texture mapping<img src="/2022/10/02/Games101_07_09_Shading/TexMapping.png" alt="TexMapping"></p>
+<li><p>Texture mapping<img src="/2022/10/02/Games101_07_09_Shading/TexMapping.png" alt="TexMapping"></p>
 </li>
-<li>
-<p>Shader：<img src="/2022/10/02/Games101_07_09_Shading/ShaderEX.png" alt="ShaderEX"></p>
+<li><p>Shader：<img src="/2022/10/02/Games101_07_09_Shading/ShaderEX.png" alt="ShaderEX"></p>
 </li>
-<li>
-<p>优秀Shader（到时候好好学习一下）<img src="/2022/10/02/Games101_07_09_Shading/Example.png" alt="Example"></p>
+<li><p>优秀Shader（到时候好好学习一下）<img src="/2022/10/02/Games101_07_09_Shading/Example.png" alt="Example"></p>
 <ul>
 <li>Inigo Quilez, <a target="_blank" rel="noopener" href="https://youtu.be/XuSnLbB1j6E">https://youtu.be/XuSnLbB1j6E</a></li>
 </ul>
 </li>
 </ul>
-<h1 id="lecture-0809-shadingtexture-mapping"><a class="markdownIt-Anchor" href="#lecture-0809-shadingtexture-mapping"></a> Lecture 08/09 Shading(Texture Mapping)</h1>
-<ul>
-<li>可见 <a href="....%5C%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92%5C%E5%9B%BE%E5%BD%A2%5C01%5CNote.md">百人计划-图形1.3-纹理的秘密</a> 作为补充；</li>
+<h1 id="Lecture-08-09-Shading-Texture-Mapping"><a href="#Lecture-08-09-Shading-Texture-Mapping" class="headerlink" title="Lecture 08/09 Shading(Texture Mapping)"></a>Lecture 08/09 Shading(Texture Mapping)</h1><ul>
+<li>可见 <a href="..\..\百人计划\图形\01\Note.md">百人计划-图形1.3-纹理的秘密</a> 作为补充；</li>
 </ul>
-<h2 id="a-interpolation-across-triangles-barycentric-coordinates"><a class="markdownIt-Anchor" href="#a-interpolation-across-triangles-barycentric-coordinates"></a> a). Interpolation Across Triangles: Barycentric Coordinates</h2>
-<ul>
-<li>
-<p><strong>重心插值的作用：<strong>通过</strong>顶点</strong>特定的值（normal、Color、Depth、Texture coordinates…），得到三角形内部**片元（像素）**上平滑过渡的值；</p>
+<h2 id="a-Interpolation-Across-Triangles-Barycentric-Coordinates"><a href="#a-Interpolation-Across-Triangles-Barycentric-Coordinates" class="headerlink" title="a). Interpolation Across Triangles: Barycentric Coordinates"></a>a). Interpolation Across Triangles: Barycentric Coordinates</h2><ul>
+<li><p><strong>重心插值的作用：</strong>通过<strong>顶点</strong>特定的值（normal、Color、Depth、Texture coordinates…），得到三角形内部<strong>片元（像素）</strong>上平滑过渡的值；</p>
 </li>
-<li>
-<p><strong>数学基础：</strong></p>
+<li><p><strong>数学基础：</strong></p>
 <ul>
-<li>共面需满足的条件：
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi><mo>+</mo><mi>γ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">α+β+γ=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>，如需要点在三角形内，还需满足<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>0</mn><mo separator="true">,</mo><mi>β</mi><mo>&gt;</mo><mn>0</mn><mo separator="true">,</mo><mi>γ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">α&gt;0,β&gt;0,γ&gt;0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.05278em;">β</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.05556em;">γ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span><img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath.png" alt="Barycentiric_inMath"></li>
+<li>共面需满足的条件：<ul>
+<li>$α+β+γ=1$，如需要点在三角形内，还需满足$α&gt;0,β&gt;0,γ&gt;0$<img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath.png" alt="Barycentiric_inMath"></li>
 </ul>
 </li>
 <li>重心坐标求法：<img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath02.png" alt="Barycentiric_inMath02"></li>
-<li>由以上易得，重心坐标<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable rowspacing="0.24999999999999992em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mi>A</mi><mo>+</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mi>B</mi><mo>+</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mi>C</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}(x, y) &amp;=\frac{1}{3} A+\frac{1}{3}B+\frac{1}{3} C\end{aligned}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.30744em;vertical-align:-0.90372em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4037200000000003em;"><span style="top:-3.4037200000000003em;"><span class="pstrut" style="height:3.32144em;"></span><span class="mord"><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.90372em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4037200000000003em;"><span style="top:-3.4037200000000003em;"><span class="pstrut" style="height:3.32144em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">3</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.90372em;"><span></span></span></span></span></span></span></span></span></span></span><img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath03.png" alt="Barycentiric_inMath03"></li>
+<li>由以上易得，重心坐标$\begin{aligned}(x, y) &amp;=\frac{1}{3} A+\frac{1}{3}B+\frac{1}{3} C\end{aligned}$<img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath03.png" alt="Barycentiric_inMath03"></li>
 <li>通用计算公式：<img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath04.png" alt="Barycentiric_inMath04"></li>
-<li><strong>Final：</strong><img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath05.png" alt="Barycentiric_inMath05">
-<ul>
-<li>**<font color="red">注意：</font>**重心并没有投影不变性，因此进行插值需要在三维空间中进行，而不是在屏幕的二维投影上；</li>
+<li><strong>Final：</strong><img src="/2022/10/02/Games101_07_09_Shading/Barycentiric_inMath05.png" alt="Barycentiric_inMath05"><ul>
+<li><strong><font color="red">注意：</font></strong>重心并没有投影不变性，因此进行插值需要在三维空间中进行，而不是在屏幕的二维投影上；</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="b-texture-magnification需要放大纹理的情况"><a class="markdownIt-Anchor" href="#b-texture-magnification需要放大纹理的情况"></a> b). Texture Magnification(需要放大纹理的情况)</h2>
-<ul>
+<h2 id="b-Texture-Magnification-需要放大纹理的情况"><a href="#b-Texture-Magnification-需要放大纹理的情况" class="headerlink" title="b). Texture Magnification(需要放大纹理的情况)"></a>b). Texture Magnification(需要放大纹理的情况)</h2><ul>
 <li>对应情况：纹理过小（如距离物体近，而贴图小）</li>
-<li><strong>插值方式：</strong>
-<ul>
+<li><strong>插值方式：</strong><ul>
 <li>Nearest</li>
 <li>Bilinear</li>
 <li>Bicubic</li>
 </ul>
 </li>
 </ul>
-<h3 id="b1-bilinear-interpolation"><a class="markdownIt-Anchor" href="#b1-bilinear-interpolation"></a> b.1). Bilinear Interpolation</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/BilinearInterpolation.png" alt="BilinearInterpolation"></p>
-<h2 id="c-texture-magnification需要缩小纹理的情况"><a class="markdownIt-Anchor" href="#c-texture-magnification需要缩小纹理的情况"></a> c).  Texture Magnification(需要缩小纹理的情况)</h2>
-<ul>
-<li>
-<p>对应情况：纹理过大（如距离物体远，而贴图大）<img src="/2022/10/02/Games101_07_09_Shading/TexturePS.png" alt="TexturePS"><img src="/2022/10/02/Games101_07_09_Shading/TexturePS02.png" alt="TexturePS02"></p>
+<h3 id="b-1-Bilinear-Interpolation"><a href="#b-1-Bilinear-Interpolation" class="headerlink" title="b.1). Bilinear Interpolation"></a>b.1). Bilinear Interpolation</h3><p><img src="/2022/10/02/Games101_07_09_Shading/BilinearInterpolation.png" alt="BilinearInterpolation"></p>
+<h2 id="c-Texture-Magnification-需要缩小纹理的情况"><a href="#c-Texture-Magnification-需要缩小纹理的情况" class="headerlink" title="c).  Texture Magnification(需要缩小纹理的情况)"></a>c).  Texture Magnification(需要缩小纹理的情况)</h2><ul>
+<li><p>对应情况：纹理过大（如距离物体远，而贴图大）<img src="/2022/10/02/Games101_07_09_Shading/TexturePS.png" alt="TexturePS"><img src="/2022/10/02/Games101_07_09_Shading/TexturePS02.png" alt="TexturePS02"></p>
 </li>
-<li>
-<p><strong>解决思路：</strong></p>
+<li><p><strong>解决思路：</strong></p>
 <ul>
-<li>增大采样率（超采样）
-<ul>
+<li>增大采样率（超采样）<ul>
 <li>高质量，但性能开销大；</li>
 </ul>
 </li>
 <li>减小贴图频率（<strong>Mipmap</strong>）</li>
 </ul>
-<h3 id="c1-mipmap"><a class="markdownIt-Anchor" href="#c1-mipmap"></a> c.1). Mipmap</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/Mipmap.png" alt="Mipmap"><img src="/2022/10/02/Games101_07_09_Shading/Mipmap02.png" alt="Mipmap02"></p>
 </li>
 </ul>
-<h3 id="c1-如何确定mipmap的level参考百人计划mipmap_levelmipmap_level02"><a class="markdownIt-Anchor" href="#c1-如何确定mipmap的level参考百人计划mipmap_levelmipmap_level02"></a> c.1). 如何确定Mipmap的level（参考百人计划）：<img src="/2022/10/02/Games101_07_09_Shading/mipmap_level.png" alt="mipmap_level"><img src="/2022/10/02/Games101_07_09_Shading/mipmap_level02.png" alt="mipmap_level02"></h3>
-<h3 id="c2-mipmap之间的过渡"><a class="markdownIt-Anchor" href="#c2-mipmap之间的过渡"></a> c.2). Mipmap之间的过渡</h3>
-<ul>
-<li>
-<p>Visualization of Mipmap Level(D rounded to nearest integer level)：<img src="/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel.png" alt="Visualization_of_MipmapLevel"></p>
+<h3 id="c-1-Mipmap"><a href="#c-1-Mipmap" class="headerlink" title="c.1). Mipmap"></a>c.1). Mipmap</h3><p>  <img src="/2022/10/02/Games101_07_09_Shading/Mipmap.png" alt="Mipmap"><img src="/2022/10/02/Games101_07_09_Shading/Mipmap02.png" alt="Mipmap02"></p>
+<h3 id="c-1-如何确定Mipmap的level（参考百人计划）："><a href="#c-1-如何确定Mipmap的level（参考百人计划）：" class="headerlink" title="c.1). 如何确定Mipmap的level（参考百人计划）："></a>c.1). 如何确定Mipmap的level（参考百人计划）：<img src="/2022/10/02/Games101_07_09_Shading/mipmap_level.png" alt="mipmap_level"><img src="/2022/10/02/Games101_07_09_Shading/mipmap_level02.png" alt="mipmap_level02"></h3><h3 id="c-2-Mipmap之间的过渡"><a href="#c-2-Mipmap之间的过渡" class="headerlink" title="c.2). Mipmap之间的过渡"></a>c.2). Mipmap之间的过渡</h3><ul>
+<li><p>Visualization of Mipmap Level(D rounded to nearest integer level)：<img src="/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel.png" alt="Visualization_of_MipmapLevel"></p>
 </li>
-<li>
-<p><strong><font color="red">Trilinear Interpolation</font></strong></p>
+<li><p><strong><font color="red">Trilinear Interpolation</font></strong></p>
 <ul>
-<li>**作法：**对相邻两层的Mipmap做Bilinear Interpolation，根据所得的level，对相邻两层进过插值的结果再进行一次插值；（e.g. D=1.6，则对一层和二层分别进行双线性插值后，再进行<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mi>e</mi><mi>r</mi><mi>p</mi><mo stretchy="false">(</mo><mn>1.6</mn><mo>−</mo><mn>1</mn><mo separator="true">,</mo><msub><mi>n</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>n</mi><mn>2</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">lerp(1.6-1, n_1, n_2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span>）<img src="/2022/10/02/Games101_07_09_Shading/TrilinearInterpolation.png" alt="TrilinearInterpolation"></li>
+<li><strong>作法：</strong>对相邻两层的Mipmap做Bilinear Interpolation，根据所得的level，对相邻两层进过插值的结果再进行一次插值；（e.g. D=1.6，则对一层和二层分别进行双线性插值后，再进行$lerp(1.6-1, n_1, n_2)$）<img src="/2022/10/02/Games101_07_09_Shading/TrilinearInterpolation.png" alt="TrilinearInterpolation"></li>
 <li>Final：<img src="/2022/10/02/Games101_07_09_Shading/Visualization_of_MipmapLevel02.png" alt="Visualization_of_MipmapLevel02"></li>
 </ul>
 </li>
 </ul>
-<h2 id="d-applications-of-textures"><a class="markdownIt-Anchor" href="#d-applications-of-textures"></a> d). Applications of Textures</h2>
-<h3 id="d1-environment-map"><a class="markdownIt-Anchor" href="#d1-environment-map"></a> d.1). Environment Map</h3>
-<ul>
-<li>
-<p><strong>简介：</strong><img src="/2022/10/02/Games101_07_09_Shading/EnvironmentMap.png" alt="EnvironmentMap"></p>
-<ul>
+<h2 id="d-Applications-of-Textures"><a href="#d-Applications-of-Textures" class="headerlink" title="d). Applications of Textures"></a>d). Applications of Textures</h2><h3 id="d-1-Environment-Map"><a href="#d-1-Environment-Map" class="headerlink" title="d.1). Environment Map"></a>d.1). Environment Map</h3><ul>
+<li><strong>简介：</strong><img src="/2022/10/02/Games101_07_09_Shading/EnvironmentMap.png" alt="EnvironmentMap"><ul>
 <li>对于环境光源，我们认为它来自与无限远处，<strong>即没有深度意义，不同位置的同一方向受到的环境光源相同</strong>（当然，暂不考虑遮挡）</li>
 </ul>
 </li>
-<li>
-<p><strong>Spherical Environment Map：</strong><img src="/2022/10/02/Games101_07_09_Shading/SphericalEnvironmentMap.png" alt="SphericalEnvironmentMap"></p>
+<li><strong>Spherical Environment Map：</strong><img src="/2022/10/02/Games101_07_09_Shading/SphericalEnvironmentMap.png" alt="SphericalEnvironmentMap"><ul>
+<li><strong>Problem：</strong>不是均匀的描述，在极点会存在较大的扭曲；<img src="/2022/10/02/Games101_07_09_Shading/SphericalMap_Problem.png" alt="SphericalMap_Problem"></li>
+</ul>
+</li>
+</ul>
 <ul>
-<li>**Problem：**不是均匀的描述，在极点会存在较大的扭曲；<img src="/2022/10/02/Games101_07_09_Shading/SphericalMap_Problem.png" alt="SphericalMap_Problem"></li>
+<li><strong>CubeMap：</strong><img src="/2022/10/02/Games101_07_09_Shading/CubeMap00.png" alt="CubeMap00"><img src="/2022/10/02/Games101_07_09_Shading/CubeMap.png" alt="CubeMap"></li>
 </ul>
-</li>
-<li>
-<p><strong>CubeMap：</strong><img src="/2022/10/02/Games101_07_09_Shading/CubeMap00.png" alt="CubeMap00"><img src="/2022/10/02/Games101_07_09_Shading/CubeMap.png" alt="CubeMap"></p>
-</li>
-</ul>
-<h3 id="d2-bump-mapping"><a class="markdownIt-Anchor" href="#d2-bump-mapping"></a> d.2). Bump Mapping</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/BumpMap01.png" alt="BumpMap01"></p>
+<h3 id="d-2-Bump-Mapping"><a href="#d-2-Bump-Mapping" class="headerlink" title="d.2). Bump Mapping"></a>d.2). Bump Mapping</h3><p><img src="/2022/10/02/Games101_07_09_Shading/BumpMap01.png" alt="BumpMap01"></p>
 <p><img src="/2022/10/02/Games101_07_09_Shading/BumpMap02.png" alt="BumpMap02"></p>
 <ul>
-<li>
-<p><strong>凹凸贴图（视差贴图/法线贴图）计算法线过程：</strong></p>
+<li><p><strong>凹凸贴图（视差贴图/法线贴图）计算法线过程：</strong></p>
 <ul>
-<li>
-<p><strong>思路（一维情况，in flatland）：</strong></p>
+<li><p><strong>思路（一维情况，in flatland）：</strong></p>
 <ul>
-<li>原始法线 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">n(p)=(0,1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span></li>
-<li>在 p 点的导数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>p</mi><mo>=</mo><mi>c</mi><mo separator="true">⋅</mo><mo stretchy="false">[</mo><mi>h</mi><mo stretchy="false">(</mo><mi>p</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>h</mi><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">dp=c·[h(p+1)-h(p)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span> （<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span></span></span></span> 是常数，用于缩放导数，改变其影响程度），得出切线</li>
-<li>计算法线（垂直于切线） <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mi>d</mi><mi>p</mi><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi><mi>n</mi><mi>o</mi><mi>r</mi><mi>m</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>d</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">n(p)=(-dp,1).normalized()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathnormal">d</span><span class="mord mathnormal">p</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">.</span><span class="mord mathnormal">n</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span>；</li>
+<li>原始法线 $n(p)=(0,1)$</li>
+<li>在 p 点的导数 $dp=c·[h(p+1)-h(p)]$ （$c$ 是常数，用于缩放导数，改变其影响程度），得出切线</li>
+<li>计算法线（垂直于切线） $n(p)=(-dp,1).normalized()$；</li>
 </ul>
 <p><img src="/2022/10/02/Games101_07_09_Shading/perturbNormal.png" alt="perturbNormal"></p>
 </li>
-<li>
-<p><strong>思路（in 3D）：</strong></p>
+<li><p><strong>思路（in 3D）：</strong></p>
 <ul>
-<li>原始法线 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">n(p)=(0,0,1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span></span></span></span>；</li>
-<li>纹理上的点对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi></mrow><annotation encoding="application/x-tex">u</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">u</span></span></span></span> 方向和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi></mrow><annotation encoding="application/x-tex">v</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span></span></span></span> 方向求偏导，得出切线
+<li>原始法线 $n(p)=(0,0,1)$；</li>
+<li>纹理上的点对 $u$ 方向和 $v$ 方向求偏导，得出切线<ul>
+<li>$dp/du=c1·[h(u+1)-h(u)]$</li>
+<li>$dp/dv=c2·[h(v+1)-h(v)]$</li>
+</ul>
+</li>
+<li>计算法线（垂直于切线） $n(p)=(-dp/du,-dp/dv,1).normalized()$；</li>
+</ul>
+</li>
+<li><p>以上计算均在<strong>切线空间、局部空间</strong>计算（具体看冯-入门精要）</p>
+</li>
+</ul>
+</li>
+</ul>
 <ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>p</mi><mi mathvariant="normal">/</mi><mi>d</mi><mi>u</mi><mo>=</mo><mi>c</mi><mn>1</mn><mo separator="true">⋅</mo><mo stretchy="false">[</mo><mi>h</mi><mo stretchy="false">(</mo><mi>u</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>h</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">dp/du=c1·[h(u+1)-h(u)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">p</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mord">1</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>p</mi><mi mathvariant="normal">/</mi><mi>d</mi><mi>v</mi><mo>=</mo><mi>c</mi><mn>2</mn><mo separator="true">⋅</mo><mo stretchy="false">[</mo><mi>h</mi><mo stretchy="false">(</mo><mi>v</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>−</mo><mi>h</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">dp/dv=c2·[h(v+1)-h(v)]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">p</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">c</span><span class="mord">2</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mopen">[</span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mclose">)</span><span class="mclose">]</span></span></span></span></li>
-</ul>
-</li>
-<li>计算法线（垂直于切线） <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mo>−</mo><mi>d</mi><mi>p</mi><mi mathvariant="normal">/</mi><mi>d</mi><mi>u</mi><mo separator="true">,</mo><mo>−</mo><mi>d</mi><mi>p</mi><mi mathvariant="normal">/</mi><mi>d</mi><mi>v</mi><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi><mi>n</mi><mi>o</mi><mi>r</mi><mi>m</mi><mi>a</mi><mi>l</mi><mi>i</mi><mi>z</mi><mi>e</mi><mi>d</mi><mo stretchy="false">(</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">n(p)=(-dp/du,-dp/dv,1).normalized()</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathnormal">d</span><span class="mord mathnormal">p</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">−</span><span class="mord mathnormal">d</span><span class="mord mathnormal">p</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord">.</span><span class="mord mathnormal">n</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">m</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mopen">(</span><span class="mclose">)</span></span></span></span>；</li>
-</ul>
-</li>
-<li>
-<p>以上计算均在<strong>切线空间、局部空间</strong>计算（具体看冯-入门精要）</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Displacement mapping（置换/高度贴图）:</strong></p>
+<li><p><strong>Displacement mapping（置换/高度贴图）:</strong></p>
 <ul>
 <li>需要足够多的三角面（DX中的Dynamic Tessellation，动态曲面细分）</li>
 <li>真正地<strong>移动了顶点</strong></li>
@@ -646,185 +498,100 @@
 <p><img src="/2022/10/02/Games101_07_09_Shading/Bump_vs_Displacement.png" alt="Bump_vs_Displacement"></p>
 </li>
 </ul>
-<h3 id="d3-3d-procedural-noise-solid-modeling"><a class="markdownIt-Anchor" href="#d3-3d-procedural-noise-solid-modeling"></a> d.3). 3D Procedural Noise + Solid Modeling</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/3DProceduralNoise.png" alt="3DProceduralNoise"></p>
+<h3 id="d-3-3D-Procedural-Noise-Solid-Modeling"><a href="#d-3-3D-Procedural-Noise-Solid-Modeling" class="headerlink" title="d.3). 3D Procedural Noise + Solid Modeling"></a>d.3). 3D Procedural Noise + Solid Modeling</h3><p><img src="/2022/10/02/Games101_07_09_Shading/3DProceduralNoise.png" alt="3DProceduralNoise"></p>
 <ul>
 <li>Perlin noise</li>
 </ul>
-<h3 id="d4-provide-precomputed-shading"><a class="markdownIt-Anchor" href="#d4-provide-precomputed-shading"></a> d.4). Provide Precomputed Shading</h3>
-<p><img src="/2022/10/02/Games101_07_09_Shading/ProvidePrecomputedShading.png" alt="ProvidePrecomputedShading"></p>
+<h3 id="d-4-Provide-Precomputed-Shading"><a href="#d-4-Provide-Precomputed-Shading" class="headerlink" title="d.4). Provide Precomputed Shading"></a>d.4). Provide Precomputed Shading</h3><p><img src="/2022/10/02/Games101_07_09_Shading/ProvidePrecomputedShading.png" alt="ProvidePrecomputedShading"></p>
 <ul>
 <li>使用Baking的AO等（也可记录其他信息，如SP中的ID、Position、Curvature等）；</li>
 </ul>
-<h3 id="d5-3d-textures-and-volume-rendering"><a class="markdownIt-Anchor" href="#d5-3d-textures-and-volume-rendering"></a> d.5). 3D Textures and Volume Rendering</h3>
-<ul>
+<h3 id="d-5-3D-Textures-and-Volume-Rendering"><a href="#d-5-3D-Textures-and-Volume-Rendering" class="headerlink" title="d.5). 3D Textures and Volume Rendering"></a>d.5). 3D Textures and Volume Rendering</h3><ul>
 <li>体渲染</li>
 </ul>
 <p><img src="/2022/10/02/Games101_07_09_Shading/3DTexturesAndVolumeRendering.png" alt="3DTexturesAndVolumeRendering"></p>
 
-      
     </div>
-    <div class="article-footer">
-      <blockquote class="mt-2x">
-  <ul class="post-copyright list-unstyled">
-    
-    <li class="post-copyright-link hidden-xs">
-      <strong>本文链接：</strong>
-      <a href="http://example.com/2022/10/02/Games101_07_09_Shading/" title="Games101-7-9 Shading" target="_blank" rel="external">http://example.com/2022/10/02/Games101_07_09_Shading/</a>
-    </li>
-    
-    <li class="post-copyright-license">
-      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
-    </li>
-  </ul>
-</blockquote>
 
-
-<div class="panel panel-default panel-badger">
-  <div class="panel-body">
-    <figure class="media">
-      <div class="media-left">
-        <a href="https://github.com/WhiteTail-o" target="_blank" class="img-burn thumb-sm visible-lg">
-          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
-        </a>
-      </div>
-      <div class="media-body">
-        <h3 class="media-heading"><a href="https://github.com/WhiteTail-o" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
-        <div>个人简介。</div>
-      </div>
-    </figure>
-  </div>
-</div>
-
-
-    </div>
-  </article>
-  
-    
-  <section id="comments">
-  	
-      <div id="vcomments"></div>
-    
-  </section>
-
-
-  
-</div>
-
-  <nav class="bar bar-footer clearfix" data-stick-bottom>
-  <div class="bar-inner">
-  
-  <ul class="pager pull-left">
-    
-    <li class="prev">
-      <a href="/2022/10/02/Games101_10_12_Geometry/" title="Games101_10_12 Geometry"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
-    </li>
     
     
-    <li class="next">
-      <a href="/2022/10/02/Games101_05_06_Rasterization/" title="Games101-5-6 Rasterization"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
-    </li>
     
-    
-  </ul>
-  
-  
-  
-  <div class="bar-right">
-    
-    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
-    
-  </div>
-  </div>
-</nav>
-  
 
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Games101/" rel="tag"># Games101</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+          </div>
 
-</main>
-
-  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
-	
-	
-    <ul class="social-links">
-    	
-        <li><a href="https://github.com/WhiteTail-o" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
         
-    </ul>
 
-    <div class="copyright">
-    	
-        <div class="publishby">
-        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
-        </div>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2022/10/02/Games101_05_06_Rasterization/" rel="prev" title="Games101-5-6 Rasterization">
+                  <i class="fa fa-chevron-left"></i> Games101-5-6 Rasterization
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/10/02/Games101_10_12_Geometry/" rel="next" title="Games101_10_12 Geometry">
+                  Games101_10_12 Geometry <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+
+
+
     </div>
-</footer>
-  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
-<script>
-window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
-</script>
+  </footer>
 
-<script src="/js/plugin.min.js"></script>
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
 
 
-<script src="/js/application.js"></script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-
-    <script>
-(function (window) {
-    var INSIGHT_CONFIG = {
-        TRANSLATION: {
-            POSTS: '文章',
-            PAGES: '页面',
-            CATEGORIES: '分类',
-            TAGS: '标签',
-            UNTITLED: '(未命名)',
-        },
-        ROOT_URL: '/',
-        CONTENT_URL: '/content.json',
-    };
-    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
-})(window);
-</script>
-
-<script src="/js/insight.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
 
 
 
 
 
-
-   
-
-
-
-
-   
-    
-  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/valine"></script>
-  <script type="text/javascript">
-  var GUEST = ['nick', 'mail', 'link'];
-  var meta = 'nick,mail,link';
-  meta = meta.split(',').filter(function(item) {
-    return GUEST.indexOf(item) > -1;
-  });
-  new Valine({
-    el: '#vcomments',
-    verify: false,
-    notify: false,
-    appId: '',
-    appKey: '',
-    placeholder: 'Just go go',
-    avatar: 'mm',
-    meta: meta,
-    pageSize: '10' || 10,
-    visitor: false
-  });
-  </script>
-
-     
-
-
+  
 
 
 
