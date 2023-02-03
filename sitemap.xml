@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/2022/10/02/Games101_02_04_Math/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -74,15 +83,6 @@
   </url>
   
   <url>
-    <loc>http://example.com/2022/10/02/Games101_02_04_Math/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -146,6 +146,15 @@
   </url>
   
   <url>
+    <loc>http://example.com/repository/index.html</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/categories/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -156,15 +165,6 @@
   
   <url>
     <loc>http://example.com/books/index.html</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/repository/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
