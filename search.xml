@@ -715,255 +715,6 @@ a c(1-\cos \theta)+b \sin \theta & b c(1-\cos \theta)-a \sin \theta & c^{2}+\lef
       </tags>
   </entry>
   <entry>
-    <title>Games101_10_12 Geometry</title>
-    <url>/2022/10/02/Games101_10_12_Geometry/</url>
-    <content><![CDATA[<h1 id="Lecture-10-11-Geometry-1-2"><a href="#Lecture-10-11-Geometry-1-2" class="headerlink" title="Lecture 10/11: Geometry 1 2"></a>Lecture 10/11: Geometry 1 2</h1><ul>
-<li>不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；</li>
-</ul>
-<h2 id="a-几何的表示形式"><a href="#a-几何的表示形式" class="headerlink" title="a). 几何的表示形式"></a>a). 几何的表示形式</h2><ul>
-<li>隐式（Implicit）<ul>
-<li>algebraic surface</li>
-<li>level sets</li>
-<li>distance functions</li>
-<li>…</li>
-</ul>
-</li>
-<li>显式（Explicit）<ul>
-<li>point cloud</li>
-<li>polygon mesh</li>
-<li>subdivision, NURBS</li>
-<li>…</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-几何的隐式表示（Implict-Representations-of-Geometry）"><a href="#b-几何的隐式表示（Implict-Representations-of-Geometry）" class="headerlink" title="b). 几何的隐式表示（Implict Representations of Geometry）"></a>b). 几何的隐式表示（Implict Representations of Geometry）</h2><ul>
-<li><strong>基于归类的点</strong><ul>
-<li>点满足某种特定的关系，但不给你特定的点<ul>
-<li>e.g. <strong>Sphere:</strong> 所有三维中的点，满足 $x^2+y^2+z^2=1$；</li>
-</ul>
-</li>
-<li><strong>通用情况：</strong>$f(x,y,z)=0$<img src="/2022/10/02/Games101_10_12_Geometry/Geo_Implicit.png" alt="Geo_Implicit"></li>
-</ul>
-</li>
-<li><strong>缺点：</strong><ul>
-<li>难以采样（Sampling Can Be Hard，难以得到式子表示的整体形状）<img src="/2022/10/02/Games101_10_12_Geometry/Implicit_B.png" alt="Implicit_B"></li>
-</ul>
-</li>
-<li><strong>优点：</strong><ul>
-<li>方便判断点是否在几何体内（Inside/Outside Tests Easy）<img src="/2022/10/02/Games101_10_12_Geometry/Implicit_G.png" alt="Implicit_G"></li>
-</ul>
-</li>
-</ul>
-<h3 id="b-1-Algebraic-Surfaces（曲面代数）"><a href="#b-1-Algebraic-Surfaces（曲面代数）" class="headerlink" title="b.1). Algebraic Surfaces（曲面代数）"></a>b.1). Algebraic Surfaces（曲面代数）</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/AlgebraicSurfaces.png" alt="AlgebraicSurfaces"></p>
-<ul>
-<li>难以表达复杂的形状；</li>
-</ul>
-<h3 id="b-2-Constructive-Solid-Geometry（CSG-体素构造表示形式）"><a href="#b-2-Constructive-Solid-Geometry（CSG-体素构造表示形式）" class="headerlink" title="b.2). Constructive Solid Geometry（CSG, 体素构造表示形式）"></a>b.2). Constructive Solid Geometry（CSG, 体素构造表示形式）</h3><ul>
-<li>对隐式几何体进行布尔运算；<img src="/2022/10/02/Games101_10_12_Geometry/CSG.png" alt="CSG"></li>
-</ul>
-<h3 id="b-3-Distance-Function（距离函数）"><a href="#b-3-Distance-Function（距离函数）" class="headerlink" title="b.3). Distance Function（距离函数）"></a>b.3). Distance Function（距离函数）</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/DistanceFunctions.png" alt="DistanceFunctions"></p>
-<ul>
-<li><strong>给出各个点到物体的最小距离</strong></li>
-</ul>
-<ul>
-<li><strong>Blending Distance Function:</strong><img src="/2022/10/02/Games101_10_12_Geometry/BlendingDF.png" alt="BlendingDF"><ul>
-<li><strong>目的：</strong>通过混合得到A、B运动的中间状态；<ul>
-<li>上半部分，blend之后中间1/3是灰的，而理想的结果是<strong>左边1/2是黑色，右边1/2是白色</strong></li>
-<li>下半部分，对<strong>SDF</strong>进行混合，再将blend后的结果恢复成shape（找到SDF等于0的情况的所有点），就可得到中间状态的物体；<img src="/2022/10/02/Games101_10_12_Geometry/BlendingSDF.png" alt="BlendingSDF"></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><em>See <a href="https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm">https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm</a></em></li>
-</ul>
-<h3 id="b-4-Level-Set-Methods（水平集）"><a href="#b-4-Level-Set-Methods（水平集）" class="headerlink" title="b.4). Level Set Methods（水平集）"></a>b.4). Level Set Methods（水平集）</h3><ul>
-<li><p>封闭方程（DF）很难描述复杂的形状</p>
-</li>
-<li><p><strong>备选方案：</strong>存储近似函数值的网格（Level Set Methods）<img src="/2022/10/02/Games101_10_12_Geometry/LSM.png" alt="LSM"></p>
-<ul>
-<li>通过找到插值为0的位置确定表面；</li>
-<li><font color="red">提供对形状更明确的控制（如纹理）?</font>
-</li>
-</ul>
-</li>
-<li><p><strong>应用：</strong></p>
-<ul>
-<li><p><strong>Level Sets from Medical Data (CT, MRI, etc. 三维LSM)</strong><img src="/2022/10/02/Games101_10_12_Geometry/LSMin3D.png" alt="LSMin3D"></p>
-</li>
-<li><p><strong>物理模拟：</strong>如水平集得到各点到液体边界的距离（距离函数混合水滴）<img src="/2022/10/02/Games101_10_12_Geometry/LSMsimulation.png" alt="LSMsimulation"></p>
-<ul>
-<li><em>See <a href="http://physbam.stanford.edu">http://physbam.stanford.edu</a></em></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="b-5-Fractals-分形"><a href="#b-5-Fractals-分形" class="headerlink" title="b.5). Fractals(分形)"></a>b.5). Fractals(分形)</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/Fractals.png" alt="Fractals"></p>
-<h2 id="c-几何的显式表示（“Explicit”-Representations-of-Geometry）"><a href="#c-几何的显式表示（“Explicit”-Representations-of-Geometry）" class="headerlink" title="c). 几何的显式表示（“Explicit” Representations of Geometry）"></a>c). 几何的显式表示（“Explicit” Representations of Geometry）</h2><ul>
-<li><p><strong>简介：</strong> <strong>直接给出</strong>所有的点 或者 <strong>通过参数映射（via parameter mapping）</strong></p>
-<ul>
-<li><strong>参数映射：</strong>给出uv，以及uv到三维空间的映射关系，遍历所有的uv就可找到三维空间所有的点；<img src="/2022/10/02/Games101_10_12_Geometry/Explicit_via_param_mapping.png" alt="Explicit_via_param_mapping"></li>
-</ul>
-</li>
-<li><p><strong>采样简单</strong><img src="/2022/10/02/Games101_10_12_Geometry/Explicit_G.png" alt="Explicit_G"></p>
-</li>
-</ul>
-<ul>
-<li><p><strong>不方便</strong>判断点是否在几何体内（Inside/Outside Tests Hard）<img src="/2022/10/02/Games101_10_12_Geometry/Explicit_B.png" alt="Explicit_B"></p>
-</li>
-<li><p><strong>隐式、显式各有优缺点，需要根据需求选择最优的表达方式</strong></p>
-</li>
-</ul>
-<h3 id="c-1-Point-Cloud"><a href="#c-1-Point-Cloud" class="headerlink" title="c.1). Point Cloud"></a>c.1). Point Cloud</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/PointCloud.png" alt="PointCloud"></p>
-<h3 id="c-2-Polygon-Mesh"><a href="#c-2-Polygon-Mesh" class="headerlink" title="c.2). Polygon Mesh"></a>c.2). Polygon Mesh</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/PolygonMesh.png" alt="PolygonMesh"></p>
-<ul>
-<li>常用的PolygonMesh文件，Wavefront Object File (<strong>.obj</strong>)<ul>
-<li>v：顶点位置；vt：纹理位置；vn：normal；f：face，顶点索引/纹理索引/法线索引</li>
-<li><img src="/2022/10/02/Games101_10_12_Geometry/PolygonMesh_Obj.png" alt="PolygonMesh_Obj"></li>
-</ul>
-</li>
-</ul>
-<h3 id="c-3-Bezier-Curve（贝塞尔曲线）"><a href="#c-3-Bezier-Curve（贝塞尔曲线）" class="headerlink" title="c.3). Bézier Curve（贝塞尔曲线）"></a>c.3). Bézier Curve（贝塞尔曲线）</h3><ul>
-<li>通过点$p_0$ 、$p_1$，且在这两点切线为$t0$、$t1$（切线前带系数，对于三次贝塞尔曲线系数为3）<img src="/2022/10/02/Games101_10_12_Geometry/Bezier_DT.png" alt="Bezier_DT"></li>
-</ul>
-<h4 id="c-3-1-计算贝塞尔曲线-德卡斯特里奥算法-De-Casteljau’s-Algorithm"><a href="#c-3-1-计算贝塞尔曲线-德卡斯特里奥算法-De-Casteljau’s-Algorithm" class="headerlink" title="c.3.1). 计算贝塞尔曲线(德卡斯特里奥算法, De Casteljau’s Algorithm)"></a>c.3.1). 计算贝塞尔曲线(德卡斯特里奥算法, De Casteljau’s Algorithm)</h4><ul>
-<li><strong>二次贝塞尔曲线</strong></li>
-</ul>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/德卡斯特里奥算法.png" alt="德卡斯特里奥算法"></p>
-<ul>
-<li><p><strong>三次贝塞尔曲线（Cubic Bezier Curve）</strong><img src="/2022/10/02/Games101_10_12_Geometry/CubicBezierCurve.png" alt="CubicBezierCurve"></p>
-</li>
-<li><p>Anim：<img src="/2022/10/02/Games101_10_12_Geometry/Bezier2.gif" alt="Bezier2"></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/Bezier3.gif" alt="Bezier3"></p>
-</li>
-</ul>
-<h4 id="c-3-2-代数形式"><a href="#c-3-2-代数形式" class="headerlink" title="c.3.2). 代数形式"></a>c.3.2). 代数形式</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/Bezier_Algebraic.png" alt="Bezier_Algebraic"></p>
-<ul>
-<li>推出<strong>Bernstein polynomial（伯恩斯坦多项式）</strong>：</li>
-</ul>
-<script type="math/tex; mode=display">
-B_{i}^{n}(t)=C_n^i · t^{i}(1-t)^{n-i}</script><ul>
-<li><img src="/2022/10/02/Games101_10_12_Geometry/Bernstein.png" alt="Bernstein"></li>
-<li><img src="/2022/10/02/Games101_10_12_Geometry/Bernstein2.png" alt="Bernstein2"></li>
-</ul>
-<h4 id="C-3-3-性质"><a href="#C-3-3-性质" class="headerlink" title="C.3.3). 性质"></a>C.3.3). 性质</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/Properties_Bezier.png" alt="Properties_Bezier"></p>
-<ul>
-<li>即（对于三次贝塞尔曲线）：<ul>
-<li>$b_0$ 是起点，$b_3$是终点；</li>
-<li>切线为$\mathbf{b}^{\prime}(0)=3\left(\mathbf{b}_{1}-\mathbf{b}_{0}\right) ; \quad \mathbf{b}^{\prime}(1)=3\left(\mathbf{b}_{3}-\mathbf{b}_{2}\right)$ （切线前带系数，对于三次贝塞尔曲线系数为3，通过求导可得）</li>
-<li>仿射不变性（对于贝塞尔曲线做仿射变换，只需要对控制点进行变换）</li>
-<li>凸包性质；</li>
-</ul>
-</li>
-</ul>
-<h4 id="c-3-4-Piecewise-Bezier-Curves（分段贝塞尔曲线）"><a href="#c-3-4-Piecewise-Bezier-Curves（分段贝塞尔曲线）" class="headerlink" title="c.3.4). Piecewise Bézier Curves（分段贝塞尔曲线）"></a>c.3.4). Piecewise Bézier Curves（分段贝塞尔曲线）</h4><ul>
-<li>使用原因：解决高阶贝塞尔曲线控制点过多的问题；</li>
-<li>分段贝塞尔曲线，常是<strong>分段立方贝塞尔（Piecewise cubic Bézier）</strong>，即每一个曲线存在4个控制点；<img src="/2022/10/02/Games101_10_12_Geometry/Piecewise_cubic_Bezier.png" alt="Piecewise_cubic_Bezier"></li>
-</ul>
-<h5 id="c-3-4-1-连续性"><a href="#c-3-4-1-连续性" class="headerlink" title="c.3.4.1). 连续性"></a>c.3.4.1). 连续性</h5><p><img src="/2022/10/02/Games101_10_12_Geometry/Continuity.png" alt="Continuity"></p>
-<ul>
-<li><p>C<sup>0</sup> 连续（C表示Continuity），几何连续：$a_n=b_0$ ；</p>
-<ul>
-<li>首尾相接，夹角任意；<img src="/2022/10/02/Games101_10_12_Geometry/C0.png" alt="C0"></li>
-</ul>
-</li>
-<li><p>C<sup>1</sup> 连续，参数连续：$a_n=b_0={1\over2}(a_{n-1} + b_1)$ ；</p>
-<ul>
-<li>切线相等，即一阶导数连续；<img src="/2022/10/02/Games101_10_12_Geometry/C1.png" alt="C1"></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-5-Other-types-of-splines-待深入"><a href="#3-5-Other-types-of-splines-待深入" class="headerlink" title="3.5). Other types of splines(待深入)"></a>3.5). Other types of splines(待深入)</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/Spline.png" alt="Spline"></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/B_splines.png" alt="B_splines"></p>
-<ul>
-<li>In this course <ul>
-<li>We do not cover B-splines and NURBS</li>
-<li>We also do not cover operations on curves (e.g. increasing/decreasing orders, etc.)</li>
-<li>To learn more / deeper, you are welcome to refer to Prof. Shi-Min Hu’s course: <a href="https://www.bilibili.com/video/av66548502?from=search&amp;seid=65256805876131485">https://www.bilibili.com/video/av66548502?from=search&amp;seid=65256805876131485</a></li>
-</ul>
-</li>
-</ul>
-<h4 id="3-6-Bezier-Surface"><a href="#3-6-Bezier-Surface" class="headerlink" title="3.6). Bezier Surface"></a>3.6). Bezier Surface</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface.png" alt="BezierSurface"></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_vis.png" alt="BezierSurface_vis"></p>
-<ul>
-<li>Animation: Steven Wittens, Making Things with Maths, <a href="http://acko.net">http://acko.net</a></li>
-</ul>
-<h5 id="3-6-1-Evaluating-Bezier-Surfaces"><a href="#3-6-1-Evaluating-Bezier-Surfaces" class="headerlink" title="3.6.1). Evaluating Bézier Surfaces"></a>3.6.1). Evaluating Bézier Surfaces</h5><p><img src="/2022/10/02/Games101_10_12_Geometry/Eva_BezierSurface.png" alt="Eva_BezierSurface"></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_method1.png" alt="BezierSurface_method1"></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_method2.png" alt="BezierSurface_method2"></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/MeshOperations.png" alt="MeshOperations"></p>
-<h1 id="Lecture-13-Geometry"><a href="#Lecture-13-Geometry" class="headerlink" title="Lecture 13 Geometry"></a>Lecture 13 Geometry</h1><h2 id="a-Subdivision"><a href="#a-Subdivision" class="headerlink" title="a). Subdivision"></a>a). Subdivision</h2><p><img src="/2022/10/02/Games101_10_12_Geometry/Subdivision.png" alt="Subdivision"></p>
-<ul>
-<li>以下是几种常用的细分方法:</li>
-</ul>
-<h3 id="a-1-Loop-Subdivision-Loop是人名"><a href="#a-1-Loop-Subdivision-Loop是人名" class="headerlink" title="a.1). Loop Subdivision(Loop是人名)"></a>a.1). Loop Subdivision(Loop是人名)</h3><ul>
-<li><strong>细分对象：<font color="red">三角面</font></strong><ul>
-<li>首先，创造更多的三角面；</li>
-<li>第二，改变他们的位置；<img src="/2022/10/02/Games101_10_12_Geometry/LoopSub.png" alt="LoopSub"></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><strong>具体做法：</strong><ul>
-<li>将每个三角形细分为四个；<img src="/2022/10/02/Games101_10_12_Geometry/SplitTriangle.png" alt="SplitTriangle"></li>
-<li>根据权重分配新的顶点位置；<ul>
-<li>区分新/老顶点，做不同变换；</li>
-</ul>
-</li>
-<li>对于<strong>新顶点</strong>：<ul>
-<li>$P_{new} = {3\over8}(A+B)+{1\over8}(C+D)$<img src="/2022/10/02/Games101_10_12_Geometry/LoopSub_NewVert.png" alt="LoopSub_NewVert"></li>
-</ul>
-</li>
-<li>对于<strong>老顶点</strong>：<ul>
-<li>$n:$ 顶点的度（图论，与该顶点关联的边的数目，该处即为<strong>与该顶点连接的边的数量</strong>）</li>
-<li>$u:$ $3/16$（如果$n=3$），$3/(8n)$ （其他情况）</li>
-<li>$P_{new} = (1-nu)original_position + u·neighbor_position_sum$</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Loop Subdivision Results：</strong><img src="/2022/10/02/Games101_10_12_Geometry/LoopSub_Result.png" alt="LoopSub_Result"></p>
-</li>
-<li><p><strong>缺点：Loop只能处理三角面</strong>；</p>
-</li>
-</ul>
-<h3 id="a-2-Catmull-Clark-Subdivision"><a href="#a-2-Catmull-Clark-Subdivision" class="headerlink" title="a.2). Catmull-Clark Subdivision"></a>a.2). Catmull-Clark Subdivision</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub.png" alt="Catmull_Clark_Sub"></p>
-<ul>
-<li><p><strong>概念：</strong></p>
-<ul>
-<li>奇异点（Extraorinary vertex）：度不为4的点；</li>
-</ul>
-</li>
-<li><p><strong>具体过程：</strong></p>
-<ul>
-<li><p><strong>第一次细分：</strong></p>
-<ol>
-<li>每条边取中点，每个面也取其中一点；<img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_01.png" alt="Catmull_Clark_Sub_01"></li>
-</ol>
-<ul>
-<li>第一次细分后，<strong>引入（n个，n=非四边形数目）奇异点，非四边形面消失</strong>。之后，奇异点不在增加，因此，之后细分只针对四边面；<img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_02.png" alt="Catmull_Clark_Sub_02"></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>Catmull-Clark Vertex Update Rules (Quad Mesh)</strong></p>
-<p><img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_UpdateRules.png" alt="Catmull_Clark_Sub_UpdateRules"></p>
-<ul>
-<li><strong>Face point:</strong> </li>
-</ul>
-<p>$$<br>f=</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Games101</category>
-      </categories>
-      <tags>
-        <tag>Games101</tag>
-        <tag>图形学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Games101-13-16 RayTracing</title>
     <url>/2022/10/03/Games101_13_16_RayTracing/</url>
     <content><![CDATA[<h1 id="Lecture-13-Ray-Tracing"><a href="#Lecture-13-Ray-Tracing" class="headerlink" title="Lecture 13 Ray Tracing"></a>Lecture 13 Ray Tracing</h1><h2 id="a-vs-Rasterization"><a href="#a-vs-Rasterization" class="headerlink" title="a). vs. Rasterization"></a>a). vs. Rasterization</h2><ul>
@@ -1609,6 +1360,255 @@ d \omega=\frac{d A \cos \theta^{\prime}}{\left\|x^{\prime}-x\right\|^{2}}
       </tags>
   </entry>
   <entry>
+    <title>Games101_10_12 Geometry</title>
+    <url>/2022/10/02/Games101_10_12_Geometry/</url>
+    <content><![CDATA[<h1 id="Lecture-10-11-Geometry-1-2"><a href="#Lecture-10-11-Geometry-1-2" class="headerlink" title="Lecture 10/11: Geometry 1 2"></a>Lecture 10/11: Geometry 1 2</h1><ul>
+<li>不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；</li>
+</ul>
+<h2 id="a-几何的表示形式"><a href="#a-几何的表示形式" class="headerlink" title="a). 几何的表示形式"></a>a). 几何的表示形式</h2><ul>
+<li>隐式（Implicit）<ul>
+<li>algebraic surface</li>
+<li>level sets</li>
+<li>distance functions</li>
+<li>…</li>
+</ul>
+</li>
+<li>显式（Explicit）<ul>
+<li>point cloud</li>
+<li>polygon mesh</li>
+<li>subdivision, NURBS</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-几何的隐式表示（Implict-Representations-of-Geometry）"><a href="#b-几何的隐式表示（Implict-Representations-of-Geometry）" class="headerlink" title="b). 几何的隐式表示（Implict Representations of Geometry）"></a>b). 几何的隐式表示（Implict Representations of Geometry）</h2><ul>
+<li><strong>基于归类的点</strong><ul>
+<li>点满足某种特定的关系，但不给你特定的点<ul>
+<li>e.g. <strong>Sphere:</strong> 所有三维中的点，满足 $x^2+y^2+z^2=1$；</li>
+</ul>
+</li>
+<li><strong>通用情况：</strong>$f(x,y,z)=0$<img src="/2022/10/02/Games101_10_12_Geometry/Geo_Implicit.png" alt="Geo_Implicit"></li>
+</ul>
+</li>
+<li><strong>缺点：</strong><ul>
+<li>难以采样（Sampling Can Be Hard，难以得到式子表示的整体形状）<img src="/2022/10/02/Games101_10_12_Geometry/Implicit_B.png" alt="Implicit_B"></li>
+</ul>
+</li>
+<li><strong>优点：</strong><ul>
+<li>方便判断点是否在几何体内（Inside/Outside Tests Easy）<img src="/2022/10/02/Games101_10_12_Geometry/Implicit_G.png" alt="Implicit_G"></li>
+</ul>
+</li>
+</ul>
+<h3 id="b-1-Algebraic-Surfaces（曲面代数）"><a href="#b-1-Algebraic-Surfaces（曲面代数）" class="headerlink" title="b.1). Algebraic Surfaces（曲面代数）"></a>b.1). Algebraic Surfaces（曲面代数）</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/AlgebraicSurfaces.png" alt="AlgebraicSurfaces"></p>
+<ul>
+<li>难以表达复杂的形状；</li>
+</ul>
+<h3 id="b-2-Constructive-Solid-Geometry（CSG-体素构造表示形式）"><a href="#b-2-Constructive-Solid-Geometry（CSG-体素构造表示形式）" class="headerlink" title="b.2). Constructive Solid Geometry（CSG, 体素构造表示形式）"></a>b.2). Constructive Solid Geometry（CSG, 体素构造表示形式）</h3><ul>
+<li>对隐式几何体进行布尔运算；<img src="/2022/10/02/Games101_10_12_Geometry/CSG.png" alt="CSG"></li>
+</ul>
+<h3 id="b-3-Distance-Function（距离函数）"><a href="#b-3-Distance-Function（距离函数）" class="headerlink" title="b.3). Distance Function（距离函数）"></a>b.3). Distance Function（距离函数）</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/DistanceFunctions.png" alt="DistanceFunctions"></p>
+<ul>
+<li><strong>给出各个点到物体的最小距离</strong></li>
+</ul>
+<ul>
+<li><strong>Blending Distance Function:</strong><img src="/2022/10/02/Games101_10_12_Geometry/BlendingDF.png" alt="BlendingDF"><ul>
+<li><strong>目的：</strong>通过混合得到A、B运动的中间状态；<ul>
+<li>上半部分，blend之后中间1/3是灰的，而理想的结果是<strong>左边1/2是黑色，右边1/2是白色</strong></li>
+<li>下半部分，对<strong>SDF</strong>进行混合，再将blend后的结果恢复成shape（找到SDF等于0的情况的所有点），就可得到中间状态的物体；<img src="/2022/10/02/Games101_10_12_Geometry/BlendingSDF.png" alt="BlendingSDF"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><em>See <a href="https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm">https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm</a></em></li>
+</ul>
+<h3 id="b-4-Level-Set-Methods（水平集）"><a href="#b-4-Level-Set-Methods（水平集）" class="headerlink" title="b.4). Level Set Methods（水平集）"></a>b.4). Level Set Methods（水平集）</h3><ul>
+<li><p>封闭方程（DF）很难描述复杂的形状</p>
+</li>
+<li><p><strong>备选方案：</strong>存储近似函数值的网格（Level Set Methods）<img src="/2022/10/02/Games101_10_12_Geometry/LSM.png" alt="LSM"></p>
+<ul>
+<li>通过找到插值为0的位置确定表面；</li>
+<li><font color="red">提供对形状更明确的控制（如纹理）?</font>
+</li>
+</ul>
+</li>
+<li><p><strong>应用：</strong></p>
+<ul>
+<li><p><strong>Level Sets from Medical Data (CT, MRI, etc. 三维LSM)</strong><img src="/2022/10/02/Games101_10_12_Geometry/LSMin3D.png" alt="LSMin3D"></p>
+</li>
+<li><p><strong>物理模拟：</strong>如水平集得到各点到液体边界的距离（距离函数混合水滴）<img src="/2022/10/02/Games101_10_12_Geometry/LSMsimulation.png" alt="LSMsimulation"></p>
+<ul>
+<li><em>See <a href="http://physbam.stanford.edu">http://physbam.stanford.edu</a></em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="b-5-Fractals-分形"><a href="#b-5-Fractals-分形" class="headerlink" title="b.5). Fractals(分形)"></a>b.5). Fractals(分形)</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/Fractals.png" alt="Fractals"></p>
+<h2 id="c-几何的显式表示（“Explicit”-Representations-of-Geometry）"><a href="#c-几何的显式表示（“Explicit”-Representations-of-Geometry）" class="headerlink" title="c). 几何的显式表示（“Explicit” Representations of Geometry）"></a>c). 几何的显式表示（“Explicit” Representations of Geometry）</h2><ul>
+<li><p><strong>简介：</strong> <strong>直接给出</strong>所有的点 或者 <strong>通过参数映射（via parameter mapping）</strong></p>
+<ul>
+<li><strong>参数映射：</strong>给出uv，以及uv到三维空间的映射关系，遍历所有的uv就可找到三维空间所有的点；<img src="/2022/10/02/Games101_10_12_Geometry/Explicit_via_param_mapping.png" alt="Explicit_via_param_mapping"></li>
+</ul>
+</li>
+<li><p><strong>采样简单</strong><img src="/2022/10/02/Games101_10_12_Geometry/Explicit_G.png" alt="Explicit_G"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>不方便</strong>判断点是否在几何体内（Inside/Outside Tests Hard）<img src="/2022/10/02/Games101_10_12_Geometry/Explicit_B.png" alt="Explicit_B"></p>
+</li>
+<li><p><strong>隐式、显式各有优缺点，需要根据需求选择最优的表达方式</strong></p>
+</li>
+</ul>
+<h3 id="c-1-Point-Cloud"><a href="#c-1-Point-Cloud" class="headerlink" title="c.1). Point Cloud"></a>c.1). Point Cloud</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/PointCloud.png" alt="PointCloud"></p>
+<h3 id="c-2-Polygon-Mesh"><a href="#c-2-Polygon-Mesh" class="headerlink" title="c.2). Polygon Mesh"></a>c.2). Polygon Mesh</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/PolygonMesh.png" alt="PolygonMesh"></p>
+<ul>
+<li>常用的PolygonMesh文件，Wavefront Object File (<strong>.obj</strong>)<ul>
+<li>v：顶点位置；vt：纹理位置；vn：normal；f：face，顶点索引/纹理索引/法线索引</li>
+<li><img src="/2022/10/02/Games101_10_12_Geometry/PolygonMesh_Obj.png" alt="PolygonMesh_Obj"></li>
+</ul>
+</li>
+</ul>
+<h3 id="c-3-Bezier-Curve（贝塞尔曲线）"><a href="#c-3-Bezier-Curve（贝塞尔曲线）" class="headerlink" title="c.3). Bézier Curve（贝塞尔曲线）"></a>c.3). Bézier Curve（贝塞尔曲线）</h3><ul>
+<li>通过点$p_0$ 、$p_1$，且在这两点切线为$t0$、$t1$（切线前带系数，对于三次贝塞尔曲线系数为3）<img src="/2022/10/02/Games101_10_12_Geometry/Bezier_DT.png" alt="Bezier_DT"></li>
+</ul>
+<h4 id="c-3-1-计算贝塞尔曲线-德卡斯特里奥算法-De-Casteljau’s-Algorithm"><a href="#c-3-1-计算贝塞尔曲线-德卡斯特里奥算法-De-Casteljau’s-Algorithm" class="headerlink" title="c.3.1). 计算贝塞尔曲线(德卡斯特里奥算法, De Casteljau’s Algorithm)"></a>c.3.1). 计算贝塞尔曲线(德卡斯特里奥算法, De Casteljau’s Algorithm)</h4><ul>
+<li><strong>二次贝塞尔曲线</strong></li>
+</ul>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/德卡斯特里奥算法.png" alt="德卡斯特里奥算法"></p>
+<ul>
+<li><p><strong>三次贝塞尔曲线（Cubic Bezier Curve）</strong><img src="/2022/10/02/Games101_10_12_Geometry/CubicBezierCurve.png" alt="CubicBezierCurve"></p>
+</li>
+<li><p>Anim：<img src="/2022/10/02/Games101_10_12_Geometry/Bezier2.gif" alt="Bezier2"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Bezier3.gif" alt="Bezier3"></p>
+</li>
+</ul>
+<h4 id="c-3-2-代数形式"><a href="#c-3-2-代数形式" class="headerlink" title="c.3.2). 代数形式"></a>c.3.2). 代数形式</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/Bezier_Algebraic.png" alt="Bezier_Algebraic"></p>
+<ul>
+<li>推出<strong>Bernstein polynomial（伯恩斯坦多项式）</strong>：</li>
+</ul>
+<script type="math/tex; mode=display">
+B_{i}^{n}(t)=C_n^i · t^{i}(1-t)^{n-i}</script><ul>
+<li><img src="/2022/10/02/Games101_10_12_Geometry/Bernstein.png" alt="Bernstein"></li>
+<li><img src="/2022/10/02/Games101_10_12_Geometry/Bernstein2.png" alt="Bernstein2"></li>
+</ul>
+<h4 id="C-3-3-性质"><a href="#C-3-3-性质" class="headerlink" title="C.3.3). 性质"></a>C.3.3). 性质</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/Properties_Bezier.png" alt="Properties_Bezier"></p>
+<ul>
+<li>即（对于三次贝塞尔曲线）：<ul>
+<li>$b_0$ 是起点，$b_3$是终点；</li>
+<li>切线为$\mathbf{b}^{\prime}(0)=3\left(\mathbf{b}_{1}-\mathbf{b}_{0}\right) ; \quad \mathbf{b}^{\prime}(1)=3\left(\mathbf{b}_{3}-\mathbf{b}_{2}\right)$ （切线前带系数，对于三次贝塞尔曲线系数为3，通过求导可得）</li>
+<li>仿射不变性（对于贝塞尔曲线做仿射变换，只需要对控制点进行变换）</li>
+<li>凸包性质；</li>
+</ul>
+</li>
+</ul>
+<h4 id="c-3-4-Piecewise-Bezier-Curves（分段贝塞尔曲线）"><a href="#c-3-4-Piecewise-Bezier-Curves（分段贝塞尔曲线）" class="headerlink" title="c.3.4). Piecewise Bézier Curves（分段贝塞尔曲线）"></a>c.3.4). Piecewise Bézier Curves（分段贝塞尔曲线）</h4><ul>
+<li>使用原因：解决高阶贝塞尔曲线控制点过多的问题；</li>
+<li>分段贝塞尔曲线，常是<strong>分段立方贝塞尔（Piecewise cubic Bézier）</strong>，即每一个曲线存在4个控制点；<img src="/2022/10/02/Games101_10_12_Geometry/Piecewise_cubic_Bezier.png" alt="Piecewise_cubic_Bezier"></li>
+</ul>
+<h5 id="c-3-4-1-连续性"><a href="#c-3-4-1-连续性" class="headerlink" title="c.3.4.1). 连续性"></a>c.3.4.1). 连续性</h5><p><img src="/2022/10/02/Games101_10_12_Geometry/Continuity.png" alt="Continuity"></p>
+<ul>
+<li><p>C<sup>0</sup> 连续（C表示Continuity），几何连续：$a_n=b_0$ ；</p>
+<ul>
+<li>首尾相接，夹角任意；<img src="/2022/10/02/Games101_10_12_Geometry/C0.png" alt="C0"></li>
+</ul>
+</li>
+<li><p>C<sup>1</sup> 连续，参数连续：$a_n=b_0={1\over2}(a_{n-1} + b_1)$ ；</p>
+<ul>
+<li>切线相等，即一阶导数连续；<img src="/2022/10/02/Games101_10_12_Geometry/C1.png" alt="C1"></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-5-Other-types-of-splines-待深入"><a href="#3-5-Other-types-of-splines-待深入" class="headerlink" title="3.5). Other types of splines(待深入)"></a>3.5). Other types of splines(待深入)</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/Spline.png" alt="Spline"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/B_splines.png" alt="B_splines"></p>
+<ul>
+<li>In this course <ul>
+<li>We do not cover B-splines and NURBS</li>
+<li>We also do not cover operations on curves (e.g. increasing/decreasing orders, etc.)</li>
+<li>To learn more / deeper, you are welcome to refer to Prof. Shi-Min Hu’s course: <a href="https://www.bilibili.com/video/av66548502?from=search&amp;seid=65256805876131485">https://www.bilibili.com/video/av66548502?from=search&amp;seid=65256805876131485</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="3-6-Bezier-Surface"><a href="#3-6-Bezier-Surface" class="headerlink" title="3.6). Bezier Surface"></a>3.6). Bezier Surface</h4><p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface.png" alt="BezierSurface"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_vis.png" alt="BezierSurface_vis"></p>
+<ul>
+<li>Animation: Steven Wittens, Making Things with Maths, <a href="http://acko.net">http://acko.net</a></li>
+</ul>
+<h5 id="3-6-1-Evaluating-Bezier-Surfaces"><a href="#3-6-1-Evaluating-Bezier-Surfaces" class="headerlink" title="3.6.1). Evaluating Bézier Surfaces"></a>3.6.1). Evaluating Bézier Surfaces</h5><p><img src="/2022/10/02/Games101_10_12_Geometry/Eva_BezierSurface.png" alt="Eva_BezierSurface"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_method1.png" alt="BezierSurface_method1"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_method2.png" alt="BezierSurface_method2"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/MeshOperations.png" alt="MeshOperations"></p>
+<h1 id="Lecture-13-Geometry"><a href="#Lecture-13-Geometry" class="headerlink" title="Lecture 13 Geometry"></a>Lecture 13 Geometry</h1><h2 id="a-Subdivision"><a href="#a-Subdivision" class="headerlink" title="a). Subdivision"></a>a). Subdivision</h2><p><img src="/2022/10/02/Games101_10_12_Geometry/Subdivision.png" alt="Subdivision"></p>
+<ul>
+<li>以下是几种常用的细分方法:</li>
+</ul>
+<h3 id="a-1-Loop-Subdivision-Loop是人名"><a href="#a-1-Loop-Subdivision-Loop是人名" class="headerlink" title="a.1). Loop Subdivision(Loop是人名)"></a>a.1). Loop Subdivision(Loop是人名)</h3><ul>
+<li><strong>细分对象：<font color="red">三角面</font></strong><ul>
+<li>首先，创造更多的三角面；</li>
+<li>第二，改变他们的位置；<img src="/2022/10/02/Games101_10_12_Geometry/LoopSub.png" alt="LoopSub"></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>具体做法：</strong><ul>
+<li>将每个三角形细分为四个；<img src="/2022/10/02/Games101_10_12_Geometry/SplitTriangle.png" alt="SplitTriangle"></li>
+<li>根据权重分配新的顶点位置；<ul>
+<li>区分新/老顶点，做不同变换；</li>
+</ul>
+</li>
+<li>对于<strong>新顶点</strong>：<ul>
+<li>$P_{new} = {3\over8}(A+B)+{1\over8}(C+D)$<img src="/2022/10/02/Games101_10_12_Geometry/LoopSub_NewVert.png" alt="LoopSub_NewVert"></li>
+</ul>
+</li>
+<li>对于<strong>老顶点</strong>：<ul>
+<li>$n:$ 顶点的度（图论，与该顶点关联的边的数目，该处即为<strong>与该顶点连接的边的数量</strong>）</li>
+<li>$u:$ $3/16$（如果$n=3$），$3/(8n)$ （其他情况）</li>
+<li>$P_{new} = (1-nu)original_position + u·neighbor_position_sum$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Loop Subdivision Results：</strong><img src="/2022/10/02/Games101_10_12_Geometry/LoopSub_Result.png" alt="LoopSub_Result"></p>
+</li>
+<li><p><strong>缺点：Loop只能处理三角面</strong>；</p>
+</li>
+</ul>
+<h3 id="a-2-Catmull-Clark-Subdivision"><a href="#a-2-Catmull-Clark-Subdivision" class="headerlink" title="a.2). Catmull-Clark Subdivision"></a>a.2). Catmull-Clark Subdivision</h3><p><img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub.png" alt="Catmull_Clark_Sub"></p>
+<ul>
+<li><p><strong>概念：</strong></p>
+<ul>
+<li>奇异点（Extraorinary vertex）：度不为4的点；</li>
+</ul>
+</li>
+<li><p><strong>具体过程：</strong></p>
+<ul>
+<li><p><strong>第一次细分：</strong></p>
+<ol>
+<li>每条边取中点，每个面也取其中一点；<img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_01.png" alt="Catmull_Clark_Sub_01"></li>
+</ol>
+<ul>
+<li>第一次细分后，<strong>引入（n个，n=非四边形数目）奇异点，非四边形面消失</strong>。之后，奇异点不在增加，因此，之后细分只针对四边面；<img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_02.png" alt="Catmull_Clark_Sub_02"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>Catmull-Clark Vertex Update Rules (Quad Mesh)</strong></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_UpdateRules.png" alt="Catmull_Clark_Sub_UpdateRules"></p>
+<ul>
+<li><strong>Face point:</strong> </li>
+</ul>
+<p>$$<br>f=</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Games101</category>
+      </categories>
+      <tags>
+        <tag>Games101</tag>
+        <tag>图形学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Games101_17_18 Materials</title>
     <url>/2022/10/03/Games101_17_18_Materials/</url>
     <content><![CDATA[<h1 id="Lecture-17-Materials-and-Appearances"><a href="#Lecture-17-Materials-and-Appearances" class="headerlink" title="Lecture 17 Materials and Appearances"></a>Lecture 17 Materials and Appearances</h1><p><strong>Material == BRDF</strong></p>
@@ -2000,6 +2000,364 @@ f_{r}\left(\omega_{i} \rightarrow \omega_{r}\right) \geq 0</script></li>
       <tags>
         <tag>Games101</tag>
         <tag>图形学</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-3 Real-time Environment Mapping</title>
+    <url>/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</url>
+    <content><![CDATA[<p><a href="https:/docs.unrealengine.com/en-US/BuildingWorlds/LightingAndShadows/MeshDistanceFields/index.html">Mesh Distance Fields</a>，<a href="https:/cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf">Real Shading in Unreal Engine 4</a></p>
+<h1 id="a-Shading-from-Environment-Lighting-IBL"><a href="#a-Shading-from-Environment-Lighting-IBL" class="headerlink" title="a). Shading from Environment Lighting(IBL)"></a>a). Shading from Environment Lighting(IBL)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png" alt="EnvironmentLight01a"></p>
+<ul>
+<li>通过环境贴图着色的方式，又被命名为 <strong>Image-Based Lighting (IBL)</strong></li>
+</ul>
+<h2 id="a-1-How"><a href="#a-1-How" class="headerlink" title="a.1). How"></a>a.1). How</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
+<ul>
+<li>对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；</li>
+</ul>
+<ul>
+<li><p><strong>Observation：</strong></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png" alt="IBL_BRDF"></p>
+<ul>
+<li><p>对于Glossy，其BRDF支持集很小（Lobe范围小）；</p>
+</li>
+<li><p>对于Diffuse，其BRDF非常平滑；</p>
+</li>
+<li><p>联想到上节课渲染方程不等式成立的条件（拆出乘积积分的那个）</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png" alt="IBL_BRDF02"></p>
+<ul>
+<li><p>这里$\Omega_{G}$ 指积分域上，$g(x)$有值的区域。</p>
+<ul>
+<li><p>如$g(x)$ 为BRDF，$\Omega_{G}$ 即为原点向Lobe各点出发，与积分半球相交的区域集合</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png" alt="IBL_BRDF02b"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="We-can-safely-take-the-lighting-term-out"><a href="#We-can-safely-take-the-lighting-term-out" class="headerlink" title="We can safely take the lighting term out!"></a>We can safely take the lighting term out!</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png" alt="IBL_BRDF03"></p>
+<p>我们把渲染方程分为了两部分积分，分别是：</p>
+<ul>
+<li>在$\Omega_{fr}$(即Lobe对应的半球区域)，对<strong>光照Radiance积分</strong></li>
+<li>在半球内对BRDF积分；</li>
+</ul>
+<h2 id="a-2-Lighting（对Radiance积分）"><a href="#a-2-Lighting（对Radiance积分）" class="headerlink" title="a.2). Lighting（对Radiance积分）"></a>a.2). Lighting（对Radiance积分）</h2><ul>
+<li><p><strong>Lighting：</strong> </p>
+<script type="math/tex; mode=display">
+\frac{\int_{\Omega_{f_{r}}} L_{i}\left(p, \omega_{i}\right) \mathrm{d} \omega_{i}}{\int_{\Omega_{f_{r}}} \mathrm{~d} \omega_{i}}</script><ul>
+<li><p>即在$\Omega_{fr}$(即Lobe对应的半球区域)，对光照Radiance积分，再归一化（normalize，分母用于归一化）；</p>
+</li>
+<li><p>类比于PCF，就是对Environment Map做滤波；</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering.png" alt="IBL_Prefiltering"></p>
+<ul>
+<li><strong>滤波方法：Mipmap</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering02.png" alt="IBL_Prefiltering02"></p>
+<ul>
+<li><p>在Shading中，需要获得Lighting项的值，只需要求得<strong>Environment Map对应Mipmap层</strong>，<strong>Lobe中点(镜面反射方向)方向</strong>的结果</p>
+<ul>
+<li>和百人计划图形2.5中，做Relief Mapping时在Unity用到的texCUBElod()，对Mipmap采样联系上了；</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fixed3 Reflection = ACESToneMapping(texCUBElod(_CubeMap, float4(worldRef, (255-_Gloss)*8/255)).rgb, 1) * SpecularTint * _EnvIntensity;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="a-3-对BRDF积分（Split-Sum）"><a href="#a-3-对BRDF积分（Split-Sum）" class="headerlink" title="a.3). 对BRDF积分（Split Sum）"></a>a.3). 对BRDF积分（Split Sum）</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2.png" alt="SplitSum_2"></p>
+<script type="math/tex; mode=display">
+\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i</script><h3 id="假设使用微表面理论的BRDF"><a href="#假设使用微表面理论的BRDF" class="headerlink" title="假设使用微表面理论的BRDF"></a>假设使用<strong>微表面理论的BRDF</strong></h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
+<ul>
+<li><strong>做法：</strong> <strong>预计算</strong>考虑进所有变量（roughness、color等）的可能值的积分；</li>
+<li>但是，维度过高，存储成本过高，因此需要降维；</li>
+</ul>
+<ul>
+<li><p><strong>降维过程：</strong></p>
+<ol>
+<li><p>对应微表面BRDF，只考虑Fresnel term($F(i,h)$)和distribution of normals($D(h)$)</p>
+</li>
+<li><p>Fresnel term采用<strong>the Schlick’s approximation</strong></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2b.png" alt="SplitSum_2b"></p>
+<ul>
+<li>至此，积分降维为三维<ul>
+<li>$R_0$ ：零度菲涅尔值</li>
+<li>$\alpha$ ：可表示为roughness，$\alpha$ 越大，越粗糙；</li>
+<li>$\theta(\theta_h)$ ：在实时渲染中，我们认为<strong>出射角</strong>、<strong>入射角</strong>以及<strong>入射角/出射角与半程向量的夹角</strong>，这三者是相同性质的（不是说值近似相等，而是<strong>指作为积分的元素效果相同</strong>）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>在对BRDF的积分式中，通过Schlick’s approximation，将$R_0$拆出，即写成下列式子</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_3.png" alt="SplitSum_3"></p>
+<ul>
+<li>积分现在被降维为二维（$R_0$被拆出，$f_r$中的菲涅尔项被分母抵消）<ul>
+<li>$\alpha$ </li>
+<li>$\theta$ </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>至此，我们对积分的两项分别进行预计算，储存在表格或者图片中（R、G通道分别两项积分结果）通过LUT查询即可</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_4.png" alt="SplitSum_4"></p>
+<ul>
+<li>而$R_0$ 则可通过BaseColor（Metallic Workflow）、Specular（Specular Workflow）贴图或软件内置（一般默认为4%）即可获得；（看百人计划美术 2.7 Metallic与Speculer流程）</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>名字由来：</strong> Split sum</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_0.png" alt="SplitSum_0"></p>
+</li>
+</ul>
+<h3 id="假设使用Lambert的BRDF"><a href="#假设使用Lambert的BRDF" class="headerlink" title="假设使用Lambert的BRDF"></a>假设使用Lambert的BRDF</h3><script type="math/tex; mode=display">
+\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i</script><ul>
+<li>$f_r = {1\over \pi}$</li>
+<li>$\int_{\Omega^+}cos\theta_i d\omega_i = \pi$ （看Games101 Lecture 17-18 Materials二重积分）</li>
+<li>所以正好BRDF积分为1</li>
+</ul>
+<hr>
+<h1 id="b-Shadow-from-Environment-Light"><a href="#b-Shadow-from-Environment-Light" class="headerlink" title="b). Shadow from Environment Light"></a>b). Shadow from Environment Light</h1><ul>
+<li><p>在实时渲染中，没有完美的解决方案；</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Shadow.png" alt="IBL_Shadow"></p>
+<ul>
+<li>难以用实时渲染方程（那个不等式）来近似：<ul>
+<li>Support大，为整个半球</li>
+<li>带有Gloosy项，不够smooth</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>工业界方法：</strong></p>
+<ul>
+<li>只计算最亮的灯光（如UE中HDRI带一个Direction Light）</li>
+</ul>
+</li>
+<li>Related research <ul>
+<li>Imperfect shadow maps</li>
+<li>Light cuts</li>
+<li>RTRT (Real-Time Ray Tracing, might be the ultimate solution)</li>
+<li><strong>Precomputed radiance transfer(PRT)</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="c-Spherical-Harmonics-SH-球面谐波函数"><a href="#c-Spherical-Harmonics-SH-球面谐波函数" class="headerlink" title="c). Spherical Harmonics(SH, 球面谐波函数)"></a>c). Spherical Harmonics(SH, 球面谐波函数)</h1><h2 id="c-1-前置知识"><a href="#c-1-前置知识" class="headerlink" title="c.1). 前置知识"></a>c.1). 前置知识</h2><h3 id="Fourier-Transform"><a href="#Fourier-Transform" class="headerlink" title="Fourier Transform"></a>Fourier Transform</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform.png" alt="FourierTransform"></p>
+<ul>
+<li><p>这里是偶函数，所以 $sin$ 项系数都为0</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform_Freq.png" alt="FourierTransform_Freq"></p>
+</li>
+</ul>
+<h3 id="Convolution-Theorem"><a href="#Convolution-Theorem" class="headerlink" title="Convolution Theorem"></a>Convolution Theorem</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Convolution.png" alt="Convolution"></p>
+<ul>
+<li><strong>时域卷积等于频域乘积</strong></li>
+</ul>
+<h3 id="A-general-understanding"><a href="#A-general-understanding" class="headerlink" title="A general understanding"></a>A general understanding</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/A general understanding_Basic.png" alt="A general understanding_Basic"></p>
+<ul>
+<li><p><strong>product intergral:</strong> 相乘后积分，对应离散的情况就是相乘后相加。如：</p>
+<ul>
+<li><p>$n$维向量$\bold{a} = (x_1, x_2,…,x_n)$ 和 $\bold{b} = (y_1, y_2,…,y_n)$ 进行product intergral，即点乘</p>
+<p>$\bold{a} \cdot \bold{b} = x_1y_1+x_2y_2+…+x_ny_n$</p>
+</li>
+</ul>
+</li>
+<li><p>我们认为，<strong>函数相乘后积分（product intergral），就是滤波（卷积）</strong></p>
+</li>
+<li>积分结果的频率，取决于频率最低的项（$f(x),g(x)$）</li>
+</ul>
+<h3 id="Basis-Functions（基函数）"><a href="#Basis-Functions（基函数）" class="headerlink" title="Basis Functions（基函数）"></a>Basis Functions（基函数）</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/BasisFunc.png" alt="BasisFunc"></p>
+<ul>
+<li>$c_i$ 为系数</li>
+<li>如傅里叶变换中，各项就为正交基；</li>
+<li>或者多项式和泰勒展开等</li>
+</ul>
+<h2 id="c-2-简介"><a href="#c-2-简介" class="headerlink" title="c.2). 简介"></a>c.2). 简介</h2><h3 id="What？"><a href="#What？" class="headerlink" title="What？"></a>What？</h3><ul>
+<li><p><strong>球谐函数</strong> 是<strong>一系列</strong> <strong>二维球面函数的正交基函数</strong></p>
+<ul>
+<li><strong>球谐函数具有正交、归一、完备性</strong></li>
+</ul>
+<p>如</p>
+<script type="math/tex; mode=display">
+f(\omega)=\sum_{i} c_{i} \cdot B_{i}(\omega)</script><ul>
+<li><p>$f(\omega)$ 为球面函数，$\omega$ 为向量</p>
+</li>
+<li><p>$c_i$ 为系数</p>
+</li>
+<li><p>$B_{i}(\omega)$ 则为球谐函数</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01a.png" alt="SH_01a"></p>
+<ul>
+<li><strong>说明：</strong><ol>
+<li>每一行（$l=n$），频率相同</li>
+<li>对于$l=n$行（第$n$阶），函数数量为$2l+1$</li>
+<li>每一阶各SH都有编号，即$m$ 从$-l$ 到 $l$；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="How？"><a href="#How？" class="headerlink" title="How？"></a>How？</h3><ul>
+<li><p>每一阶的SH函数，由<strong>勒让德多项式</strong>求得；</p>
+</li>
+<li><p>如何求得$c_i$ </p>
+<ul>
+<li><p>投影（Projection）</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01b.png" alt="SH_01b"></p>
+<ul>
+<li>类似于傅里叶展开中，函数和各个正交基相乘求系数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="c-3-性质"><a href="#c-3-性质" class="headerlink" title="c.3). 性质"></a>c.3). 性质</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_BasisFunc.png" alt="SH_BasisFunc"></p>
+<ul>
+<li>正交性；</li>
+<li>投影性；</li>
+<li>旋转方便（旋转$f(x)$，相当于旋转基函数$B(i)$）<ul>
+<li>SH中，旋转后的基函数，可通过同阶的基函数线性组合得到；</li>
+</ul>
+</li>
+</ul>
+<h1 id="d-Shading-from-Environment-Lighting-SH-Diffuse项"><a href="#d-Shading-from-Environment-Lighting-SH-Diffuse项" class="headerlink" title="d). Shading from Environment Lighting(SH, Diffuse项)"></a>d). Shading from Environment Lighting(SH, Diffuse项)</h1><h2 id="d-1-简介"><a href="#d-1-简介" class="headerlink" title="d.1). 简介"></a>d.1). 简介</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading.png" alt="SH_Shading"></p>
+<ul>
+<li>如果不通过IBL方式，计算shading，<strong>那可以通过SH展开$L_i(p,\omega_i)$ ，即展开Environment Map（</strong>Environment Map可以写成二维函数）</li>
+</ul>
+<h2 id="d-2-分析Diffuse项的BRDF"><a href="#d-2-分析Diffuse项的BRDF" class="headerlink" title="d.2). 分析Diffuse项的BRDF"></a>d.2). 分析Diffuse项的BRDF</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading02.png" alt="SH_Shading02"></p>
+<ul>
+<li>$A_l$ 就是基函数的系数；</li>
+<li>由图可见，通过SH分析Diffuse项的BRDF后，可得出结论<ul>
+<li>当$l\geq3$ (即第四阶开始)，其 $A_l$ 接近0，说明Diffuse项的BRDF频率低，由SH前三阶表示即可；</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>积分结果的频率，取决于频率最低的项（$f(x),g(x)$）</p>
+</blockquote>
+<ul>
+<li><strong>Diffuse BRDF acts like a low-pass filter</strong></li>
+<li>因此，对于Environment Map的展开，只需要SH前三阶即可</li>
+</ul>
+<h2 id="d-3-SH展开Environment-Map"><a href="#d-3-SH展开Environment-Map" class="headerlink" title="d.3). SH展开Environment Map"></a>d.3). SH展开Environment Map</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading03.png" alt="SH_Shading03"></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading04.png" alt="SH_Shading04"></p>
+<ul>
+<li>通过求得各球谐函数的结果后，再通过结果逆变换得到Shading结果<ul>
+<li>通过ShadingPoint法线，再经过一系列计算（？）得到shading</li>
+</ul>
+</li>
+</ul>
+<h1 id="e-Precomputed-Radiance-Transfer"><a href="#e-Precomputed-Radiance-Transfer" class="headerlink" title="e). Precomputed Radiance Transfer"></a>e). Precomputed Radiance Transfer</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01a.png" alt="PRT_01a"></p>
+<ul>
+<li>对于渲染方程，如果我们把它每一项都进行Brute-force（蛮力）计算<ul>
+<li>$L_i$ : 二维，方位角$\omega$和俯仰角$\theta$</li>
+<li>$V(i)$ : 二维，方位角和俯仰角</li>
+<li>$\rho(\mathbf{i}, \mathbf{o})$ : 四维，入射角和出射角的方位角和俯仰角</li>
+</ul>
+</li>
+<li>存储压力过于大；</li>
+</ul>
+<h2 id="e-1-PRT"><a href="#e-1-PRT" class="headerlink" title="e.1). PRT"></a>e.1). PRT</h2><ul>
+<li><strong>前提：</strong> 假设场景中除了Lighting，其他都不变；</li>
+</ul>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01b.png" alt="PRT_01b"></p>
+<ul>
+<li>将RE分为两项，<ul>
+<li>Lighting变化；</li>
+<li>light transport不变；<ul>
+<li>$V(i): $ 二维，$\omega,\theta$，可烘焙为图像，如CubeMap（场景摆放固定）</li>
+<li>$\rho(\mathbf{i}, \mathbf{o}): $ <strong>BRDF</strong><ul>
+<li><strong>Diffuse Case:</strong> 常数</li>
+<li><strong>Gloosy Case:</strong> 四维，$\omega_{i},\theta_i, \omega_o,\theta_o$，入射和出射的方位角和俯仰角（相机固定，入射角固定）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="e-2-Diffuse-Case"><a href="#e-2-Diffuse-Case" class="headerlink" title="e.2). Diffuse Case"></a>e.2). Diffuse Case</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase01.png" alt="PRT_DiffuseCase01"></p>
+<ul>
+<li><p>此处（图形学中，大部分情况都是），积分和求和位置可变；</p>
+</li>
+<li><p>经过预计算后，求得Shading结果只需要<strong>在SH空间中，对向量进行点乘即可</strong>；</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02b.png" alt="PRT_02b"></p>
+</li>
+</ul>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02.png" alt="PRT_02"></p>
+<hr>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_03.png" alt="PRT_03"></p>
+<h3 id="e-2-1-计算"><a href="#e-2-1-计算" class="headerlink" title="e.2.1). 计算"></a>e.2.1). 计算</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase02.png" alt="PRT_DiffuseCase02"></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase03.png" alt="PRT_DiffuseCase03"></p>
+<ul>
+<li><strong>注意：</strong> 此处两次求和复杂度仍然是$O(n)$，因为SH基函数具有正交性；</li>
+</ul>
+<ul>
+<li><p><strong>Runtime is independent of transport complexity</strong></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans.png" alt="PRT_LightTrans"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>计算Light Transport简易理解：</strong> 积分形式和渲染方程相似，$B_i(\bold{i})$ 类似于$L_i(\bold{i})$ ，可看成是将球谐函数作为光照进行Shading得到Light Transport结果</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans02.png" alt="PRT_LightTrans02"></p>
+</li>
+</ul>
+<h2 id="e-3-Glossy-Case"><a href="#e-3-Glossy-Case" class="headerlink" title="e.3). Glossy Case"></a>e.3). Glossy Case</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_GlossyCase.png" alt="PRT_GlossyCase"></p>
+<ul>
+<li>此时，BRDF是关于入射和出射的方位角和俯仰角的四维函数；</li>
+<li><strong>做法：</strong> 对 $\bold{o}$ 也进行SH展开；（对于Gloosy不止展开到第三阶）<ul>
+<li>light coefficient与Diffuse Case相同，为SH空间的一维向量；</li>
+<li>transport matrix则是关于  $\bold{o}$ 和 $\bold{i}$ 四维函数（入射和出射的方位角和俯仰角），为SH空间的二维矩阵；</li>
+<li>reflected radiance coefficient则是关于 $\bold{o}$ 的二维函数（出射角的方位角和俯仰角），通过SH逆变换，即可得出相应视角（ $\bold{o}$ ）下的Gloosy radiance；<ul>
+<li><font color="red">具体怎么变换的？待实现</font>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="e-4-总结和限制"><a href="#e-4-总结和限制" class="headerlink" title="e.4). 总结和限制"></a>e.4). 总结和限制</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Summary.png" alt="PRT_Summary"></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Limitations.png" alt="PRT_Limitations"></p>
+<hr>
+<h1 id="f-Wavelet-小波"><a href="#f-Wavelet-小波" class="headerlink" title="f). Wavelet(小波)"></a>f). Wavelet(小波)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet01.png" alt="Wavelet01"></p>
+<ul>
+<li><p>定义在二维平面上的一系列基函数</p>
+</li>
+<li><p><strong>A non-linear approximation:</strong> 二维函数经过小波变换后，大部分系数接近0，这时可采用只记录系数大于一定值的项来近似原函数；</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet02.png" alt="Wavelet02"></p>
+<ul>
+<li>对于Environment Map，小波变换无法变换球面函数，因此展开为Cubemap后进行小波变换；</li>
+<li>每一个矩形经过小波变换后，把<strong>高频信息</strong>放在<strong>右上、右下、左下</strong>子块，剩下的<strong>低频信息</strong>放在<strong>左上</strong>，继续做小波变换；</li>
+</ul>
+</li>
+<li><p><strong>其他应用：</strong>JPG格式图片压缩， 使用类似与小波变换的DCT（Discrete cosine transform，离散余弦变换）、JPEG2000</p>
+</li>
+<li><p><strong>效果对比：</strong></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet03.png" alt="Wavelet03"></p>
+</li>
+<li><p><strong>缺点：</strong> </p>
+<ul>
+<li>旋转不方便（不同于SH基函数的旋转简易型，小波旋转需要从Wavelet展开，旋转后再做小波变换）</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Games202</tag>
       </tags>
   </entry>
   <entry>
@@ -2511,364 +2869,6 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
 <li>需要额外存储（不仅仅是图形，而是需要<strong>三维空间存储</strong>）</li>
 <li>对于形变物体需要大量实时计算</li>
 <li>……</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Games202</category>
-      </categories>
-      <tags>
-        <tag>图形学</tag>
-        <tag>Games202</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Games202-3 Real-time Environment Mapping</title>
-    <url>/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</url>
-    <content><![CDATA[<p><a href="https:/docs.unrealengine.com/en-US/BuildingWorlds/LightingAndShadows/MeshDistanceFields/index.html">Mesh Distance Fields</a>，<a href="https:/cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf">Real Shading in Unreal Engine 4</a></p>
-<h1 id="a-Shading-from-Environment-Lighting-IBL"><a href="#a-Shading-from-Environment-Lighting-IBL" class="headerlink" title="a). Shading from Environment Lighting(IBL)"></a>a). Shading from Environment Lighting(IBL)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png" alt="EnvironmentLight01a"></p>
-<ul>
-<li>通过环境贴图着色的方式，又被命名为 <strong>Image-Based Lighting (IBL)</strong></li>
-</ul>
-<h2 id="a-1-How"><a href="#a-1-How" class="headerlink" title="a.1). How"></a>a.1). How</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
-<ul>
-<li>对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；</li>
-</ul>
-<ul>
-<li><p><strong>Observation：</strong></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png" alt="IBL_BRDF"></p>
-<ul>
-<li><p>对于Glossy，其BRDF支持集很小（Lobe范围小）；</p>
-</li>
-<li><p>对于Diffuse，其BRDF非常平滑；</p>
-</li>
-<li><p>联想到上节课渲染方程不等式成立的条件（拆出乘积积分的那个）</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png" alt="IBL_BRDF02"></p>
-<ul>
-<li><p>这里$\Omega_{G}$ 指积分域上，$g(x)$有值的区域。</p>
-<ul>
-<li><p>如$g(x)$ 为BRDF，$\Omega_{G}$ 即为原点向Lobe各点出发，与积分半球相交的区域集合</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png" alt="IBL_BRDF02b"></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="We-can-safely-take-the-lighting-term-out"><a href="#We-can-safely-take-the-lighting-term-out" class="headerlink" title="We can safely take the lighting term out!"></a>We can safely take the lighting term out!</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png" alt="IBL_BRDF03"></p>
-<p>我们把渲染方程分为了两部分积分，分别是：</p>
-<ul>
-<li>在$\Omega_{fr}$(即Lobe对应的半球区域)，对<strong>光照Radiance积分</strong></li>
-<li>在半球内对BRDF积分；</li>
-</ul>
-<h2 id="a-2-Lighting（对Radiance积分）"><a href="#a-2-Lighting（对Radiance积分）" class="headerlink" title="a.2). Lighting（对Radiance积分）"></a>a.2). Lighting（对Radiance积分）</h2><ul>
-<li><p><strong>Lighting：</strong> </p>
-<script type="math/tex; mode=display">
-\frac{\int_{\Omega_{f_{r}}} L_{i}\left(p, \omega_{i}\right) \mathrm{d} \omega_{i}}{\int_{\Omega_{f_{r}}} \mathrm{~d} \omega_{i}}</script><ul>
-<li><p>即在$\Omega_{fr}$(即Lobe对应的半球区域)，对光照Radiance积分，再归一化（normalize，分母用于归一化）；</p>
-</li>
-<li><p>类比于PCF，就是对Environment Map做滤波；</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering.png" alt="IBL_Prefiltering"></p>
-<ul>
-<li><strong>滤波方法：Mipmap</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Prefiltering02.png" alt="IBL_Prefiltering02"></p>
-<ul>
-<li><p>在Shading中，需要获得Lighting项的值，只需要求得<strong>Environment Map对应Mipmap层</strong>，<strong>Lobe中点(镜面反射方向)方向</strong>的结果</p>
-<ul>
-<li>和百人计划图形2.5中，做Relief Mapping时在Unity用到的texCUBElod()，对Mipmap采样联系上了；</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">fixed3 Reflection = ACESToneMapping(texCUBElod(_CubeMap, float4(worldRef, (255-_Gloss)*8/255)).rgb, 1) * SpecularTint * _EnvIntensity;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="a-3-对BRDF积分（Split-Sum）"><a href="#a-3-对BRDF积分（Split-Sum）" class="headerlink" title="a.3). 对BRDF积分（Split Sum）"></a>a.3). 对BRDF积分（Split Sum）</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2.png" alt="SplitSum_2"></p>
-<script type="math/tex; mode=display">
-\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i</script><h3 id="假设使用微表面理论的BRDF"><a href="#假设使用微表面理论的BRDF" class="headerlink" title="假设使用微表面理论的BRDF"></a>假设使用<strong>微表面理论的BRDF</strong></h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
-<ul>
-<li><strong>做法：</strong> <strong>预计算</strong>考虑进所有变量（roughness、color等）的可能值的积分；</li>
-<li>但是，维度过高，存储成本过高，因此需要降维；</li>
-</ul>
-<ul>
-<li><p><strong>降维过程：</strong></p>
-<ol>
-<li><p>对应微表面BRDF，只考虑Fresnel term($F(i,h)$)和distribution of normals($D(h)$)</p>
-</li>
-<li><p>Fresnel term采用<strong>the Schlick’s approximation</strong></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_2b.png" alt="SplitSum_2b"></p>
-<ul>
-<li>至此，积分降维为三维<ul>
-<li>$R_0$ ：零度菲涅尔值</li>
-<li>$\alpha$ ：可表示为roughness，$\alpha$ 越大，越粗糙；</li>
-<li>$\theta(\theta_h)$ ：在实时渲染中，我们认为<strong>出射角</strong>、<strong>入射角</strong>以及<strong>入射角/出射角与半程向量的夹角</strong>，这三者是相同性质的（不是说值近似相等，而是<strong>指作为积分的元素效果相同</strong>）</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>在对BRDF的积分式中，通过Schlick’s approximation，将$R_0$拆出，即写成下列式子</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_3.png" alt="SplitSum_3"></p>
-<ul>
-<li>积分现在被降维为二维（$R_0$被拆出，$f_r$中的菲涅尔项被分母抵消）<ul>
-<li>$\alpha$ </li>
-<li>$\theta$ </li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>至此，我们对积分的两项分别进行预计算，储存在表格或者图片中（R、G通道分别两项积分结果）通过LUT查询即可</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_4.png" alt="SplitSum_4"></p>
-<ul>
-<li>而$R_0$ 则可通过BaseColor（Metallic Workflow）、Specular（Specular Workflow）贴图或软件内置（一般默认为4%）即可获得；（看百人计划美术 2.7 Metallic与Speculer流程）</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><p><strong>名字由来：</strong> Split sum</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SplitSum_0.png" alt="SplitSum_0"></p>
-</li>
-</ul>
-<h3 id="假设使用Lambert的BRDF"><a href="#假设使用Lambert的BRDF" class="headerlink" title="假设使用Lambert的BRDF"></a>假设使用Lambert的BRDF</h3><script type="math/tex; mode=display">
-\int_{\Omega^+}f_r(p,w_i,w_o)cos\theta_i d\omega_i</script><ul>
-<li>$f_r = {1\over \pi}$</li>
-<li>$\int_{\Omega^+}cos\theta_i d\omega_i = \pi$ （看Games101 Lecture 17-18 Materials二重积分）</li>
-<li>所以正好BRDF积分为1</li>
-</ul>
-<hr>
-<h1 id="b-Shadow-from-Environment-Light"><a href="#b-Shadow-from-Environment-Light" class="headerlink" title="b). Shadow from Environment Light"></a>b). Shadow from Environment Light</h1><ul>
-<li><p>在实时渲染中，没有完美的解决方案；</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_Shadow.png" alt="IBL_Shadow"></p>
-<ul>
-<li>难以用实时渲染方程（那个不等式）来近似：<ul>
-<li>Support大，为整个半球</li>
-<li>带有Gloosy项，不够smooth</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>工业界方法：</strong></p>
-<ul>
-<li>只计算最亮的灯光（如UE中HDRI带一个Direction Light）</li>
-</ul>
-</li>
-<li>Related research <ul>
-<li>Imperfect shadow maps</li>
-<li>Light cuts</li>
-<li>RTRT (Real-Time Ray Tracing, might be the ultimate solution)</li>
-<li><strong>Precomputed radiance transfer(PRT)</strong></li>
-</ul>
-</li>
-</ul>
-<h1 id="c-Spherical-Harmonics-SH-球面谐波函数"><a href="#c-Spherical-Harmonics-SH-球面谐波函数" class="headerlink" title="c). Spherical Harmonics(SH, 球面谐波函数)"></a>c). Spherical Harmonics(SH, 球面谐波函数)</h1><h2 id="c-1-前置知识"><a href="#c-1-前置知识" class="headerlink" title="c.1). 前置知识"></a>c.1). 前置知识</h2><h3 id="Fourier-Transform"><a href="#Fourier-Transform" class="headerlink" title="Fourier Transform"></a>Fourier Transform</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform.png" alt="FourierTransform"></p>
-<ul>
-<li><p>这里是偶函数，所以 $sin$ 项系数都为0</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/FourierTransform_Freq.png" alt="FourierTransform_Freq"></p>
-</li>
-</ul>
-<h3 id="Convolution-Theorem"><a href="#Convolution-Theorem" class="headerlink" title="Convolution Theorem"></a>Convolution Theorem</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Convolution.png" alt="Convolution"></p>
-<ul>
-<li><strong>时域卷积等于频域乘积</strong></li>
-</ul>
-<h3 id="A-general-understanding"><a href="#A-general-understanding" class="headerlink" title="A general understanding"></a>A general understanding</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/A general understanding_Basic.png" alt="A general understanding_Basic"></p>
-<ul>
-<li><p><strong>product intergral:</strong> 相乘后积分，对应离散的情况就是相乘后相加。如：</p>
-<ul>
-<li><p>$n$维向量$\bold{a} = (x_1, x_2,…,x_n)$ 和 $\bold{b} = (y_1, y_2,…,y_n)$ 进行product intergral，即点乘</p>
-<p>$\bold{a} \cdot \bold{b} = x_1y_1+x_2y_2+…+x_ny_n$</p>
-</li>
-</ul>
-</li>
-<li><p>我们认为，<strong>函数相乘后积分（product intergral），就是滤波（卷积）</strong></p>
-</li>
-<li>积分结果的频率，取决于频率最低的项（$f(x),g(x)$）</li>
-</ul>
-<h3 id="Basis-Functions（基函数）"><a href="#Basis-Functions（基函数）" class="headerlink" title="Basis Functions（基函数）"></a>Basis Functions（基函数）</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/BasisFunc.png" alt="BasisFunc"></p>
-<ul>
-<li>$c_i$ 为系数</li>
-<li>如傅里叶变换中，各项就为正交基；</li>
-<li>或者多项式和泰勒展开等</li>
-</ul>
-<h2 id="c-2-简介"><a href="#c-2-简介" class="headerlink" title="c.2). 简介"></a>c.2). 简介</h2><h3 id="What？"><a href="#What？" class="headerlink" title="What？"></a>What？</h3><ul>
-<li><p><strong>球谐函数</strong> 是<strong>一系列</strong> <strong>二维球面函数的正交基函数</strong></p>
-<ul>
-<li><strong>球谐函数具有正交、归一、完备性</strong></li>
-</ul>
-<p>如</p>
-<script type="math/tex; mode=display">
-f(\omega)=\sum_{i} c_{i} \cdot B_{i}(\omega)</script><ul>
-<li><p>$f(\omega)$ 为球面函数，$\omega$ 为向量</p>
-</li>
-<li><p>$c_i$ 为系数</p>
-</li>
-<li><p>$B_{i}(\omega)$ 则为球谐函数</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01a.png" alt="SH_01a"></p>
-<ul>
-<li><strong>说明：</strong><ol>
-<li>每一行（$l=n$），频率相同</li>
-<li>对于$l=n$行（第$n$阶），函数数量为$2l+1$</li>
-<li>每一阶各SH都有编号，即$m$ 从$-l$ 到 $l$；</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="How？"><a href="#How？" class="headerlink" title="How？"></a>How？</h3><ul>
-<li><p>每一阶的SH函数，由<strong>勒让德多项式</strong>求得；</p>
-</li>
-<li><p>如何求得$c_i$ </p>
-<ul>
-<li><p>投影（Projection）</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_01b.png" alt="SH_01b"></p>
-<ul>
-<li>类似于傅里叶展开中，函数和各个正交基相乘求系数</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="c-3-性质"><a href="#c-3-性质" class="headerlink" title="c.3). 性质"></a>c.3). 性质</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_BasisFunc.png" alt="SH_BasisFunc"></p>
-<ul>
-<li>正交性；</li>
-<li>投影性；</li>
-<li>旋转方便（旋转$f(x)$，相当于旋转基函数$B(i)$）<ul>
-<li>SH中，旋转后的基函数，可通过同阶的基函数线性组合得到；</li>
-</ul>
-</li>
-</ul>
-<h1 id="d-Shading-from-Environment-Lighting-SH-Diffuse项"><a href="#d-Shading-from-Environment-Lighting-SH-Diffuse项" class="headerlink" title="d). Shading from Environment Lighting(SH, Diffuse项)"></a>d). Shading from Environment Lighting(SH, Diffuse项)</h1><h2 id="d-1-简介"><a href="#d-1-简介" class="headerlink" title="d.1). 简介"></a>d.1). 简介</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading.png" alt="SH_Shading"></p>
-<ul>
-<li>如果不通过IBL方式，计算shading，<strong>那可以通过SH展开$L_i(p,\omega_i)$ ，即展开Environment Map（</strong>Environment Map可以写成二维函数）</li>
-</ul>
-<h2 id="d-2-分析Diffuse项的BRDF"><a href="#d-2-分析Diffuse项的BRDF" class="headerlink" title="d.2). 分析Diffuse项的BRDF"></a>d.2). 分析Diffuse项的BRDF</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading02.png" alt="SH_Shading02"></p>
-<ul>
-<li>$A_l$ 就是基函数的系数；</li>
-<li>由图可见，通过SH分析Diffuse项的BRDF后，可得出结论<ul>
-<li>当$l\geq3$ (即第四阶开始)，其 $A_l$ 接近0，说明Diffuse项的BRDF频率低，由SH前三阶表示即可；</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p>积分结果的频率，取决于频率最低的项（$f(x),g(x)$）</p>
-</blockquote>
-<ul>
-<li><strong>Diffuse BRDF acts like a low-pass filter</strong></li>
-<li>因此，对于Environment Map的展开，只需要SH前三阶即可</li>
-</ul>
-<h2 id="d-3-SH展开Environment-Map"><a href="#d-3-SH展开Environment-Map" class="headerlink" title="d.3). SH展开Environment Map"></a>d.3). SH展开Environment Map</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading03.png" alt="SH_Shading03"></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/SH_Shading04.png" alt="SH_Shading04"></p>
-<ul>
-<li>通过求得各球谐函数的结果后，再通过结果逆变换得到Shading结果<ul>
-<li>通过ShadingPoint法线，再经过一系列计算（？）得到shading</li>
-</ul>
-</li>
-</ul>
-<h1 id="e-Precomputed-Radiance-Transfer"><a href="#e-Precomputed-Radiance-Transfer" class="headerlink" title="e). Precomputed Radiance Transfer"></a>e). Precomputed Radiance Transfer</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01a.png" alt="PRT_01a"></p>
-<ul>
-<li>对于渲染方程，如果我们把它每一项都进行Brute-force（蛮力）计算<ul>
-<li>$L_i$ : 二维，方位角$\omega$和俯仰角$\theta$</li>
-<li>$V(i)$ : 二维，方位角和俯仰角</li>
-<li>$\rho(\mathbf{i}, \mathbf{o})$ : 四维，入射角和出射角的方位角和俯仰角</li>
-</ul>
-</li>
-<li>存储压力过于大；</li>
-</ul>
-<h2 id="e-1-PRT"><a href="#e-1-PRT" class="headerlink" title="e.1). PRT"></a>e.1). PRT</h2><ul>
-<li><strong>前提：</strong> 假设场景中除了Lighting，其他都不变；</li>
-</ul>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_01b.png" alt="PRT_01b"></p>
-<ul>
-<li>将RE分为两项，<ul>
-<li>Lighting变化；</li>
-<li>light transport不变；<ul>
-<li>$V(i): $ 二维，$\omega,\theta$，可烘焙为图像，如CubeMap（场景摆放固定）</li>
-<li>$\rho(\mathbf{i}, \mathbf{o}): $ <strong>BRDF</strong><ul>
-<li><strong>Diffuse Case:</strong> 常数</li>
-<li><strong>Gloosy Case:</strong> 四维，$\omega_{i},\theta_i, \omega_o,\theta_o$，入射和出射的方位角和俯仰角（相机固定，入射角固定）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="e-2-Diffuse-Case"><a href="#e-2-Diffuse-Case" class="headerlink" title="e.2). Diffuse Case"></a>e.2). Diffuse Case</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase01.png" alt="PRT_DiffuseCase01"></p>
-<ul>
-<li><p>此处（图形学中，大部分情况都是），积分和求和位置可变；</p>
-</li>
-<li><p>经过预计算后，求得Shading结果只需要<strong>在SH空间中，对向量进行点乘即可</strong>；</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02b.png" alt="PRT_02b"></p>
-</li>
-</ul>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_02.png" alt="PRT_02"></p>
-<hr>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_03.png" alt="PRT_03"></p>
-<h3 id="e-2-1-计算"><a href="#e-2-1-计算" class="headerlink" title="e.2.1). 计算"></a>e.2.1). 计算</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase02.png" alt="PRT_DiffuseCase02"></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_DiffuseCase03.png" alt="PRT_DiffuseCase03"></p>
-<ul>
-<li><strong>注意：</strong> 此处两次求和复杂度仍然是$O(n)$，因为SH基函数具有正交性；</li>
-</ul>
-<ul>
-<li><p><strong>Runtime is independent of transport complexity</strong></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans.png" alt="PRT_LightTrans"></p>
-</li>
-</ul>
-<ul>
-<li><p><strong>计算Light Transport简易理解：</strong> 积分形式和渲染方程相似，$B_i(\bold{i})$ 类似于$L_i(\bold{i})$ ，可看成是将球谐函数作为光照进行Shading得到Light Transport结果</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_LightTrans02.png" alt="PRT_LightTrans02"></p>
-</li>
-</ul>
-<h2 id="e-3-Glossy-Case"><a href="#e-3-Glossy-Case" class="headerlink" title="e.3). Glossy Case"></a>e.3). Glossy Case</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_GlossyCase.png" alt="PRT_GlossyCase"></p>
-<ul>
-<li>此时，BRDF是关于入射和出射的方位角和俯仰角的四维函数；</li>
-<li><strong>做法：</strong> 对 $\bold{o}$ 也进行SH展开；（对于Gloosy不止展开到第三阶）<ul>
-<li>light coefficient与Diffuse Case相同，为SH空间的一维向量；</li>
-<li>transport matrix则是关于  $\bold{o}$ 和 $\bold{i}$ 四维函数（入射和出射的方位角和俯仰角），为SH空间的二维矩阵；</li>
-<li>reflected radiance coefficient则是关于 $\bold{o}$ 的二维函数（出射角的方位角和俯仰角），通过SH逆变换，即可得出相应视角（ $\bold{o}$ ）下的Gloosy radiance；<ul>
-<li><font color="red">具体怎么变换的？待实现</font>
-
-
-
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="e-4-总结和限制"><a href="#e-4-总结和限制" class="headerlink" title="e.4). 总结和限制"></a>e.4). 总结和限制</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Summary.png" alt="PRT_Summary"></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/PRT_Limitations.png" alt="PRT_Limitations"></p>
-<hr>
-<h1 id="f-Wavelet-小波"><a href="#f-Wavelet-小波" class="headerlink" title="f). Wavelet(小波)"></a>f). Wavelet(小波)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet01.png" alt="Wavelet01"></p>
-<ul>
-<li><p>定义在二维平面上的一系列基函数</p>
-</li>
-<li><p><strong>A non-linear approximation:</strong> 二维函数经过小波变换后，大部分系数接近0，这时可采用只记录系数大于一定值的项来近似原函数；</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet02.png" alt="Wavelet02"></p>
-<ul>
-<li>对于Environment Map，小波变换无法变换球面函数，因此展开为Cubemap后进行小波变换；</li>
-<li>每一个矩形经过小波变换后，把<strong>高频信息</strong>放在<strong>右上、右下、左下</strong>子块，剩下的<strong>低频信息</strong>放在<strong>左上</strong>，继续做小波变换；</li>
-</ul>
-</li>
-<li><p><strong>其他应用：</strong>JPG格式图片压缩， 使用类似与小波变换的DCT（Discrete cosine transform，离散余弦变换）、JPEG2000</p>
-</li>
-<li><p><strong>效果对比：</strong></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/Wavelet03.png" alt="Wavelet03"></p>
-</li>
-<li><p><strong>缺点：</strong> </p>
-<ul>
-<li>旋转不方便（不同于SH基函数的旋转简易型，小波旋转需要从Wavelet展开，旋转后再做小波变换）</li>
 </ul>
 </li>
 </ul>

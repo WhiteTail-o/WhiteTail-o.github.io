@@ -13,9 +13,9 @@ https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/
 https://whitetail-o.github.io/2022/10/02/Games101_10_12_Geometry/
 https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/
 https://whitetail-o.github.io/about/index.html
-https://whitetail-o.github.io/repository/index.html
 https://whitetail-o.github.io/links/index.html
 https://whitetail-o.github.io/books/index.html
+https://whitetail-o.github.io/repository/index.html
 https://whitetail-o.github.io/404.html
 https://whitetail-o.github.io/
 https://whitetail-o.github.io/tags/Games101/

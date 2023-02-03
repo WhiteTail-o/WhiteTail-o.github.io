@@ -2226,6 +2226,13 @@ mark.search-keyword {
   color: #ff2a2a;
   font-weight: bold;
 }
+mjx-container[jax='CHTML'][display='true'],
+.has-jax {
+  overflow: auto hidden;
+}
+mjx-container[display='true'] + br {
+  display: none;
+}
 .use-motion .animated {
   animation-fill-mode: none;
   visibility: inherit;
@@ -2406,7 +2413,7 @@ mark.search-keyword {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #32c777;
+  background: #996f2d;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -2449,10 +2456,4 @@ mark.search-keyword {
   .sidebar-dimmer {
     display: none;
   }
-}
-body {
-  background-image: url("/images/background.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
 }
