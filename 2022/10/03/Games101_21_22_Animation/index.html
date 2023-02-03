@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Games101_21_22 Animation | Hexo</title>
+  <meta name="description" content="Lecture 21 Animation  a). History  b). Keyframe  c). Physical Simualtion   c.1). Mass Spring System    Idealized spring   但永远不会停止，因此加入摩擦力        中间项为相对速度在向量ababab方向的投影，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games101_21_22 Animation">
+<meta property="og:url" content="http://example.com/2022/10/03/Games101_21_22_Animation/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Lecture 21 Animation  a). History  b). Keyframe  c). Physical Simualtion   c.1). Mass Spring System    Idealized spring   但永远不会停止，因此加入摩擦力        中间项为相对速度在向量ababab方向的投影，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那f">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/DampSpring.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/FK.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/JointTypes.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/IK_eg.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/IK00.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/Rigging.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/%E9%BE%99%E6%A0%BC%E5%BA%93%E5%A1%94.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/Position-Based.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/MPM.png">
+<meta property="article:published_time" content="2022-10-03T10:20:10.000Z">
+<meta property="article:modified_time" content="2023-02-03T13:42:54.858Z">
+<meta property="article:author" content="WhiteTail">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/10/03/Games101_21_22_Animation/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games101/">Games101</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Games101_21_22_Animation" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Games101_21_22 Animation
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/03/Games101_21_22_Animation/" class="article-date">
+	  <time datetime="2022-10-03T10:20:10.000Z" itemprop="datePublished">2022-10-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Games101/">Games101</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/03/Games101_21_22_Animation/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="lecture-21-animation"><a class="markdownIt-Anchor" href="#lecture-21-animation"></a> Lecture 21 Animation</h1>
+<h2 id="a-history"><a class="markdownIt-Anchor" href="#a-history"></a> a). History</h2>
+<h2 id="b-keyframe"><a class="markdownIt-Anchor" href="#b-keyframe"></a> b). Keyframe</h2>
+<h2 id="c-physical-simualtion"><a class="markdownIt-Anchor" href="#c-physical-simualtion"></a> c). Physical Simualtion</h2>
+<p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c1-mass-spring-system"><a class="markdownIt-Anchor" href="#c1-mass-spring-system"></a> c.1). Mass Spring System</h3>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+<ul>
+<li>
+<p><strong>Idealized spring</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<ul>
+<li>但永远不会停止，因此加入摩擦力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<ul>
+<li>
+<p>中间项为<strong>相对速度在向量<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>b</mi></mrow><annotation encoding="application/x-tex">ab</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal">b</span></span></span></span>方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>b</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f_b=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.10764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">b</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>；</p>
+<ul>
+<li>
+<p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
+</li>
+</ul>
+</li>
+<li>
+<p>加入两条对角线，以及skip connection</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<ul>
+<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
+</ul>
+</li>
+<li>
+<p>**其他方式：**FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+</li>
+</ul>
+<hr>
+<h3 id="c2-particle-system"><a class="markdownIt-Anchor" href="#c2-particle-system"></a> c.2). Particle System</h3>
+<p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；
+<ul>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+</ul>
+</li>
+</ul>
+<h2 id="d-forward-kinematicsfk"><a class="markdownIt-Anchor" href="#d-forward-kinematicsfk"></a> d). Forward Kinematics(FK)</h2>
+<p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<ul>
+<li>
+<p>关节（Joint）分类：</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
+</li>
+</ul>
+<h2 id="e-inverse-kinematicsik"><a class="markdownIt-Anchor" href="#e-inverse-kinematicsik"></a> e). Inverse Kinematics(IK)</h2>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
+<ul>
+<li>解决多个解的方法：梯度下降</li>
+</ul>
+<h2 id="f-rigging"><a class="markdownIt-Anchor" href="#f-rigging"></a> f). Rigging</h2>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<ul>
+<li>
+<p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p>![Blend Shapes](Blend Shapes.png)</p>
+</li>
+</ul>
+<h2 id="g-motion-capture-facial-motion-capture"><a class="markdownIt-Anchor" href="#g-motion-capture-facial-motion-capture"></a> g). Motion Capture / Facial Motion Capture</h2>
+<hr>
+<h1 id="lecture-22"><a class="markdownIt-Anchor" href="#lecture-22"></a> Lecture 22</h1>
+<h2 id="a-single-particle-simulation"><a class="markdownIt-Anchor" href="#a-single-particle-simulation"></a> a). Single Particle Simulation</h2>
+<p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
+<ul>
+<li>
+<p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
+</li>
+<li>
+<p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
+<p>![Oridinary Differential Equation](Oridinary Differential Equation.png)</p>
+<ul>
+<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；
+<ul>
+<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="a1-eulers-method"><a class="markdownIt-Anchor" href="#a1-eulers-method"></a> a.1). Euler’s Method</h3>
+<p>![Euler’s Method](Euler’s Method.png)</p>
+<ul>
+<li>
+<p><strong>缺点：</strong></p>
+<ol>
+<li>
+<p>存在误差，可通过减小步长（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Delta t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">Δ</span><span class="mord mathnormal">t</span></span></span></span>）来减少误差；</p>
+<p>![Euler’s Method_Errors01](Euler’s Method_Errors01.png)</p>
+</li>
+<li>
+<p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
+<p>![Euler’s Method_Errors02](Euler’s Method_Errors02.png)</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="a2-combating-instability"><a class="markdownIt-Anchor" href="#a2-combating-instability"></a> a.2). Combating Instability</h3>
+<p>![Combating Instability](Combating Instability.png)</p>
+<h4 id="a21-midpoint-method"><a class="markdownIt-Anchor" href="#a21-midpoint-method"></a> a.2.1). Midpoint Method</h4>
+<p>![Midpoint Method](Midpoint Method.png)</p>
+<ul>
+<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
+</ul>
+<p>![Midpoint Method02](Midpoint Method02.png)</p>
+<h4 id="a22-adaptive-step-size"><a class="markdownIt-Anchor" href="#a22-adaptive-step-size"></a> a.2.2). Adaptive Step Size</h4>
+<p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
+<h4 id="a23-implicit-euler-method"><a class="markdownIt-Anchor" href="#a23-implicit-euler-method"></a> a.2.3). Implicit Euler Method</h4>
+<p>![Implicit Euler Method](Implicit Euler Method.png)</p>
+<ul>
+<li>使用下一时刻的速度和加速度，并求解</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
+<ul>
+<li>
+<p><strong>龙格库塔</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/%E9%BE%99%E6%A0%BC%E5%BA%93%E5%A1%94.png" alt="龙格库塔"></p>
+</li>
+</ul>
+<h4 id="a24-position-based-verlet-integration"><a class="markdownIt-Anchor" href="#a24-position-based-verlet-integration"></a> a.2.4). Position-Based / Verlet Integration</h4>
+<ul>
+<li>非基于物理
+<ul>
+<li>时间快</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
+<hr>
+<h2 id="b-rigid-body-simulation"><a class="markdownIt-Anchor" href="#b-rigid-body-simulation"></a> b). Rigid Body Simulation</h2>
+<p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
+<ul>
+<li>与单粒子类似</li>
+</ul>
+<h2 id="c-fluid-simulation"><a class="markdownIt-Anchor" href="#c-fluid-simulation"></a> c). Fluid Simulation</h2>
+<h4 id="c1-a-simple-position-based-method"><a class="markdownIt-Anchor" href="#c1-a-simple-position-based-method"></a> c.1). A Simple Position-Based Method</h4>
+<p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
+<h3 id="c2-eulerian-vs-lagrangian"><a class="markdownIt-Anchor" href="#c2-eulerian-vs-lagrangian"></a> c.2). Eulerian vs. Lagrangian</h3>
+<p>![Eulerian vs. Lagrangian](Eulerian vs. Lagrangian.png)</p>
+<ul>
+<li>
+<p>拉格朗日（质点法）：考虑单个粒子的运动</p>
+</li>
+<li>
+<p>欧拉（网格法）：考虑不同位置的网格</p>
+</li>
+<li>
+<p>Material Point Method (MPM ，混合上两种方法)</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/10/03/Games101_21_22_Animation/" title="Games101_21_22 Animation" target="_blank" rel="external">http://example.com/2022/10/03/Games101_21_22_Animation/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/10/03/Games101_17_18_Materials/" title="Games101_17_18 Materials"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/10/03/Games101_13_16_RayTracing/" title="Games101-13-16 RayTracing"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

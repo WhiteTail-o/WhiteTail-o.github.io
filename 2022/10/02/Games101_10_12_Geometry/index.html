@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Games101_10_12 Geometry | Hexo</title>
+  <meta name="description" content="Lecture 10&#x2F;11: Geometry 1 2  不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；   a). 几何的表示形式  隐式（Implicit）  algebraic surface level sets distance functions …   显式（Explicit）  point cloud polygon mesh subdivisi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games101_10_12 Geometry">
+<meta property="og:url" content="http://example.com/2022/10/02/Games101_10_12_Geometry/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Lecture 10&#x2F;11: Geometry 1 2  不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；   a). 几何的表示形式  隐式（Implicit）  algebraic surface level sets distance functions …   显式（Explicit）  point cloud polygon mesh subdivisi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Geo_Implicit.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Implicit_B.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Implicit_G.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/AlgebraicSurfaces.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/CSG.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/DistanceFunctions.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/BlendingDF.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/BlendingSDF.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/LSM.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/LSMin3D.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/LSMsimulation.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Fractals.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Explicit_via_param_mapping.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Explicit_G.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Explicit_B.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/PointCloud.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/PolygonMesh.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/PolygonMesh_Obj.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Bezier_DT.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/%E5%BE%B7%E5%8D%A1%E6%96%AF%E7%89%B9%E9%87%8C%E5%A5%A5%E7%AE%97%E6%B3%95.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/CubicBezierCurve.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Bezier2.gif">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Bezier3.gif">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Bezier_Algebraic.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Bernstein.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Bernstein2.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Properties_Bezier.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Piecewise_cubic_Bezier.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Continuity.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/C0.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/C1.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Spline.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/B_splines.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/BezierSurface.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/BezierSurface_vis.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Eva_BezierSurface.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/BezierSurface_method1.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/BezierSurface_method2.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/MeshOperations.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Subdivision.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/LoopSub.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/SplitTriangle.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/LoopSub_NewVert.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/LoopSub_Result.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_01.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_02.png">
+<meta property="og:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_UpdateRules.png">
+<meta property="article:published_time" content="2022-10-02T08:35:10.000Z">
+<meta property="article:modified_time" content="2023-02-03T13:34:33.512Z">
+<meta property="article:author" content="WhiteTail">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/02/Games101_10_12_Geometry/Geo_Implicit.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/10/02/Games101_10_12_Geometry/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games101/">Games101</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Games101_10_12_Geometry" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Games101_10_12 Geometry
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/02/Games101_10_12_Geometry/" class="article-date">
+	  <time datetime="2022-10-02T08:35:10.000Z" itemprop="datePublished">2022-10-02</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Games101/">Games101</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/02/Games101_10_12_Geometry/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="lecture-1011-geometry-1-2"><a class="markdownIt-Anchor" href="#lecture-1011-geometry-1-2"></a> Lecture 10/11: Geometry 1 2</h1>
+<ul>
+<li>不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；</li>
+</ul>
+<h2 id="a-几何的表示形式"><a class="markdownIt-Anchor" href="#a-几何的表示形式"></a> a). 几何的表示形式</h2>
+<ul>
+<li>隐式（Implicit）
+<ul>
+<li>algebraic surface</li>
+<li>level sets</li>
+<li>distance functions</li>
+<li>…</li>
+</ul>
+</li>
+<li>显式（Explicit）
+<ul>
+<li>point cloud</li>
+<li>polygon mesh</li>
+<li>subdivision, NURBS</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-几何的隐式表示implict-representations-of-geometry"><a class="markdownIt-Anchor" href="#b-几何的隐式表示implict-representations-of-geometry"></a> b). 几何的隐式表示（Implict Representations of Geometry）</h2>
+<ul>
+<li><strong>基于归类的点</strong>
+<ul>
+<li>点满足某种特定的关系，但不给你特定的点
+<ul>
+<li>e.g. <strong>Sphere:</strong> 所有三维中的点，满足 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo><msup><mi>z</mi><mn>2</mn></msup><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">x^2+y^2+z^2=1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.008548em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>；</li>
+</ul>
+</li>
+<li><strong>通用情况：</strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">,</mo><mi>z</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f(x,y,z)=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span><img src="/2022/10/02/Games101_10_12_Geometry/Geo_Implicit.png" alt="Geo_Implicit"></li>
+</ul>
+</li>
+<li><strong>缺点：</strong>
+<ul>
+<li>难以采样（Sampling Can Be Hard，难以得到式子表示的整体形状）<img src="/2022/10/02/Games101_10_12_Geometry/Implicit_B.png" alt="Implicit_B"></li>
+</ul>
+</li>
+<li><strong>优点：</strong>
+<ul>
+<li>方便判断点是否在几何体内（Inside/Outside Tests Easy）<img src="/2022/10/02/Games101_10_12_Geometry/Implicit_G.png" alt="Implicit_G"></li>
+</ul>
+</li>
+</ul>
+<h3 id="b1-algebraic-surfaces曲面代数"><a class="markdownIt-Anchor" href="#b1-algebraic-surfaces曲面代数"></a> b.1). Algebraic Surfaces（曲面代数）</h3>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/AlgebraicSurfaces.png" alt="AlgebraicSurfaces"></p>
+<ul>
+<li>难以表达复杂的形状；</li>
+</ul>
+<h3 id="b2-constructive-solid-geometrycsg-体素构造表示形式"><a class="markdownIt-Anchor" href="#b2-constructive-solid-geometrycsg-体素构造表示形式"></a> b.2). Constructive Solid Geometry（CSG, 体素构造表示形式）</h3>
+<ul>
+<li>对隐式几何体进行布尔运算；<img src="/2022/10/02/Games101_10_12_Geometry/CSG.png" alt="CSG"></li>
+</ul>
+<h3 id="b3-distance-function距离函数"><a class="markdownIt-Anchor" href="#b3-distance-function距离函数"></a> b.3). Distance Function（距离函数）</h3>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/DistanceFunctions.png" alt="DistanceFunctions"></p>
+<ul>
+<li>
+<p><strong>给出各个点到物体的最小距离</strong></p>
+</li>
+<li>
+<p><strong>Blending Distance Function:</strong><img src="/2022/10/02/Games101_10_12_Geometry/BlendingDF.png" alt="BlendingDF"></p>
+<ul>
+<li>**目的：**通过混合得到A、B运动的中间状态；
+<ul>
+<li>上半部分，blend之后中间1/3是灰的，而理想的结果是<strong>左边1/2是黑色，右边1/2是白色</strong></li>
+<li>下半部分，对<strong>SDF</strong>进行混合，再将blend后的结果恢复成shape（找到SDF等于0的情况的所有点），就可得到中间状态的物体；<img src="/2022/10/02/Games101_10_12_Geometry/BlendingSDF.png" alt="BlendingSDF"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><em>See <a target="_blank" rel="noopener" href="https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm">https://iquilezles.org/www/articles/raymarchingdf/raymarchingdf.htm</a></em></p>
+</li>
+</ul>
+<h3 id="b4-level-set-methods水平集"><a class="markdownIt-Anchor" href="#b4-level-set-methods水平集"></a> b.4). Level Set Methods（水平集）</h3>
+<ul>
+<li>
+<p>封闭方程（DF）很难描述复杂的形状</p>
+</li>
+<li>
+<p>**备选方案：**存储近似函数值的网格（Level Set Methods）<img src="/2022/10/02/Games101_10_12_Geometry/LSM.png" alt="LSM"></p>
+<ul>
+<li>通过找到插值为0的位置确定表面；</li>
+<li><font color="red">提供对形状更明确的控制（如纹理）?</font></li>
+</ul>
+</li>
+<li>
+<p><strong>应用：</strong></p>
+<ul>
+<li>
+<p><strong>Level Sets from Medical Data (CT, MRI, etc. 三维LSM)</strong><img src="/2022/10/02/Games101_10_12_Geometry/LSMin3D.png" alt="LSMin3D"></p>
+</li>
+<li>
+<p>**物理模拟：**如水平集得到各点到液体边界的距离（距离函数混合水滴）<img src="/2022/10/02/Games101_10_12_Geometry/LSMsimulation.png" alt="LSMsimulation"></p>
+<ul>
+<li><em>See <a target="_blank" rel="noopener" href="http://physbam.stanford.edu">http://physbam.stanford.edu</a></em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="b5-fractals分形"><a class="markdownIt-Anchor" href="#b5-fractals分形"></a> b.5). Fractals(分形)</h3>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Fractals.png" alt="Fractals"></p>
+<h2 id="c-几何的显式表示explicit-representations-of-geometry"><a class="markdownIt-Anchor" href="#c-几何的显式表示explicit-representations-of-geometry"></a> c). 几何的显式表示（“Explicit” Representations of Geometry）</h2>
+<ul>
+<li>
+<p><strong>简介：</strong> <strong>直接给出</strong>所有的点 或者 <strong>通过参数映射（via parameter mapping）</strong></p>
+<ul>
+<li>**参数映射：**给出uv，以及uv到三维空间的映射关系，遍历所有的uv就可找到三维空间所有的点；<img src="/2022/10/02/Games101_10_12_Geometry/Explicit_via_param_mapping.png" alt="Explicit_via_param_mapping"></li>
+</ul>
+</li>
+<li>
+<p><strong>采样简单</strong><img src="/2022/10/02/Games101_10_12_Geometry/Explicit_G.png" alt="Explicit_G"></p>
+</li>
+<li>
+<p><strong>不方便</strong>判断点是否在几何体内（Inside/Outside Tests Hard）<img src="/2022/10/02/Games101_10_12_Geometry/Explicit_B.png" alt="Explicit_B"></p>
+</li>
+<li>
+<p><strong>隐式、显式各有优缺点，需要根据需求选择最优的表达方式</strong></p>
+</li>
+</ul>
+<h3 id="c1-point-cloud"><a class="markdownIt-Anchor" href="#c1-point-cloud"></a> c.1). Point Cloud</h3>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/PointCloud.png" alt="PointCloud"></p>
+<h3 id="c2-polygon-mesh"><a class="markdownIt-Anchor" href="#c2-polygon-mesh"></a> c.2). Polygon Mesh</h3>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/PolygonMesh.png" alt="PolygonMesh"></p>
+<ul>
+<li>常用的PolygonMesh文件，Wavefront Object File (<strong>.obj</strong>)
+<ul>
+<li>v：顶点位置；vt：纹理位置；vn：normal；f：face，顶点索引/纹理索引/法线索引</li>
+<li><img src="/2022/10/02/Games101_10_12_Geometry/PolygonMesh_Obj.png" alt="PolygonMesh_Obj"></li>
+</ul>
+</li>
+</ul>
+<h3 id="c3-bézier-curve贝塞尔曲线"><a class="markdownIt-Anchor" href="#c3-bézier-curve贝塞尔曲线"></a> c.3). Bézier Curve（贝塞尔曲线）</h3>
+<ul>
+<li>通过点<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">p_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">p_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，且在这两点切线为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mn>0</mn></mrow><annotation encoding="application/x-tex">t0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathnormal">t</span><span class="mord">0</span></span></span></span>、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">t1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord mathnormal">t</span><span class="mord">1</span></span></span></span>（切线前带系数，对于三次贝塞尔曲线系数为3）<img src="/2022/10/02/Games101_10_12_Geometry/Bezier_DT.png" alt="Bezier_DT"></li>
+</ul>
+<h4 id="c31-计算贝塞尔曲线德卡斯特里奥算法-de-casteljaus-algorithm"><a class="markdownIt-Anchor" href="#c31-计算贝塞尔曲线德卡斯特里奥算法-de-casteljaus-algorithm"></a> c.3.1). 计算贝塞尔曲线(德卡斯特里奥算法, De Casteljau’s Algorithm)</h4>
+<ul>
+<li><strong>二次贝塞尔曲线</strong></li>
+</ul>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/%E5%BE%B7%E5%8D%A1%E6%96%AF%E7%89%B9%E9%87%8C%E5%A5%A5%E7%AE%97%E6%B3%95.png" alt="德卡斯特里奥算法"></p>
+<ul>
+<li>
+<p><strong>三次贝塞尔曲线（Cubic Bezier Curve）</strong><img src="/2022/10/02/Games101_10_12_Geometry/CubicBezierCurve.png" alt="CubicBezierCurve"></p>
+</li>
+<li>
+<p>Anim：<img src="/2022/10/02/Games101_10_12_Geometry/Bezier2.gif" alt="Bezier2"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Bezier3.gif" alt="Bezier3"></p>
+</li>
+</ul>
+<h4 id="c32-代数形式"><a class="markdownIt-Anchor" href="#c32-代数形式"></a> c.3.2). 代数形式</h4>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Bezier_Algebraic.png" alt="Bezier_Algebraic"></p>
+<ul>
+<li>推出<strong>Bernstein polynomial（伯恩斯坦多项式）</strong>：</li>
+</ul>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>B</mi><mi>i</mi><mi>n</mi></msubsup><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><msubsup><mi>C</mi><mi>n</mi><mi>i</mi></msubsup><mo separator="true">⋅</mo><msup><mi>t</mi><mi>i</mi></msup><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><msup><mo stretchy="false">)</mo><mrow><mi>n</mi><mo>−</mo><mi>i</mi></mrow></msup></mrow><annotation encoding="application/x-tex">B_{i}^{n}(t)=C_n^i · t^{i}(1-t)^{n-i}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.05017em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1246639999999999em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8746639999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8746639999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.124664em;vertical-align:-0.25em;"></span><span class="mord mathnormal">t</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.874664em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span></span></span></span></span></span></p>
+<ul>
+<li><img src="/2022/10/02/Games101_10_12_Geometry/Bernstein.png" alt="Bernstein"></li>
+<li><img src="/2022/10/02/Games101_10_12_Geometry/Bernstein2.png" alt="Bernstein2"></li>
+</ul>
+<h4 id="c33-性质"><a class="markdownIt-Anchor" href="#c33-性质"></a> C.3.3). 性质</h4>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Properties_Bezier.png" alt="Properties_Bezier"></p>
+<ul>
+<li>即（对于三次贝塞尔曲线）：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">b_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是起点，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">b_3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>是终点；</li>
+<li>切线为<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi mathvariant="bold">b</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mn>3</mn><mrow><mo fence="true">(</mo><msub><mi mathvariant="bold">b</mi><mn>1</mn></msub><mo>−</mo><msub><mi mathvariant="bold">b</mi><mn>0</mn></msub><mo fence="true">)</mo></mrow><mo separator="true">;</mo><mspace width="1em"><msup><mi mathvariant="bold">b</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>3</mn><mrow><mo fence="true">(</mo><msub><mi mathvariant="bold">b</mi><mn>3</mn></msub><mo>−</mo><msub><mi mathvariant="bold">b</mi><mn>2</mn></msub><mo fence="true">)</mo></mrow></mspace></mrow><annotation encoding="application/x-tex">\mathbf{b}^{\prime}(0)=3\left(\mathbf{b}_{1}-\mathbf{b}_{0}\right) ; \quad \mathbf{b}^{\prime}(1)=3\left(\mathbf{b}_{3}-\mathbf{b}_{2}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">b</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.001892em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord"><span class="mord mathbf">b</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">b</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">;</span><span class="mspace" style="margin-right:1em;"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">b</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.751892em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord"><span class="mord mathbf">b</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">b</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span> （切线前带系数，对于三次贝塞尔曲线系数为3，通过求导可得）</li>
+<li>仿射不变性（对于贝塞尔曲线做仿射变换，只需要对控制点进行变换）</li>
+<li>凸包性质；</li>
+</ul>
+</li>
+</ul>
+<h4 id="c34-piecewise-bézier-curves分段贝塞尔曲线"><a class="markdownIt-Anchor" href="#c34-piecewise-bézier-curves分段贝塞尔曲线"></a> c.3.4). Piecewise Bézier Curves（分段贝塞尔曲线）</h4>
+<ul>
+<li>使用原因：解决高阶贝塞尔曲线控制点过多的问题；</li>
+<li>分段贝塞尔曲线，常是<strong>分段立方贝塞尔（Piecewise cubic Bézier）</strong>，即每一个曲线存在4个控制点；<img src="/2022/10/02/Games101_10_12_Geometry/Piecewise_cubic_Bezier.png" alt="Piecewise_cubic_Bezier"></li>
+</ul>
+<h5 id="c341-连续性"><a class="markdownIt-Anchor" href="#c341-连续性"></a> c.3.4.1). 连续性</h5>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Continuity.png" alt="Continuity"></p>
+<ul>
+<li>
+<p>C<sup>0</sup> 连续（C表示Continuity），几何连续：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>n</mi></msub><mo>=</mo><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">a_n=b_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> ；</p>
+<ul>
+<li>首尾相接，夹角任意；<img src="/2022/10/02/Games101_10_12_Geometry/C0.png" alt="C0"></li>
+</ul>
+</li>
+<li>
+<p>C<sup>1</sup> 连续，参数连续：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>n</mi></msub><mo>=</mo><msub><mi>b</mi><mn>0</mn></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo stretchy="false">(</mo><msub><mi>a</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">a_n=b_0={1\over2}(a_{n-1} + b_1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> ；</p>
+<ul>
+<li>切线相等，即一阶导数连续；<img src="/2022/10/02/Games101_10_12_Geometry/C1.png" alt="C1"></li>
+</ul>
+</li>
+</ul>
+<h4 id="35-other-types-of-splines待深入"><a class="markdownIt-Anchor" href="#35-other-types-of-splines待深入"></a> 3.5). Other types of splines(待深入)</h4>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Spline.png" alt="Spline"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/B_splines.png" alt="B_splines"></p>
+<ul>
+<li>In this course
+<ul>
+<li>We do not cover B-splines and NURBS</li>
+<li>We also do not cover operations on curves (e.g. increasing/decreasing orders, etc.)</li>
+<li>To learn more / deeper, you are welcome to refer to Prof. Shi-Min Hu’s course: <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av66548502?from=search&amp;seid=65256805876131485">https://www.bilibili.com/video/av66548502?from=search&amp;seid=65256805876131485</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="36-bezier-surface"><a class="markdownIt-Anchor" href="#36-bezier-surface"></a> 3.6). Bezier Surface</h4>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface.png" alt="BezierSurface"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_vis.png" alt="BezierSurface_vis"></p>
+<ul>
+<li>Animation: Steven Wittens, Making Things with Maths, <a target="_blank" rel="noopener" href="http://acko.net">http://acko.net</a></li>
+</ul>
+<h5 id="361-evaluating-bézier-surfaces"><a class="markdownIt-Anchor" href="#361-evaluating-bézier-surfaces"></a> 3.6.1). Evaluating Bézier Surfaces</h5>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Eva_BezierSurface.png" alt="Eva_BezierSurface"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_method1.png" alt="BezierSurface_method1"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/BezierSurface_method2.png" alt="BezierSurface_method2"></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/MeshOperations.png" alt="MeshOperations"></p>
+<h1 id="lecture-13-geometry"><a class="markdownIt-Anchor" href="#lecture-13-geometry"></a> Lecture 13 Geometry</h1>
+<h2 id="a-subdivision"><a class="markdownIt-Anchor" href="#a-subdivision"></a> a). Subdivision</h2>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Subdivision.png" alt="Subdivision"></p>
+<ul>
+<li>以下是几种常用的细分方法:</li>
+</ul>
+<h3 id="a1-loop-subdivisionloop是人名"><a class="markdownIt-Anchor" href="#a1-loop-subdivisionloop是人名"></a> a.1). Loop Subdivision(Loop是人名)</h3>
+<ul>
+<li>
+<p><strong>细分对象：<font color="red">三角面</font></strong></p>
+<ul>
+<li>首先，创造更多的三角面；</li>
+<li>第二，改变他们的位置；<img src="/2022/10/02/Games101_10_12_Geometry/LoopSub.png" alt="LoopSub"></li>
+</ul>
+</li>
+<li>
+<p><strong>具体做法：</strong></p>
+<ul>
+<li>将每个三角形细分为四个；<img src="/2022/10/02/Games101_10_12_Geometry/SplitTriangle.png" alt="SplitTriangle"></li>
+<li>根据权重分配新的顶点位置；
+<ul>
+<li>区分新/老顶点，做不同变换；</li>
+</ul>
+</li>
+<li>对于<strong>新顶点</strong>：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>=</mo><mfrac><mn>3</mn><mn>8</mn></mfrac><mo stretchy="false">(</mo><mi>A</mi><mo>+</mo><mi>B</mi><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>1</mn><mn>8</mn></mfrac><mo stretchy="false">(</mo><mi>C</mi><mo>+</mo><mi>D</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">P_{new} = {3\over8}(A+B)+{1\over8}(C+D)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.190108em;vertical-align:-0.345em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.845108em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mclose">)</span></span></span></span><img src="/2022/10/02/Games101_10_12_Geometry/LoopSub_NewVert.png" alt="LoopSub_NewVert"></li>
+</ul>
+</li>
+<li>对于<strong>老顶点</strong>：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>:</mo></mrow><annotation encoding="application/x-tex">n:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span></span></span></span> 顶点的度（图论，与该顶点关联的边的数目，该处即为<strong>与该顶点连接的边的数量</strong>）</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>:</mo></mrow><annotation encoding="application/x-tex">u:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span></span></span></span> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi mathvariant="normal">/</mi><mn>16</mn></mrow><annotation encoding="application/x-tex">3/16</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mord">/</span><span class="mord">1</span><span class="mord">6</span></span></span></span>（如果<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">n=3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span>），<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi mathvariant="normal">/</mi><mo stretchy="false">(</mo><mn>8</mn><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">3/(8n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">3</span><span class="mord">/</span><span class="mopen">(</span><span class="mord">8</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span> （其他情况）</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>n</mi><mi>u</mi><mo stretchy="false">)</mo><mi>o</mi><mi>r</mi><mi>i</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>l</mi><mi mathvariant="normal">_</mi><mi>p</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>+</mo><mi>u</mi><mo separator="true">⋅</mo><mi>n</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>b</mi><mi>o</mi><mi>r</mi><mi mathvariant="normal">_</mi><mi>p</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mi mathvariant="normal">_</mi><mi>s</mi><mi>u</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">P_{new} = (1-nu)original\_position + u·neighbor\_position\_sum</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.06em;vertical-align:-0.31em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">i</span><span class="mord mathnormal">n</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">p</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="mord mathnormal">u</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">h</span><span class="mord mathnormal">b</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">p</span><span class="mord mathnormal">o</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathnormal">s</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span></span></span></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Loop Subdivision Results：</strong><img src="/2022/10/02/Games101_10_12_Geometry/LoopSub_Result.png" alt="LoopSub_Result"></p>
+</li>
+<li>
+<p><strong>缺点：Loop只能处理三角面</strong>；</p>
+</li>
+</ul>
+<h3 id="a2-catmull-clark-subdivision"><a class="markdownIt-Anchor" href="#a2-catmull-clark-subdivision"></a> a.2). Catmull-Clark Subdivision</h3>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub.png" alt="Catmull_Clark_Sub"></p>
+<ul>
+<li>
+<p><strong>概念：</strong></p>
+<ul>
+<li>奇异点（Extraorinary vertex）：度不为4的点；</li>
+</ul>
+</li>
+<li>
+<p><strong>具体过程：</strong></p>
+<ul>
+<li>
+<p><strong>第一次细分：</strong></p>
+<ol>
+<li>每条边取中点，每个面也取其中一点；<img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_01.png" alt="Catmull_Clark_Sub_01"></li>
+</ol>
+<ul>
+<li>第一次细分后，<strong>引入（n个，n=非四边形数目）奇异点，非四边形面消失</strong>。之后，奇异点不在增加，因此，之后细分只针对四边面；<img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_02.png" alt="Catmull_Clark_Sub_02"></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Catmull-Clark Vertex Update Rules (Quad Mesh)</strong></p>
+<p><img src="/2022/10/02/Games101_10_12_Geometry/Catmull_Clark_Sub_UpdateRules.png" alt="Catmull_Clark_Sub_UpdateRules"></p>
+<ul>
+<li><strong>Face point:</strong></li>
+</ul>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">f=</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span></span></span></span></p>
+</li>
+</ul>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/10/02/Games101_10_12_Geometry/" title="Games101_10_12 Geometry" target="_blank" rel="external">http://example.com/2022/10/02/Games101_10_12_Geometry/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2022/10/03/Games101_13_16_RayTracing/" title="Games101-13-16 RayTracing"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/10/02/Games101_07_09_Shading/" title="Games101-7-9 Shading"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>

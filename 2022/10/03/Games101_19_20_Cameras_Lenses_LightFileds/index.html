@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform" />
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000" />
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top" />
+  
+  
+  <title>Games101_19_20 Cameras Lenses and Light Fileds | Hexo</title>
+  <meta name="description" content="Lecture19   讲相机的，老本行笔记直接看别人的吧； http:&#x2F;&#x2F;t.csdn.cn&#x2F;4gODC    b). Light Field &#x2F; Lumingraph(光场)  	                  两者看到的光线信息完全相同，那人眼中的世界就完全相同；   b.1). The Plenoptic Function(全光函数)   现实世界可以用一个七维的全光函数进行描述，记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games101_19_20 Cameras Lenses and Light Fileds">
+<meta property="og:url" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Lecture19   讲相机的，老本行笔记直接看别人的吧； http:&#x2F;&#x2F;t.csdn.cn&#x2F;4gODC    b). Light Field &#x2F; Lumingraph(光场)  	                  两者看到的光线信息完全相同，那人眼中的世界就完全相同；   b.1). The Plenoptic Function(全光函数)   现实世界可以用一个七维的全光函数进行描述，记">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_000.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_001.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PlenopticFunc.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_2Plane.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PF_Thing.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/uvst.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/st2uv.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_camera.png">
+<meta property="og:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/st2uv2.png">
+<meta property="article:published_time" content="2022-10-03T10:25:10.000Z">
+<meta property="article:modified_time" content="2023-02-03T13:41:37.635Z">
+<meta property="article:author" content="WhiteTail">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_000.png">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/index.html">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  
+  
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/cofess" target="_blank">
+          <img class="img-circle img-rotate" src="/images/Pong.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">白尾鸥</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md"></h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Zhejiang, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="搜索" />
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech />
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">首页</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">归档</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories">
+            
+            <i class="icon icon-folder"></i>
+            
+            <span class="menu-title">分类</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags">
+            
+            <i class="icon icon-tags"></i>
+            
+            <span class="menu-title">标签</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">公告</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Games101/">Games101</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Games202/">Games202</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+
+    
+      
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/02/">二月 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/10/">十月 2022</a><span class="archive-list-count">8</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/" class="title">Games202-4 Real-time Global Illumination(in 3D)</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-02T09:23:32.000Z" itemprop="datePublished">2023-02-02</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="title">Games202-3 Real-time Environment Mapping</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:42:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="title">Games202-2 Real-Time Shadow</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:23:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games202/">Games202</a>
+              </p>
+              <p class="item-title">
+                <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="title">Games202-1 Recap of CG Basics</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2023-02-01T08:15:10.000Z" itemprop="datePublished">2023-02-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                <a class="category-link" href="/categories/Games101/">Games101</a>
+              </p>
+              <p class="item-title">
+                <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="title">Games101_19_20 Cameras Lenses and Light Fileds</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-Games101_19_20_Cameras_Lenses_LightFileds" class="article article-type-post" itemscope itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Games101_19_20 Cameras Lenses and Light Fileds
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="article-date">
+	  <time datetime="2022-10-03T10:25:10.000Z" itemprop="datePublished">2022-10-03</time>
+	</a>
+</span>
+        
+  <span class="article-category">
+    <i class="icon icon-folder"></i>
+    <a class="article-category-link" href="/categories/Games101/">Games101</a>
+  </span>
+
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/#comments" class="article-comment-link">评论</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h1 id="lecture19"><a class="markdownIt-Anchor" href="#lecture19"></a> Lecture19</h1>
+<ul>
+<li>
+<p>讲相机的，老本行笔记直接看别人的吧；</p>
+<p><a target="_blank" rel="noopener" href="http://t.csdn.cn/4gODC">http://t.csdn.cn/4gODC</a></p>
+</li>
+</ul>
+<h2 id="b-light-field-lumingraph光场"><a class="markdownIt-Anchor" href="#b-light-field-lumingraph光场"></a> b). Light Field / Lumingraph(光场)</h2>
+<table frame="void">
+	<tr>
+    <td><center><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_000.png" alt="LF_000" height="250"></center></td>
+    <td><center><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_001.png" alt="LF_001" height="250"></center></td>
+    </tr>
+</table>
+<ul>
+<li>两者看到的光线信息完全相同，那人眼中的世界就完全相同；</li>
+</ul>
+<h3 id="b1-the-plenoptic-function全光函数"><a class="markdownIt-Anchor" href="#b1-the-plenoptic-function全光函数"></a> b.1). The Plenoptic Function(全光函数)</h3>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PlenopticFunc.png" alt="PlenopticFunc"></p>
+<ul>
+<li>现实世界可以用一个七维的全光函数进行描述，记录了任意时间，不同位置的不同方向接收光的波长</li>
+<li>参数：
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span> ：方位角</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϕ</mi></mrow><annotation encoding="application/x-tex">\phi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">ϕ</span></span></span></span>：俯仰角</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">λ</span></span></span></span>：波长</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathnormal">t</span></span></span></span>：时间</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mi>X</mi></msub><mtext>，</mtext><msub><mi>V</mi><mi>Y</mi></msub><mo separator="true">,</mo><msub><mi>V</mi><mi>Z</mi></msub></mrow><annotation encoding="application/x-tex">V_X，V_Y,V_Z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">X</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord cjk_fallback">，</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">Y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">Z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>：位置</li>
+</ul>
+</li>
+</ul>
+<h3 id="b2-light-field"><a class="markdownIt-Anchor" href="#b2-light-field"></a> b.2). Light Field</h3>
+<p><strong>光场</strong>则可以认为是记录了任何一个点所接收的任何一个方向的irradiance。</p>
+<ul>
+<li>可用四维函数表示，二维描述位置，二维描述方向</li>
+<li>光线可由两个点定义，因此这四维可改写成s,t,u,v。即两个平面上的位置；</li>
+</ul>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_2Plane.png" alt="LF_2Plane"></p>
+<ul>
+<li>
+<p>由此得出，描述一个物体的光场，只需要记录其包围盒上四维的全光函数即可</p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PF_Thing.png" alt="PF_Thing"></p>
+</li>
+<li>
+<p>从uv平面看向st平面，得到的是这个物体从各个方向看的相应的图像；</p>
+</li>
+<li>
+<p>而从st看向uv，则得到的是这个物体在这个方向的irradiance的集合（不是合起来，而是类似二维数组的集合）即<strong>radiance</strong></p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/uvst.png" alt="uvst"></p>
+</li>
+<li>
+<p><strong>st到uv</strong></p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/st2uv.png" alt="st2uv"></p>
+<ul>
+<li>记录不同方向的光线radiance（注意和拜耳阵列的区分，这里三色只是代表不同方向）</li>
+</ul>
+</li>
+</ul>
+<h3 id="b3-light-field-camera"><a class="markdownIt-Anchor" href="#b3-light-field-camera"></a> b.3). Light Field Camera</h3>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_camera.png" alt="LF_camera"></p>
+<ul>
+<li>
+<p>支持先拍照，后期动态调焦、光圈等</p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/st2uv2.png" alt="st2uv2"></p>
+</li>
+</ul>
+<h1 id="lecture20"><a class="markdownIt-Anchor" href="#lecture20"></a> Lecture20</h1>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" title="Games101_19_20 Cameras Lenses and Light Fileds" target="_blank" rel="external">http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/cofess" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/Pong.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/cofess" target="_blank"><span class="text-dark">白尾鸥</span><small class="ml-1x"></small></a></h3>
+        <div>个人简介。</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+      <div id="vcomments"></div>
+    
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom>
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    <li class="prev">
+      <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" title="Games202-1 Recap of CG Basics"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;上一篇</span></a>
+    </li>
+    
+    
+    <li class="next">
+      <a href="/2022/10/03/Games101_17_18_Materials/" title="Games101_17_18 Materials"><span>下一篇&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+    <div class="share-component" data-sites="weibo,qq,wechat,facebook,twitter" data-mobile-sites="weibo,qq,qzone"></div>
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/cofess" target="_blank" title="Github" data-toggle=tooltip data-placement=top><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="http://weibo.com/cofess" target="_blank" title="Weibo" data-toggle=tooltip data-placement=top><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="https://twitter.com/iwebued" target="_blank" title="Twitter" data-toggle=tooltip data-placement=top><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="https://www.behance.net/cofess" target="_blank" title="Behance" data-toggle=tooltip data-placement=top><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle=tooltip data-placement=top><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+
+<script src="/js/plugin.min.js"></script>
+
+
+<script src="/js/application.js"></script>
+
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+
+
+
+
+   
+
+
+
+
+   
+    
+  <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/valine"></script>
+  <script type="text/javascript">
+  var GUEST = ['nick', 'mail', 'link'];
+  var meta = 'nick,mail,link';
+  meta = meta.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#vcomments',
+    verify: false,
+    notify: false,
+    appId: '',
+    appKey: '',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: meta,
+    pageSize: '10' || 10,
+    visitor: false
+  });
+  </script>
+
+     
+
+
+
+
+
+
+
+</body>
+</html>
