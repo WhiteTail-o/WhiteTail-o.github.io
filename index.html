@@ -226,7 +226,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 02:45:01" itemprop="dateModified" datetime="2023-02-04T02:45:01+08:00">2023-02-04</time>
+      <time title="修改时间：2023-02-04 06:36:20" itemprop="dateModified" datetime="2023-02-04T06:36:20+08:00">2023-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -280,178 +280,14 @@
 </ul>
 </li>
 </ul>
-<hr>
-<h1 id="b-Reflective-Shadow-Maps-RSM"><a href="#b-Reflective-Shadow-Maps-RSM" class="headerlink" title="b). Reflective Shadow Maps (RSM)"></a>b). Reflective Shadow Maps (RSM)</h1><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/GI00a.png" alt="GI00a"></p>
-<ul>
-<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
-<li>Shadow map中每一个Texel都是一个作为Secondary light sourc的面片（Surface patch）<ul>
-<li>Shadow map做阴影中是光源视角的$Depth$，和相机视角的比较；这里是光源视角的$Depth$和 点$p$ 视角比较</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
-<li>但是，对于不同的 点$p$ 次级光源入射方向是不一定的。即，即使观察角度固定，同一个Shadow map中的Surface patch，对不同的 $p$ 贡献不同；</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><strong>假设：</strong><ul>
-<li><strong>次级光源均为Diffuse</strong>（观察角度固定，同一个次级光源对不同 点$p$ 的贡献相同）</li>
-<li>Therefore, outgoing radiance is uniform toward all directions</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献"><a href="#b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献" class="headerlink" title="b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献"></a>b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献</h2><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_01a.png" alt="RSM_01a"></p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-L_{o}\left(\mathrm{p}, \omega_{o}\right) & =\int_{\Omega_{\mathrm{patch}}} L_{i}\left(\mathrm{p}, \omega_{i}\right) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \omega_{i}, \omega_{o}\right) \cos \theta_{i} \mathrm{~d} \omega_{i} \\
-& =\int_{A_{\mathrm{patch}}} L_{i}(\mathrm{q} \rightarrow \mathrm{p}) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \mathrm{q} \rightarrow \mathrm{p}, \omega_{o}\right) \frac{\cos \theta_{p} \cos \theta_{q}}{\|q-p\|^{2}} \mathrm{~d} A
-\end{aligned}</script><ul>
-<li><p>对于每个diffuse reflective patch(点$q$)</p>
-<ul>
-<li><p><strong>点$q$</strong> 的BRDF: $f_{rq} = \rho/\pi$ </p>
-</li>
-<li><p>$L_i(q\rightarrow p) = f_{rq} \cdot \frac{\Phi}{d A}$ ( $\Phi$ 是光源的辐射通量，将该式带入渲染方程，${d A}$ 被消除)</p>
-</li>
-<li><script type="math/tex; mode=display">
-E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{max}\{0,\langle n|x_{q}-x\rangle\}}{||x-x_{q}||^{4}}.</script><ul>
-<li>${||x-x_{q}||^{4}}$ 是因为分子上$x-x_{q}$是未归一化的向量；</li>
-<li>$\Phi_p$ 为 $f_{rq} \cdot {\Phi}$</li>
-<li>将$E_p(x,n)$ 乘上 点$p$ 的BRDF即可得出$L_o$</li>
-<li>$V$：Visibility项就不算了</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><strong>Not all pixels in the RSM can contribute</strong></p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_04.png" alt="RSM_04"></p>
-<ul>
-<li><p>Visibility (难处理，不管了)</p>
-</li>
-<li><p>Orientation（方向，Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响）</p>
-</li>
-<li><p>Distance（只有和Shading Point近的Reflector才做贡献）</p>
-<ul>
-<li><p><strong>假设：</strong> 世界坐标下，两点接近 $\rightarrow$ Shadow Map（世界空间转换到光源空间）中距离比较近，且深度相差不大；</p>
-</li>
-<li><p>进一步加速（类似于Step 1 and 3 in PCSS），在shading point转换到Shadow Map后对应点$(s,t)$ 的一定范围内，做随机采样</p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_Distance.png" alt="RSM_Distance"></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-2-光源视角下储存的信息（Shadow-Map）"><a href="#b-2-光源视角下储存的信息（Shadow-Map）" class="headerlink" title="b.2). 光源视角下储存的信息（Shadow Map）"></a>b.2). 光源视角下储存的信息（Shadow Map）</h2><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_Record.png" alt="RSM_Record"></p>
-<ul>
-<li>深度</li>
-<li>世界坐标</li>
-<li>法线</li>
-<li>辐射通量（flux）</li>
-<li>etc.</li>
-</ul>
-<h2 id="b-3-Pros-And-Cons"><a href="#b-3-Pros-And-Cons" class="headerlink" title="b.3). Pros And Cons"></a>b.3). Pros And Cons</h2><ul>
-<li>Pros:<ul>
-<li>好写（类似于Shadow Map）</li>
-</ul>
-</li>
-<li>Cons:<ul>
-<li>计算量随光源（Primary Light Source）数量增多线性增加</li>
-<li>Visibility无法处理</li>
-<li>很多假设：diffuse reflectors, depth as distance, etc.<ul>
-<li>只能处理次级光源为Diffuse</li>
-</ul>
-</li>
-<li>质量依赖于采样率</li>
-</ul>
-</li>
-</ul>
-<h1 id="c-Light-Propagation-Volumes-LPV"><a href="#c-Light-Propagation-Volumes-LPV" class="headerlink" title="c). Light Propagation Volumes(LPV)"></a>c). Light Propagation Volumes(LPV)</h1><ul>
-<li>CryEngine3 里用到了，在孤岛危机里应用<ul>
-<li>快而且质量好</li>
-<li>同样也只能处理次级光源为Diffuse</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_CryEngine.png" alt="LPV_CryEngine"></p>
-<ul>
-<li><strong>Key idea:</strong> 光线直线传播中，Radiance大小不变；</li>
-<li><strong>Key solution:</strong> 通过3D网格<strong>(体素，Voxel)</strong>，传播Secondary Light Source/dirctly illminated surfaces的Radiance到其他地方；</li>
-</ul>
-<ul>
-<li><strong>Steps:</strong><ol>
-<li><strong>生成</strong>场景中被直接光照照射到的<strong>Radiance point</strong>(即Secondary light source)；</li>
-<li>将Radiance point<strong>注入到体素</strong>中；</li>
-<li>Radiance在体素中<strong>传播</strong>；</li>
-<li>传播稳定后（一般迭代4、5次），通过体素中储存的Radiance进行Shading；</li>
-</ol>
-</li>
-</ul>
-<h2 id="c-1-做法"><a href="#c-1-做法" class="headerlink" title="c.1). 做法"></a>c.1). 做法</h2><h3 id="Step-1-Generation"><a href="#Step-1-Generation" class="headerlink" title="Step 1: Generation"></a>Step 1: Generation</h3><ul>
-<li>找到Secondary light source</li>
-<li>使用Reflective Shadow Maps (RSM)；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step01.png" alt="LPV_Step01" style="zoom: 50%;"></p>
-<h3 id="Step-2-Injection-注入"><a href="#Step-2-Injection-注入" class="headerlink" title="Step 2: Injection(注入)"></a>Step 2: Injection(注入)</h3><ul>
-<li>预先划分好3D网格（体素）；</li>
-<li>对于每一个体素，找到其内部的Secondary light source；</li>
-<li>将他们出射的Radiance大小和方向看做是球面函数，<strong>投影到2阶（4个）的球谐函数上</strong>；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step02.png" alt="LPV_Step02" style="zoom:33%;"></p>
-<h3 id="Step-3-Propagation-传播"><a href="#Step-3-Propagation-传播" class="headerlink" title="Step 3: Propagation(传播)"></a>Step 3: Propagation(传播)</h3><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step03.png" alt="LPV_Step03" style="zoom:50%;"></p>
-<ul>
-<li>对于每一个Voxel，都会传播到相邻的6个面（3D，前后左右上下，不会斜向传播），也会接收6个面的Radiance；</li>
-<li>接收6个面的Radiance并相加后，再次使用SH表示；</li>
-<li>重复上述步骤，直至传播接近稳定（一般整体迭代4-5次）</li>
-</ul>
-<h3 id="Step4-Rendering"><a href="#Step4-Rendering" class="headerlink" title="Step4: Rendering"></a>Step4: Rendering</h3><ul>
-<li>对于每一个着色点，找到他们所处的Voxel；</li>
-<li>使用该Voxel中存储的Radiance<strong>（from all direction, 是一个SH表达的球面函数）</strong>，进行Shading；<ul>
-<li>因为存储的是球面函数形式的Radiance，所以既可以做Diffuse也可以做Gloosy</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step04.png" alt="LPV_Step04" style="zoom:67%;"></p>
-<ul>
-<li><p><strong>造成的问题：</strong> 由于同一个Voxel中Radiance相同，对于薄的几何体可能造成<strong>Light leaking</strong></p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_LightLeaking.png" alt="LPV_LightLeaking"></p>
-</li>
-</ul>
-<h1 id="d-Voxel-Global-Illumination-VXGI"><a href="#d-Voxel-Global-Illumination-VXGI" class="headerlink" title="d). Voxel Global Illumination (VXGI)"></a>d). Voxel Global Illumination (VXGI)</h1><ul>
-<li>与RSM两点主要的不同<ul>
-<li>将被光源直接照射的像素变为<strong>带有层级的体素（hierarchical voxels）</strong>（即Secondary light source不再看成surface patch，而是hierarchical voxels）</li>
-<li>光线传播方式：<ul>
-<li>从摄像机开始传播，进行锥形传播（Cone tracing，比如光线在Gloosy表面弹射，出射方向为一个锥形），计算锥体相交的Voxel对该点的Radiance贡献；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="d-1-做法"><a href="#d-1-做法" class="headerlink" title="d.1). 做法"></a>d.1). 做法</h2><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_00.png" alt="VXGI_00"></p>
-<hr>
-<h3 id="Pass-1-from-the-light"><a href="#Pass-1-from-the-light" class="headerlink" title="Pass 1: from the light"></a>Pass 1: from the light</h3><ul>
-<li>储存每个点的入射Radiance，并储存到对应的Voxel中；</li>
-<li>Voxel中存储Incident lighting和normal的分布，以便支持Gloosy等材质；<ul>
-<li>存储Lobe分布的基础：Cone Trace</li>
-</ul>
-</li>
-<li>根据这两个分布，即可得出 出射Radiance 的分布情况；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_Pass01.png" alt="VXGI_Pass01"></p>
-<h3 id="Pass-2-from-the-camera"><a href="#Pass-2-from-the-camera" class="headerlink" title="Pass 2: from the camera"></a>Pass 2: from the camera</h3><ul>
-<li>对于Gloosy的表面，追踪1个朝向反射方向的圆锥；</li>
-<li>根据圆锥的（grow）大小，查询相应层级；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_Pass02.png" alt="VXGI_Pass02"></p>
-<ul>
-<li><p>对于Diffuse，追踪多个Cones</p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_Pass02_Diffuse.png" alt="VXGI_Pass02_Diffuse"></p>
-</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1711,6 +1547,213 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/03/Games101_21_22_Animation/" class="post-title-link" itemprop="url">Games101_21_22 Animation</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 02:06:01" itemprop="dateModified" datetime="2023-02-04T02:06:01+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+<ul>
+<li><p><strong>Idealized spring</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<ul>
+<li>但永远不会停止，因此加入摩擦力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<ul>
+<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
+<ul>
+<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
+</li>
+</ul>
+</li>
+<li><p>加入两条对角线，以及skip connection</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<ul>
+<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
+</ul>
+</li>
+<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+</li>
+</ul>
+<hr>
+<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+</ul>
+</li>
+</ul>
+<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<ul>
+<li><p>关节（Joint）分类：</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
+</li>
+</ul>
+<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
+<ul>
+<li>解决多个解的方法：梯度下降</li>
+</ul>
+<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<ul>
+<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
+</li>
+</ul>
+<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><hr>
+<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
+<ul>
+<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
+</li>
+<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
+<ul>
+<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
+<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
+<ul>
+<li><p><strong>缺点：</strong></p>
+<ol>
+<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
+</li>
+<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
+<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
+<ul>
+<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
+<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
+<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
+<ul>
+<li>使用下一时刻的速度和加速度，并求解</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
+<ul>
+<li><p><strong>龙格库塔</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
+</li>
+</ul>
+<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
+<li>非基于物理<ul>
+<li>时间快</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
+<hr>
+<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
+<ul>
+<li>与单粒子类似</li>
+</ul>
+<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
+<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
+<ul>
+<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
+</li>
+<li><p>欧拉（网格法）：考虑不同位置的网格</p>
+</li>
+<li><p>Material Point Method (MPM ，混合上两种方法)</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2016,213 +2059,6 @@ f_{r}\left(\omega_{i} \rightarrow \omega_{r}\right) \geq 0</script></li>
 </li>
 </ul>
 <h3 id="b-4-Procedural-Appearance"><a href="#b-4-Procedural-Appearance" class="headerlink" title="b.4). Procedural Appearance"></a>b.4). Procedural Appearance</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Procedural Appearance.png" alt="Procedural Appearance"></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/Games101_21_22_Animation/" class="post-title-link" itemprop="url">Games101_21_22 Animation</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 02:06:01" itemprop="dateModified" datetime="2023-02-04T02:06:01+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
-<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
-<ul>
-<li><p><strong>Idealized spring</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
-<ul>
-<li>但永远不会停止，因此加入摩擦力</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
-<ul>
-<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
-<ul>
-<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
-</li>
-</ul>
-</li>
-<li><p>加入两条对角线，以及skip connection</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
-<ul>
-<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
-</ul>
-</li>
-<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
-</li>
-</ul>
-<hr>
-<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
-<ul>
-<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
-</ul>
-</li>
-</ul>
-<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
-<ul>
-<li><p>关节（Joint）分类：</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
-</li>
-</ul>
-<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
-<ul>
-<li>解决多个解的方法：梯度下降</li>
-</ul>
-<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
-<ul>
-<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
-</li>
-</ul>
-<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><hr>
-<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
-<ul>
-<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
-</li>
-<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
-<ul>
-<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
-<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
-<ul>
-<li><p><strong>缺点：</strong></p>
-<ol>
-<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
-</li>
-<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
-</li>
-</ol>
-</li>
-</ul>
-<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
-<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
-<ul>
-<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
-<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
-<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
-<ul>
-<li>使用下一时刻的速度和加速度，并求解</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
-<ul>
-<li><p><strong>龙格库塔</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
-</li>
-</ul>
-<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
-<li>非基于物理<ul>
-<li>时间快</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
-<hr>
-<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
-<ul>
-<li>与单粒子类似</li>
-</ul>
-<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
-<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
-<ul>
-<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
-</li>
-<li><p>欧拉（网格法）：考虑不同位置的网格</p>
-</li>
-<li><p>Material Point Method (MPM ，混合上两种方法)</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
-</li>
-</ul>
 
       
     </div>

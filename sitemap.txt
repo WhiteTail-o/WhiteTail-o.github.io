@@ -1,8 +1,8 @@
+https://whitetail-o.github.io/2023/02/02/Games202_04_Real-time%20Global%20Illumination/
 https://whitetail-o.github.io/tags/index.html
 https://whitetail-o.github.io/categories/index.html
 https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/
 https://whitetail-o.github.io/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/
-https://whitetail-o.github.io/2023/02/02/Games202_04_Real-time%20Global%20Illumination/
 https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/
 https://whitetail-o.github.io/2022/10/02/Games101_02_04_Math/
 https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/

@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://whitetail-o.github.io/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://whitetail-o.github.io/tags/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -30,15 +39,6 @@
   
   <url>
     <loc>https://whitetail-o.github.io/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
