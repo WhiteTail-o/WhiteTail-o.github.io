@@ -13,10 +13,10 @@ http://example.com/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/
 http://example.com/categories/test.html
 http://example.com/about/index.html
 http://example.com/tags/index.html
-http://example.com/categories/index.html
 http://example.com/links/index.html
-http://example.com/repository/index.html
+http://example.com/categories/index.html
 http://example.com/books/index.html
+http://example.com/repository/index.html
 http://example.com/404.html
 http://example.com/
 http://example.com/categories/Games101/
