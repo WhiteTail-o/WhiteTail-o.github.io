@@ -2,79 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2022/10/02/Games101_02_04_Math/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://example.com/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/03/Games101_13_16_RayTracing/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/03/Games101_21_22_Animation/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/03/Games101_17_18_Materials/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/02/Games101_10_12_Geometry/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/02/Games101_07_09_Shading/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/2022/10/02/Games101_05_06_Rasterization/</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -110,6 +38,78 @@
   </url>
   
   <url>
+    <loc>http://example.com/2022/10/03/Games101_21_22_Animation/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/03/Games101_17_18_Materials/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/03/Games101_13_16_RayTracing/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/02/Games101_10_12_Geometry/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/02/Games101_07_09_Shading/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/02/Games101_05_06_Rasterization/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/2022/10/02/Games101_02_04_Math/</loc>
+    
+    <lastmod>2023-02-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/categories/test.html</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -137,7 +137,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/links/index.html</loc>
+    <loc>http://example.com/books/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -164,7 +164,7 @@
   </url>
   
   <url>
-    <loc>http://example.com/books/index.html</loc>
+    <loc>http://example.com/links/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -189,6 +189,27 @@
     <priority>1.0</priority>
   </url>
 
+  
+  <url>
+    <loc>http://example.com/tags/Games101/</loc>
+    <lastmod>2023-02-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
+    <lastmod>2023-02-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/tags/Games202/</loc>
+    <lastmod>2023-02-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 
   
