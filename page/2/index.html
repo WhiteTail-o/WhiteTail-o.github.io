@@ -149,18 +149,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">3</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -181,6 +181,529 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/03/Games101_21_22_Animation/" class="post-title-link" itemprop="url">Games101_21_22 Animation</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:32:18" itemprop="dateModified" datetime="2023-02-04T14:32:18+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+<ul>
+<li><p><strong>Idealized spring</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<ul>
+<li>但永远不会停止，因此加入摩擦力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<ul>
+<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
+<ul>
+<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
+</li>
+</ul>
+</li>
+<li><p>加入两条对角线，以及skip connection</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<ul>
+<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
+</ul>
+</li>
+<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+</li>
+</ul>
+<hr>
+<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+</ul>
+</li>
+</ul>
+<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<ul>
+<li><p>关节（Joint）分类：</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
+</li>
+</ul>
+<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
+<ul>
+<li>解决多个解的方法：梯度下降</li>
+</ul>
+<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<ul>
+<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
+</li>
+</ul>
+<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/03/Games101_21_22_Animation/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/03/Games101_13_16_RayTracing/" class="post-title-link" itemprop="url">Games101-13-16 RayTracing</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:15:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:15:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:31:31" itemprop="dateModified" datetime="2023-02-04T14:31:31+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lecture-13-Ray-Tracing"><a href="#Lecture-13-Ray-Tracing" class="headerlink" title="Lecture 13 Ray Tracing"></a>Lecture 13 Ray Tracing</h1><h2 id="a-vs-Rasterization"><a href="#a-vs-Rasterization" class="headerlink" title="a). vs. Rasterization"></a>a). vs. Rasterization</h2><ul>
+<li><p>光栅化难以表现<strong>全局（global）</strong>效果，如</p>
+<ul>
+<li>（软）阴影（Soft shadows）</li>
+<li>光线反弹<strong>超过一次</strong>（Glossy reflection）</li>
+<li>Indirect illumination（间接光照）</li>
+</ul>
+<p><img src="/2022/10/03/Games101_13_16_RayTracing/vs.Rsaterization.png" alt="vs.Rsaterization"></p>
+</li>
+<li><p>Rasterization is fast, but quality is relatively low；</p>
+</li>
+</ul>
+<p><img src="/2022/10/03/Games101_13_16_RayTracing/RayTracing00.png" alt="RayTracing00"></p>
+<h2 id="b-Basic-Ray-Tracing-Algorithm"><a href="#b-Basic-Ray-Tracing-Algorithm" class="headerlink" title="b.). Basic Ray-Tracing Algorithm"></a>b.). Basic Ray-Tracing Algorithm</h2><ul>
+<li><p><strong>光追中光线的性质：</strong></p>
+<ol>
+<li>光是沿直线传播的；</li>
+<li>光相交时，并不产生干扰；</li>
+<li>光从光源出发，传播到眼睛（由于光路可逆，也可是光线从眼睛出发，传播到光源）</li>
+</ol>
+<p><img src="/2022/10/03/Games101_13_16_RayTracing/EmissionTheory.png" alt="EmissionTheory"></p>
+</li>
+</ul>
+<h3 id="b-1-Ray-Casting"><a href="#b-1-Ray-Casting" class="headerlink" title="b.1). Ray Casting"></a>b.1). Ray Casting</h3><ul>
+<li><p><strong>做法：</strong></p>
+<ol>
+<li>Generate an image by <strong>casting one ray per pixel</strong>;（生成从眼睛出发的光线）</li>
+<li>Check for shadows by <strong>sending a ray to the light</strong>;（检查光线投射点是否可传播到光源）</li>
+</ol>
+</li>
+<li><div align="center"> <img src="/2022/10/03/Games101_13_16_RayTracing/CastingRay.png" height="300px" alt="CastingRay"> <img src="/2022/10/03/Games101_13_16_RayTracing/CastingRay01.png" height="300px" alt="CastingRay01"> </div>
+
+<ul>
+<li>光线由眼睛出发，可不再使用深度缓存；</li>
+<li>投射点到光源发射<strong>Shadow Ray</strong>，查看该点是否在阴影里（是否对光源可见）；</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/03/Games101_13_16_RayTracing/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_10_12_Geometry/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/02/Games101_10_12_Geometry/" class="post-title-link" itemprop="url">Games101_10_12 Geometry</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-02 16:35:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:35:10+08:00">2022-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:31:24" itemprop="dateModified" datetime="2023-02-04T14:31:24+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lecture-10-11-Geometry-1-2"><a href="#Lecture-10-11-Geometry-1-2" class="headerlink" title="Lecture 10/11: Geometry 1 2"></a>Lecture 10/11: Geometry 1 2</h1><ul>
+<li>不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；</li>
+</ul>
+<h2 id="a-几何的表示形式"><a href="#a-几何的表示形式" class="headerlink" title="a). 几何的表示形式"></a>a). 几何的表示形式</h2><ul>
+<li>隐式（Implicit）<ul>
+<li>algebraic surface</li>
+<li>level sets</li>
+<li>distance functions</li>
+<li>…</li>
+</ul>
+</li>
+<li>显式（Explicit）<ul>
+<li>point cloud</li>
+<li>polygon mesh</li>
+<li>subdivision, NURBS</li>
+<li>…</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/02/Games101_10_12_Geometry/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/02/Games101_07_09_Shading/" class="post-title-link" itemprop="url">Games101-7-9 Shading</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-02 16:25:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:25:10+08:00">2022-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:31:20" itemprop="dateModified" datetime="2023-02-04T14:31:20+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline"><a href="#Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline" class="headerlink" title="Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)"></a>Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)</h1><h2 id="a-Definition"><a href="#a-Definition" class="headerlink" title="a). Definition"></a>a). Definition</h2><p><img src="/2022/10/02/Games101_07_09_Shading/Shading_Definition.png" alt="Shading_Definition"></p>
+<h2 id="b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model"><a href="#b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model" class="headerlink" title="b). A Simple Shading Model(Blinn-Phong Reflectance Model)"></a>b). A Simple Shading Model(Blinn-Phong Reflectance Model)</h2><h3 id="b-1-Fundamental"><a href="#b-1-Fundamental" class="headerlink" title="b.1). Fundamental"></a>b.1). Fundamental</h3><ul>
+<li><p>Blinn-Phong是一个<strong>经验模型</strong>，并不是严格基于物理的；</p>
+</li>
+<li><p><strong>进入视线内的光照一般有以下构成：</strong></p>
+<ul>
+<li>高光（Specualr）</li>
+<li>漫反射（Diffuse）</li>
+<li>环境光（Ambient）</li>
+<li>自发光（Emissive）</li>
+</ul>
+</li>
+<li><p><strong>Shading is Local: </strong>Compute light reflected toward camera at a <font color="red"><strong>specific shading point</strong></font><img src="/2022/10/02/Games101_07_09_Shading/ShadingInput.png" alt="ShadingInput"></p>
+<ul>
+<li><p>No shadows will be generated! <strong>(shading ≠ shadow)</strong> </p>
+<ul>
+<li>阴影会由另外的Shadow Caster来着色；</li>
+</ul>
+<p><img src="/2022/10/02/Games101_07_09_Shading/NoShadow.png" alt="NoShadow"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="b-2-Diffuse-Reflection"><a href="#b-2-Diffuse-Reflection" class="headerlink" title="b.2). Diffuse Reflection"></a>b.2). Diffuse Reflection</h3><ul>
+<li>Blinn-Phong中，漫反射的光均匀散射到各个方向；<img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Diffuse.png" alt="Blinn-Phong_Diffuse"></li>
+<li><p><strong>Lambert’s cosine law</strong>：接收到的能量与 $l·n$ 成正比例<img src="/2022/10/02/Games101_07_09_Shading/Lambert_cos_law.png" alt="Lambert_cos_law"></p>
+</li>
+<li><p><strong>Light Falloff</strong><img src="/2022/10/02/Games101_07_09_Shading/LightFalloff.png" alt="LightFalloff"></p>
+</li>
+<li><p><strong>漫反射最终的着色：</strong><img src="/2022/10/02/Games101_07_09_Shading/LambertDiffuseShading.png" alt="LambertDiffuseShading"><img src="/2022/10/02/Games101_07_09_Shading/Diffuse_kd.png" alt="Diffuse_kd"></p>
+</li>
+</ul>
+<h3 id="b-3-Specular-Term-Blinn-Phong"><a href="#b-3-Specular-Term-Blinn-Phong" class="headerlink" title="b.3). Specular Term(Blinn-Phong)"></a>b.3). Specular Term(Blinn-Phong)</h3><ul>
+<li><p>Intensity <strong>depends</strong> on view direction</p>
+<p><img src="/2022/10/02/Games101_07_09_Shading/Specular.png" alt="Specular" style="zoom: 33%;"></p>
+</li>
+<li><p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Half_vector.png" alt="Blinn-Phong_Half_vector"></p>
+<ul>
+<li>采用半程向量简化计算。采用半程向量$h$与$n$点乘的是Blinn-Phong模型，而采用镜面反射方向$r$和视线方向$v$点乘的是Phong模型；</li>
+<li><strong>指数$p$的作用：</strong>Increasing p narrows the reflection lobe<img src="/2022/10/02/Games101_07_09_Shading/Specular_Power.png" alt="Specular_Power"></li>
+<li>效果总览：<img src="/2022/10/02/Games101_07_09_Shading/Specular_Term.png" alt="Specular_Term"></li>
+</ul>
+</li>
+</ul>
+<h3 id="b-4-Ambient-Term"><a href="#b-4-Ambient-Term" class="headerlink" title="b.4). Ambient Term"></a>b.4). Ambient Term</h3><p><img src="/2022/10/02/Games101_07_09_Shading/AmbientTerm.png" alt="AmbientTerm"></p>
+<p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong.png" alt="Blinn-Phong"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/02/Games101_07_09_Shading/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -226,7 +749,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 02:17:03" itemprop="dateModified" datetime="2023-02-04T02:17:03+08:00">2023-02-04</time>
+      <time title="修改时间：2023-02-04 14:31:12" itemprop="dateModified" datetime="2023-02-04T14:31:12+08:00">2023-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -327,161 +850,14 @@
 </ul>
 </li>
 </ul>
-<h1 id="Lecture-6-Rasterization-2-Antialiasing-and-Z-Buffering"><a href="#Lecture-6-Rasterization-2-Antialiasing-and-Z-Buffering" class="headerlink" title="Lecture 6: Rasterization 2(Antialiasing and Z-Buffering)"></a>Lecture 6: Rasterization 2(Antialiasing and Z-Buffering)</h1><h2 id="a-Sampling-Artifacts-Errors-Mistakes-Inaccuracies-in-Computer-Graphics"><a href="#a-Sampling-Artifacts-Errors-Mistakes-Inaccuracies-in-Computer-Graphics" class="headerlink" title="a). Sampling Artifacts(Errors / Mistakes / Inaccuracies) in Computer Graphics"></a>a). Sampling Artifacts(Errors / Mistakes / Inaccuracies) in Computer Graphics</h2><ul>
-<li>由于采样造成的“Artifacts“<ul>
-<li>锯齿（ <em>Jaggies</em>）——空间上采样</li>
-<li>摩尔纹（<em>Moire</em>）——欠采样图像</li>
-<li>车轮错觉（<em>Wagon wheel effect</em>）——时间上采样</li>
-<li>……</li>
-</ul>
-</li>
-<li><strong>造成错误的原因：</strong>信号频率高，而采样频率低（可联系<strong>奈奎斯特定理：</strong>当采样频率大于信号中最高频率的2倍时(fs&gt;2f)，采样之后的数字信号完整地保留了原始信号中的信息）</li>
-</ul>
-<h2 id="b-Antialiasing-Idea-Blurring-Pre-Filtering-Before-Sampling"><a href="#b-Antialiasing-Idea-Blurring-Pre-Filtering-Before-Sampling" class="headerlink" title="b). Antialiasing Idea:Blurring (Pre-Filtering) Before Sampling"></a>b). Antialiasing Idea:Blurring (Pre-Filtering) Before Sampling</h2><ul>
-<li><p>抗锯齿的思路就是在采样前”模糊“；</p>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/AS.png" alt="AS"></p>
-<ul>
-<li><strong>注意：</strong>先模糊，后采样。对应频域上先低通滤波（或其他操作，如卷积、超采样，FSAA那种图像层面的抗锯齿暂不考虑），后采样（<strong>卷积定理：</strong>时域信号与冲激信号相乘，等于两者对应的频域信号卷积。反之，也成立）；</li>
-</ul>
-</li>
-</ul>
-<h2 id="c-Frequency-Domain"><a href="#c-Frequency-Domain" class="headerlink" title="c). Frequency Domain"></a>c). Frequency Domain</h2><h3 id="c-1-Fundamental"><a href="#c-1-Fundamental" class="headerlink" title="c.1). Fundamental"></a>c.1). Fundamental</h3><ul>
-<li><p>傅里叶变换</p>
-</li>
-<li><p><strong>卷积定理：</strong>时域中乘积等于频域上卷积，反之也成立。（时域信号与冲激信号相乘，等于两者对应的频域信号卷积。反之，也成立。）</p>
-</li>
-<li><p><strong>Aliases:</strong> 在给定的采样率下，无法区分两个不同频率<img src="/2022/10/02/Games101_05_06_Rasterization/Aliases.png" alt="Aliases"></p>
-</li>
-</ul>
-<h3 id="c-2-Filtering-Getting-rid-of-certain-frequency-contents"><a href="#c-2-Filtering-Getting-rid-of-certain-frequency-contents" class="headerlink" title="c.2). Filtering: Getting rid of certain frequency contents"></a>c.2). Filtering: Getting rid of certain frequency contents</h3><ul>
-<li>K空间：反应图像进过二维傅里叶变换后的结果，越靠中间，频率越小；<img src="/2022/10/02/Games101_05_06_Rasterization/K_space.png" alt="K_space"><ul>
-<li>出现十字星的原因：把图像看成类似Wrap Mode的Repeat，即重复的图像。使得其四个方向的高频内容增加，形成十字星；</li>
-</ul>
-</li>
-<li><strong>Filter（滤波器）：</strong><ul>
-<li><strong>High-pass filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/High_pass filter.png" alt="High_pass filter"></li>
-<li><strong>Low-pass filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/Low_pass_filter.png" alt="Low_pass_filter"></li>
-<li>Filter Out Low and High Frequencies<img src="/2022/10/02/Games101_05_06_Rasterization/F_Low_and_high.png" alt="F_Low_and_high"></li>
-</ul>
-</li>
-</ul>
-<h3 id="c-3-Convolution"><a href="#c-3-Convolution" class="headerlink" title="c.3). Convolution"></a>c.3). Convolution</h3><ul>
-<li><strong>Filtering = Convolution (= Averaging)</strong><ul>
-<li>注意：只是在这里相等，而滤波和卷积概念上不相同；</li>
-</ul>
-</li>
-<li><strong>对信号进行滤波，就是用卷积核和信号做卷积；</strong><ul>
-<li>Point-wise local averaging in a “sliding window”<img src="/2022/10/02/Games101_05_06_Rasterization/convolution.png" alt="convolution"></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><strong>卷积定理：</strong>在空域（时域）做卷积，等于在频域做乘积；反之亦然。<ul>
-<li>因此，对图像滤波有两种处理方法；<ul>
-<li><strong>Option 1: </strong>在空域上与滤波器（卷积核）做卷积；</li>
-<li><strong>Option 2: </strong><ol>
-<li>将图像和滤波器（卷积核）转换到频域（傅里叶变换）；</li>
-<li>两者在频域相乘；</li>
-<li>将得到的结果重新变换到空域（逆傅里叶变换）；<img src="/2022/10/02/Games101_05_06_Rasterization/Convolution_Theorem.png" alt="Convolution_Theorem"></li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Box Filter</strong><img src="/2022/10/02/Games101_05_06_Rasterization/BoxFilter.png" alt="BoxFilter"><ul>
-<li>箱式滤波类似于低通滤波<img src="/2022/10/02/Games101_05_06_Rasterization/BoxF_LP.png" alt="BoxF_LP"></li>
-<li>更大的卷积核意味着更低的频率<img src="/2022/10/02/Games101_05_06_Rasterization/WiderFK.png" alt="WiderFK"></li>
-</ul>
-</li>
-</ul>
-<h3 id="c-4-Sampling-Repeating-Frequency-Contents"><a href="#c-4-Sampling-Repeating-Frequency-Contents" class="headerlink" title="c.4). Sampling = Repeating Frequency Contents"></a>c.4). Sampling = Repeating Frequency Contents</h3><p><img src="/2022/10/02/Games101_05_06_Rasterization/Sampling.png" alt="Sampling"></p>
-<ul>
-<li>锯齿=混叠<img src="/2022/10/02/Games101_05_06_Rasterization/MixedFrequencyContents.png" alt="MixedFrequencyContents"></li>
-</ul>
-<h2 id="d-Antialiasing"><a href="#d-Antialiasing" class="headerlink" title="d). Antialiasing"></a>d). Antialiasing</h2><ul>
-<li>解决锯齿的选择：<ul>
-<li>提高采样率<ul>
-<li>增大冲激信号在频域的距离；</li>
-<li>更高分辨率的显示器；</li>
-<li>缺点：成本高，且需要很高的分辨率</li>
-</ul>
-</li>
-<li><strong>抗锯齿</strong><ul>
-<li>让信号在采样（重复，Repeat）前变“窄”，即<strong>在采样前过滤掉高频部分</strong></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Antialiasing = Limiting, then repeating</strong><img src="/2022/10/02/Games101_05_06_Rasterization/AA.png" alt="AA"></li>
-<li><img src="/2022/10/02/Games101_05_06_Rasterization/Pre-Filter.png" alt="Pre-Filter"><ul>
-<li>Solution: <ul>
-<li><strong>Convolve</strong> f(x,y) by a <strong>1-pixel box-blur</strong><ul>
-<li>Recall: convolving = filtering = averaging </li>
-</ul>
-</li>
-<li><strong>Then sample</strong> at every pixel’s center</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>通过计算像素平均值来抗锯齿</strong><img src="/2022/10/02/Games101_05_06_Rasterization/Avertage_Pixel_Value.png" alt="Avertage_Pixel_Value"></li>
-</ul>
-<h2 id="e-SSAA-Super-Sampling-Antialiasing"><a href="#e-SSAA-Super-Sampling-Antialiasing" class="headerlink" title="e). SSAA(Super Sampling Antialiasing)"></a>e). SSAA(Super Sampling Antialiasing)</h2><ul>
-<li>通过将一个像素分割成NxN个像素来进行采样和shading，最后将每个像素点内部所细分的采样点的颜色值全部加起来再求均值，作为该像素点的抗锯齿之后的颜色值<img src="/2022/10/02/Games101_05_06_Rasterization/SSAA.png" alt="SSAA"></li>
-</ul>
-<h2 id="f-MSAA-Multi-Sampling-Antialiasing"><a href="#f-MSAA-Multi-Sampling-Antialiasing" class="headerlink" title="f). MSAA(Multi-Sampling Antialiasing)"></a>f). MSAA(Multi-Sampling Antialiasing)</h2><ul>
-<li>MSAA是对SSAA的改进。SSAA的计算量大，一个像素中会有多个点进行shading，而MSAA只是计算究竟有几个采样点会被三角形cover，计算颜色的时候只会利用像素中心坐标进行一次shading。<img src="/2022/10/02/Games101_05_06_Rasterization/MSAA.png" alt="MSAA"></li>
-<li>如图中大点所在的像素块，三角形只覆盖了其中的三个点（左下，右上，右下），则该像素的颜色为$75\%Color_{origin}$，<strong>之后，再对像素中心进行采样</strong></li>
-<li><strong>注意</strong>：MSAA只是近似Blur，而没提高采样率。要注意和SSAA以及高分辨率的区分</li>
-<li><strong>在实际中</strong>，子像素的划分并不是均匀划分为NxN，而是通过其他更有效的方法，而且有些样本还会得到复用；</li>
-</ul>
-<blockquote>
-<ul>
-<li><strong>SSAA中每个像素点有4个子采样点，每个三角形对每个像素点的4个子采样点各着色1次（共4次）</strong>，再把计算结果根据深度和覆盖信息保存到对应的子采样点，最后对4个采样点取均值作为最终的像素颜色；</li>
-<li><strong>MSAA中每个像素点有4个子采样点，每个三角形对每个像素点只在中心点着色1次</strong>，再把计算结果根据深度和覆盖信息保存到对应的子采样点，最后对4个采样点取均值作为最终的像素颜色；</li>
-</ul>
-</blockquote>
-<h2 id="g-Other-AA"><a href="#g-Other-AA" class="headerlink" title="g). Other AA"></a>g). Other AA</h2><ul>
-<li><strong>FXAA(Fast Approximate AA)</strong><ul>
-<li><strong>图像层面</strong>上进行处理，是一个后期处理，先得到有锯齿的图像，再通过图像匹配找到有锯齿的边界，之后，替换为没有锯齿的边界；</li>
-</ul>
-</li>
-<li><strong>TAA(Temporal AA)</strong><ul>
-<li>可以联系UE_NOTE</li>
-<li>将空域采样点，均匀分布到时域上；</li>
-</ul>
-</li>
-</ul>
-<h2 id="h-Z-buffer"><a href="#h-Z-buffer" class="headerlink" title="h). Z-buffer"></a>h). Z-buffer</h2><h3 id="h-0-Painter’s-Algorithm"><a href="#h-0-Painter’s-Algorithm" class="headerlink" title="h.0). Painter’s Algorithm"></a>h.0). Painter’s Algorithm</h3><ul>
-<li>画家算法：<ul>
-<li>对三角形进行排序，先画远的，再画近的；</li>
-<li>不能解决相互遮挡问题，因此采用Z-buffer<img src="/2022/10/02/Games101_05_06_Rasterization/Painters_Algorithm.png" alt="Painters_Algorithm"></li>
-</ul>
-</li>
-</ul>
-<h3 id="h-1-Z-buffer"><a href="#h-1-Z-buffer" class="headerlink" title="h.1). Z-buffer"></a>h.1). Z-buffer</h3><ul>
-<li><strong>Idea：</strong><ul>
-<li>储存<strong>每个采样（像素）</strong>中最小的深度值；</li>
-<li>储存深度值到缓存区（buffer）中；</li>
-</ul>
-</li>
-<li>为了简单起见，我们看作z是正数(smaller z -&gt; closer, larger z -&gt; further)；<img src="/2022/10/02/Games101_05_06_Rasterization/Z-Buffer.png" alt="Z-Buffer"></li>
-<li>深度缓存步骤：<ol>
-<li><strong>初始化深度缓存，将其中每个值初始化为∞</strong></li>
-<li><strong>遍历每个三角形面上的每一个像素点[x,y]，如果该像素点的深度值z，小于Z-buffer[x,y]中的值，则更新zbuffer[x,y]值为该点深度值z，并同时更新该像素点[x,y]的颜色为该三角形面上的该点的颜色。</strong><ul>
-<li>伪代码：<img src="/2022/10/02/Games101_05_06_Rasterization/PCode.png" alt="PCode"></li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/Z-Buffer_Algorithm.png" alt="Z-Buffer_Algorithm"></p>
-<ul>
-<li>时间复杂度$O(n)$。Z-buffer并没有进行排序，只是求得最小（深度）值，因此时间复杂度为线性；</li>
-<li>三角形的绘制顺序并不影响最终结果（不考虑不透明等情况）；</li>
-</ul>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/02/Games101_05_06_Rasterization/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -543,7 +919,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 02:13:51" itemprop="dateModified" datetime="2023-02-04T02:13:51+08:00">2023-02-04</time>
+      <time title="修改时间：2023-02-04 14:30:59" itemprop="dateModified" datetime="2023-02-04T14:30:59+08:00">2023-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -576,243 +952,14 @@
 </li>
 </ul>
 <h2 id="b-Orthonormal-Coordinate-Frames-正交直角坐标系"><a href="#b-Orthonormal-Coordinate-Frames-正交直角坐标系" class="headerlink" title="b). Orthonormal Coordinate Frames(正交直角坐标系)"></a>b). Orthonormal Coordinate Frames(正交直角坐标系)</h2><p><img src="/2022/10/02/Games101_02_04_Math/OCF.png" alt="OCF"></p>
-<h1 id="Lecture-03-Transformation"><a href="#Lecture-03-Transformation" class="headerlink" title="Lecture 03 Transformation"></a>Lecture 03 Transformation</h1><h2 id="a-2D-Transformation"><a href="#a-2D-Transformation" class="headerlink" title="a). 2D Transformation"></a>a). 2D Transformation</h2><ul>
-<li><p><strong>Scale Matrix</strong> </p>
-</li>
-<li><p><strong>Reflection Matrix</strong></p>
-</li>
-<li><p><strong>Shear Matrix(切变矩阵)</strong></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/ShearMatrix.png" alt="ShearMatrix"></p>
-</li>
-<li><p><strong>Rotation matrix(默认原点(0, 0), CCW/逆时针旋转)</strong></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/RotationMatrix.png" alt="RotationMatrix"></p>
-</li>
-</ul>
-<h2 id="b-Homogeneous-coordinates-齐次坐标"><a href="#b-Homogeneous-coordinates-齐次坐标" class="headerlink" title="b). Homogeneous coordinates(齐次坐标)"></a>b). Homogeneous coordinates(齐次坐标)</h2><ul>
-<li><p><strong>To solve:</strong> 平移不是线性变换，无法用2*2矩阵表示（2D）</p>
-</li>
-<li><p><img src="/2022/10/02/Games101_02_04_Math/HomogenousCoord.png" alt="HomogenousCoord"></p>
-<ul>
-<li><strong>为什么点和向量的其次项不同？</strong><ol>
-<li>向量具有平移不变性，齐次项为0可使其不受$t_x$、$t_y$的影响</li>
-<li>考虑向量与点、向量/点之间的运算<img src="/2022/10/02/Games101_02_04_Math/HomogenousCoord01.png" alt="HomogenousCoord01"><ul>
-<li>point + point得到<strong>两点的中点</strong></li>
-</ul>
-</li>
-</ol>
-</li>
-<li>所有的<strong>仿射变换（Affine Transformation）</strong>都可以用<strong>齐次坐标系</strong>表示<img src="/2022/10/02/Games101_02_04_Math/AT2HC.png" alt="AT2HC"></li>
-</ul>
-</li>
-<li><p><strong>复杂变换</strong>，如</p>
-<p><img src="/2022/10/02/Games101_02_04_Math/ComplexTransforms.png" alt="ComplexTransforms"></p>
-</li>
-</ul>
-<h2 id="c-3D-Transformation"><a href="#c-3D-Transformation" class="headerlink" title="c). 3D Transformation"></a>c). 3D Transformation</h2><p><img src="/2022/10/02/Games101_02_04_Math/3D_Transformations.png" alt="3D_Transformations"></p>
-<ul>
-<li>三维空间中使用齐次坐标的变换</li>
-</ul>
-<script type="math/tex; mode=display">
-\left(\begin{array}{l}
-x^{\prime} \\
-y^{\prime} \\
-z^{\prime} \\
-1
-\end{array}\right)=\left(\begin{array}{lllc}
-a & b & c & t_{x} \\
-d & e & f & t_{y} \\
-g & h & i & t_{z} \\
-0 & 0 & 0 & 1
-\end{array}\right) \cdot\left(\begin{array}{l}
-x \\
-y \\
-z \\
-1
-\end{array}\right)</script><script type="math/tex; mode=display">
-\left(\begin{array}{l}
-x^{\prime} \\
-y^{\prime} \\
-z^{\prime} \\
-1
-\end{array}\right)=\left(\begin{array}{lllc}
-1 & 0 & 0 & t_{x} \\
-0 & 1 & 0 & t_{y} \\
-0 & 0 & 1 & t_{z} \\
-0 & 0 & 0 & 1
-\end{array}\right) \cdot\left(\begin{array}{lllc}
-a & b & c & 0 \\
-d & e & f & 0 \\
-g & h & i & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right) \cdot\left(\begin{array}{l}
-x \\
-y \\
-z \\
-1
-\end{array}\right)</script><p><strong>上述矩阵先线性变换再平移</strong>，相当于：</p>
-<script type="math/tex; mode=display">
-\left(\begin{array}{l}x^{\prime} \\y^{\prime} \\z^{\prime} \\1\end{array}\right)=\left(\begin{array}{lllc}1 & 0 & 0 & t_{x} \\0 & 1 & 0 & t_{y} \\0 & 0 & 1 & t_{z} \\0 & 0 & 0 & 1\end{array}\right) \cdot\left(\begin{array}{lllc}a & b & c & 0 \\d & e & f & 0 \\g & h & i & 0 \\0 & 0 & 0 & 1\end{array}\right) \cdot\left(\begin{array}{l}x \\y \\z \\1\end{array}\right)</script><hr>
-<ul>
-<li>补充知识：正交矩阵</li>
-</ul>
-<h1 id="Lecture-04-Transformation-Cont"><a href="#Lecture-04-Transformation-Cont" class="headerlink" title="Lecture 04 Transformation Cont."></a>Lecture 04 Transformation Cont.</h1><h2 id="a-3D变换"><a href="#a-3D变换" class="headerlink" title="a). 3D变换"></a>a). 3D变换</h2><h3 id="a-1-Scale、Translation"><a href="#a-1-Scale、Translation" class="headerlink" title="a.1) Scale、Translation"></a>a.1) Scale、Translation</h3><p><img src="/2022/10/02/Games101_02_04_Math/3d01.png" alt="3d01"></p>
-<h3 id="a-2-3D-Rotations"><a href="#a-2-3D-Rotations" class="headerlink" title="a.2) 3D Rotations"></a>a.2) 3D Rotations</h3><ul>
-<li><p><strong>旋转矩阵：</strong></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/3d_rotation.png" alt="3d_rotation"></p>
-<ul>
-<li><p><strong>注意绕y轴旋转和其他的区别</strong>（$y=cross(z, x)$）</p>
-</li>
-<li><p>三轴旋转可以表示3D空间的所有旋转变换，例如飞机（<strong>Roll、Pitch、Yaw</strong>）</p>
-<p><img src="/2022/10/02/Games101_02_04_Math/RPY.png" alt="RPY"></p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><strong>罗德里格旋转公式</strong>（表示绕任意<strong>经过原点</strong>轴的任意旋转）</p>
-<p><img src="/2022/10/02/Games101_02_04_Math/Rodrigues_Rotation.png" alt="Rodrigues_Rotation"></p>
-<ul>
-<li>默认旋转轴经过原点</li>
-<li>$\left(\begin{array}{ccc}<br>0 &amp; -n_{z} &amp; n_{y} \\<br>n_{z} &amp; 0 &amp; -n_{x} \\<br>-n_{y} &amp; n_{x} &amp; 0<br>\end{array}\right)$是叉乘向量的矩阵形式</li>
-<li>四元数多是为了旋转之间的插值用的</li>
-</ul>
-</li>
-<li><font color="red">四元数待课后补充</font>
-
-
-
-</li>
-</ul>
-<h2 id="b-Viewing-Transformation"><a href="#b-Viewing-Transformation" class="headerlink" title="b). Viewing Transformation"></a>b). Viewing Transformation</h2><ul>
-<li><strong>概念：</strong>Viewing Transformation（观测矩阵）相当于MVP中的VP<ul>
-<li>View/Camera transformation</li>
-<li>Projection transformation<ul>
-<li>Orthographic projection</li>
-<li>Perspective projection</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="b-1-View-Transformaiton"><a href="#b-1-View-Transformaiton" class="headerlink" title="b.1) View Transformaiton"></a>b.1) View Transformaiton</h3><ul>
-<li><p><img src="/2022/10/02/Games101_02_04_Math/MVP_VP.png" alt="MVP_VP"></p>
-</li>
-<li><p><strong>Difine the camera:</strong></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/Difine_cam.png" alt="Difine_cam"></p>
-</li>
-<li><p><strong>View Space:</strong></p>
-<ul>
-<li>相机位于原点，上是$Y$，看向$-Z$</li>
-<li>看成所有相机不动，全是其他物体动</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>$M_{view}$：<ul>
-<li>in math:<ul>
-<li><img src="/2022/10/02/Games101_02_04_Math/M_in_math01.png" alt="M_in_math01"></li>
-<li><img src="/2022/10/02/Games101_02_04_Math/M_in_math02.png" alt="M_in_math02"></li>
-<li>直接应用矩阵空间变换</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="b-2-Projection-transformation"><a href="#b-2-Projection-transformation" class="headerlink" title="b.2) Projection transformation"></a>b.2) Projection transformation</h3><p><strong>这里的投影变换中对xyzw都乘了z，因此最后需要齐次除法（透视除法），转换到NDC(Normalized Device Coordinates)</strong></p>
-<h4 id="b-2-1-Orthographic-Projection"><a href="#b-2-1-Orthographic-Projection" class="headerlink" title="b.2.1 Orthographic Projection"></a>b.2.1 <strong>Orthographic Projection</strong></h4><ul>
-<li><p><strong>简易理解：</strong><img src="/2022/10/02/Games101_02_04_Math/Orthographic Projection.png" alt="Orthographic Projection"></p>
-<ul>
-<li>注意$[-1, 1]$</li>
-</ul>
-</li>
-<li><p><strong>图形学中的做法：</strong><img src="/2022/10/02/Games101_02_04_Math/Orthographic Projection In general.png" alt="Orthographic Projection In general"></p>
-<ul>
-<li>通过平移将立方体中心化</li>
-<li>缩放成标准立方体（“canonical” cube）</li>
-<li>这里采用右手坐标系，缺点是$f&lt;n$，远的z值小于近的z值</li>
-</ul>
-</li>
-<li><p><strong>矩阵形式：</strong></p>
-<script type="math/tex; mode=display">
-M_{\text {ortho }}=\left[\begin{array}{cccc}
-\frac{2}{r-l} & 0 & 0 & 0 \\
-0 & \frac{2}{t-b} & 0 & 0 \\
-0 & 0 & \frac{2}{n-f} & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-1 & 0 & 0 & -\frac{r+l}{2} \\
-0 & 1 & 0 & -\frac{t+b}{2} \\
-0 & 0 & 1 & -\frac{n+f}{2} \\
-0 & 0 & 0 & 1
-\end{array}\right]</script></li>
-<li><p><strong><font color="red">Caveat:</font></strong></p>
-<ul>
-<li>（使用右手坐标系）看向 $-Z$ 使得$f&lt;n$，远的z值小于近的z值</li>
-<li>这也是为什么OpenGL使用左手坐标系（但也会造成其他问题）</li>
-</ul>
-</li>
-</ul>
-<h4 id="b-2-2-Perspective-Projection"><a href="#b-2-2-Perspective-Projection" class="headerlink" title="b.2.2 Perspective Projection"></a>b.2.2 Perspective Projection</h4><ul>
-<li><p><strong>前置知识：</strong><img src="/2022/10/02/Games101_02_04_Math/Recall_P_M.png" alt="Recall_P_M"></p>
-</li>
-<li><p><strong>How to do perspective projection</strong></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/how_to_perspective_projection.png" alt="how_to_perspective_projection"></p>
-</li>
-<li><p><strong>挤压（squish）</strong></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/squish.png" alt="squish"></p>
-<p><img src="/2022/10/02/Games101_02_04_Math/squish02.png" alt="squish02"></p>
-<ul>
-<li>$M_{\text {persp } \rightarrow \text { ortho }}=\left(\begin{array}{cccc}<br>n &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; 0 \\<br>? &amp; ? &amp; ? &amp; ? \\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}\right)$</li>
-<li>不知道经过挤压后$z$的变化（即第三行乘以$\left(\begin{array}{l}<br>x \\<br>y \\<br>n \\<br>1<br>\end{array}\right)$未知），但知道：<ul>
-<li>在近平面的点不会变化</li>
-<li>在远平面的中点不会变化</li>
-</ul>
-</li>
-<li>$z=n$时，$\left(\begin{array}{l}<br>x \\<br>y \\<br>n \\<br>1<br>\end{array}\right) \Rightarrow\left(\begin{array}{l}<br>x \\<br>y \\<br>n \\<br>1<br>\end{array}\right)==\left(\begin{array}{c}<br>n x^{n} \\<br>n y \\<br>n^{2} \\<br>n<br>\end{array}\right)$<ul>
-<li>易得$\left(\begin{array}{llll}<br>0 &amp; 0 &amp; A &amp; B<br>\end{array}\right)\left(\begin{array}{l}<br>x \\<br>y \\<br>n \\<br>1<br>\end{array}\right)=n^{2}$</li>
-<li>$An+B=n^2$</li>
-</ul>
-</li>
-<li>$z=f$时，对于远平面中点，$\left(\begin{array}{l}<br>0 \\<br>0 \\<br>f \\<br>1<br>\end{array}\right) \Rightarrow\left(\begin{array}{l}<br>0 \\<br>0 \\<br>f \\<br>1<br>\end{array}\right)==\left(\begin{array}{c}<br>0 \\<br>0 \\<br>f^{2} \\<br>f<br>\end{array}\right)$<ul>
-<li>易得$\left(\begin{array}{llll}<br>0 &amp; 0 &amp; A &amp; B<br>\end{array}\right)\left(\begin{array}{l}<br>0 \\<br>0 \\<br>f \\<br>1<br>\end{array}\right)=f^{2}$</li>
-<li>$Af+B=f^2$</li>
-</ul>
-</li>
-<li><p>得$A=n+f$，$B=-nf$</p>
-</li>
-<li><p>$M_{\text {persp } \rightarrow \text { ortho }}=\left(\begin{array}{cccc}<br>n &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; 0 \\<br>0 &amp; 0 &amp; n+f &amp; -nf \\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}\right)$</p>
-</li>
-<li><p>之后进行平行投影的变换，得</p>
-<p>$\mathbf{M}_{\text {per }}=\left[\begin{array}{cccc}<br>\frac{2 n}{r-l} &amp; 0 &amp; \frac{l+r}{l-r} &amp; 0 \\<br>0 &amp; \frac{2 n}{t-b} &amp; \frac{b+t}{b-t} &amp; 0 \\<br>0 &amp; 0 &amp; \frac{f+n}{n-f} &amp; \frac{2 f n}{f-n} \\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}\right]$</p>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p>【补充】</p>
-<p>作业1中用到的<a target="_blank" rel="noopener" href="https://www.cnblogs.com/graphics/archive/2012/08/10/2627458.html">绕任意轴旋转</a>：</p>
-<p><img src="/2022/10/02/Games101_02_04_Math/rotation.jpg" alt="rotation"></p>
-<ul>
-<li><strong>步骤：</strong><ol>
-<li>将旋转轴平移至原点</li>
-<li>将旋转轴旋转至YOZ平面</li>
-<li>将旋转轴旋转至于Z轴重合</li>
-<li>绕Z轴旋转θ度</li>
-<li>执行步骤3的逆过程</li>
-<li>执行步骤2的逆过程</li>
-<li>执行步骤1的逆过程</li>
-</ol>
-</li>
-</ul>
-<p><img src="/2022/10/02/Games101_02_04_Math/rotation02.jpg" alt="rotation02"></p>
-<p>如果旋转轴是过原点的，那么第一步和最后一步的平移操作可以省略，也就是把中间五个矩阵连乘起来，再转置一下，得到下面的绕任意轴旋转的矩阵</p>
-<script type="math/tex; mode=display">
-\left[\begin{array}{cccc}
-a^{2}+\left(1-a^{2}\right) \cos \theta & a b(1-\cos \theta)+\operatorname{csin} \theta & a c(1-\cos \theta)-b \sin \theta & 0 \\
-a b(1-\cos \theta)-c \sin \theta & b^{2}+\left(1-b^{2}\right) \cos \theta & b c(1-\cos \theta)+a \sin \theta & 0 \\
-a c(1-\cos \theta)+b \sin \theta & b c(1-\cos \theta)-a \sin \theta & c^{2}+\left(1-c^{2}\right) \cos \theta & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]</script>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/02/Games101_02_04_Math/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -849,6 +996,24 @@ a c(1-\cos \theta)+b \sin \theta & b c(1-\cos \theta)-a \sin \theta & c^{2}+\lef
   </span>
   <span class="author" itemprop="copyrightHolder">WhiteTail</span>
 </div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 
@@ -880,6 +1045,7 @@ a c(1-\cos \theta)+b \sin \theta & b c(1-\cos \theta)-a \sin \theta & c^{2}+\lef
 
 
   
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
 

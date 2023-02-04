@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). PBR模型基于物理的渲染模型，是当前主流游戏引擎使用的真实感3D渲染模型。  a.1). 两种工作流游戏资源中常见的贴图类型 PBR Guide PBR流程中，常用的有两种工作流程：  金属&#x2F;粗糙度工作流(Metal&#x2F;Roughness) 符合直觉，容易调参 更不容易打破能量守恒   高光（镜面反射）&#x2F;光泽度（Specular&#x2F;Glossiness）工作流 可自由调节$F_0$（零度菲涅尔">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Art_2.7 Metallic与Speculer流程">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). PBR模型基于物理的渲染模型，是当前主流游戏引擎使用的真实感3D渲染模型。  a.1). 两种工作流游戏资源中常见的贴图类型 PBR Guide PBR流程中，常用的有两种工作流程：  金属&#x2F;粗糙度工作流(Metal&#x2F;Roughness) 符合直觉，容易调参 更不容易打破能量守恒   高光（镜面反射）&#x2F;光泽度（Specular&#x2F;Glossiness）工作流 可自由调节$F_0$（零度菲涅尔">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/PBR_model.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0a.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_eg.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_D_M.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Micro-occlusion.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Metallic_RawMetal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Metallic_roughness.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Specular_Diffuse01a.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/%E7%94%B5%E4%BB%8B%E8%B4%A8F0.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/M_R_edge.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/S_G_edge.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/M_R_Solve.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/SD_node.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/M_vs_S.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/S_vs_M.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Sci-Fi%20Structure%2024_4K_Specular.jpg">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Specular_Convert.png">
+<meta property="article:published_time" content="2023-02-03T09:23:32.000Z">
+<meta property="article:modified_time" content="2023-02-04T06:49:27.828Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="美术">
+<meta property="article:tag" content="模型制作流程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/PBR_model.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/","path":"2023/02/03/HPP_Art_02.7_Metallic与Speculer流程/","title":"HPP_Art_2.7 Metallic与Speculer流程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Art_2.7 Metallic与Speculer流程 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-PBR%E6%A8%A1%E5%9E%8B"><span class="nav-text">a). PBR模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-1-%E4%B8%A4%E7%A7%8D%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">a.1). 两种工作流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-2-F0%E5%8F%8D%E5%B0%84%E7%8E%87%E5%80%BC"><span class="nav-text">a.2). F0反射率值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-Metal-Roughness%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">b). Metal&#x2F;Roughness工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b-1-Base-color-RGB-sRGB"><span class="nav-text">b.1). Base color(RGB-sRGB)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-2-Metallic-Grey-Linear"><span class="nav-text">b.2). Metallic(Grey-Linear)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-3-Roughness-Grey-Linear"><span class="nav-text">b.3). Roughness(Grey-Linear)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-Specular-Glossiness%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-text">c). Specular&#x2F;Glossiness工作流</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-Diffuse-RGB-sRGB"><span class="nav-text">c.1). Diffuse(RGB-sRGB)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-Specular-RGB-sRGB"><span class="nav-text">c.2). Specular(RGB-sRGB)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-3-Glossiness-Grey-Linear"><span class="nav-text">c.3). Glossiness(Grey-Linear)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#d-Metallic-vs-Specular"><span class="nav-text">d). Metallic vs. Specular</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#e-Metallic%E5%92%8CSpecular%E6%B5%81%E7%A8%8B%E7%9A%84%E8%B4%B4%E5%9B%BE%E8%BD%AC%E6%8D%A2%EF%BC%88PS%E6%BC%94%E7%A4%BA%EF%BC%89"><span class="nav-text">e). Metallic和Specular流程的贴图转换（PS演示）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#e-1-Metallic%E6%B5%81%E7%A8%8B-%E2%86%92-Specular%E6%B5%81%E7%A8%8B"><span class="nav-text">e.1). Metallic流程 → Specular流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#BaseColor-Metallic-%E2%86%92-Diffuse"><span class="nav-text">BaseColor + Metallic → Diffuse</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BaseColor-Metallic-%E2%86%92-Specular"><span class="nav-text">BaseColor + Metallic → Specular</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Roughness-%E2%86%92-Glossiness"><span class="nav-text">Roughness → Glossiness</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-2-Specular%E6%B5%81%E7%A8%8B-%E2%86%92-Metallic%E6%B5%81%E7%A8%8B"><span class="nav-text">e.2). Specular流程 → Metallic流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Diffuse-Specular-%E2%86%92-BaseColor-Metallic"><span class="nav-text">Diffuse + Specular → BaseColor + Metallic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Glossiness-%E2%86%92-Roughness"><span class="nav-text">Glossiness → Roughness</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Homework"><span class="nav-text">Homework</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Art_2.7 Metallic与Speculer流程 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Art_2.7 Metallic与Speculer流程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-03 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T17:23:32+08:00">2023-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:49:27" itemprop="dateModified" datetime="2023-02-04T14:49:27+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="a-PBR模型"><a href="#a-PBR模型" class="headerlink" title="a). PBR模型"></a>a). PBR模型</h1><p>基于物理的渲染模型，是当前主流游戏引擎使用的真实感3D渲染模型。</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/PBR_model.png" alt="PBR_model" style="zoom:50%;"></p>
+<h2 id="a-1-两种工作流"><a href="#a-1-两种工作流" class="headerlink" title="a.1). 两种工作流"></a>a.1). 两种工作流</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/260973533">游戏资源中常见的贴图类型</a></p>
+<p><a target="_blank" rel="noopener" href="https://substance3d.adobe.com/tutorials/courses/the-pbr-guide-part-1-zh">PBR Guide</a></p>
+<p>PBR流程中，常用的有两种工作流程：</p>
+<ul>
+<li>金属/粗糙度工作流(Metal/Roughness)<ul>
+<li>符合直觉，容易调参</li>
+<li>更不容易打破能量守恒</li>
+</ul>
+</li>
+<li>高光（镜面反射）/光泽度（Specular/Glossiness）工作流<ul>
+<li>可自由调节$F_0$（零度菲涅尔反射）值</li>
+<li>容易打破能量守恒</li>
+</ul>
+</li>
+</ul>
+<h2 id="a-2-F0反射率值"><a href="#a-2-F0反射率值" class="headerlink" title="a.2). F0反射率值"></a>a.2). F0反射率值</h2><p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0.png" alt="F0"></p>
+<p>大多数常用的电介质的F0范围从0.02-0.05（线性值）。对于导体，F0值 范围为0.5-1.0。因此表面的反射率由折射率决定，正如下面的方程式所示（Lagarde 2011）。</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0a.png" alt="F0a"></p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_eg.png" alt="F0_eg" style="zoom:50%;"></p>
+<blockquote id="fn_图1">
+<sup>图1</sup>. 金属和非金属的$F_0$​值<a href="#reffn_图1" title="Jump back to footnote [图1] in the text."> &#8617;</a>
+</blockquote>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_D_M.png" alt="F0_D_M"></p>
+<blockquote id="fn_图2">
+<sup>图2</sup>. 电介质$F_0$值和金属反射率值<a href="#reffn_图2" title="Jump back to footnote [图2] in the text."> &#8617;</a>
+</blockquote>
+<ul>
+<li>通用贴图：法线贴图、AO贴图、高度贴图等</li>
+</ul>
+<span id="more"></span>
+<h1 id="b-Metal-Roughness工作流"><a href="#b-Metal-Roughness工作流" class="headerlink" title="b). Metal/Roughness工作流"></a>b). Metal/Roughness工作流</h1><h2 id="b-1-Base-color-RGB-sRGB"><a href="#b-1-Base-color-RGB-sRGB" class="headerlink" title="b.1). Base color(RGB-sRGB)"></a>b.1). Base color(RGB-sRGB)</h2><p><strong>储存数据：</strong></p>
+<ul>
+<li><strong>非导体</strong> 的<strong>漫反射颜色</strong>/反照率颜色（Diffuse Reflected Color/Albedo）</li>
+<li><strong>金属导体</strong> 的镜面反射$F_0$值<ul>
+<li><strong>非导体</strong>使用<strong>4%(0.04)</strong> 的$F_0$反射值（在一些软件中可以自定义）</li>
+<li><strong>混合材质</strong>（即非导体和金属导体混合材质，如锈蚀）则可以认为同时储存了两种数据</li>
+</ul>
+</li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<ol>
+<li><p><strong>非导体（即电介质，非金属）：</strong> 暗色值，尽量不要低于30-50sRGB，严格控制下应不低于50sRGB。对于亮色值，贴图中不应高于240sRGB；</p>
+</li>
+<li><p><strong>导体（金属）：</strong> 金属一般会有70-100%的镜面反射，映射到sRGB大概为180-255；</p>
+</li>
+<li><p>在SP中，可通过滤镜中的PBR检查；SD可通过PBR BaseColor/Metallic Validate节点验证是否在合适范围内；</p>
+</li>
+<li><p>BaseColor中除了<strong>微观遮蔽信息（Micro-occlusion）</strong>以外，不应包含任何光照信息；</p>
+</li>
+</ol>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Micro-occlusion.png" alt="Micro-occlusion" style="zoom:50%;"></p>
+<h2 id="b-2-Metallic-Grey-Linear"><a href="#b-2-Metallic-Grey-Linear" class="headerlink" title="b.2). Metallic(Grey-Linear)"></a>b.2). Metallic(Grey-Linear)</h2><p><strong>储存数据：</strong></p>
+<ul>
+<li>对应区域的<strong>金属度</strong>。<strong>0.0纯黑代表非金属，1.0纯白代表纯金属</strong>。</li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<ol>
+<li><strong>纯金属</strong>灰度范围在<strong>235-255 sRGB</strong>，其对应的反射率范围为<strong>70%-100%（180-255sRGB）</strong></li>
+</ol>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Metallic_RawMetal.png" alt="Metallic_RawMetal" style="zoom: 50%;"></p>
+<ol>
+<li><p>在Metallic贴图中，纯黑(0.0)代表了非金属，纯白(1.0)代表了金属，我们可以用过渡的灰阶来表示不同程度氧化和污垢；</p>
+</li>
+<li><p>对于<strong>金属</strong>，<strong>如Metallic低于235 sRGB，在BaseColor中反射率值应降低</strong>。（如一个地方锈蚀特别严重，Metallic低于235sRGB，那么需要降低BaseColor）；</p>
+</li>
+</ol>
+<h2 id="b-3-Roughness-Grey-Linear"><a href="#b-3-Roughness-Grey-Linear" class="headerlink" title="b.3). Roughness(Grey-Linear)"></a>b.3). Roughness(Grey-Linear)</h2><p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Metallic_roughness.png" alt="Metallic_roughness"></p>
+<p>Roughness中，<strong>纯黑（0.0）代表平滑表面，纯白（1.0）代表粗糙平面</strong>。</p>
+<p>这改变了光的方向，但是光强度保持恒定不变。表面越粗糙，高光越散越暗。表面越光滑，高光反射集中，尽管反射的光的总量是一点的，表面也会更亮，光会更强。</p>
+<h1 id="c-Specular-Glossiness工作流"><a href="#c-Specular-Glossiness工作流" class="headerlink" title="c). Specular/Glossiness工作流"></a>c). Specular/Glossiness工作流</h1><h2 id="c-1-Diffuse-RGB-sRGB"><a href="#c-1-Diffuse-RGB-sRGB" class="headerlink" title="c.1). Diffuse(RGB-sRGB)"></a>c.1). Diffuse(RGB-sRGB)</h2><p><strong>储存数据：</strong></p>
+<ul>
+<li><strong>漫反射颜色（Albedo）</strong></li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<ol>
+<li>Diffuse贴图表示的是漫反射颜色，<strong>Raw Metal</strong>没有漫反射，因此为<strong>纯黑（0.0）</strong>。如果发生氧化现象，金属区域就会有颜色；</li>
+</ol>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Specular_Diffuse01a.png" alt="Specular_Diffuse01a" style="zoom:50%;"></p>
+<ol>
+<li>Diffuse中除了<strong>微观遮蔽信息（Micro-occlusion）</strong>以外，不应包含任何光照信息；</li>
+<li>除了表示金属的纯黑（0.0）外，暗色值不应低于30sRGB，严格上说，不应该低于50sRGB；</li>
+<li>亮色值不应该高于240sRGB；</li>
+</ol>
+<h2 id="c-2-Specular-RGB-sRGB"><a href="#c-2-Specular-RGB-sRGB" class="headerlink" title="c.2). Specular(RGB-sRGB)"></a>c.2). Specular(RGB-sRGB)</h2><p><strong>储存数据：</strong></p>
+<ul>
+<li>$F_0$（0度菲涅尔反射值）</li>
+</ul>
+<p><strong>注意事项：</strong></p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/电介质F0.png" alt="电介质F0" style="zoom:50%;"></p>
+<ol>
+<li>镜面反射贴图包含$F_0$值；</li>
+<li><strong>普遍非导体</strong>的反射值为<strong>2-5%（线性）</strong>，对应<strong>40-75 sRGB</strong>；</li>
+<li><strong>普通宝石</strong>的反射值范围在<strong>0.05-0.17（线性）</strong>；</li>
+<li><strong>普通液体</strong>的反射值范围在<strong>0.02-0.04（线性）</strong>；</li>
+<li>而<strong>原始金属（Raw Metal）</strong>的反射值则可以高达<strong>70-100%的镜面反射，sRGB约为180-255</strong>；</li>
+<li>如果你无法找到某个材质的折射率(IOR)，可以先假设F0为4%，也就是塑料的F0。</li>
+</ol>
+<h2 id="c-3-Glossiness-Grey-Linear"><a href="#c-3-Glossiness-Grey-Linear" class="headerlink" title="c.3). Glossiness(Grey-Linear)"></a>c.3). Glossiness(Grey-Linear)</h2><p><strong>储存数据：</strong></p>
+<ul>
+<li>对应区域的<strong>光泽度</strong>。<strong>0.0纯黑代表粗糙，1.0纯白代表光滑</strong>。和金属工作流的Roughness为反相的关系；</li>
+</ul>
+<h1 id="d-Metallic-vs-Specular"><a href="#d-Metallic-vs-Specular" class="headerlink" title="d). Metallic vs. Specular"></a>d). Metallic vs. Specular</h1><ul>
+<li><p><strong>边缘效应：</strong></p>
+<ul>
+<li><p>金属工作流导致金属和非金属的边缘出现白色边界</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/M_R_edge.png" alt="M_R_edge" style="zoom: 50%;"></p>
+</li>
+<li><p>高光工作流导致金属和非金属边缘出现黑色伪影</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/S_G_edge.png" alt="S_G_edge" style="zoom:50%;"></p>
+</li>
+<li><p><strong>原因：</strong> 纹理插值（放大），贴图分辨率和Texel密度直接影响边界伪影的可见度</p>
+</li>
+<li><p><strong>解决方法：</strong> 尽可能使纹理的UV利用率高；</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/M_R_Solve.png" alt="M_R_Solve" style="zoom: 50%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:left">Metallic/Roughness流程</th>
+<th style="text-align:left">Specular/Glossiness流程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>优势</strong></td>
+<td style="text-align:left">1. 在M/R工作流中，由于非导体（电介质）的FO都是规定好的所以设计师在对非导体FO赋值时不易出错。<br>2. 纹理的缓存压力更小，因为金属贴图和粗糙度贴图都是灰度贴图。<br>3. 目前来说是兼容性最广的工作流。</td>
+<td style="text-align:left">1. 边缘效应不会那么明显。<br><br>2. 可以在镜面反射贴图中对非导体（电介质）材质的F0值自由调整。</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>劣势</strong></td>
+<td style="text-align:left">1. 非导体（电介质）F0的值固定为4%，无法调整。然而，在大多是实现流程中都有控制器可以直接复写这个值，所以也不能算硬伤。<br><br>2.白色边缘问题较明显，尤其在低分辨率的情况下问题突出。</td>
+<td style="text-align:left">1. 由于在S/G工作流的镜面反射贴图中，非导体（电介质）材质的℉0值是可以自由调整的，所以也会导致设计师容易输入错误的值。而这些错误的值被着色器误读后可能会打破能量守恒定律，从而造成不正确的渲染效果。<br><br>2.由于新增了一张RGB通道的镜面反射贴图，所以对性能消耗会更大。<br><br>3. S/G工作流有些名词和传统的工作流太相似，但是实质所对应的数据可能是不样的，因此会导致设计师容易误解或误操作。这种情况下就要求设计师有更好的PBR理论知识，例如了解非导体（电介质）的正确FO值，金属在漫反射色下表现为纯黑，以及在着色器没有自动校正情况下，能量守恒相关的基础知识。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="e-Metallic和Specular流程的贴图转换（PS演示）"><a href="#e-Metallic和Specular流程的贴图转换（PS演示）" class="headerlink" title="e). Metallic和Specular流程的贴图转换（PS演示）"></a>e). Metallic和Specular流程的贴图转换（PS演示）</h1><p><strong>金属工作流各贴图含义：</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">贴图</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>Base color</strong></td>
+<td style="text-align:center">漫反射颜色+镜面反射$F_0$</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Metallic</strong></td>
+<td style="text-align:center">材质区分，辅助解读Base color</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Roughness</strong></td>
+<td style="text-align:center">表面状态参数</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+<p><strong>高光工作流各贴图含义：</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">贴图</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>Diffuse</strong></td>
+<td style="text-align:center">漫反射颜色</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Specular</strong></td>
+<td style="text-align:center">镜面反射$F_0$</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Glossiness</strong></td>
+<td style="text-align:center">表面状态参数（Roughness反相）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/SD_node.png" alt="SD_node" style="zoom: 33%;"></p>
+<h2 id="e-1-Metallic流程-→-Specular流程"><a href="#e-1-Metallic流程-→-Specular流程" class="headerlink" title="e.1). Metallic流程 → Specular流程"></a>e.1). Metallic流程 → Specular流程</h2><h3 id="BaseColor-Metallic-→-Diffuse"><a href="#BaseColor-Metallic-→-Diffuse" class="headerlink" title="BaseColor + Metallic → Diffuse"></a>BaseColor + Metallic → Diffuse</h3><ul>
+<li><strong>方法：</strong> 去掉Base Color中金属和混合材质的$F_0$数据</li>
+<li><strong>实操：</strong><ol>
+<li>打开BaseColor和Metallic，RGB模式</li>
+<li>新建Diffuse图层，纯黑填充；</li>
+<li>选择Metallic任一通道，得到带灰度的区域$a$；</li>
+<li>Diffuse图层新建区域 $a$ 的蒙版，底层为BaseColor；</li>
+</ol>
+</li>
+</ul>
+<h3 id="BaseColor-Metallic-→-Specular"><a href="#BaseColor-Metallic-→-Specular" class="headerlink" title="BaseColor + Metallic → Specular"></a>BaseColor + Metallic → Specular</h3><ul>
+<li><strong>方法：</strong> 去掉BaseColor中的漫反射数据，并加上非导体和混合材质的$F_0$ （默认0.04，56 sRGB，#383838）</li>
+<li><strong>实操：</strong><ol>
+<li>打开BaseColor和Metallic，RGB模式</li>
+<li>新建Specular图层，填充#383838（0.04对于22-Linear，对应56 sRGB，即#383838）；</li>
+<li>反相Metallic，选择Metallic任一通道，得到带灰度的区域$b$；</li>
+<li>Specular图层新建区域 $b$的蒙版，底层为BaseColor；</li>
+</ol>
+</li>
+</ul>
+<h3 id="Roughness-→-Glossiness"><a href="#Roughness-→-Glossiness" class="headerlink" title="Roughness → Glossiness"></a>Roughness → Glossiness</h3><ul>
+<li><strong>方法：</strong> 反相</li>
+</ul>
+<h2 id="e-2-Specular流程-→-Metallic流程"><a href="#e-2-Specular流程-→-Metallic流程" class="headerlink" title="e.2). Specular流程 → Metallic流程"></a>e.2). Specular流程 → Metallic流程</h2><h3 id="Diffuse-Specular-→-BaseColor-Metallic"><a href="#Diffuse-Specular-→-BaseColor-Metallic" class="headerlink" title="Diffuse + Specular → BaseColor + Metallic"></a>Diffuse + Specular → BaseColor + Metallic</h3><ul>
+<li><strong>方法：</strong> 找出金属区域对应的数据，金属的特性是$F_0$在0.7-1.0之间，而非金属一般不超过0.04（宝石最高0.17），差异明显。</li>
+<li><strong>实操：</strong><ol>
+<li>Specular,菜单选择，色彩范围，选择阴影，灰度预览，调整参数。（也可以使用Diffuse图层)(效果不好的话可以将阴影换为取样颜色，选择纯黑，调整容差)shift+ctrl+i反选，创建蒙版。</li>
+<li>alt+左键拖动蒙版到Diffuse图层，选择蒙版，ctrl+i反相。<strong>Base color完成</strong></li>
+<li>新建Metallicl图层，填充黑色，ctrl+左键点击Specular蒙版进行选区，填充白色。<strong>Metallic完成</strong></li>
+</ol>
+</li>
+</ul>
+<h3 id="Glossiness-→-Roughness"><a href="#Glossiness-→-Roughness" class="headerlink" title="Glossiness → Roughness"></a>Glossiness → Roughness</h3><ul>
+<li><strong>方法：</strong> 反相</li>
+</ul>
+<h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><p><strong>高光工作流转金属工作流</strong> 对比：</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/M_vs_S.png" alt="M_vs_S"></p>
+<p><strong>金属工作流转高光工作流</strong> 对比：</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/S_vs_M.png" alt="S_vs_M"></p>
+<hr>
+<p>乍一看，经过两次转换（原资源为高光工作流，经过PS转为金属工作流后又转到高光工作流），表面上看起来区别不大，但其实已经有所变化，因此，需要在PS中多次尝试；</p>
+<table frame="void">
+    <tr>
+    <td><center><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Sci-Fi Structure 24_4K_Specular.jpg" alt="Sci-Fi Structure 24_4K_Specular" width="600"></center></td>
+    <td><center><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/Specular_Convert.png" alt="Specular_Convert" width="600"></center></td>
+    </tr>
+</table>
+
+<blockquote id="fn_图3">
+<sup>图3</sup>. 左侧为原Specular贴图，右侧为转换两次后的Specular贴图，可以看到已经丢失了许多细节；<a href="#reffn_图3" title="Jump back to footnote [图3] in the text."> &#8617;</a>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E7%BE%8E%E6%9C%AF/" rel="tag"># 美术</a>
+              <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%88%B6%E4%BD%9C%E6%B5%81%E7%A8%8B/" rel="tag"># 模型制作流程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/" rel="prev" title="HPP_Art_2.5 模型常见问题及规范">
+                  <i class="fa fa-chevron-left"></i> HPP_Art_2.5 模型常见问题及规范
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

@@ -2,6 +2,141 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/03/HPP_Art_01_%E7%BE%8E%E6%9C%AF%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/01/Games202_02_Real-Time%20Shadow/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_10_12_Geometry/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/02/Games101_02_04_Math/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</loc>
+    
+    <lastmod>2023-02-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://whitetail-o.github.io/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -29,105 +164,6 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/02/Games101_02_04_Math/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/01/Games202_02_Real-Time%20Shadow/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/02/Games101_10_12_Geometry/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/</loc>
-    
-    <lastmod>2023-02-03</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://whitetail-o.github.io/about/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
@@ -137,7 +173,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/links/index.html</loc>
+    <loc>https://whitetail-o.github.io/books/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -146,7 +182,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/books/index.html</loc>
+    <loc>https://whitetail-o.github.io/links/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -175,7 +211,7 @@
 
   <url>
     <loc>https://whitetail-o.github.io/</loc>
-    <lastmod>2023-02-03</lastmod>
+    <lastmod>2023-02-04</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -183,21 +219,49 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Games101/</loc>
-    <lastmod>2023-02-03</lastmod>
+    <lastmod>2023-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
-    <lastmod>2023-02-03</lastmod>
+    <lastmod>2023-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Games202/</loc>
-    <lastmod>2023-02-03</lastmod>
+    <lastmod>2023-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/</loc>
+    <lastmod>2023-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%BE%8E%E6%9C%AF/</loc>
+    <lastmod>2023-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%BE%8E%E6%9C%AF%E7%90%86%E8%AE%BA/</loc>
+    <lastmod>2023-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%A8%A1%E5%9E%8B%E5%88%B6%E4%BD%9C%E6%B5%81%E7%A8%8B/</loc>
+    <lastmod>2023-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -206,14 +270,21 @@
   
   <url>
     <loc>https://whitetail-o.github.io/categories/Games101/</loc>
-    <lastmod>2023-02-03</lastmod>
+    <lastmod>2023-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/categories/Games202/</loc>
-    <lastmod>2023-02-03</lastmod>
+    <lastmod>2023-02-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/</loc>
+    <lastmod>2023-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
