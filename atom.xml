@@ -6,7 +6,7 @@
   <link href="https://whitetail-o.github.io/atom.xml" rel="self"/>
   
   <link href="https://whitetail-o.github.io/"/>
-  <updated>2023-02-04T06:49:27.828Z</updated>
+  <updated>2023-02-08T10:50:43.022Z</updated>
   <id>https://whitetail-o.github.io/</id>
   
   <author>
@@ -15,6 +15,38 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>待做事项</title>
+    <link href="https://whitetail-o.github.io/2023/02/08/Todo/"/>
+    <id>https://whitetail-o.github.io/2023/02/08/Todo/</id>
+    <published>2023-02-08T10:23:22.443Z</published>
+    <updated>2023-02-08T10:50:43.022Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="LTC"><a href="#LTC" class="headerlink" title="LTC"></a>LTC</h1><ul><li>[ ] LTC解决实时渲染中，多边形光源光照积分问题</li></ul><p>Ref:</p><p> <a href="LTC.pdf">Real-Time Polygonal-Light Shading with Linearly Transformed Cosines</a> </p><p><a href="https://zhuanlan.zhihu.com/p/84714602">Real-Time Polygonal-Light with LTC-zhihu</a></p><p><a href="https://blog.csdn.net/JMXIN422/article/details/124586534?ops_request_misc=%7B%22request%5Fid%22%3A%22167578550616800192233591%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&amp;request_id=167578550616800192233591&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-124586534-null-null.142">物理光源：Linearly Transformed Cosines</a></p><p><a href="https://eheitzresearch.wordpress.com/415-2/">Eric Heitz’s Research Page</a></p><p><a href="https://blog.csdn.net/qq_35312463/article/details/122514827?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0-122514827-blog-77370524.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">Global Illumination_Linearly Transformed Cosines (LTC)</a></p><p><a href="https://blog.csdn.net/qjh5606/article/details/119682254?spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-2-119682254-blog-77370524.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-2-119682254-blog-77370524.pc_relevant_default&amp;utm_relevant_index=5">图形学基础|基于LTC的面光源渲染</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;LTC&quot;&gt;&lt;a href=&quot;#LTC&quot; class=&quot;headerlink&quot; title=&quot;LTC&quot;&gt;&lt;/a&gt;LTC&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;[ ] LTC解决实时渲染中，多边形光源光照积分问题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Ref:&lt;/p&gt;
+&lt;p&gt; &lt;a hre</summary>
+      
+    
+    
+    
+    <category term="Todo" scheme="https://whitetail-o.github.io/categories/Todo/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="Todo" scheme="https://whitetail-o.github.io/tags/Todo/"/>
+    
+    <category term="论文复现" scheme="https://whitetail-o.github.io/tags/%E8%AE%BA%E6%96%87%E5%A4%8D%E7%8E%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>HPP_Art_2.7 Metallic与Speculer流程</title>
@@ -518,6 +550,84 @@
   </entry>
   
   <entry>
+    <title>Games101_21_22 Animation</title>
+    <link href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/"/>
+    <id>https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/</id>
+    <published>2022-10-03T10:20:10.000Z</published>
+    <updated>2023-02-04T06:32:18.141Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p><h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p><ul><li><p><strong>Idealized spring</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p><ul><li>但永远不会停止，因此加入摩擦力</li></ul></li></ul><hr><p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p><ul><li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p><ul><li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p></li></ul></li><li><p>加入两条对角线，以及skip connection</p><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p><ul><li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li></ul></li><li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p></li></ul><hr><h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p><ul><li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul><li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li><li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li></ul></li></ul><h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p><ul><li><p>关节（Joint）分类：</p><p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p></li></ul><h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p><p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p><ul><li>解决多个解的方法：梯度下降</li></ul><h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p><ul><li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p><p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p></li></ul><h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><span id="more"></span><hr><h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p><ul><li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p></li><li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p><ul><li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul><li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li></ul></li></ul></li></ul><h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p><ul><li><p><strong>缺点：</strong></p><ol><li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p></li><li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p></li></ol></li></ul><h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p><h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p><ul><li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li></ul><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p><h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p><h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p><ul><li>使用下一时刻的速度和加速度，并求解</li></ul><p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p><ul><li><p><strong>龙格库塔</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p></li></ul><h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul><li>非基于物理<ul><li>时间快</li></ul></li></ul><p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p><hr><h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p><ul><li>与单粒子类似</li></ul><h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p><h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p><ul><li><p>拉格朗日（质点法）：考虑单个粒子的运动</p></li><li><p>欧拉（网格法）：考虑不同位置的网格</p></li><li><p>Material Point Method (MPM ，混合上两种方法)</p><p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;Lecture-21-Animation&quot;&gt;&lt;a href=&quot;#Lecture-21-Animation&quot; class=&quot;headerlink&quot; title=&quot;Lecture 21 Animation&quot;&gt;&lt;/a&gt;Lecture 21 Animation&lt;/h1&gt;&lt;h2 id=&quot;a-History&quot;&gt;&lt;a href=&quot;#a-History&quot; class=&quot;headerlink&quot; title=&quot;a). History&quot;&gt;&lt;/a&gt;a). History&lt;/h2&gt;&lt;h2 id=&quot;b-Keyframe&quot;&gt;&lt;a href=&quot;#b-Keyframe&quot; class=&quot;headerlink&quot; title=&quot;b). Keyframe&quot;&gt;&lt;/a&gt;b). Keyframe&lt;/h2&gt;&lt;h2 id=&quot;c-Physical-Simualtion&quot;&gt;&lt;a href=&quot;#c-Physical-Simualtion&quot; class=&quot;headerlink&quot; title=&quot;c). Physical Simualtion&quot;&gt;&lt;/a&gt;c). Physical Simualtion&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png&quot; alt=&quot;PhysicalBasedAnimation&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;c-1-Mass-Spring-System&quot;&gt;&lt;a href=&quot;#c-1-Mass-Spring-System&quot; class=&quot;headerlink&quot; title=&quot;c.1). Mass Spring System&quot;&gt;&lt;/a&gt;c.1). Mass Spring System&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png&quot; alt=&quot;MassSpringSystem_eg00&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Idealized spring&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png&quot; alt=&quot;IdealizedSpring&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;但永远不会停止，因此加入摩擦力&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/DampSpring.png&quot; alt=&quot;DampSpring&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;中间项为&lt;strong&gt;相对速度在向量$ab$方向的投影&lt;/strong&gt;，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png&quot; alt=&quot;MassSpringSystem_01&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;加入两条对角线，以及skip connection&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png&quot; alt=&quot;MassSpringSystem_03&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;红色较弱，仅其辅助作用；蓝色较强，其主要作用；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;其他方式：&lt;/strong&gt;FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&quot;c-2-Particle-System&quot;&gt;&lt;a href=&quot;#c-2-Particle-System&quot; class=&quot;headerlink&quot; title=&quot;c.2). Particle System&quot;&gt;&lt;/a&gt;c.2). Particle System&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png&quot; alt=&quot;ParticleSystemForces&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;粒子系统不仅可描述微小粒子，还可以描述一些群落；&lt;ul&gt;
+&lt;li&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png&quot; alt=&quot;SimulatedFlocking&quot;&gt;&lt;/li&gt;
+&lt;li&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png&quot; alt=&quot;SimulatedCrowds&quot;&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;d-Forward-Kinematics-FK&quot;&gt;&lt;a href=&quot;#d-Forward-Kinematics-FK&quot; class=&quot;headerlink&quot; title=&quot;d). Forward Kinematics(FK)&quot;&gt;&lt;/a&gt;d). Forward Kinematics(FK)&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/FK.png&quot; alt=&quot;FK&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;关节（Joint）分类：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/JointTypes.png&quot; alt=&quot;JointTypes&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;e-Inverse-Kinematics-IK&quot;&gt;&lt;a href=&quot;#e-Inverse-Kinematics-IK&quot; class=&quot;headerlink&quot; title=&quot;e). Inverse Kinematics(IK)&quot;&gt;&lt;/a&gt;e). Inverse Kinematics(IK)&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/IK_eg.png&quot; alt=&quot;IK_eg&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/IK00.png&quot; alt=&quot;IK00&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;解决多个解的方法：梯度下降&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;f-Rigging&quot;&gt;&lt;a href=&quot;#f-Rigging&quot; class=&quot;headerlink&quot; title=&quot;f). Rigging&quot;&gt;&lt;/a&gt;f). Rigging&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/Rigging.png&quot; alt=&quot;Rigging&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Blend shapes:&lt;/strong&gt; 混合控制点或骨骼位置&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/Blend Shapes.png&quot; alt=&quot;Blend Shapes&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;g-Motion-Capture-Facial-Motion-Capture&quot;&gt;&lt;a href=&quot;#g-Motion-Capture-Facial-Motion-Capture&quot; class=&quot;headerlink&quot; title=&quot;g). Motion Capture / Facial Motion Capture&quot;&gt;&lt;/a&gt;g). Motion Capture / Facial Motion Capture&lt;/h2&gt;</summary>
+    
+    
+    
+    <category term="Games101" scheme="https://whitetail-o.github.io/categories/Games101/"/>
+    
+    
+    <category term="Games101" scheme="https://whitetail-o.github.io/tags/Games101/"/>
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Games101_17_18 Materials</title>
     <link href="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/"/>
     <id>https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/</id>
@@ -588,84 +698,6 @@
 &lt;li&gt;左图是绝缘体的菲涅尔项，右图是导体（金属）的菲涅尔项&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_17_18_Materials/FresnelTerm.png&quot; alt=&quot;FresnelTerm&quot;&gt;&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="Games101" scheme="https://whitetail-o.github.io/categories/Games101/"/>
-    
-    
-    <category term="Games101" scheme="https://whitetail-o.github.io/tags/Games101/"/>
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Games101_21_22 Animation</title>
-    <link href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/"/>
-    <id>https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/</id>
-    <published>2022-10-03T10:20:10.000Z</published>
-    <updated>2023-02-04T06:32:18.141Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p><h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p><ul><li><p><strong>Idealized spring</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p><ul><li>但永远不会停止，因此加入摩擦力</li></ul></li></ul><hr><p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p><ul><li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p><ul><li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p></li></ul></li><li><p>加入两条对角线，以及skip connection</p><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p><ul><li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li></ul></li><li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p></li></ul><hr><h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p><ul><li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul><li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li><li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li></ul></li></ul><h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p><ul><li><p>关节（Joint）分类：</p><p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p></li></ul><h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p><p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p><ul><li>解决多个解的方法：梯度下降</li></ul><h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p><ul><li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p><p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p></li></ul><h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><span id="more"></span><hr><h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p><ul><li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p></li><li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p><ul><li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul><li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li></ul></li></ul></li></ul><h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p><ul><li><p><strong>缺点：</strong></p><ol><li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p></li><li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p></li></ol></li></ul><h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p><h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p><ul><li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li></ul><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p><h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p><h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p><ul><li>使用下一时刻的速度和加速度，并求解</li></ul><p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p><ul><li><p><strong>龙格库塔</strong></p><p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p></li></ul><h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul><li>非基于物理<ul><li>时间快</li></ul></li></ul><p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p><hr><h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p><ul><li>与单粒子类似</li></ul><h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p><h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p><ul><li><p>拉格朗日（质点法）：考虑单个粒子的运动</p></li><li><p>欧拉（网格法）：考虑不同位置的网格</p></li><li><p>Material Point Method (MPM ，混合上两种方法)</p><p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;Lecture-21-Animation&quot;&gt;&lt;a href=&quot;#Lecture-21-Animation&quot; class=&quot;headerlink&quot; title=&quot;Lecture 21 Animation&quot;&gt;&lt;/a&gt;Lecture 21 Animation&lt;/h1&gt;&lt;h2 id=&quot;a-History&quot;&gt;&lt;a href=&quot;#a-History&quot; class=&quot;headerlink&quot; title=&quot;a). History&quot;&gt;&lt;/a&gt;a). History&lt;/h2&gt;&lt;h2 id=&quot;b-Keyframe&quot;&gt;&lt;a href=&quot;#b-Keyframe&quot; class=&quot;headerlink&quot; title=&quot;b). Keyframe&quot;&gt;&lt;/a&gt;b). Keyframe&lt;/h2&gt;&lt;h2 id=&quot;c-Physical-Simualtion&quot;&gt;&lt;a href=&quot;#c-Physical-Simualtion&quot; class=&quot;headerlink&quot; title=&quot;c). Physical Simualtion&quot;&gt;&lt;/a&gt;c). Physical Simualtion&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png&quot; alt=&quot;PhysicalBasedAnimation&quot;&gt;&lt;/p&gt;
-&lt;h3 id=&quot;c-1-Mass-Spring-System&quot;&gt;&lt;a href=&quot;#c-1-Mass-Spring-System&quot; class=&quot;headerlink&quot; title=&quot;c.1). Mass Spring System&quot;&gt;&lt;/a&gt;c.1). Mass Spring System&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png&quot; alt=&quot;MassSpringSystem_eg00&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Idealized spring&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png&quot; alt=&quot;IdealizedSpring&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;但永远不会停止，因此加入摩擦力&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/DampSpring.png&quot; alt=&quot;DampSpring&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;中间项为&lt;strong&gt;相对速度在向量$ab$方向的投影&lt;/strong&gt;，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png&quot; alt=&quot;MassSpringSystem_01&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;加入两条对角线，以及skip connection&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png&quot; alt=&quot;MassSpringSystem_03&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;红色较弱，仅其辅助作用；蓝色较强，其主要作用；&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;其他方式：&lt;/strong&gt;FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h3 id=&quot;c-2-Particle-System&quot;&gt;&lt;a href=&quot;#c-2-Particle-System&quot; class=&quot;headerlink&quot; title=&quot;c.2). Particle System&quot;&gt;&lt;/a&gt;c.2). Particle System&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png&quot; alt=&quot;ParticleSystemForces&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;粒子系统不仅可描述微小粒子，还可以描述一些群落；&lt;ul&gt;
-&lt;li&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png&quot; alt=&quot;SimulatedFlocking&quot;&gt;&lt;/li&gt;
-&lt;li&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png&quot; alt=&quot;SimulatedCrowds&quot;&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;d-Forward-Kinematics-FK&quot;&gt;&lt;a href=&quot;#d-Forward-Kinematics-FK&quot; class=&quot;headerlink&quot; title=&quot;d). Forward Kinematics(FK)&quot;&gt;&lt;/a&gt;d). Forward Kinematics(FK)&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/FK.png&quot; alt=&quot;FK&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;关节（Joint）分类：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/JointTypes.png&quot; alt=&quot;JointTypes&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;e-Inverse-Kinematics-IK&quot;&gt;&lt;a href=&quot;#e-Inverse-Kinematics-IK&quot; class=&quot;headerlink&quot; title=&quot;e). Inverse Kinematics(IK)&quot;&gt;&lt;/a&gt;e). Inverse Kinematics(IK)&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/IK_eg.png&quot; alt=&quot;IK_eg&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/IK00.png&quot; alt=&quot;IK00&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;解决多个解的方法：梯度下降&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;f-Rigging&quot;&gt;&lt;a href=&quot;#f-Rigging&quot; class=&quot;headerlink&quot; title=&quot;f). Rigging&quot;&gt;&lt;/a&gt;f). Rigging&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/Rigging.png&quot; alt=&quot;Rigging&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Blend shapes:&lt;/strong&gt; 混合控制点或骨骼位置&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2022/10/03/Games101_21_22_Animation/Blend Shapes.png&quot; alt=&quot;Blend Shapes&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;g-Motion-Capture-Facial-Motion-Capture&quot;&gt;&lt;a href=&quot;#g-Motion-Capture-Facial-Motion-Capture&quot; class=&quot;headerlink&quot; title=&quot;g). Motion Capture / Facial Motion Capture&quot;&gt;&lt;/a&gt;g). Motion Capture / Facial Motion Capture&lt;/h2&gt;</summary>
     
     
     
