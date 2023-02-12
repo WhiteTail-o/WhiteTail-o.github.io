@@ -35,8 +35,8 @@ https://whitetail-o.github.io/tags/Ray-Tracing/
 https://whitetail-o.github.io/tags/Materials/
 https://whitetail-o.github.io/tags/Animation/
 https://whitetail-o.github.io/tags/Games202/
-https://whitetail-o.github.io/tags/IBL/
 https://whitetail-o.github.io/tags/Shadow/
+https://whitetail-o.github.io/tags/IBL/
 https://whitetail-o.github.io/tags/GI/
 https://whitetail-o.github.io/tags/NPR/
 https://whitetail-o.github.io/tags/PBR/
