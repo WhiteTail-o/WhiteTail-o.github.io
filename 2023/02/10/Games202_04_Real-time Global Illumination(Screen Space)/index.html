@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). Screen Space Ambient Occlusion(SSAO)a.1). Introduction SSAO: 在屏幕空间中，对全局光照的近似；   Key idea:  假设各方向间接光照的强度相同（类似于Phong模型中的Ambition light）  考虑不同着色点，有不同的Visibility   假设材质为diffuse  假设间接光照来自于比较远的地方。因此，橙色的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games202-4 Real-time Global Illumination(Screen Space)">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). Screen Space Ambient Occlusion(SSAO)a.1). Introduction SSAO: 在屏幕空间中，对全局光照的近似；   Key idea:  假设各方向间接光照的强度相同（类似于Phong模型中的Ambition light）  考虑不同着色点，有不同的Visibility   假设材质为diffuse  假设间接光照来自于比较远的地方。因此，橙色的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory04.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory05.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory06.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory07.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO%E5%8E%9F%E7%90%86.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/%E6%B3%95%E5%90%91%E5%8D%8A%E7%90%83.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_ColorBlooding.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_How00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_vsSSAO.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_Func.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_How01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_issues2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_issues.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Intro01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Intro02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection04.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Shading01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Show01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/MicrofacetBRDF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_issue01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_issue02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_ProsAndCons.png">
+<meta property="article:published_time" content="2023-02-10T08:52:10.000Z">
+<meta property="article:modified_time" content="2023-02-12T13:16:48.370Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Games202">
+<meta property="article:tag" content="GI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro01.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/","path":"2023/02/10/Games202_04_Real-time Global Illumination(Screen Space)/","title":"Games202-4 Real-time Global Illumination(Screen Space)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games202-4 Real-time Global Illumination(Screen Space) | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-Screen-Space-Ambient-Occlusion-SSAO"><span class="nav-text">a). Screen Space Ambient Occlusion(SSAO)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-1-Introduction"><span class="nav-text">a.1). Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-2-Theory"><span class="nav-text">a.2). Theory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-1-Simpler-understanding"><span class="nav-text">a.2.1). Simpler understanding</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-3-%E5%AE%9E%E7%8E%B0"><span class="nav-text">a.3). 实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-Screen-Space-Directional-Occlusion-SSDO"><span class="nav-text">b). Screen Space Directional Occlusion(SSDO)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b-1-Introduction"><span class="nav-text">b.1). Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-2-%E5%AE%9E%E7%8E%B0"><span class="nav-text">b.2). 实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-3-Issues"><span class="nav-text">b.3). Issues</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-Screen-Space-Reflection-SSR"><span class="nav-text">c). Screen Space Reflection(SSR)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-Introduction"><span class="nav-text">c.1). Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-%E5%AE%9E%E7%8E%B0"><span class="nav-text">c.2). 实现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-1-Intersection%EF%BC%88%E6%B1%82%E4%BA%A4%EF%BC%89"><span class="nav-text">c.2.1). Intersection（求交）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Hierarchical-tracing"><span class="nav-text">Hierarchical tracing</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-2-Shading"><span class="nav-text">c.2.2). Shading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-3-%E6%95%88%E6%9E%9C"><span class="nav-text">c.2.3). 效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-3-Issues"><span class="nav-text">c.3). Issues</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#d-Pros-And-Cons"><span class="nav-text">d). Pros And Cons</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-10</time>
+        <br>
+      Games202-4 Real-time Global Illumination(in 3D)
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games202-4 Real-time Global Illumination(Screen Space) | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games202-4 Real-time Global Illumination(Screen Space)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-10 16:52:10" itemprop="dateCreated datePublished" datetime="2023-02-10T16:52:10+08:00">2023-02-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-12 21:16:48" itemprop="dateModified" datetime="2023-02-12T21:16:48+08:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="a-Screen-Space-Ambient-Occlusion-SSAO"><a href="#a-Screen-Space-Ambient-Occlusion-SSAO" class="headerlink" title="a). Screen Space Ambient Occlusion(SSAO)"></a>a). Screen Space Ambient Occlusion(SSAO)</h1><h2 id="a-1-Introduction"><a href="#a-1-Introduction" class="headerlink" title="a.1). Introduction"></a>a.1). Introduction</h2><ul>
+<li><strong>SSAO:</strong> 在<strong>屏幕空间</strong>中，对全局光照的近似；</li>
+</ul>
+<ul>
+<li><p><strong>Key idea:</strong></p>
+<ol>
+<li><p>假设各方向间接光照的强度相同（类似于Phong模型中的Ambition light）</p>
+</li>
+<li><p>考虑不同着色点，有<strong>不同的Visibility</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro01.png" alt="SSAO_Intro01" style="zoom:50%;"></p>
+</li>
+<li><p>假设材质为<strong>diffuse</strong></p>
+</li>
+<li><p>假设间接光照来自于比较远的地方。因此，橙色的光线，即一定范围内不被遮挡的光线会贡献间接光。（如假设间接光来自比较近的地方，则是红色射线方向贡献间接光）</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro02.png" alt="SSAO_Intro02" style="zoom:50%;"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="a-2-Theory"><a href="#a-2-Theory" class="headerlink" title="a.2). Theory"></a>a.2). Theory</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory01.png" alt="SSAO_Theory01" style="zoom:50%;"></p>
+<ul>
+<li><p>通过不等式，拆分渲染方程为：</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory02.png" alt="SSAO_Theory02" style="zoom:50%;"></p>
+<ul>
+<li>$k_A$ 项代表<strong>不同方向Visibility的（加权）平均</strong></li>
+<li><p>黄色框可用一个Constant color表示</p>
+<ul>
+<li>假设了间接光 $L_i^{indir}$ 各方向强度相同，因此为常数；</li>
+<li>假设了材质为Diffuse，因此BRDF为常数；</li>
+<li>$cos\theta$ 半球积分为$\pi$</li>
+</ul>
+</li>
+<li><p>同样，因为黄色框，即$g(x)$为常数，其Support极小。因此，应用该不等式是<strong>精确</strong>的</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>A deeper understanding 1:</strong><ul>
+<li><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory03.png" alt="SSAO_Theory03" style="zoom:50%;"></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>A deeper understanding 2:（为什么Visibility项会有$cos\theta$）</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory04.png" alt="SSAO_Theory04" style="zoom:50%;"></p>
+<ul>
+<li><p>加上 $cos\theta$ 的含义是<strong>把积分域从单位半球投影到单位圆上</strong>(Projected solid angle)；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory05.png" alt="SSAO_Theory05" style="zoom:50%;"></p>
+</li>
+<li><p><strong><font color="red">为什么要这么做呢？</font></strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h3 id="a-2-1-Simpler-understanding"><a href="#a-2-1-Simpler-understanding" class="headerlink" title="a.2.1). Simpler understanding"></a>a.2.1). Simpler understanding</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory06.png" alt="SSAO_Theory06" style="zoom:50%;"></p>
+<ul>
+<li>那么，我们怎么算 $k_A$ 项（不同方向Visibility的（加权）平均）呢？这就是AO算法实现的，如SSAO；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory07.png" alt="SSAO_Theory07" style="zoom:50%;"></p>
+<ul>
+<li>在计算AO时，我们计算的Visibility是<strong>限制在一定半径内的一个半球的局部遮挡</strong>。如在封闭的区域，如室内，如不限制半径，那Visibility将会为0。因此需要限制半径。</li>
+</ul>
+<h2 id="a-3-实现"><a href="#a-3-实现" class="headerlink" title="a.3). 实现"></a>a.3). 实现</h2><ul>
+<li><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p>
+</li>
+<li><p><strong>做法总览（详情见<em>百人计划图形4.2 SSAO</em>）：</strong> </p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO原理.png" alt="SSAO原理"></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/法向半球.png" alt="法向半球"></p>
+</li>
+</ul>
+<ul>
+<li><p>在法向半球内随机采样，采样点 $p$ 的深度$Z_p$与 点$p$ 在屏幕空间中对应位置 点$p’$ 的Z-Buffer中的深度$Z_{p’Zbuffer}$比较。</p>
+<ul>
+<li>如 $Z_p&gt;Z_{p’Zbuffer}$，说明该采样点被遮蔽（红点），Visibility为0；</li>
+<li>如 $Z_p&lt;Z_{p’Zbuffer}$，说明该采样点可见（绿点），Visibility为1；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How01.png" alt="SSAO_How01"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Cons：</strong></p>
+<ol>
+<li><p>由于是通过屏幕空间像素坐标和Z-Buffer取近似场景，只模拟了离屏幕最近的表面，对于一些点（如箭头所指的红点）的Visibility会误判；（从着色点看向该点可以看到，但SSAO中却将该点视为被遮蔽）</p>
+</li>
+<li><p>没有$cos\theta $ 项的加权，因此在物理上是不准确的；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How02.png" alt="SSAO_How02" style="zoom: 33%;"></p>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code> [^SSAO]: 经过滤波后的SSAO
+
+ $$
+ k_&#123;A&#125;=\frac&#123;\int_&#123;\Omega^&#123;+&#125;&#125; V\left(\mathrm&#123;p&#125;, \omega_&#123;i&#125;\right) \cos \theta_&#123;i&#125; \mathrm&#123;~d&#125; \omega_&#123;i&#125;&#125;&#123;\pi&#125;
+ $$
+
+ - 采用了$cos\theta $ 项的加权的算法：Horizon based ambient occlusion(HBAO)
+</code></pre><ol>
+<li><p>由于SSAO中未考虑深度比较时采样点深度和Z-Buffer深度的差值，造成相距比较远的物体之间也会存在AO (HBAO解决了)</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How03.png" alt="SSAO_How03" style="zoom:50%;"></p>
+</li>
+</ol>
+<hr>
+<h1 id="b-Screen-Space-Directional-Occlusion-SSDO"><a href="#b-Screen-Space-Directional-Occlusion-SSDO" class="headerlink" title="b). Screen Space Directional Occlusion(SSDO)"></a>b). Screen Space Directional Occlusion(SSDO)</h1><h2 id="b-1-Introduction"><a href="#b-1-Introduction" class="headerlink" title="b.1). Introduction"></a>b.1). Introduction</h2><ul>
+<li>An imporovement over SSAO;</li>
+<li>考虑了更准确的间接光照（不再假设各方向的间接光照相同）</li>
+</ul>
+<ul>
+<li><strong>Key idea:</strong><ul>
+<li>考虑了更准确的间接光照</li>
+<li>使用已知的间接光源信息<ul>
+<li>如RSM得到的Secondary Light Source 的flux等；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>效果：</strong> 间接光照更为准确，<strong>出现了color blooding</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_ColorBlooding.png" alt="SSDO_ColorBlooding"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>做法</strong>：（与Path Tracing非常相似）</p>
+<ul>
+<li>着色 $p$点 时，发射随机光线；<ul>
+<li><strong>如未被遮挡（无交点）：</strong> 该点受<strong>直接光照</strong>影响（如Ambient Light）；</li>
+<li><strong>如被遮挡（有交点）：</strong> 该点受<strong>间接光照</strong>影响；</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_How00.png" alt="SSDO_How00" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="b-2-实现"><a href="#b-2-实现" class="headerlink" title="b.2). 实现"></a>b.2). 实现</h2><ul>
+<li><p><strong>与SSAO相比：</strong> SSAO为被遮挡的光线的方向为间接光照贡献方向，SSDO则是被遮挡的光线方向为间接光照贡献方向；</p>
+<blockquote>
+<p>（SSAO）假设间接光照来自于比较远的地方。因此，橙色（被红圈圈起来的）的光线，即一定范围内不被遮挡的光线会贡献间接光。（如假设间接光来自比较近的地方（SSDO），则是红色射线（被橙圈圈起来的）方向贡献间接光）</p>
+</blockquote>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_vsSSAO.png" alt="SSDO_vsSSAO" style="zoom:50%;"></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_Func.png" alt="SSDO_Func" style="zoom:50%;"></p>
+<ul>
+<li>间接光照的计算则可采用RSM、或者LPV、VXGI等；</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>具体做法：</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_How01.png" alt="SSDO_How01"></p>
+<ul>
+<li><p>和SSAO类似，在<strong>着色点P</strong>周围，一定半径的<strong>法向半球</strong>内进行随机给出采样点（A、B、C、D……），并和Z-Buffer中的深度进行比较；</p>
+<ul>
+<li><p>如$Z_{sample} &gt; Z_{sample\, Z-buffer}$ ，说明该点（A、B、D）<strong>被遮挡</strong>，该点则会对点P贡献间接光；</p>
+<ul>
+<li><p><strong>判断：</strong> 贡献间接光的Patch的方向是否会能贡献到，如点A ，${Normal_A}\cdot \vec{AP} &lt; 0$ ，则该点不贡献间接光；</p>
+<blockquote>
+<p>Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>如$Z_{sample} &lt; Z_{sample\, Z-buffer}$ ，说明该点（A、B、D）<strong>未被遮挡</strong>，该点则不会对点P贡献间接光，而是贡献直接光（Ambition Light）；</p>
+</li>
+</ul>
+</li>
+<li><p><strong>缺点：</strong> 如上图最右</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-3-Issues"><a href="#b-3-Issues" class="headerlink" title="b.3). Issues"></a>b.3). Issues</h2><ol>
+<li><p>只能计算小范围的AO；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_issues2.png" alt="SSDO_issues2"></p>
+</li>
+<li><p>是通过采样点深度和Z-buffer比较得出Visibility，而不是从P点出射光线计算交点，导致Visibility不精准；</p>
+</li>
+<li><p><strong>屏幕空间的通病：</strong> 失去了屏幕中<strong>未被显示（如屏幕外）</strong>的表面的信息；</p>
+<ul>
+<li>屏幕空间只能表现场景最表面(Depth最小)的一层“壳”；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_issues.png" alt="SSDO_issues" style="zoom:50%;"></p>
+</li>
+</ol>
+<h1 id="c-Screen-Space-Reflection-SSR"><a href="#c-Screen-Space-Reflection-SSR" class="headerlink" title="c). Screen Space Reflection(SSR)"></a>c). Screen Space Reflection(SSR)</h1><h2 id="c-1-Introduction"><a href="#c-1-Introduction" class="headerlink" title="c.1). Introduction"></a>c.1). Introduction</h2><p><strong>What is SSR?</strong></p>
+<ul>
+<li>Still, one way to introduce Global Illumination in RTR;</li>
+<li>执行上为光线追踪；</li>
+<li>光线追踪的求交并不要求3D图元，而是屏幕空间的一层“壳”（通过Z-Buffer还原的场景）</li>
+</ul>
+<p><strong>Two fundamental tasks of SSR：</strong></p>
+<ul>
+<li>求交：任何光线和场景；</li>
+<li>着色：交点对Shading point的贡献；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Intro01.png" alt="SSR_Intro01"></p>
+<ul>
+<li><p><strong>效果：</strong> 可实现Specular reflection和Gloosy reflection；</p>
+<ul>
+<li>对于Specular只用追踪镜面反射方向即可；</li>
+<li>对于Gloosy知道BRDF后需追踪入射方向的Lobe；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Intro02.png" alt="SSR_Intro02"></p>
+</li>
+</ul>
+<h2 id="c-2-实现"><a href="#c-2-实现" class="headerlink" title="c.2). 实现"></a>c.2). 实现</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How01.png" alt="SSR_How01"></p>
+<blockquote>
+<p><strong>Two fundamental tasks of SSR：</strong></p>
+<ul>
+<li>求交：任何光线和场景；</li>
+<li>着色：交点对Shading point的贡献；</li>
+</ul>
+</blockquote>
+<h3 id="c-2-1-Intersection（求交）"><a href="#c-2-1-Intersection（求交）" class="headerlink" title="c.2.1). Intersection（求交）"></a>c.2.1). Intersection（求交）</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection01.png" alt="SSR_How_Intersection01"></p>
+<ul>
+<li><p>使用<strong>光线步进（Raymarch）</strong>，那么如何确定步进的步长？</p>
+<ul>
+<li><p>Hierarchical tracing</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection02.png" alt="SSR_How_Intersection02" style="zoom: 25%;"></p>
+<ul>
+<li>不想一层一层步进，而是允许时步长变大；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Hierarchical-tracing"><a href="#Hierarchical-tracing" class="headerlink" title="Hierarchical tracing"></a>Hierarchical tracing</h4><ul>
+<li><p><strong>Step1: Generate Depth Mip-Map</strong>(使用<strong>最小</strong>池化，而不是平均)</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection03.png" alt="SSR_How_Intersection03"></p>
+<ul>
+<li><p><strong>取最小：</strong> 如2x2的像素中，取最小深度值作为下一层该位置的深度；</p>
+</li>
+<li><p>最小池化构造出类似与KD-tree的结构；</p>
+</li>
+<li><p><strong>逻辑：</strong> 取最小后，如果光线不和父（更大的）节点相交，那就不会和子节点相交；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection04.png" alt="SSR_How_Intersection04"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>P-Code</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How02.png" alt="SSR_How02"></p>
+<ul>
+<li>开始在Mip0层步进<ul>
+<li>没交点则进入下一层Mip（父节点）；</li>
+<li>有交点则进入上一层Mip（子节点），并在交点对应位置的子节点继续求交；</li>
+<li>直到找到Mip0层的交点，结束循环；（演示看PPT）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-2-2-Shading"><a href="#c-2-2-Shading" class="headerlink" title="c.2.2). Shading"></a>c.2.2). Shading</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Shading01.png" alt="SSR_Shading01"></p>
+<p>Shading过程和Path tracing相似；</p>
+<ul>
+<li><strong>假设：</strong> <font color="red">Reflectors(反射物)/ Secondary light source是Diffuse的</font><ul>
+<li><strong>原因：</strong> 生成Shaded场景时，只知道屏幕空间下一个点的Radiance（即Shading Point到Camera的Radiance）。如假设Reflector为Diffuse，那么该点的$L_i$就为framebuffer中的颜色；</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-2-3-效果"><a href="#c-2-3-效果" class="headerlink" title="c.2.3). 效果"></a>c.2.3). 效果</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Show01.png" alt="SSR_Show01"></p>
+<ul>
+<li><p>可实现锐利或模糊的反射；</p>
+</li>
+<li><p>Contact hardening（接触的地方反射较为锐利，类似PCSS）</p>
+</li>
+<li><p>Specular elongation</p>
+<ul>
+<li><p>类似雨天红绿灯反射垂直拉长的效果；</p>
+</li>
+<li><p>给定视角后，各项同性的法线分布，造成的反射Lobe为垂直方向椭圆的Lobe；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
+</li>
+</ul>
+</li>
+<li><p>每个像素不同的Roughness和Normal</p>
+</li>
+</ul>
+<h2 id="c-3-Issues"><a href="#c-3-Issues" class="headerlink" title="c.3). Issues"></a>c.3). Issues</h2><ul>
+<li><p>Edge Cutoff</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_issue01.png" alt="SSR_issue01" style="zoom:50%;"></p>
+<ul>
+<li><p>缓解方法：根据反射长度进行Fade off</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_issue02.png" alt="SSR_issue02"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="d-Pros-And-Cons"><a href="#d-Pros-And-Cons" class="headerlink" title="d). Pros And Cons"></a>d). Pros And Cons</h1><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_ProsAndCons.png" alt="SSR_ProsAndCons"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Games202/" rel="tag"># Games202</a>
+              <a href="/tags/GI/" rel="tag"># GI</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/" rel="prev" title="Games202-4 Real-time Global Illumination(in 3D)">
+                  <i class="fa fa-chevron-left"></i> Games202-4 Real-time Global Illumination(in 3D)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/" rel="next" title="Games202-5 Non-Photorealistic Rendering (NPR)">
+                  Games202-5 Non-Photorealistic Rendering (NPR) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

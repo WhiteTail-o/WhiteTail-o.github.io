@@ -149,18 +149,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">19</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -190,7 +190,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -208,7 +208,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/Games101_21_22_Animation/" class="post-title-link" itemprop="url">Games101_21_22 Animation</a>
+          <a href="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Art_2.3 硬表面基础</a>
         </h2>
 
         <div class="post-meta-container">
@@ -221,14 +221,626 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
+      <time title="创建时间：2023-02-03 13:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T13:23:32+08:00">2023-02-03</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:32:18" itemprop="dateModified" datetime="2023-02-04T14:32:18+08:00">2023-02-04</time>
+      <time title="修改时间：2023-02-04 14:49:21" itemprop="dateModified" datetime="2023-02-04T14:49:21+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-什么是硬表面"><a href="#a-什么是硬表面" class="headerlink" title="a). 什么是硬表面"></a>a). 什么是硬表面</h1><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面01.png" alt="硬表面01"></p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面02.png" alt="硬表面02"></p>
+<ol>
+<li><p><strong>从外表/建模来说：</strong>有着重工业质感、该平滑的时候平滑，该硬朗的时候硬朗。即平的平，弯的弯。</p>
+</li>
+<li><p><strong>从光影来说：</strong>光影变化均匀，硬朗，有经过打磨的感觉。</p>
+</li>
+</ol>
+<p>需要区别于LowPoly，Lowpoly有种纸片的拼凑感，更像是纸膜，主要是倒角所给予硬表面的厚度。即缺少最重要的倒角。</p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/Lowpoly.jpg" alt="Lowpoly"></p>
+<h1 id="b-如何制作硬表面（高模上倒角方法）"><a href="#b-如何制作硬表面（高模上倒角方法）" class="headerlink" title="b). 如何制作硬表面（高模上倒角方法）"></a>b). 如何制作硬表面（高模上倒角方法）</h1><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面_倒角01.png" alt="硬表面_倒角01"></p>
+<ul>
+<li><p>在游戏中硬表面通常是使用低模进行体现。因为硬表面的质感很大程度上取决于倒角。倒角会很大的增加模型面数。对于一些较小的结构，小凹槽，实际在低模上进行倒角或者卡边做出结构是不太划算的。本质上是<strong>要让高光的呈现更加集中</strong>，如果高光过于散开，就会显得较软，漂亮的高光边会表现很强的质感。</p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面_倒角02.png" alt="硬表面_倒角02"></p>
+</li>
+</ul>
+<h2 id="b-1-卡双线"><a href="#b-1-卡双线" class="headerlink" title="b.1). 卡双线"></a>b.1). 卡双线</h2><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/卡双线.png" alt="卡双线"></p>
+<p><strong>第一对线用于Smooth后形成倒角，第二对线用于收敛高光</strong></p>
+<h2 id="b-2-方倒角"><a href="#b-2-方倒角" class="headerlink" title="b.2). 方倒角"></a>b.2). 方倒角</h2><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/方倒角.png" alt="方倒角"></p>
+<p>对两个倒角卡双线</p>
+<h2 id="b-3-直接倒角"><a href="#b-3-直接倒角" class="headerlink" title="b.3). 直接倒角"></a>b.3). 直接倒角</h2><p>效果最好，可得到漂亮的高光边，但是因为增加的边数很多，过于密集，修改起来麻烦。</p>
+<h2 id="b-4-光滑组（软硬边）-卡单线"><a href="#b-4-光滑组（软硬边）-卡单线" class="headerlink" title="b.4). 光滑组（软硬边）+ 卡单线"></a>b.4). 光滑组（软硬边）+ 卡单线</h2><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/光滑组00.png" alt="光滑组00"></p>
+<p>通过将两个面设为同一光滑组（Maya里则将连接边设为软边）+ 两边各卡一条线用于收敛高光区域</p>
+<h1 id="光滑组的本质：-改变点法线"><a href="#光滑组的本质：-改变点法线" class="headerlink" title="光滑组的本质： 改变点法线"></a>光滑组的本质： <font color="red">改变点法线</font></h1><p>光滑组的本质是<strong>改变点法线</strong>，进而影响面法线，进而影响三角线遍历中Normal的插值；</p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/Hard_VertexNormal.png" alt="Hard_VertexNormal"></p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/Soft_VertexNormal.png" alt="Soft_VertexNormal"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_01_%E7%BE%8E%E6%9C%AF%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/03/HPP_Art_01_%E7%BE%8E%E6%9C%AF%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Art_1 美术理论基础(角色/场景设计精要)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-03 11:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T11:23:32+08:00">2023-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:48:01" itemprop="dateModified" datetime="2023-02-04T14:48:01+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><a target="_blank" rel="noopener" href="https://www.yuque.com/sugelameiyoudi-jadcc/okgm7e/pfo9oz">https://www.yuque.com/sugelameiyoudi-jadcc/okgm7e/pfo9oz</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="post-title-link" itemprop="url">Games202-3 Real-time Environment Mapping</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-01 16:42:10" itemprop="dateCreated datePublished" datetime="2023-02-01T16:42:10+08:00">2023-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-12 21:17:10" itemprop="dateModified" datetime="2023-02-12T21:17:10+08:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><a target="_blank" rel="noopener" href="https:/docs.unrealengine.com/en-US/BuildingWorlds/LightingAndShadows/MeshDistanceFields/index.html">Mesh Distance Fields</a>，<a target="_blank" rel="noopener" href="https:/cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf">Real Shading in Unreal Engine 4</a></p>
+<h1 id="a-Shading-from-Environment-Lighting-IBL"><a href="#a-Shading-from-Environment-Lighting-IBL" class="headerlink" title="a). Shading from Environment Lighting(IBL)"></a>a). Shading from Environment Lighting(IBL)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png" alt="EnvironmentLight01a"></p>
+<ul>
+<li>通过环境贴图着色的方式，又被命名为 <strong>Image-Based Lighting (IBL)</strong></li>
+</ul>
+<h2 id="a-1-How"><a href="#a-1-How" class="headerlink" title="a.1). How"></a>a.1). How</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
+<ul>
+<li>对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；</li>
+</ul>
+<ul>
+<li><p><strong>Observation：</strong></p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png" alt="IBL_BRDF"></p>
+<ul>
+<li><p>对于Glossy，其BRDF支持集很小（Lobe范围小）；</p>
+</li>
+<li><p>对于Diffuse，其BRDF非常平滑；</p>
+</li>
+<li><p>联想到上节课渲染方程不等式成立的条件（拆出乘积积分的那个）</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png" alt="IBL_BRDF02"></p>
+<ul>
+<li><p>这里$\Omega_{G}$ 指积分域上，$g(x)$有值的区域。</p>
+<ul>
+<li><p>如$g(x)$ 为BRDF，$\Omega_{G}$ 即为原点向Lobe各点出发，与积分半球相交的区域集合</p>
+<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png" alt="IBL_BRDF02b"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="We-can-safely-take-the-lighting-term-out"><a href="#We-can-safely-take-the-lighting-term-out" class="headerlink" title="We can safely take the lighting term out!"></a>We can safely take the lighting term out!</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png" alt="IBL_BRDF03"></p>
+<p>我们把渲染方程分为了两部分积分，分别是：</p>
+<ul>
+<li>在$\Omega_{fr}$(即Lobe对应的半球区域)，对<strong>光照Radiance积分</strong></li>
+<li>在半球内对BRDF积分；</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/Games202_02_Real-Time%20Shadow/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="post-title-link" itemprop="url">Games202-2 Real-Time Shadow</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-01 16:23:10" itemprop="dateCreated datePublished" datetime="2023-02-01T16:23:10+08:00">2023-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-12 21:17:17" itemprop="dateModified" datetime="2023-02-12T21:17:17+08:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-Shadow-Mapping"><a href="#a-Shadow-Mapping" class="headerlink" title="a). Shadow Mapping"></a>a). Shadow Mapping</h1><ul>
+<li>A <strong>2-Pass</strong> Algorithm<ol>
+<li>Light pass: Generate the SM(Shadow Map)</li>
+<li>Camera pass: uses the SM</li>
+</ol>
+</li>
+<li>An image-space algorithm<ul>
+<li>Pro(优点): no knowledge of scene’s geometry is required</li>
+<li>Con(缺点): causing <strong>self occlusion(自遮挡)</strong> and <strong>aliasing(走样)</strong> issues</li>
+</ul>
+</li>
+</ul>
+<h2 id="Pass-1-Render-from-Light"><a href="#Pass-1-Render-from-Light" class="headerlink" title="Pass 1: Render from Light"></a>Pass 1: Render from Light</h2><ul>
+<li>输出一张<strong>光源视角</strong>的<strong>深度图（Depth Buffer）</strong></li>
+</ul>
+<p><img src="/2023/02/01/Games202_02_Real-Time%20Shadow/SM_Pass01.png" alt="SM_Pass01"></p>
+<h2 id="Pass-2-Render-from-Eye-Camera"><a href="#Pass-2-Render-from-Eye-Camera" class="headerlink" title="Pass 2: Render from Eye(Camera)"></a>Pass 2: Render from Eye(Camera)</h2><p><img src="/2023/02/01/Games202_02_Real-Time%20Shadow/SM_Pass02.png" alt="SM_Pass02"></p>
+<ul>
+<li><p>将光源视角对应的深度转换到View Space, 与Camera视角的深度进行深度比较；</p>
+<ul>
+<li>如$Depth_{cam} &gt; Depth_{light}$ ，那说明该点<strong>在阴影中</strong>（相机可见，光源不可见）</li>
+<li>如$Depth_{cam} &lt; Depth_{light}$ ，那说明该点在<strong>不在阴影中</strong>（相机可见，光源可见）</li>
+</ul>
+</li>
+<li><p><strong>用于比较的深度值：</strong></p>
+<ul>
+<li><p>经过透视投影中的Squeez矩阵后（具体看Games101 Math笔记），z会被推向远平面</p>
+<p>$M_{\text {persp } \rightarrow \text { ortho }}=\left(\begin{array}{cccc}<br>n &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; 0 \\<br>0 &amp; 0 &amp; n+f &amp; -nf \\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}\right)$</p>
+</li>
+<li><p>用于比较的$Depth$ 可以是经过MVP中的深度值（即Depth Buffer中的深度值）；</p>
+</li>
+<li>也可以是该点在同一空间（如模型空间）中，该点到相机/光源的线性距离；</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/01/Games202_02_Real-Time%20Shadow/SM_vs.png" alt="SM_vs"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/01/Games202_02_Real-Time%20Shadow/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/" class="post-title-link" itemprop="url">Games202-1 Recap of CG Basics</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-01 16:15:10" itemprop="dateCreated datePublished" datetime="2023-02-01T16:15:10+08:00">2023-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:32:31" itemprop="dateModified" datetime="2023-02-04T14:32:31+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-Graphics-Pipeline"><a href="#a-Graphics-Pipeline" class="headerlink" title="a). Graphics Pipeline"></a>a). Graphics Pipeline</h1><p><img src="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/GraphicsPipeline.png" alt="GraphicsPipeline"></p>
+<h1 id="b-OpenGL"><a href="#b-OpenGL" class="headerlink" title="b). OpenGL"></a>b). OpenGL</h1><p><img src="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/OpenGL01a.png" alt="OpenGL01a"></p>
+<h2 id="A-Place-objects-models"><a href="#A-Place-objects-models" class="headerlink" title="A. Place objects/models"></a>A. Place objects/models</h2><ul>
+<li>Model specification(模型信息)</li>
+<li>Model transformation</li>
+</ul>
+<p><img src="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/OpenGL_A.png" alt="OpenGL_A"></p>
+<h2 id="B-Set-up-an-easel-画架"><a href="#B-Set-up-an-easel-画架" class="headerlink" title="B. Set up an easel(画架)"></a>B. Set up an easel(画架)</h2><ul>
+<li>View transformation</li>
+<li>Create /use a <strong><font color="red">framebuffer</font></strong></li>
+</ul>
+<p><img src="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/OpenGL_B.png" alt="OpenGL_B"></p>
+<h2 id="C-Attach-a-canvas-to-the-easel"><a href="#C-Attach-a-canvas-to-the-easel" class="headerlink" title="C. Attach a canvas to the easel"></a>C. Attach a canvas to the easel</h2><p>指定Pass到framebuffer，就和Unity中FS的SV_TARGET一样。</p>
+<p><strong>E. you can also paint multiple pictures using the same easel</strong></p>
+<ul>
+<li><p>一个Rendering <strong>Pass</strong>，使用<strong>一个framebuffer</strong>，渲染一个或多个texture（shading, depth, etc.）作为输出</p>
+</li>
+<li><p>即一个framebuffer可以绑定多个纹理（MRT）</p>
+</li>
+<li><p><strong>Multiple Render Target（MRT）</strong>是一种指可以使绘制程序在单帧中同时渲染多个Render Target</p>
+</li>
+</ul>
+<h2 id="D-Paint-to-the-canvas"><a href="#D-Paint-to-the-canvas" class="headerlink" title="D. Paint to the canvas"></a>D. Paint to the canvas</h2><ul>
+<li>This is when vertex / fragment shaders will be used</li>
+</ul>
+<ul>
+<li><strong>For each vertex in parallel</strong>     <ul>
+<li>OpenGL calls user-specified vertex shader: Transform vertex (ModelView, Projection), other ops </li>
+</ul>
+</li>
+<li>For each primitive, OpenGL rasterizes <ul>
+<li>Generates a fragment for each pixel the fragment covers</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>For each fragment in parallel <ul>
+<li>OpenGL calls user-specified fragment shader: Shading and lighting calculations </li>
+<li>OpenGL handles z-buffer depth test unless overwritten</li>
+</ul>
+</li>
+</ul>
+<h2 id="Summary-in-each-pass"><a href="#Summary-in-each-pass" class="headerlink" title="Summary: in each pass"></a>Summary: in each pass</h2><ul>
+<li><p>Specify objects, camera, MVP, etc. </p>
+</li>
+<li><p>Specify framebuffer and input/output textures </p>
+</li>
+<li><p>Specify vertex / fragment shaders </p>
+</li>
+<li><p><strong>(When you have everything specified on the GPU)</strong> Render</p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="post-title-link" itemprop="url">Games101_19_20 Cameras Lenses and Light Fileds</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:25:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:25:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:31:58" itemprop="dateModified" datetime="2023-02-04T14:31:58+08:00">2023-02-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -250,65 +862,58 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
-<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+          <h1 id="Lecture19"><a href="#Lecture19" class="headerlink" title="Lecture19"></a>Lecture19</h1><ul>
+<li><p>讲相机的，老本行笔记直接看别人的吧；</p>
+<p><a target="_blank" rel="noopener" href="http://t.csdn.cn/4gODC">http://t.csdn.cn/4gODC</a></p>
+</li>
+</ul>
+<h2 id="b-Light-Field-Lumingraph-光场"><a href="#b-Light-Field-Lumingraph-光场" class="headerlink" title="b). Light Field / Lumingraph(光场)"></a>b). Light Field / Lumingraph(光场)</h2><table frame="void">
+    <tr>
+    <td><center><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_000.png" alt="LF_000" height="250"></center></td>
+    <td><center><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_001.png" alt="LF_001" height="250"></center></td>
+    </tr>
+</table>
+
 <ul>
-<li><p><strong>Idealized spring</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<li>两者看到的光线信息完全相同，那人眼中的世界就完全相同；</li>
+</ul>
+<h3 id="b-1-The-Plenoptic-Function-全光函数"><a href="#b-1-The-Plenoptic-Function-全光函数" class="headerlink" title="b.1). The Plenoptic Function(全光函数)"></a>b.1). The Plenoptic Function(全光函数)</h3><p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PlenopticFunc.png" alt="PlenopticFunc"></p>
 <ul>
-<li>但永远不会停止，因此加入摩擦力</li>
+<li>现实世界可以用一个七维的全光函数进行描述，记录了任意时间，不同位置的不同方向接收光的波长</li>
+<li>参数：<ul>
+<li>$\theta$ ：方位角</li>
+<li>$\phi$：俯仰角</li>
+<li>$\lambda$：波长</li>
+<li>$t$：时间</li>
+<li>$V_X，V_Y,V_Z$：位置</li>
 </ul>
 </li>
 </ul>
-<hr>
-<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<h3 id="b-2-Light-Field"><a href="#b-2-Light-Field" class="headerlink" title="b.2). Light Field"></a>b.2). Light Field</h3><p><strong>光场</strong>则可以认为是记录了任何一个点所接收的任何一个方向的irradiance。</p>
 <ul>
-<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
-<ul>
-<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
-</li>
+<li>可用四维函数表示，二维描述位置，二维描述方向</li>
+<li>光线可由两个点定义，因此这四维可改写成s,t,u,v。即两个平面上的位置； </li>
 </ul>
-</li>
-<li><p>加入两条对角线，以及skip connection</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_2Plane.png" alt="LF_2Plane"></p>
 <ul>
-<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
-</ul>
+<li><p>由此得出，描述一个物体的光场，只需要记录其包围盒上四维的全光函数即可</p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PF_Thing.png" alt="PF_Thing"></p>
 </li>
-<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+<li><p>从uv平面看向st平面，得到的是这个物体从各个方向看的相应的图像；</p>
 </li>
-</ul>
-<hr>
-<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<li><p>而从st看向uv，则得到的是这个物体在这个方向的irradiance的集合（不是合起来，而是类似二维数组的集合）即<strong>radiance</strong></p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/uvst.png" alt="uvst"></p>
+</li>
+<li><p><strong>st到uv</strong></p>
+<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/st2uv.png" alt="st2uv"></p>
 <ul>
-<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+<li>记录不同方向的光线radiance（注意和拜耳阵列的区分，这里三色只是代表不同方向）</li>
 </ul>
 </li>
 </ul>
-<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
-<ul>
-<li><p>关节（Joint）分类：</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
-</li>
-</ul>
-<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
-<ul>
-<li>解决多个解的方法：梯度下降</li>
-</ul>
-<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
-<ul>
-<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
-</li>
-</ul>
-<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/10/03/Games101_21_22_Animation/#more" rel="contents">
+              <a class="btn" href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -377,7 +982,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:31:43" itemprop="dateModified" datetime="2023-02-04T14:31:43+08:00">2023-02-04</time>
+      <time title="修改时间：2023-02-12 21:17:44" itemprop="dateModified" datetime="2023-02-12T21:17:44+08:00">2023-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -493,6 +1098,155 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/03/Games101_21_22_Animation/" class="post-title-link" itemprop="url">Games101_21_22 Animation</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-12 21:17:31" itemprop="dateModified" datetime="2023-02-12T21:17:31+08:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+<ul>
+<li><p><strong>Idealized spring</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<ul>
+<li>但永远不会停止，因此加入摩擦力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<ul>
+<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
+<ul>
+<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
+</li>
+</ul>
+</li>
+<li><p>加入两条对角线，以及skip connection</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<ul>
+<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
+</ul>
+</li>
+<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+</li>
+</ul>
+<hr>
+<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+</ul>
+</li>
+</ul>
+<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<ul>
+<li><p>关节（Joint）分类：</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
+</li>
+</ul>
+<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
+<ul>
+<li>解决多个解的方法：梯度下降</li>
+</ul>
+<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<ul>
+<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
+</li>
+</ul>
+<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/03/Games101_21_22_Animation/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -531,7 +1285,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:31:31" itemprop="dateModified" datetime="2023-02-04T14:31:31+08:00">2023-02-04</time>
+      <time title="修改时间：2023-02-12 21:18:29" itemprop="dateModified" datetime="2023-02-12T21:18:29+08:00">2023-02-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -728,423 +1482,8 @@
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_07_09_Shading/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/02/Games101_07_09_Shading/" class="post-title-link" itemprop="url">Games101-7-9 Shading</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-02 16:25:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:25:10+08:00">2022-10-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:31:20" itemprop="dateModified" datetime="2023-02-04T14:31:20+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline"><a href="#Lecture-07-08-Shading-Illumination-Shading-and-Graphics-Pipeline" class="headerlink" title="Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)"></a>Lecture 07/08 Shading(Illumination, Shading and Graphics Pipeline)</h1><h2 id="a-Definition"><a href="#a-Definition" class="headerlink" title="a). Definition"></a>a). Definition</h2><p><img src="/2022/10/02/Games101_07_09_Shading/Shading_Definition.png" alt="Shading_Definition"></p>
-<h2 id="b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model"><a href="#b-A-Simple-Shading-Model-Blinn-Phong-Reflectance-Model" class="headerlink" title="b). A Simple Shading Model(Blinn-Phong Reflectance Model)"></a>b). A Simple Shading Model(Blinn-Phong Reflectance Model)</h2><h3 id="b-1-Fundamental"><a href="#b-1-Fundamental" class="headerlink" title="b.1). Fundamental"></a>b.1). Fundamental</h3><ul>
-<li><p>Blinn-Phong是一个<strong>经验模型</strong>，并不是严格基于物理的；</p>
-</li>
-<li><p><strong>进入视线内的光照一般有以下构成：</strong></p>
-<ul>
-<li>高光（Specualr）</li>
-<li>漫反射（Diffuse）</li>
-<li>环境光（Ambient）</li>
-<li>自发光（Emissive）</li>
-</ul>
-</li>
-<li><p><strong>Shading is Local: </strong>Compute light reflected toward camera at a <font color="red"><strong>specific shading point</strong></font><img src="/2022/10/02/Games101_07_09_Shading/ShadingInput.png" alt="ShadingInput"></p>
-<ul>
-<li><p>No shadows will be generated! <strong>(shading ≠ shadow)</strong> </p>
-<ul>
-<li>阴影会由另外的Shadow Caster来着色；</li>
-</ul>
-<p><img src="/2022/10/02/Games101_07_09_Shading/NoShadow.png" alt="NoShadow"></p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="b-2-Diffuse-Reflection"><a href="#b-2-Diffuse-Reflection" class="headerlink" title="b.2). Diffuse Reflection"></a>b.2). Diffuse Reflection</h3><ul>
-<li>Blinn-Phong中，漫反射的光均匀散射到各个方向；<img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Diffuse.png" alt="Blinn-Phong_Diffuse"></li>
-<li><p><strong>Lambert’s cosine law</strong>：接收到的能量与 $l·n$ 成正比例<img src="/2022/10/02/Games101_07_09_Shading/Lambert_cos_law.png" alt="Lambert_cos_law"></p>
-</li>
-<li><p><strong>Light Falloff</strong><img src="/2022/10/02/Games101_07_09_Shading/LightFalloff.png" alt="LightFalloff"></p>
-</li>
-<li><p><strong>漫反射最终的着色：</strong><img src="/2022/10/02/Games101_07_09_Shading/LambertDiffuseShading.png" alt="LambertDiffuseShading"><img src="/2022/10/02/Games101_07_09_Shading/Diffuse_kd.png" alt="Diffuse_kd"></p>
-</li>
-</ul>
-<h3 id="b-3-Specular-Term-Blinn-Phong"><a href="#b-3-Specular-Term-Blinn-Phong" class="headerlink" title="b.3). Specular Term(Blinn-Phong)"></a>b.3). Specular Term(Blinn-Phong)</h3><ul>
-<li><p>Intensity <strong>depends</strong> on view direction</p>
-<p><img src="/2022/10/02/Games101_07_09_Shading/Specular.png" alt="Specular" style="zoom: 33%;"></p>
-</li>
-<li><p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong_Half_vector.png" alt="Blinn-Phong_Half_vector"></p>
-<ul>
-<li>采用半程向量简化计算。采用半程向量$h$与$n$点乘的是Blinn-Phong模型，而采用镜面反射方向$r$和视线方向$v$点乘的是Phong模型；</li>
-<li><strong>指数$p$的作用：</strong>Increasing p narrows the reflection lobe<img src="/2022/10/02/Games101_07_09_Shading/Specular_Power.png" alt="Specular_Power"></li>
-<li>效果总览：<img src="/2022/10/02/Games101_07_09_Shading/Specular_Term.png" alt="Specular_Term"></li>
-</ul>
-</li>
-</ul>
-<h3 id="b-4-Ambient-Term"><a href="#b-4-Ambient-Term" class="headerlink" title="b.4). Ambient Term"></a>b.4). Ambient Term</h3><p><img src="/2022/10/02/Games101_07_09_Shading/AmbientTerm.png" alt="AmbientTerm"></p>
-<p><img src="/2022/10/02/Games101_07_09_Shading/Blinn-Phong.png" alt="Blinn-Phong"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/02/Games101_07_09_Shading/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_05_06_Rasterization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/02/Games101_05_06_Rasterization/" class="post-title-link" itemprop="url">Games101-5-6 Rasterization</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-02 16:20:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:20:10+08:00">2022-10-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:31:12" itemprop="dateModified" datetime="2023-02-04T14:31:12+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-05-Rasterization-Triangles"><a href="#Lecture-05-Rasterization-Triangles" class="headerlink" title="Lecture 05 Rasterization(Triangles)"></a>Lecture 05 Rasterization(Triangles)</h1><h2 id="a-Perspective-Projection"><a href="#a-Perspective-Projection" class="headerlink" title="a). Perspective Projection"></a>a). Perspective Projection</h2><ul>
-<li><p>如何定义一个<strong>frustum</strong>：</p>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/Frustum.png" alt="Frustum"></p>
-<ul>
-<li>近平面宽度、高度（得到宽高比）</li>
-<li>FOV(Field of View)</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-Viewport-transformation"><a href="#b-Viewport-transformation" class="headerlink" title="b). Viewport transformation"></a>b). Viewport transformation</h2><ul>
-<li><p>经过MVP后，模型空间中点变换到标准立方体（canonical cube, x,y,z[-1, 1]）中。之后就需要进行视口变换（Viewport transformation）</p>
-</li>
-<li><p><strong>定义屏幕空间</strong></p>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/Difine_the_screen_space.png" alt="Difine_the_screen_space"></p>
-<ul>
-<li>OpenGL屏幕空间坐标原点为左下（上图），DX坐标原点为左上</li>
-<li>像素位置该像素（方块）左下角的坐标，如左下角像素坐标为$(0, 0)$，但像素中心为$(0.5, 0.5)$</li>
-</ul>
-</li>
-<li><p><strong>Viewport transformation</strong></p>
-<p><img src="/2022/10/02/Games101_05_06_Rasterization/ScreenSpace_transformation.png" alt="ScreenSpace_transformation"></p>
-</li>
-</ul>
-<h2 id="c-Rasterization"><a href="#c-Rasterization" class="headerlink" title="c). Rasterization"></a>c). Rasterization</h2><ul>
-<li><p><strong>Frame Buffer</strong>: Memory for a Raster Display</p>
-<ul>
-<li><p>显存中的一块区域</p>
-</li>
-<li><p>补充：Render texture（详情见Other/Note）</p>
-<ul>
-<li><blockquote>
-<p>以下以Unity为例：</p>
-<p>渲染过程中，贴图最开始在CPU内存，这时的贴图被称为client-side的texture，最后被送到GPU，这时叫server-side的texture；</p>
-<p>Render texture是将FrameBufferObject连接到一个server-side的texture；</p>
-<ul>
-<li>注意：FrameBufferObject不一定只有一个，也不一定连接屏幕；</li>
-</ul>
-<p>详情：<a target="_blank" rel="noopener" href="http://t.csdn.cn/3JHqA">http://t.csdn.cn/3JHqA</a></p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><strong>Triangles - Fundamental Shape Primitives</strong></p>
-<ul>
-<li>无法分割为其他多边形</li>
-<li>保证是一个平面</li>
-<li>容易区分内部和外部</li>
-<li>内部插值方便</li>
-<li><img src="/2022/10/02/Games101_05_06_Rasterization/Triangles.png" alt="Triangles"></li>
-</ul>
-</li>
-<li><p><strong>Fundament：</strong> <em>What Pixel Values Approximate a Triangle?<img src="/2022/10/02/Games101_05_06_Rasterization/T2PV.png" alt="T2PV"></em></p>
-<ul>
-<li><p>Sampling（采样）：逐像素中心采样，判断像素是否在三角形内</p>
-<ul>
-<li><pre><code>for (int x = 0; x &lt; xmax; ++x)
- output[x] = f(x);
-</code></pre></li>
-<li><p><img src="/2022/10/02/Games101_05_06_Rasterization/if_PinT.png" alt="if_PinT"></p>
-</li>
-</ul>
-</li>
-<li><p><strong>判断$(x,y)$是否在三角形内：</strong>做三次叉乘，看正负符号是否相同，相同则在三角形内；</p>
-</li>
-<li><p>Edge Cases：要么不做处理，要么特殊处理（OpenGL，DX里规定落于左边和上边算三角形中的点，而落于右边和下边的不算<strong>“<em>Top</em>-<em>Left</em> <em>Rule</em>“</strong>）<img src="/2022/10/02/Games101_05_06_Rasterization/Top_left_rule.png" alt="Top_left_rule"></p>
-</li>
-</ul>
-</li>
-<li><p><strong>光栅化加速</strong></p>
-<ul>
-<li>光栅化中，对每一个像素都判断是否在三角形中性能浪费过大。因此，加入<strong>Bounding Box（包围盒）</strong>来限定需要进行判断的区域<img src="/2022/10/02/Games101_05_06_Rasterization/BoundingBox.png" alt="BoundingBox"></li>
-<li>Incremental Triangle Traversal（找到三角形中每一行最左和最右的像素，但实际上没那么容易，是用于细长并旋转的三角形）<img src="/2022/10/02/Games101_05_06_Rasterization/Incremental_Triangle_Traversal.png" alt="Incremental_Triangle_Traversal"></li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/02/Games101_05_06_Rasterization/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_02_04_Math/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/02/Games101_02_04_Math/" class="post-title-link" itemprop="url">Games101-2-4 Math</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-02 16:15:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:15:10+08:00">2022-10-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:30:59" itemprop="dateModified" datetime="2023-02-04T14:30:59+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-02-Review-of-Linear-Algebra"><a href="#Lecture-02-Review-of-Linear-Algebra" class="headerlink" title="Lecture 02 Review of Linear Algebra"></a>Lecture 02 Review of Linear Algebra</h1><h2 id="a-Cross-Product"><a href="#a-Cross-Product" class="headerlink" title="a). Cross Product"></a>a). Cross Product</h2><p><img src="/2022/10/02/Games101_02_04_Math/cross.png" alt="cross"></p>
-<ul>
-<li><p>判断相对的左右、前后、内外</p>
-<p><img src="/2022/10/02/Games101_02_04_Math/cross.png" alt="cross"></p>
-</li>
-<li><p><strong>判断左右：</strong>如$ \vec{a} \cdot \vec{b} &gt; 0$那 $\vec{b}$ 就在 $\vec{a}$ 的左侧（按图中的右手坐标系）</p>
-</li>
-<li><p><strong>判断内外：</strong>判断 $\vec{AB}$  和 $\vec{AP}$ 的关系，可判断$P$ 点的在 $\vec{AB}$ 的左侧，同理可判断$P$ 在 $\vec{BC}$ 和 $\vec{CA}$ 的左侧，即均在向量<strong>同侧</strong>。由此，可判断$P$ 点的在 $ABC$ 的内部</p>
-</li>
-</ul>
-<h2 id="b-Orthonormal-Coordinate-Frames-正交直角坐标系"><a href="#b-Orthonormal-Coordinate-Frames-正交直角坐标系" class="headerlink" title="b). Orthonormal Coordinate Frames(正交直角坐标系)"></a>b). Orthonormal Coordinate Frames(正交直角坐标系)</h2><p><img src="/2022/10/02/Games101_02_04_Math/OCF.png" alt="OCF"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/02/Games101_02_04_Math/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

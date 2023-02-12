@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Q&amp;A</title>
+    <url>/2023/02/12/Q&amp;A/</url>
+    <content><![CDATA[<h1 id="零度菲涅尔值与Albedo"><a href="#零度菲涅尔值与Albedo" class="headerlink" title="零度菲涅尔值与Albedo"></a>零度菲涅尔值与Albedo</h1><p><em>Games202-5 Real-time Physically-based Materials</em></p>
+<p><strong>Q：</strong>在金属或高光工作流中，对于非导体材质（电介质）默认其零度菲涅尔值$R_0$ 为4%，那么按PBR来，他怎么会有颜色呢；还是说非导体的albedo就是$R_0$ ? 按作业中来好像albedo就是 $R_0$ ，后续还得深挖一下；</p>
+<p><strong>A：</strong>对于最终用于BRDF中的$F_0(R_0)$，会根据Metallic在$R_0$和albedo之间Lerp。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">F0 = lerp(R0, albedo, metallic);</span><br></pre></td></tr></table></figure>
+<p>如果不做特殊处理，那对于Metallic为0的物体是不会有颜色的（如简单使用GGX等）。但一般会进行一些特殊处理（如Disney’s Principled BRDF），使得Metallic为0的物体仍有一定颜色；</p>
+<h1 id="Jacobian（雅克比矩阵）"><a href="#Jacobian（雅克比矩阵）" class="headerlink" title="Jacobian（雅克比矩阵）"></a>Jacobian（雅克比矩阵）</h1><p><strong>Q</strong>：Jacobian 项，方向导数需要去了解更多</p>
+]]></content>
+      <categories>
+        <category>Q&amp;A</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Q&amp;A</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>待做事项</title>
     <url>/2023/02/08/Todo/</url>
     <content><![CDATA[<h1 id="LTC"><a href="#LTC" class="headerlink" title="LTC"></a>LTC</h1><ul>
@@ -21,6 +39,1188 @@
         <tag>图形学</tag>
         <tag>Todo</tag>
         <tag>论文复现</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-7 A Glimpse of Industrial Solution</title>
+    <url>/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/</url>
+    <content><![CDATA[<h1 id="a-Anti-Aliasing"><a href="#a-Anti-Aliasing" class="headerlink" title="a). Anti-Aliasing"></a>a). Anti-Aliasing</h1><h2 id="a-1-Temporal-Anti-Aliasing-TAA"><a href="#a-1-Temporal-Anti-Aliasing-TAA" class="headerlink" title="a.1). Temporal Anti-Aliasing (TAA)"></a>a.1). Temporal Anti-Aliasing (TAA)</h2><ul>
+<li><strong>复用先前帧的样本</strong>，假设画面不动，就可在单个像素内随时间规律移动感知点，进行（加权）平均；<ul>
+<li><strong>为何规律移动感知点：</strong> 随机采样会引入高频噪声；</li>
+</ul>
+</li>
+<li>如画面移动，则和频域降噪相同，使用Motion vector找到对应像素，再规律移动感知点。同时也可引入Clamp和Detection的操作；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/TAA01.png" alt="TAA01"></p>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/TAA02.png" alt="TAA02" style="zoom: 33%;"></p>
+<h2 id="a-2-MSAA-vs-SSAA"><a href="#a-2-MSAA-vs-SSAA" class="headerlink" title="a.2). MSAA vs. SSAA"></a>a.2). MSAA vs. SSAA</h2><p><strong>SSAA：</strong></p>
+<ul>
+<li>相当于用更大分辨率渲染后降采样，做2倍的SSAA，相当于一个像素做4次shading；</li>
+<li>质量最好，但是性能开销大；</li>
+</ul>
+<p><strong>MSAA：</strong></p>
+<ul>
+<li><p>在一个像素内，<strong>同一个图元只着色一次</strong>；(如图，0、2、3为图元A，着色一次(左边的绿点)；1为图元B，着色一次；)</p>
+<ul>
+<li>因此，MSAA会维护一张表，表中记录当前感知点记录的color(albedo?) 和 深度</li>
+</ul>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/MSAA01.png" alt="MSAA01" style="zoom:50%;"></p>
+</li>
+<li><p>在像素间复用样本；</p>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/MSAA02.png" alt="MSAA02" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="a-3-Image-Based-Anti-Aliasing-Solution"><a href="#a-3-Image-Based-Anti-Aliasing-Solution" class="headerlink" title="a.3). Image Based Anti-Aliasing Solution"></a>a.3). Image Based Anti-Aliasing Solution</h2><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/ImageBasedAA.png" alt="ImageBasedAA"></p>
+<h2 id="a-4-Note"><a href="#a-4-Note" class="headerlink" title="a.4). Note"></a>a.4). Note</h2><ul>
+<li><strong><font color="red">G-buffers一定不能做抗锯齿</font></strong></li>
+</ul>
+<span id="more"></span>
+<h1 id="b-Temporal-Super-Resolution"><a href="#b-Temporal-Super-Resolution" class="headerlink" title="b). Temporal Super Resolution"></a>b). Temporal Super Resolution</h1><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/DLSS01.png" alt="DLSS01"></p>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/DLSS02.png" alt="DLSS02"></p>
+<ul>
+<li>通过深度学习告诉管线，<strong>如何使用历史帧的信息</strong>；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/DLSS03.png" alt="DLSS03" style="zoom:50%;"></p>
+<h1 id="c-Deferred-Shading-详见百人计划图形3-4-延迟渲染管线"><a href="#c-Deferred-Shading-详见百人计划图形3-4-延迟渲染管线" class="headerlink" title="c). Deferred Shading(详见百人计划图形3.4 延迟渲染管线)"></a>c). Deferred Shading(详见百人计划图形3.4 延迟渲染管线)</h1><p>主要解决<strong>大量光照渲染</strong>和<strong>overdraw</strong>（传统渲染如果从后往前渲染，那所有fragment都会被shaded一次）的方案。</p>
+<p>可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即<strong>G-buffer</strong>，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染<strong>基本思想</strong>是，<strong>先执行深度测试（应该也包括其他测试），再进行着色计算</strong>，将本来在物空间（三维空间）进行光照计算放到了<strong>像空间</strong>（二维空间）进行处理。</p>
+<p>对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。</p>
+<h2 id="c-1-流程"><a href="#c-1-流程" class="headerlink" title="c.1). 流程"></a>c.1). 流程</h2><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/Deffer_Workflow.png" alt="Deffer_Workflow" style="zoom:33%;"></p>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/Deffer_Workflow2.jpg" alt="Deffer_Workflow2"></p>
+<p>可以将延迟渲染理解为两个Pass的过程：</p>
+<ol>
+<li><p><strong>几何处理阶段(Geometry Pass)。</strong>这个阶段中，我们获取对象的各种<strong>几何信息</strong>（Position、Normal、Albedo、Specular等），并将第二步所需的各种数据储存（也就是渲染）到多个<strong>G-buffer</strong>中；</p>
+<ul>
+<li>由于有深度测试，所以最终写入G-buffer中的，都是离摄像机最近的片元的集合属性，这就意味着，在G-buffer中的片元必定要进行光照计算。</li>
+</ul>
+</li>
+<li><p><strong>光照处理阶段(Lighting Pass)。</strong>在这个pass中，我们只需渲染出一个屏幕大小的二维矩形，使用第一步在G-buffer中存储的数据对此矩阵的每一个片段<strong>计算场景的光照</strong>；光照计算的过程还是和正向渲染以前一样，只是现在<strong>我们需要从对应的G-buffer而不是顶点着色器(和一些uniform变量)那里获取输入变量了</strong>。</p>
+</li>
+</ol>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/Deffer_Workflow3.jpg" alt="Deffer_Workflow3"></p>
+<h2 id="c-2-延迟渲染的优缺点"><a href="#c-2-延迟渲染的优缺点" class="headerlink" title="c.2). 延迟渲染的优缺点"></a>c.2). 延迟渲染的优缺点</h2><ul>
+<li><p><strong>优点：</strong></p>
+<ol>
+<li>Complexity: O(#fragment <em> #light) -&gt; O(#vis. frag. </em> #light)</li>
+<li>只渲染可见的像素，节省计算量</li>
+<li>用更少的shader</li>
+<li>对后处理支持良好（例如深度信息：直接拿G-buffer中的就行。而前向渲染需要单独Pass再渲染一张深度图）</li>
+<li>在大量光源的场景优势尤其明显；</li>
+</ol>
+</li>
+<li><p><strong>缺点：</strong></p>
+<ol>
+<li>内存开销较大，且占用了大量的显存带宽；<ul>
+<li>需要传递G-Buffer；</li>
+<li>有时需要用到G-Buffer的信息，如深度图做后处理，那将不会进行Clear；</li>
+</ul>
+</li>
+<li>只能用同一套Lighting Pass；</li>
+<li>对透明物体的渲染存在问题。在这点上需要结合正向渲染进行渲染；</li>
+<li>对多重采样抗锯齿（MultiSampling Anti-Aliasing, MSAA）等硬件抗锯齿的支持不友好，主要因为需开启MRT；<ul>
+<li>MSAA是依赖于子像素，而Deffered shading<strong>处在光栅化之后（单个像素内值相等）</strong>，传输数据是通过G-Buffer；</li>
+<li>但可使用TAA</li>
+</ul>
+</li>
+</ol>
+<p><a href="https://www.zhihu.com/question/20236638/answer/44821615">问FXAA、FSAA与MSAA有什么区别？效果和性能上哪个好？ - 文刀秋二的回答 - 知乎</a></p>
+<p><a href="https://catlikecoding.com/unity/tutorials/rendering/part-13/">https://catlikecoding.com/unity/tutorials/rendering/part-13/</a></p>
+</li>
+</ul>
+<h1 id="d-Tiled-Shading"><a href="#d-Tiled-Shading" class="headerlink" title="d). Tiled Shading"></a>d). Tiled Shading</h1><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/Tiled Shading.png" alt="Tiled Shading"></p>
+<ul>
+<li>基于Deferred Shading</li>
+<li>并不是所有光源都会对Tile有贡献</li>
+<li>Complexity: O(#vis. frag. <em> #light) -&gt; O(#vis. frag. </em> avg #light per tile)</li>
+</ul>
+<h1 id="e-Clustered-Shading-群组渲染"><a href="#e-Clustered-Shading-群组渲染" class="headerlink" title="e). Clustered Shading(群组渲染)"></a>e). Clustered Shading(群组渲染)</h1><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/ClusteredShading.png" alt="ClusteredShading"></p>
+<ul>
+<li>在Tiled Shading的基础上再对Depth分段；</li>
+<li>Complexity: O(#vis. frag. <em> avg #light per tile) -&gt; O(#vis. frag. </em> avg #light per cluster)</li>
+</ul>
+<h1 id="f-Level-of-Detail-Solutions"><a href="#f-Level-of-Detail-Solutions" class="headerlink" title="f). Level of Detail Solutions"></a>f). Level of Detail Solutions</h1><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/LoD01.png" alt="LoD01"></p>
+<ul>
+<li>cascaded: 级联</li>
+</ul>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/LoD02.png" alt="LoD02"></p>
+<ul>
+<li>生成时，不同Level之间有一定重叠，用于过渡时Lerp</li>
+</ul>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/LoD03.png" alt="LoD03"></p>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/LoD04.png" alt="LoD04"></p>
+<h1 id="g-Global-Illumination-Solutions"><a href="#g-Global-Illumination-Solutions" class="headerlink" title="g). Global Illumination Solutions"></a>g). Global Illumination Solutions</h1><p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/GI01.png" alt="GI01"></p>
+<p><img src="/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/GI02.png" alt="GI02"></p>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Games202</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-6 Real-time Ray-Tracing</title>
+    <url>/2023/02/10/Games202_06_Real-time%20Ray-Tracing/</url>
+    <content><![CDATA[<h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><p><strong>Real-time Ray-Tracing vs. Ray-Tracing:</strong></p>
+<ul>
+<li><p>Real-time Ray-Tracing == <strong>1/few sample per pixel(SPP)</strong></p>
+</li>
+<li><p><strong>Key technology:</strong> Denoising(降噪)</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/RTRT00.png" alt="RTRT00" style="zoom: 50%;"></p>
+</li>
+</ul>
+<p><strong>一个光路样本（1 SPP path tracing）：</strong></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/RTRT01.png" alt="RTRT01" style="zoom:50%;"></p>
+<ul>
+<li><strong>第一步是Rasterization，而不是Ray的原因：</strong> 从摄影机发出经过各个像素的光线，即等同于进行一次光栅化，找到Primary hitpoint</li>
+</ul>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/RTRT02.png" alt="RTRT02" style="zoom:50%;"></p>
+<ul>
+<li>传统的降噪方式不是效果不好，就是太慢或不靠谱</li>
+</ul>
+<h1 id="b-Temporal-denoising-时域降噪"><a href="#b-Temporal-denoising-时域降噪" class="headerlink" title="b). Temporal denoising(时域降噪)"></a>b). Temporal denoising(时域降噪)</h1><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Denoising01.png" alt="Denoising01" style="zoom:50%;"></p>
+<p><strong>Key idea:</strong></p>
+<ul>
+<li>复用<strong>前面已经降噪过的一帧</strong>；</li>
+<li>使用<strong>motion vector</strong>来找到先前的位置；</li>
+<li>本质上是提高采样率；</li>
+</ul>
+<h2 id="b-1-G-Buffer"><a href="#b-1-G-Buffer" class="headerlink" title="b.1). G-Buffer"></a>b.1). G-Buffer</h2><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/G-Buffer01.png" alt="G-Buffer01"></p>
+<h2 id="b-2-Back-Projection"><a href="#b-2-Back-Projection" class="headerlink" title="b.2). Back Projection"></a>b.2). Back Projection</h2><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/BackProj01.png" alt="BackProj01" style="zoom:50%;"></p>
+<ul>
+<li><strong>Key idea：</strong>不同帧之间相同的点，意味着有着<strong>相同的世界位置（如不移动）或模型空间位置</strong>；</li>
+</ul>
+<p><strong>How：</strong></p>
+<ul>
+<li>如果世界坐标 $s$ 存在于G-Buffer中，即可直接使用；</li>
+<li>否则，$s = M^{-1}V^{-1}P^{-1}E^{-1}x$ （$E$ 为视口变换，即NDF到Viewport/Screen）</li>
+<li>运动（Motion）情况已知，$s’ = T^{-1} s$，$s’$ 为运动前的位置，$T$ 为运动的矩阵</li>
+<li>在 $i-1$ 帧，$s$ 对应的屏幕空间位置为 $x’=P’V’M’s’$</li>
+</ul>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/BackProj03.png" alt="BackProj03" style="zoom:50%;"></p>
+<span id="more"></span>
+<h2 id="b-3-issues"><a href="#b-3-issues" class="headerlink" title="b.3). issues"></a>b.3). issues</h2><ul>
+<li><p>Failure case 1: 切换场景</p>
+<ul>
+<li><strong>burn-in period</strong>(即需要一定时间积累降噪质量足够好的帧，如UE中的burn-in)</li>
+</ul>
+</li>
+<li><p>Failure case 2: walking backwards in a hallway</p>
+<ul>
+<li><strong>screen space issue</strong>（当前帧出现上一帧屏幕外的信息）</li>
+</ul>
+</li>
+<li><p>Failure case 3: suddenly appearing background</p>
+<ul>
+<li><p><strong>disocclusion</strong>（上一帧被遮挡的物体，当前帧未被遮挡）</p>
+</li>
+<li><p>可能造成<strong>拖尾（lagging）</strong></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/TemporalFailure01.png" alt="TemporalFailure01" style="zoom: 67%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-4-Adjustments-to-Temp-Failure"><a href="#b-4-Adjustments-to-Temp-Failure" class="headerlink" title="b.4). Adjustments to Temp. Failure"></a>b.4). Adjustments to Temp. Failure</h2><script type="math/tex; mode=display">
+\bar{C}^{(i)}=\alpha \bar{C}^{(i)}+(1-\alpha) C^{(i-1)}</script><ul>
+<li><p>Clamping</p>
+<ul>
+<li>Clamp上一帧的信息，使其接近当前帧。即Clamp $C^{(i-1)}$ </li>
+</ul>
+</li>
+<li><p>Detection(即不符合要求时，不使用Temp. denoising)</p>
+<ul>
+<li>Use e.g. object ID to detect temporal failure（ID通道）</li>
+<li>调整$\alpha$，上一帧不可靠时，调高$\alpha$<ul>
+<li>Problem：重新引入更多噪声；</li>
+</ul>
+</li>
+<li>可能需要增强空域降噪；</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-5-More-Temporal-Failure"><a href="#b-5-More-Temporal-Failure" class="headerlink" title="b.5). More Temporal Failure"></a>b.5). More Temporal Failure</h2><ul>
+<li><p>Detaching/lagging shadows(阴影拖尾)</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Failure01.png" alt="Failure01"></p>
+</li>
+<li><p>Temporal failure can also happen in shading</p>
+<ul>
+<li><p>如反射滞后；</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Failure02.png" alt="Failure02" style="zoom:67%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="c-Implementation-实现"><a href="#c-Implementation-实现" class="headerlink" title="c). Implementation(实现)"></a>c). Implementation(实现)</h1><p>eg. Gaussian filter</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Implementation01.png" alt="Implementation01"></p>
+<ul>
+<li>滤波核可以不归一化，但对于结果需要归一化；</li>
+</ul>
+<h2 id="c-1-Bilateral-filtering-双边滤波"><a href="#c-1-Bilateral-filtering-双边滤波" class="headerlink" title="c.1). Bilateral filtering(双边滤波)"></a>c.1). Bilateral filtering(双边滤波)</h2><p><strong>观察：</strong></p>
+<ul>
+<li>高斯模糊会将边界模糊，但我们需要保留边界；</li>
+<li>边界 = 颜色差异大</li>
+</ul>
+<p><strong>目的：</strong></p>
+<ul>
+<li><p>模糊同时保留边界；</p>
+</li>
+<li><p>当像素$j$ 和像素$i$ 颜色差异大时，$j$贡献变少（权重变小）</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/BilateralFiltering01.png" alt="BilateralFiltering01"></p>
+<ul>
+<li>像素$a$ 位置为$(i,j)$，像素$b$ 位置为$(k,l)$；</li>
+<li>$I(i,j)$ 表示$(i,j)$位置的像素值；</li>
+<li>$\sigma$ 控制对应项的作用范围，其值越大，对应项的局部影响<strong>范围</strong>就越大，分子变化影响越小</li>
+<li>类似于两个不同形式的高斯核<strong>相乘</strong>（指数相加），即两个标准（距离，颜色），2 metrics</li>
+<li>可以根据需求调整，如较为看重color dist. 对weight的影响，就可以将第二项的2 调为 1；</li>
+</ul>
+</li>
+</ul>
+<h2 id="c-2-Joint-Bilateral-filtering-联合双边滤波"><a href="#c-2-Joint-Bilateral-filtering-联合双边滤波" class="headerlink" title="c.2). Joint Bilateral filtering(联合双边滤波)"></a>c.2). Joint Bilateral filtering(联合双边滤波)</h2><p><strong>观察：</strong></p>
+<ul>
+<li>Gaussian filtering: 1 metric (distance)</li>
+<li>Bilateral filtering: 2 metrics (position dist. &amp; color dist.)</li>
+<li>因此，我们可以<strong>考虑更多的标准（metric），丰富滤波核，进行滤波（Key idea）</strong></li>
+</ul>
+<p><strong>定义：</strong>Joint Bilateral filtering是一系列考虑更多标准的滤波方法。</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering01.png" alt="JointBilateralFiltering01"></p>
+<p><strong>Note:</strong></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering02.png" alt="JointBilateralFiltering02"></p>
+<hr>
+<h3 id="c-2-1-Example"><a href="#c-2-1-Example" class="headerlink" title="c.2.1). Example"></a>c.2.1). Example</h3><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering_Example01.png" alt="JointBilateralFiltering_Example01"></p>
+<h2 id="c-2-Large-Filters"><a href="#c-2-Large-Filters" class="headerlink" title="c.2). Large Filters"></a>c.2). Large Filters</h2><p>对于大的滤波核，性能开销会非常大(e.g. 64x64)</p>
+<h3 id="Solution-1-Separate-Passes"><a href="#Solution-1-Separate-Passes" class="headerlink" title="Solution 1: Separate Passes"></a>Solution 1: Separate Passes</h3><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Large_Solution01.png" alt="Large_Solution01"></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Large_Solution02.png" alt="Large_Solution02"></p>
+<ul>
+<li>将NxN大小的2D高斯核，拆分为 1xN 和 Nx1 的1D高斯核。通过两个Pass进行滤波；（<strong>注意：</strong> 并不是所有滤波核都可拆分）</li>
+</ul>
+<hr>
+<p><strong>原因：</strong></p>
+<script type="math/tex; mode=display">
+w(i, j, k, l)=\exp \left(-\frac{(i-k)^{2}+(j-l)^{2}}{2 \sigma_{d}^{2}}\right)</script><p>2D高斯核的形式是可拆分的，如下：</p>
+<script type="math/tex; mode=display">
+G_{2D}(x, y) = G_{1D}(x) \cdot G_{1D}(y)</script><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Large_Solution03.png" alt="Large_Solution03"></p>
+<ul>
+<li><strong><font color="red">理论上</font>，双边滤波/联合双边滤波是不可拆分的</strong>（实现上，只要滤波核不特别大，如超过32x32，就可采用拆分方法）</li>
+</ul>
+<hr>
+<h3 id="Solution-2-Progressively-Growing-Sizes-逐步增加尺寸"><a href="#Solution-2-Progressively-Growing-Sizes-逐步增加尺寸" class="headerlink" title="Solution 2: Progressively Growing Sizes(逐步增加尺寸)"></a>Solution 2: Progressively Growing Sizes(逐步增加尺寸)</h3><p><strong>介绍：</strong> 逐Pass增加filter (间隙的)size，类似空洞卷积。第一次间隙为0，第二次间隙为1……</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/ATW01.png" alt="ATW01"></p>
+<hr>
+<p><strong>原因：</strong></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/ATW02.png" alt="ATW02"></p>
+<ul>
+<li><p><strong>逐步增加尺寸：</strong> 逐步减小信号的最高频率；</p>
+</li>
+<li><p><strong>增加采样间隙：</strong> 降低采样频率，频谱搬移距离逐渐减小；</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/频谱搬移.png" alt="频谱搬移" style="zoom: 67%;"></p>
+</li>
+</ul>
+<ul>
+<li><strong>逻辑：</strong> 减少信号高频部分，并增大采样间隙（频谱搬移，将信号左边界搬移到有边界），使得不会产生信号混叠；</li>
+</ul>
+<hr>
+<h1 id="d-Outlier-Removal-and-temporal-clamping"><a href="#d-Outlier-Removal-and-temporal-clamping" class="headerlink" title="d). Outlier Removal(and temporal clamping)"></a>d). Outlier Removal(and temporal clamping)</h1><h2 id="d-1-Introduction"><a href="#d-1-Introduction" class="headerlink" title="d.1). Introduction"></a>d.1). Introduction</h2><p><strong>Outlier:</strong> 场景中一些特别亮的噪声，即萤火虫噪声；</p>
+<ul>
+<li><strong>出现原因：</strong> 蒙特卡洛积分时，由于采样率不足，会出现特别亮和特别暗的点；</li>
+<li><p>无法用滤波解决，滤波后仍会存在，甚至从一点变为亮的色块（<strong>blocky</strong>）</p>
+</li>
+<li><p><strong>解决方法：</strong> Outlier removal(clamp)</p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval01.png" alt="OutlierRemoval01"></p>
+</li>
+</ul>
+<p><strong>Outlier removal:</strong></p>
+<ul>
+<li><strong>应用时间：</strong> 滤波<strong>之前</strong>（但会打破能量守恒，如不想打破就得提高采样率）</li>
+</ul>
+<h2 id="d-2-实现"><a href="#d-2-实现" class="headerlink" title="d.2). 实现"></a>d.2). 实现</h2><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval02.png" alt="OutlierRemoval02"></p>
+<ul>
+<li>$\mu$: 均值</li>
+<li>$\sigma$: 标准差</li>
+<li>即将各个点Clamp到一定范围内（如担心光源被clamp掉，可以先不Render光源。Outlier removal之后再加上光源）</li>
+</ul>
+<p><strong>之前提到的Temporal Clamping同理：</strong></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval03.png" alt="OutlierRemoval03"></p>
+<ul>
+<li>将上一帧Clamp向（经过空域降噪）这一帧</li>
+</ul>
+<h1 id="e-SVGF-Spatiotemporal-Variance-Guided-Filtering"><a href="#e-SVGF-Spatiotemporal-Variance-Guided-Filtering" class="headerlink" title="e). SVGF(Spatiotemporal Variance-Guided Filtering)"></a>e). SVGF(Spatiotemporal Variance-Guided Filtering)</h1><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/SVGF01.png" alt="SVGF01"></p>
+<ul>
+<li>降噪效果好，但仍然有拖影、反射滞后等问题；</li>
+<li>在Overblue和更多的noise之间，选择了Overblur</li>
+</ul>
+<h2 id="e-1-SVGF-—-Joint-Bilateral-Filtering"><a href="#e-1-SVGF-—-Joint-Bilateral-Filtering" class="headerlink" title="e.1). SVGF — Joint Bilateral Filtering"></a>e.1). SVGF — Joint Bilateral Filtering</h2><h3 id="e-1-1-Depth"><a href="#e-1-1-Depth" class="headerlink" title="e.1.1). Depth"></a>e.1.1). Depth</h3><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/SVGF_Depth.png" alt="SVGF_Depth"></p>
+<ul>
+<li>A、B在同平面深度却差异很大，使得互相之间贡献少。因此，在分母中引入梯度$\nabla z(p)$ ，该梯度为<strong>深度在对应点法线方向的变化率</strong>（注意：梯度为向量，其方向为法线方向；）。<ul>
+<li>当平面几乎垂直于屏幕时，$\nabla z(p)$ 变大，使得深度差异对权重的影响变小；</li>
+</ul>
+</li>
+</ul>
+<h3 id="e-1-2-Normal"><a href="#e-1-2-Normal" class="headerlink" title="e.1.2). Normal"></a>e.1.2). Normal</h3><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/SVGF_Normal.png" alt="SVGF_Normal"></p>
+<ul>
+<li>应使用几何法线，而不使用经过法线扰动的Normal</li>
+</ul>
+<h3 id="e-1-3-Luminance-grayscale-color-value"><a href="#e-1-3-Luminance-grayscale-color-value" class="headerlink" title="e.1.3). Luminance(grayscale color value)"></a>e.1.3). Luminance(grayscale color value)</h3><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/SVGF_Color.png" alt="SVGF_Color"></p>
+<ul>
+<li><p>使用亮度值；</p>
+</li>
+<li><p><strong>Variance:</strong></p>
+<ul>
+<li><p><strong>Step1:</strong> 计算<strong>空域</strong>中<strong>7x7的方差</strong>；</p>
+</li>
+<li><p><strong>Step2:</strong> 通过<strong>motion vectors</strong>在<strong>时域</strong>上<strong>平均</strong>（类似时域降噪）；</p>
+</li>
+<li><strong>Step3:</strong> 对平均后的结果再在<strong>空域</strong>上<strong>3x3的范围内平均</strong>；</li>
+<li>即，<strong>spatial filter —&gt; temporal filter —&gt; spatial filter</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="f-RAE-Recurrent-AutoEncoder"><a href="#f-RAE-Recurrent-AutoEncoder" class="headerlink" title="f). RAE(Recurrent AutoEncoder)"></a>f). RAE(Recurrent AutoEncoder)</h1><ul>
+<li>一种结构，对Monte carlo路径追踪得到的结果进行reconstruction-对RTRT做滤波。</li>
+<li>后期处理，把noise的图变clean。</li>
+<li>使用G-buffers</li>
+<li>神经网络会自动将temporal的结果累积起来</li>
+</ul>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/RAE.png" alt="RAE"></p>
+<p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/RAE02.png" alt="RAE02"></p>
+<h1 id="g-Comparison"><a href="#g-Comparison" class="headerlink" title="g). Comparison"></a>g). Comparison</h1><p><img src="/2023/02/10/Games202_06_Real-time%20Ray-Tracing/Comparison.png" alt="Comparison"></p>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Ray-Tracing</tag>
+        <tag>Games202</tag>
+        <tag>Denoise</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-5 Real-time Physically-based Materials</title>
+    <url>/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/</url>
+    <content><![CDATA[<p>Q1：在金属或高光工作流中，对于非导体材质（电介质）默认其零度菲涅尔值$R_0$ 为4%，那么按PBR来，他怎么会有颜色呢；还是说非导体的albedo就是$R_0$ ? 按作业中来好像albedo就是 $R_0$ ，后续还得深挖一下；</p>
+<p>Q2：Jacobian 项，方向导数需要去了解更多</p>
+<h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/PBR_Intro00.png" alt="PBR_Intro00"></p>
+<ul>
+<li>尽管实时渲染中的PBR，不一定完全基于物理。如Disney principled BRDFs (artist friendly but still not PBR)</li>
+</ul>
+<h1 id="b-Microfacet-BRDF"><a href="#b-Microfacet-BRDF" class="headerlink" title="b). Microfacet BRDF"></a>b). Microfacet BRDF</h1><p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
+<ul>
+<li>菲涅尔项；</li>
+<li>Shadowing-masking term<ul>
+<li>考虑微表面之间的遮挡和阴影；</li>
+<li>当光线几乎平行与表面入射时(Grazing angle)，微表面之间遮挡变多</li>
+</ul>
+</li>
+<li>Disterbution of normals(法线分布)</li>
+</ul>
+<span id="more"></span>
+<h2 id="b-1-The-Fresnel-Term"><a href="#b-1-The-Fresnel-Term" class="headerlink" title="b.1). The Fresnel Term"></a>b.1). The Fresnel Term</h2><ul>
+<li><strong>本质上是考虑能量的吸收和反射</strong>（即考虑BRDF就会有因为颜色的合理的能量损失）</li>
+</ul>
+<table frame="void">
+    <tr>
+    <td><center><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/绝缘体_Fresnel.png" alt="绝缘体_Fresnel" height="250"></center></td>
+    <td><center><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/导体(金属)_Fresnel.png" alt="导体(金属)_Fresnel" height="250"></center></td>
+    </tr>
+</table>
+
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/FresnelTerm.png" alt="FresnelTerm"></p>
+<hr>
+<h2 id="b-2-Normal-Distribution-Function-NDF"><a href="#b-2-Normal-Distribution-Function-NDF" class="headerlink" title="b.2). Normal Distribution Function(NDF)"></a>b.2). Normal Distribution Function(NDF)</h2><p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/NormalDistribution.png" alt="NormalDistribution"></p>
+<ul>
+<li>NDF从简单（如Gloosy）变为复杂（如Diffuse），就类似于把微表面高度场拉大；</li>
+</ul>
+<ul>
+<li><p><strong>类型：</strong></p>
+<ul>
+<li>Beckmann, GGX, etc.</li>
+<li>Detailed models [Yan 2014, 2016, 2018, …]</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/NDF01.png" alt="NDF01"></p>
+</li>
+</ul>
+<h3 id="b-2-1-Beckmann-NDF"><a href="#b-2-1-Beckmann-NDF" class="headerlink" title="b.2.1). Beckmann NDF"></a>b.2.1). Beckmann NDF</h3><p><strong>Beckmann NDF:</strong></p>
+<ul>
+<li><p>和高斯函数相似</p>
+</li>
+<li><p>Project Solid angel上积分为1</p>
+</li>
+<li><p>定义在Slope space（坡度空间）</p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/NDF_Beckmann_01.png" alt="NDF_Beckmann_01" style="zoom:50%;"></p>
+<ul>
+<li><strong>原因：</strong> 在Slope space（法线交点处切线平面）中Support无限大，任意位置对应的夹角不会超过90°，<strong>保证微表面不会朝下</strong></li>
+</ul>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+D(h)=\frac{e^{-\frac{\tan ^{2} \theta_{h}}{\alpha^{2}}}}{\pi \alpha^{2} \cos ^{4} \theta_{h}}</script><ul>
+<li><strong>$\alpha$ ：Roughness的平方</strong></li>
+<li><strong>$\theta_{h}$ ：半角向量和（宏观）法线的夹角</strong></li>
+</ul>
+<h3 id="b-2-2-GGX-or-Trowbridge-Reitz-TR"><a href="#b-2-2-GGX-or-Trowbridge-Reitz-TR" class="headerlink" title="b.2.2). GGX (or Trowbridge-Reitz, TR)"></a>b.2.2). GGX (or Trowbridge-Reitz, TR)</h3><p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/NDF_GGX01.png" alt="NDF_GGX01"></p>
+<ul>
+<li><p><strong>Long tail:</strong> 使得光线过度更为自然，如高光过渡柔和</p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/NDF_GGX02.png" alt="NDF_GGX02"></p>
+</li>
+</ul>
+<h3 id="b-2-3-GGGX-GTR"><a href="#b-2-3-GGGX-GTR" class="headerlink" title="b.2.3). GGGX(GTR)"></a>b.2.3). GGGX(GTR)</h3><p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/NDF_GTR.png" alt="NDF_GTR"></p>
+<hr>
+<h2 id="b-3-Shadowing-Masking-Term"><a href="#b-3-Shadowing-Masking-Term" class="headerlink" title="b.3). Shadowing-Masking Term"></a>b.3). Shadowing-Masking Term</h2><p> <strong>Why is it important?</strong></p>
+<ul>
+<li><p>如没$G$ 项，在grazing angle时，物体表面会发亮；</p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/MicrofacetBRDF_G01.png" alt="MicrofacetBRDF_G01"></p>
+</li>
+</ul>
+<h3 id="b-3-1-The-Smith-shadowing-masking-term"><a href="#b-3-1-The-Smith-shadowing-masking-term" class="headerlink" title="b.3.1). The Smith shadowing-masking term"></a>b.3.1). The Smith shadowing-masking term</h3><ul>
+<li><p><strong>假设：</strong> Shadow和Masking无关，即</p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Smith_01.png" alt="Smith_01"></p>
+</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Smith_02.png" alt="Smith_02"></p>
+<h3 id="b-3-2-Issues-Missing-energy"><a href="#b-3-2-Issues-Missing-energy" class="headerlink" title="b.3.2). Issues(Missing energy)"></a>b.3.2). Issues(Missing energy)</h3><ul>
+<li><p><strong>原因：</strong>由于Shadowing-masking只考虑了一次弹射，对于<strong>多次弹射</strong>的能量直接舍去，造成能量损失；</p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/WhiteFurnaceTest.png" alt="WhiteFurnaceTest"></p>
+</li>
+</ul>
+<p>  <img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/ShadowMasking01.png" alt="ShadowMasking01"></p>
+<ul>
+<li><strong>做法：</strong><ul>
+<li>Accurate methods exist [Heitz et al. 2016]<ul>
+<li>主要用于离线渲染，对于RTR过慢；</li>
+</ul>
+</li>
+<li><strong>The Kulla-Conty Approximation</strong><ul>
+<li>Being occluded == next bounce happening</li>
+<li>构造函数去补偿损失的能量；</li>
+<li>求得的BRDF+原BRDF，即可；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="b-3-3-Kulla-Conty-Approximation"><a href="#b-3-3-Kulla-Conty-Approximation" class="headerlink" title="b.3.3). Kulla-Conty Approximation"></a>b.3.3). Kulla-Conty Approximation</h3><script type="math/tex; mode=display">
+{L}_{o}(\omega_{o})=\int_{\Omega^{+}}{L}_{i}(\omega_{i})f_{r}(\omega_{i},\omega_{o})cos\theta_i\,\mathrm{d}\omega_{i}</script><ul>
+<li><p>通过对$\mathrm{d}\omega_{i}$ 换元（即立体角）</p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/SolidAngle_D02.png" alt="SolidAngle_D02" style="zoom: 25%;"></p>
+<p><strong>得到：</strong></p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty.png" alt="Kulla-Conty"></p>
+<ul>
+<li>此处假设各处<strong>入射Radiance（$L_i$） 均匀为1</strong>，因此出射的Radiance也应均匀为1；</li>
+<li>此处假设BRDF的菲涅尔项为1，即无颜色，能量不损失。后续再考虑颜色（<em>？待验证</em>）</li>
+<li>该函数是关于出射角的俯仰角$\theta_o$ 的函数（和方位角无关是因为假设为各项同性）</li>
+</ul>
+</li>
+</ul>
+<h4 id="Key-idea"><a href="#Key-idea" class="headerlink" title="Key idea:"></a>Key idea:</h4><ul>
+<li><p>通过积分可得<strong>需要补偿的能量为 $1 - E(\mu_{o})$；</strong></p>
+</li>
+<li><blockquote>
+<p>该函数是关于出射角的俯仰角$\theta_o$ 的函数（和方位角无关是因为假设为各项同性）</p>
+</blockquote>
+</li>
+<li><p>考虑到对称性质（reciprocity），即入射方向和出射方向互换，Radiance不变，<strong>补偿项的BRDF</strong>形式为$c(1 - E(\mu_{i}))(1 - E(\mu_{o}))$，其中 $c$ 为常数；</p>
+</li>
+</ul>
+<h4 id="补偿项的BRDF（带cos）-c-1-E-mu-i-1-E-mu-o"><a href="#补偿项的BRDF（带cos）-c-1-E-mu-i-1-E-mu-o" class="headerlink" title="补偿项的BRDF（带cos） - $c(1 - E(\mu_{i}))(1 - E(\mu_{o}))$"></a>补偿项的BRDF（带cos） - $c(1 - E(\mu_{i}))(1 - E(\mu_{o}))$</h4><ul>
+<li><p>常数 $c = \frac{1}{\pi(1-E_{avg})}, E_{avg}=2\int_0^1E(\mu)\mu\, \mathrm{d}\mu$ </p>
+</li>
+<li><p><strong>补偿项即为：</strong>  </p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty02.png" alt="Kulla-Conty02"></p>
+<ul>
+<li>$c$ 推导：即让补偿项的BRDF$f_{ms}(\mu_{o},\mu_{i})$ 的积分结果为 $1 - E(\mu_{o})$</li>
+</ul>
+</li>
+</ul>
+<h4 id="预计算"><a href="#预计算" class="headerlink" title="预计算"></a>预计算</h4><p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty03.png" alt="Kulla-Conty03"></p>
+<ul>
+<li>对于$E_{avg}=2\int_0^1E(\mu)\mu\, \mathrm{d}\mu$ ，只需要得知其Roughness就可求出对应的结果，储存在1D table中；<ul>
+<li>NDF等使用的模型已知；</li>
+</ul>
+</li>
+<li>对于$E(\mu)$ 得知其roughness(确定函数) 和 $\mu$ (确定函数自变量)，即可求出对应结果，储存在2D table中；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty_Result.png" alt="Kulla-Conty_Result"></p>
+<blockquote id="fn_Result">
+<sup>Result</sup>. 原BRDF+(uncolored)补偿项BRDF<a href="#reffn_Result" title="Jump back to footnote [Result] in the text."> &#8617;</a>
+</blockquote>
+<h4 id="Color-energy-loss"><a href="#Color-energy-loss" class="headerlink" title="Color(energy loss)"></a>Color(energy loss)</h4><ul>
+<li>有颜色( vec3的$R_0$项 )，意味着能量被吸收，也是能量合理的损失；</li>
+<li>之前我们做了，不损失能量，无颜色的情况。之后，我们需要计算由于颜色的能量损失；</li>
+</ul>
+<hr>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty04.png" alt="Kulla-Conty04"></p>
+<ul>
+<li>定义平均菲涅尔 $F_{avg}$ ，表示<strong>能量参与弹射后，平均反射出多少</strong>；（剩下的被吸收）</li>
+<li>之前定义了 $E_{avg}$ ，表示每次弹射后，<strong>平均有多少能量被看见（即<font color="red">不参与</font>之后的弹射）</strong></li>
+<li>$F_{avg}$ 、$E_{avg}$ 都是三维的向量；</li>
+</ul>
+<ul>
+<li><p><strong>由此可得，</strong></p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty05.png" alt="Kulla-Conty05"></p>
+<ul>
+<li>$(1-E_{avg})$ 表示上一次弹射后，被遮挡未出射的能量；</li>
+<li>等比数列求和；</li>
+<li>求得的color term直接乘上uncolored additional BRDF即可；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Kulla-Conty_Result02.png" alt="Kulla-Conty_Result02"></p>
+<blockquote id="fn_Result with color">
+<sup>Result with color</sup>. 原BRDF + colored补偿项BRDF(color term * uncolor补偿项BRDF)<a href="#reffn_Result with color" title="Jump back to footnote [Result with color] in the text."> &#8617;</a>
+</blockquote>
+</li>
+</ul>
+<h1 id="c-Linearly-Transformed-Cosines-LTC-线性变换余弦"><a href="#c-Linearly-Transformed-Cosines-LTC-线性变换余弦" class="headerlink" title="c). Linearly Transformed Cosines(LTC, 线性变换余弦)"></a>c). Linearly Transformed Cosines(LTC, 线性变换余弦)</h1><h2 id="c-1-Introduction"><a href="#c-1-Introduction" class="headerlink" title="c.1). Introduction"></a>c.1). Introduction</h2><p><strong>作用：</strong> Solves the <strong>shading</strong> of <strong>microfacet models</strong> </p>
+<ul>
+<li>主要用于GGX，当然其他NDF也适用；</li>
+<li>No shadows</li>
+<li><strong>Under polygon shaped lighting</strong>(多边形光源)，解决多边形光源的光照积分问题；</li>
+</ul>
+<p><strong>Key idea:</strong></p>
+<ul>
+<li><p>对于<strong>任意一个球面分布函数</strong>，一定可以通过<strong>一个线性变换矩阵</strong>将其变化到<strong>另外一个球面分布函数</strong>(对于任意2D(二维，出射方位角和俯仰角) BRDF lobe can be transformed to a cosine)</p>
+</li>
+<li><p>光源的形状也可以被变换，且积分结果相同；</p>
+</li>
+<li>变换后的积分有<strong>解析解</strong>；</li>
+</ul>
+<p><strong>Ref:</strong></p>
+<p>[1] <a href="pic\LTC.pdf">Real-Time Polygonal-Light Shading with Linearly Transformed Cosines</a> </p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/84714602">Real-Time Polygonal-Light with LTC-zhihu</a></p>
+<p>[3] <a href="https://blog.csdn.net/JMXIN422/article/details/124586534?ops_request_misc=%7B%22request%5Fid%22%3A%22167578550616800192233591%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&amp;request_id=167578550616800192233591&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-124586534-null-null.142">物理光源：Linearly Transformed Cosines</a></p>
+<p>[4] <a href="https://eheitzresearch.wordpress.com/415-2/">Eric Heitz’s Research Page</a></p>
+<p>[5] <a href="https://blog.csdn.net/qq_35312463/article/details/122514827?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_utm_term~default-0-122514827-blog-77370524.pc_relevant_default&amp;spm=1001.2101.3001.4242.1&amp;utm_relevant_index=3">Global Illumination_Linearly Transformed Cosines (LTC)</a></p>
+<p>[6] <a href="https://blog.csdn.net/qjh5606/article/details/119682254?spm=1001.2101.3001.6650.2&amp;utm_medium=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-2-119682254-blog-77370524.pc_relevant_default&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2~default~CTRLIST~Rate-2-119682254-blog-77370524.pc_relevant_default&amp;utm_relevant_index=5">图形学基础|基于LTC的面光源渲染</a></p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/LTC01.png" alt="LTC01"></p>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/LTC00.png" alt="LTC00"></p>
+<ul>
+<li>$J$ 是雅可比行列式，更进一步的可见Ref，后续论文复现后再进一步补充此处笔记；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/LTC03.png" alt="LTC03"></p>
+<blockquote id="fn_LTC介绍">
+<sup>LTC介绍</sup>. 来源Ref[3]<a href="#reffn_LTC介绍" title="Jump back to footnote [LTC介绍] in the text."> &#8617;</a>
+</blockquote>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/LTC04.png" alt="LTC04"></p>
+<blockquote id="fn_LTC拟合BRDF">
+<sup>LTC拟合BRDF</sup>. 来源Ref[6]<a href="#reffn_LTC拟合BRDF" title="Jump back to footnote [LTC拟合BRDF] in the text."> &#8617;</a>
+</blockquote>
+<h1 id="d-Disney’s-Principled-BRDF"><a href="#d-Disney’s-Principled-BRDF" class="headerlink" title="d). Disney’s Principled BRDF"></a>d). Disney’s Principled BRDF</h1><h2 id="d-1-Introduction"><a href="#d-1-Introduction" class="headerlink" title="d.1). Introduction"></a>d.1). Introduction</h2><p><strong>微表面BRDF的缺点</strong></p>
+<ul>
+<li>微表面模型不擅长表示真实（基于物理）的材质；<ul>
+<li>如：Diffuse的情况不好表示，多层材质也难以表示；</li>
+</ul>
+</li>
+<li>微表面模型“are not artist friendly”<ul>
+<li>如： <strong>复折射率（complex index of refraction）</strong>,$n-ik$（详见PBR-White-Paper）</li>
+</ul>
+</li>
+</ul>
+<p><strong>需求：</strong></p>
+<ul>
+<li>Artist friendly，但一定程度上physically-based</li>
+</ul>
+<p><strong>设计原则：</strong></p>
+<ul>
+<li>应该使用直观的而不是物理的参数；</li>
+<li>使用的参数尽可能少；</li>
+<li>参数应该在0~1；</li>
+<li>参数在必要时允许超出0~1的范围；</li>
+<li>参数的所有组合的外观都应该是合理、稳定的；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/Disney00.png" alt="Disney00"></p>
+<blockquote id="fn_Disney’s Principled BRDF">
+<sup>Disney’s Principled BRDF</sup>. A table showing the effects of individual parameters<a href="#reffn_Disney’s Principled BRDF" title="Jump back to footnote [Disney’s Principled BRDF] in the text."> &#8617;</a>
+</blockquote>
+<ul>
+<li>sheen: 类似天鹅绒，材质表面有一层绒毛，使得其在grazing angle有雾化的效果</li>
+<li>sheenTint: 绒毛的颜色</li>
+<li>clearcoat: 类似清漆（当时做雨滴就用的是clearcoat）</li>
+</ul>
+<h2 id="d-2-Pros-and-Cons"><a href="#d-2-Pros-and-Cons" class="headerlink" title="d.2). Pros and Cons"></a>d.2). Pros and Cons</h2><ul>
+<li>易于理解/控制</li>
+<li>可表现大量材质；</li>
+<li>实现复杂，基本是去拟合PBR材质；</li>
+<li>不基于物理，但视觉上大部分是符合的；</li>
+<li>参数空间巨大；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Materials</tag>
+        <tag>Games202</tag>
+        <tag>PBR</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-5 Non-Photorealistic Rendering (NPR)</title>
+    <url>/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/</url>
+    <content><![CDATA[<h1 id="a-Photorealistic-vs-Non-Photorealistic"><a href="#a-Photorealistic-vs-Non-Photorealistic" class="headerlink" title="a). Photorealistic vs. Non-Photorealistic"></a>a). Photorealistic vs. Non-Photorealistic</h1><p><strong>Photorealistic Rendering</strong></p>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/PhotorealisticRendering01.png" alt="PhotorealisticRendering01"></p>
+<p><strong>Non-Photorealistic Rendering</strong></p>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/NPR01.png" alt="NPR01"></p>
+<ul>
+<li>描边</li>
+<li>色块（量化Quantization 颜色）</li>
+<li>风格化阴影</li>
+</ul>
+<h1 id="b-Outline-Rendering"><a href="#b-Outline-Rendering" class="headerlink" title="b). Outline Rendering"></a>b). Outline Rendering</h1><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Outline01.png" alt="Outline01"></p>
+<ul>
+<li>边界（B, 属于剪影的线，但只属于一个面）</li>
+<li>折痕（C）</li>
+<li>材质的边界（M）</li>
+<li>轮廓（CS, 属于剪影的线，且有多个面共享）</li>
+</ul>
+<span id="more"></span>
+<h2 id="shading"><a href="#shading" class="headerlink" title="shading"></a>shading</h2><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Outline_Shading01.png" alt="Outline_Shading01"></p>
+<ul>
+<li>法线和摄影机夹角：即轮廓都是grazing angle</li>
+</ul>
+<h2 id="Geometry"><a href="#Geometry" class="headerlink" title="Geometry"></a>Geometry</h2><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Outline_Geo01.png" alt="Outline_Geo01"></p>
+<h2 id="Image"><a href="#Image" class="headerlink" title="Image"></a>Image</h2><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Outline_img01.png" alt="Outline_img01"></p>
+<ul>
+<li>Soble算子做卷积</li>
+</ul>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Outline_img02.png" alt="Outline_img02"></p>
+<ul>
+<li>综合多种信息，如法线和深度等</li>
+</ul>
+<h1 id="c-Color-blockers"><a href="#c-Color-blockers" class="headerlink" title="c). Color blockers"></a>c). Color blockers</h1><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Color_Blockers01.png" alt="Color_Blockers01"></p>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Color_Blockers02.png" alt="Color_Blockers02"></p>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Color_Blockers03.png" alt="Color_Blockers03"></p>
+<h1 id="d-Strokes-Surface-Stylization"><a href="#d-Strokes-Surface-Stylization" class="headerlink" title="d). Strokes Surface Stylization"></a>d). Strokes Surface Stylization</h1><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/StrokesSurfaceStylization01.png" alt="StrokesSurfaceStylization01"></p>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/StrokesSurfaceStylization02.png" alt="StrokesSurfaceStylization02"></p>
+<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/StrokesSurfaceStylization03.png" alt="StrokesSurfaceStylization03"></p>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Materials</tag>
+        <tag>Games202</tag>
+        <tag>NPR</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-4 Real-time Global Illumination(Screen Space)</title>
+    <url>/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/</url>
+    <content><![CDATA[<h1 id="a-Screen-Space-Ambient-Occlusion-SSAO"><a href="#a-Screen-Space-Ambient-Occlusion-SSAO" class="headerlink" title="a). Screen Space Ambient Occlusion(SSAO)"></a>a). Screen Space Ambient Occlusion(SSAO)</h1><h2 id="a-1-Introduction"><a href="#a-1-Introduction" class="headerlink" title="a.1). Introduction"></a>a.1). Introduction</h2><ul>
+<li><strong>SSAO:</strong> 在<strong>屏幕空间</strong>中，对全局光照的近似；</li>
+</ul>
+<ul>
+<li><p><strong>Key idea:</strong></p>
+<ol>
+<li><p>假设各方向间接光照的强度相同（类似于Phong模型中的Ambition light）</p>
+</li>
+<li><p>考虑不同着色点，有<strong>不同的Visibility</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro01.png" alt="SSAO_Intro01" style="zoom:50%;"></p>
+</li>
+<li><p>假设材质为<strong>diffuse</strong></p>
+</li>
+<li><p>假设间接光照来自于比较远的地方。因此，橙色的光线，即一定范围内不被遮挡的光线会贡献间接光。（如假设间接光来自比较近的地方，则是红色射线方向贡献间接光）</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro02.png" alt="SSAO_Intro02" style="zoom:50%;"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="a-2-Theory"><a href="#a-2-Theory" class="headerlink" title="a.2). Theory"></a>a.2). Theory</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory01.png" alt="SSAO_Theory01" style="zoom:50%;"></p>
+<ul>
+<li><p>通过不等式，拆分渲染方程为：</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory02.png" alt="SSAO_Theory02" style="zoom:50%;"></p>
+<ul>
+<li>$k_A$ 项代表<strong>不同方向Visibility的（加权）平均</strong></li>
+<li><p>黄色框可用一个Constant color表示</p>
+<ul>
+<li>假设了间接光 $L_i^{indir}$ 各方向强度相同，因此为常数；</li>
+<li>假设了材质为Diffuse，因此BRDF为常数；</li>
+<li>$cos\theta$ 半球积分为$\pi$</li>
+</ul>
+</li>
+<li><p>同样，因为黄色框，即$g(x)$为常数，其Support极小。因此，应用该不等式是<strong>精确</strong>的</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>A deeper understanding 1:</strong><ul>
+<li><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory03.png" alt="SSAO_Theory03" style="zoom:50%;"></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>A deeper understanding 2:（为什么Visibility项会有$cos\theta$）</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory04.png" alt="SSAO_Theory04" style="zoom:50%;"></p>
+<ul>
+<li><p>加上 $cos\theta$ 的含义是<strong>把积分域从单位半球投影到单位圆上</strong>(Projected solid angle)；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory05.png" alt="SSAO_Theory05" style="zoom:50%;"></p>
+</li>
+<li><p><strong><font color="red">为什么要这么做呢？</font></strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h3 id="a-2-1-Simpler-understanding"><a href="#a-2-1-Simpler-understanding" class="headerlink" title="a.2.1). Simpler understanding"></a>a.2.1). Simpler understanding</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory06.png" alt="SSAO_Theory06" style="zoom:50%;"></p>
+<ul>
+<li>那么，我们怎么算 $k_A$ 项（不同方向Visibility的（加权）平均）呢？这就是AO算法实现的，如SSAO；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory07.png" alt="SSAO_Theory07" style="zoom:50%;"></p>
+<ul>
+<li>在计算AO时，我们计算的Visibility是<strong>限制在一定半径内的一个半球的局部遮挡</strong>。如在封闭的区域，如室内，如不限制半径，那Visibility将会为0。因此需要限制半径。</li>
+</ul>
+<h2 id="a-3-实现"><a href="#a-3-实现" class="headerlink" title="a.3). 实现"></a>a.3). 实现</h2><ul>
+<li><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p>
+</li>
+<li><p><strong>做法总览（详情见<em>百人计划图形4.2 SSAO</em>）：</strong> </p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO原理.png" alt="SSAO原理"></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/法向半球.png" alt="法向半球"></p>
+</li>
+</ul>
+<ul>
+<li><p>在法向半球内随机采样，采样点 $p$ 的深度$Z_p$与 点$p$ 在屏幕空间中对应位置 点$p’$ 的Z-Buffer中的深度$Z_{p’Zbuffer}$比较。</p>
+<ul>
+<li>如 $Z_p&gt;Z_{p’Zbuffer}$，说明该采样点被遮蔽（红点），Visibility为0；</li>
+<li>如 $Z_p&lt;Z_{p’Zbuffer}$，说明该采样点可见（绿点），Visibility为1；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How01.png" alt="SSAO_How01"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Cons：</strong></p>
+<ol>
+<li><p>由于是通过屏幕空间像素坐标和Z-Buffer取近似场景，只模拟了离屏幕最近的表面，对于一些点（如箭头所指的红点）的Visibility会误判；（从着色点看向该点可以看到，但SSAO中却将该点视为被遮蔽）</p>
+</li>
+<li><p>没有$cos\theta $ 项的加权，因此在物理上是不准确的；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How02.png" alt="SSAO_How02" style="zoom: 33%;"></p>
+</li>
+</ol>
+</li>
+</ul>
+<pre><code> [^SSAO]: 经过滤波后的SSAO
+
+ $$
+ k_&#123;A&#125;=\frac&#123;\int_&#123;\Omega^&#123;+&#125;&#125; V\left(\mathrm&#123;p&#125;, \omega_&#123;i&#125;\right) \cos \theta_&#123;i&#125; \mathrm&#123;~d&#125; \omega_&#123;i&#125;&#125;&#123;\pi&#125;
+ $$
+
+ - 采用了$cos\theta $ 项的加权的算法：Horizon based ambient occlusion(HBAO)
+</code></pre><ol>
+<li><p>由于SSAO中未考虑深度比较时采样点深度和Z-Buffer深度的差值，造成相距比较远的物体之间也会存在AO (HBAO解决了)</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_How03.png" alt="SSAO_How03" style="zoom:50%;"></p>
+</li>
+</ol>
+<hr>
+<h1 id="b-Screen-Space-Directional-Occlusion-SSDO"><a href="#b-Screen-Space-Directional-Occlusion-SSDO" class="headerlink" title="b). Screen Space Directional Occlusion(SSDO)"></a>b). Screen Space Directional Occlusion(SSDO)</h1><h2 id="b-1-Introduction"><a href="#b-1-Introduction" class="headerlink" title="b.1). Introduction"></a>b.1). Introduction</h2><ul>
+<li>An imporovement over SSAO;</li>
+<li>考虑了更准确的间接光照（不再假设各方向的间接光照相同）</li>
+</ul>
+<ul>
+<li><strong>Key idea:</strong><ul>
+<li>考虑了更准确的间接光照</li>
+<li>使用已知的间接光源信息<ul>
+<li>如RSM得到的Secondary Light Source 的flux等；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>效果：</strong> 间接光照更为准确，<strong>出现了color blooding</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_ColorBlooding.png" alt="SSDO_ColorBlooding"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>做法</strong>：（与Path Tracing非常相似）</p>
+<ul>
+<li>着色 $p$点 时，发射随机光线；<ul>
+<li><strong>如未被遮挡（无交点）：</strong> 该点受<strong>直接光照</strong>影响（如Ambient Light）；</li>
+<li><strong>如被遮挡（有交点）：</strong> 该点受<strong>间接光照</strong>影响；</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_How00.png" alt="SSDO_How00" style="zoom:50%;"></p>
+</li>
+</ul>
+<h2 id="b-2-实现"><a href="#b-2-实现" class="headerlink" title="b.2). 实现"></a>b.2). 实现</h2><ul>
+<li><p><strong>与SSAO相比：</strong> SSAO为被遮挡的光线的方向为间接光照贡献方向，SSDO则是被遮挡的光线方向为间接光照贡献方向；</p>
+<blockquote>
+<p>（SSAO）假设间接光照来自于比较远的地方。因此，橙色（被红圈圈起来的）的光线，即一定范围内不被遮挡的光线会贡献间接光。（如假设间接光来自比较近的地方（SSDO），则是红色射线（被橙圈圈起来的）方向贡献间接光）</p>
+</blockquote>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_vsSSAO.png" alt="SSDO_vsSSAO" style="zoom:50%;"></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_Func.png" alt="SSDO_Func" style="zoom:50%;"></p>
+<ul>
+<li>间接光照的计算则可采用RSM、或者LPV、VXGI等；</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>具体做法：</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_How01.png" alt="SSDO_How01"></p>
+<ul>
+<li><p>和SSAO类似，在<strong>着色点P</strong>周围，一定半径的<strong>法向半球</strong>内进行随机给出采样点（A、B、C、D……），并和Z-Buffer中的深度进行比较；</p>
+<ul>
+<li><p>如$Z_{sample} &gt; Z_{sample\, Z-buffer}$ ，说明该点（A、B、D）<strong>被遮挡</strong>，该点则会对点P贡献间接光；</p>
+<ul>
+<li><p><strong>判断：</strong> 贡献间接光的Patch的方向是否会能贡献到，如点A ，${Normal_A}\cdot \vec{AP} &lt; 0$ ，则该点不贡献间接光；</p>
+<blockquote>
+<p>Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>如$Z_{sample} &lt; Z_{sample\, Z-buffer}$ ，说明该点（A、B、D）<strong>未被遮挡</strong>，该点则不会对点P贡献间接光，而是贡献直接光（Ambition Light）；</p>
+</li>
+</ul>
+</li>
+<li><p><strong>缺点：</strong> 如上图最右</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-3-Issues"><a href="#b-3-Issues" class="headerlink" title="b.3). Issues"></a>b.3). Issues</h2><ol>
+<li><p>只能计算小范围的AO；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_issues2.png" alt="SSDO_issues2"></p>
+</li>
+<li><p>是通过采样点深度和Z-buffer比较得出Visibility，而不是从P点出射光线计算交点，导致Visibility不精准；</p>
+</li>
+<li><p><strong>屏幕空间的通病：</strong> 失去了屏幕中<strong>未被显示（如屏幕外）</strong>的表面的信息；</p>
+<ul>
+<li>屏幕空间只能表现场景最表面(Depth最小)的一层“壳”；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSDO_issues.png" alt="SSDO_issues" style="zoom:50%;"></p>
+</li>
+</ol>
+<h1 id="c-Screen-Space-Reflection-SSR"><a href="#c-Screen-Space-Reflection-SSR" class="headerlink" title="c). Screen Space Reflection(SSR)"></a>c). Screen Space Reflection(SSR)</h1><h2 id="c-1-Introduction"><a href="#c-1-Introduction" class="headerlink" title="c.1). Introduction"></a>c.1). Introduction</h2><p><strong>What is SSR?</strong></p>
+<ul>
+<li>Still, one way to introduce Global Illumination in RTR;</li>
+<li>执行上为光线追踪；</li>
+<li>光线追踪的求交并不要求3D图元，而是屏幕空间的一层“壳”（通过Z-Buffer还原的场景）</li>
+</ul>
+<p><strong>Two fundamental tasks of SSR：</strong></p>
+<ul>
+<li>求交：任何光线和场景；</li>
+<li>着色：交点对Shading point的贡献；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Intro01.png" alt="SSR_Intro01"></p>
+<ul>
+<li><p><strong>效果：</strong> 可实现Specular reflection和Gloosy reflection；</p>
+<ul>
+<li>对于Specular只用追踪镜面反射方向即可；</li>
+<li>对于Gloosy知道BRDF后需追踪入射方向的Lobe；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Intro02.png" alt="SSR_Intro02"></p>
+</li>
+</ul>
+<h2 id="c-2-实现"><a href="#c-2-实现" class="headerlink" title="c.2). 实现"></a>c.2). 实现</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How01.png" alt="SSR_How01"></p>
+<blockquote>
+<p><strong>Two fundamental tasks of SSR：</strong></p>
+<ul>
+<li>求交：任何光线和场景；</li>
+<li>着色：交点对Shading point的贡献；</li>
+</ul>
+</blockquote>
+<h3 id="c-2-1-Intersection（求交）"><a href="#c-2-1-Intersection（求交）" class="headerlink" title="c.2.1). Intersection（求交）"></a>c.2.1). Intersection（求交）</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection01.png" alt="SSR_How_Intersection01"></p>
+<ul>
+<li><p>使用<strong>光线步进（Raymarch）</strong>，那么如何确定步进的步长？</p>
+<ul>
+<li><p>Hierarchical tracing</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection02.png" alt="SSR_How_Intersection02" style="zoom: 25%;"></p>
+<ul>
+<li>不想一层一层步进，而是允许时步长变大；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="Hierarchical-tracing"><a href="#Hierarchical-tracing" class="headerlink" title="Hierarchical tracing"></a>Hierarchical tracing</h4><ul>
+<li><p><strong>Step1: Generate Depth Mip-Map</strong>(使用<strong>最小</strong>池化，而不是平均)</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection03.png" alt="SSR_How_Intersection03"></p>
+<ul>
+<li><p><strong>取最小：</strong> 如2x2的像素中，取最小深度值作为下一层该位置的深度；</p>
+</li>
+<li><p>最小池化构造出类似与KD-tree的结构；</p>
+</li>
+<li><p><strong>逻辑：</strong> 取最小后，如果光线不和父（更大的）节点相交，那就不会和子节点相交；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How_Intersection04.png" alt="SSR_How_Intersection04"></p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>P-Code</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_How02.png" alt="SSR_How02"></p>
+<ul>
+<li>开始在Mip0层步进<ul>
+<li>没交点则进入下一层Mip（父节点）；</li>
+<li>有交点则进入上一层Mip（子节点），并在交点对应位置的子节点继续求交；</li>
+<li>直到找到Mip0层的交点，结束循环；（演示看PPT）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-2-2-Shading"><a href="#c-2-2-Shading" class="headerlink" title="c.2.2). Shading"></a>c.2.2). Shading</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Shading01.png" alt="SSR_Shading01"></p>
+<p>Shading过程和Path tracing相似；</p>
+<ul>
+<li><strong>假设：</strong> <font color="red">Reflectors(反射物)/ Secondary light source是Diffuse的</font><ul>
+<li><strong>原因：</strong> 生成Shaded场景时，只知道屏幕空间下一个点的Radiance（即Shading Point到Camera的Radiance）。如假设Reflector为Diffuse，那么该点的$L_i$就为framebuffer中的颜色；</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-2-3-效果"><a href="#c-2-3-效果" class="headerlink" title="c.2.3). 效果"></a>c.2.3). 效果</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_Show01.png" alt="SSR_Show01"></p>
+<ul>
+<li><p>可实现锐利或模糊的反射；</p>
+</li>
+<li><p>Contact hardening（接触的地方反射较为锐利，类似PCSS）</p>
+</li>
+<li><p>Specular elongation</p>
+<ul>
+<li><p>类似雨天红绿灯反射垂直拉长的效果；</p>
+</li>
+<li><p>给定视角后，各项同性的法线分布，造成的反射Lobe为垂直方向椭圆的Lobe；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/MicrofacetBRDF.png" alt="MicrofacetBRDF"></p>
+</li>
+</ul>
+</li>
+<li><p>每个像素不同的Roughness和Normal</p>
+</li>
+</ul>
+<h2 id="c-3-Issues"><a href="#c-3-Issues" class="headerlink" title="c.3). Issues"></a>c.3). Issues</h2><ul>
+<li><p>Edge Cutoff</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_issue01.png" alt="SSR_issue01" style="zoom:50%;"></p>
+<ul>
+<li><p>缓解方法：根据反射长度进行Fade off</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_issue02.png" alt="SSR_issue02"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="d-Pros-And-Cons"><a href="#d-Pros-And-Cons" class="headerlink" title="d). Pros And Cons"></a>d). Pros And Cons</h1><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSR_ProsAndCons.png" alt="SSR_ProsAndCons"></p>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Games202</tag>
+        <tag>GI</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games202-4 Real-time Global Illumination(in 3D)</title>
+    <url>/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/</url>
+    <content><![CDATA[<h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><ul>
+<li>In RTR, people seek simple and fast solutions to <strong>one bounce indirect illumination</strong></li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00b.png" alt="GI00b"></p>
+<ul>
+<li><p><strong>Primary LIght Source（真正的光源，太阳）</strong></p>
+</li>
+<li><p><strong>Secondary Light Source(次级光源，Q点)</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00a.png" alt="GI00a"></p>
+</li>
+</ul>
+<ul>
+<li><strong>观察（要得到$p$点的间接光照我们需要做什么）：</strong><ol>
+<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
+<li><strong>方法：</strong> Shadow Mapping</li>
+</ul>
+</li>
+<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
+<li><strong>方法：</strong> 解渲染方程</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>以下是实时渲染中常用的在3D空间中（意为渲染效果不取决于相机位置/屏幕空间）的GI方法（<strong>主要针对one bounce indirect illumination</strong>）：<ul>
+<li>Reflective Shadow Maps (RSM)</li>
+<li>Light Propagation Volumes (LPV)</li>
+<li>Voxel Global Illumination (VXGI)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="b-Reflective-Shadow-Maps-RSM"><a href="#b-Reflective-Shadow-Maps-RSM" class="headerlink" title="b). Reflective Shadow Maps (RSM)"></a>b). Reflective Shadow Maps (RSM)</h1><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00a.png" alt="GI00a"></p>
+<ul>
+<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
+<li>Shadow map中每一个Texel都是一个作为Secondary light sourc的面片（Surface patch）<ul>
+<li>Shadow map做阴影中是光源视角的$Depth$，和相机视角的比较；这里是光源视角的$Depth$和 点$p$ 视角比较</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
+<li>但是，对于不同的 点$p$ 次级光源入射方向是不一定的。即，即使观察角度固定，同一个Shadow map中的Surface patch，对不同的 $p$ 贡献不同；</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>假设：</strong><ul>
+<li><strong>次级光源均为Diffuse</strong>（观察角度固定，同一个次级光源对不同 点$p$ 的贡献相同）</li>
+<li>Therefore, outgoing radiance is uniform toward all directions</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献"><a href="#b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献" class="headerlink" title="b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献"></a>b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_01a.png" alt="RSM_01a"></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L_{o}\left(\mathrm{p}, \omega_{o}\right) & =\int_{\Omega_{\mathrm{patch}}} L_{i}\left(\mathrm{p}, \omega_{i}\right) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \omega_{i}, \omega_{o}\right) \cos \theta_{i} \mathrm{~d} \omega_{i} \\
+& =\int_{A_{\mathrm{patch}}} L_{i}(\mathrm{q} \rightarrow \mathrm{p}) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \mathrm{q} \rightarrow \mathrm{p}, \omega_{o}\right) \frac{\cos \theta_{p} \cos \theta_{q}}{\|q-p\|^{2}} \mathrm{~d} A
+\end{aligned}</script><ul>
+<li><p>对于每个diffuse reflective patch(点$q$)</p>
+<ul>
+<li><p><strong>点$q$</strong> 的BRDF: $f_{rq} = \rho/\pi$ </p>
+</li>
+<li><p>$L_i(q\rightarrow p) = f_{rq} \cdot \frac{\Phi}{d A}$ ( $\Phi$ 是光源的辐射通量，将该式带入渲染方程，${d A}$ 被消除)</p>
+</li>
+<li><script type="math/tex; mode=display">
+E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{max}\{0,\langle n|x_{q}-x\rangle\}}{||x-x_{q}||^{4}}.</script><ul>
+<li>${||x-x_{q}||^{4}}$ 是因为分子上$x-x_{q}$是未归一化的向量；</li>
+<li>$\Phi_p$ 为 $f_{rq} \cdot {\Phi}$</li>
+<li>将$E_p(x,n)$ 乘上 点$p$ 的BRDF即可得出$L_o$</li>
+<li>$V$：Visibility项就不算了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>Not all pixels in the RSM can contribute</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_04.png" alt="RSM_04"></p>
+<ul>
+<li><p>Visibility (难处理，不管了)</p>
+</li>
+<li><p>Orientation（方向，Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响）</p>
+</li>
+<li><p>Distance（只有和Shading Point近的Reflector才做贡献）</p>
+<ul>
+<li><p><strong>假设：</strong> 世界坐标下，两点接近 $\rightarrow$ Shadow Map（世界空间转换到光源空间）中距离比较近，且深度相差不大；</p>
+</li>
+<li><p>进一步加速（类似于Step 1 and 3 in PCSS），在shading point转换到Shadow Map后对应点$(s,t)$ 的一定范围内，做随机采样</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_Distance.png" alt="RSM_Distance"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-2-光源视角下储存的信息（Shadow-Map）"><a href="#b-2-光源视角下储存的信息（Shadow-Map）" class="headerlink" title="b.2). 光源视角下储存的信息（Shadow Map）"></a>b.2). 光源视角下储存的信息（Shadow Map）</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_Record.png" alt="RSM_Record"></p>
+<ul>
+<li>深度</li>
+<li>世界坐标</li>
+<li>法线</li>
+<li>辐射通量（flux）</li>
+<li>etc.</li>
+</ul>
+<h2 id="b-3-Pros-And-Cons"><a href="#b-3-Pros-And-Cons" class="headerlink" title="b.3). Pros And Cons"></a>b.3). Pros And Cons</h2><ul>
+<li>Pros:<ul>
+<li>好写（类似于Shadow Map）</li>
+</ul>
+</li>
+<li>Cons:<ul>
+<li>计算量随光源（Primary Light Source）数量增多线性增加</li>
+<li>Visibility无法处理</li>
+<li>很多假设：diffuse reflectors, depth as distance, etc.<ul>
+<li>只能处理次级光源为Diffuse</li>
+</ul>
+</li>
+<li>质量依赖于采样率</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="c-Light-Propagation-Volumes-LPV"><a href="#c-Light-Propagation-Volumes-LPV" class="headerlink" title="c). Light Propagation Volumes(LPV)"></a>c). Light Propagation Volumes(LPV)</h1><ul>
+<li>CryEngine3 里用到了，在孤岛危机里应用<ul>
+<li>快而且质量好</li>
+<li>同样也只能处理次级光源为Diffuse</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/LPV_CryEngine.png" alt="LPV_CryEngine"></p>
+<ul>
+<li><strong>Key idea:</strong> 光线直线传播中，Radiance大小不变；</li>
+<li><strong>Key solution:</strong> 通过3D网格<strong>(体素，Voxel)</strong>，传播Secondary Light Source/dirctly illminated surfaces的Radiance到其他地方；</li>
+</ul>
+<ul>
+<li><strong>Steps:</strong><ol>
+<li><strong>生成</strong>场景中被直接光照照射到的<strong>Radiance point</strong>(即Secondary light source)；</li>
+<li>将Radiance point<strong>注入到体素</strong>中；</li>
+<li>Radiance在体素中<strong>传播</strong>；</li>
+<li>传播稳定后（一般迭代4、5次），通过体素中储存的Radiance进行Shading；</li>
+</ol>
+</li>
+</ul>
+<h2 id="c-1-做法"><a href="#c-1-做法" class="headerlink" title="c.1). 做法"></a>c.1). 做法</h2><h3 id="Step-1-Generation"><a href="#Step-1-Generation" class="headerlink" title="Step 1: Generation"></a>Step 1: Generation</h3><ul>
+<li>找到Secondary light source</li>
+<li>使用Reflective Shadow Maps (RSM)；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/LPV_Step01.png" alt="LPV_Step01" style="zoom: 50%;"></p>
+<h3 id="Step-2-Injection-注入"><a href="#Step-2-Injection-注入" class="headerlink" title="Step 2: Injection(注入)"></a>Step 2: Injection(注入)</h3><ul>
+<li>预先划分好3D网格（体素）；</li>
+<li>对于每一个体素，找到其内部的Secondary light source；</li>
+<li>将他们出射的Radiance大小和方向看做是球面函数，<strong>投影到2阶（4个）的球谐函数上</strong>；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/LPV_Step02.png" alt="LPV_Step02" style="zoom:33%;"></p>
+<h3 id="Step-3-Propagation-传播"><a href="#Step-3-Propagation-传播" class="headerlink" title="Step 3: Propagation(传播)"></a>Step 3: Propagation(传播)</h3><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/LPV_Step03.png" alt="LPV_Step03" style="zoom:50%;"></p>
+<ul>
+<li>对于每一个Voxel，都会传播到相邻的6个面（3D，前后左右上下，不会斜向传播），也会接收6个面的Radiance；</li>
+<li>接收6个面的Radiance并相加后，再次使用SH表示；</li>
+<li>重复上述步骤，直至传播接近稳定（一般整体迭代4-5次）</li>
+</ul>
+<h3 id="Step4-Rendering"><a href="#Step4-Rendering" class="headerlink" title="Step4: Rendering"></a>Step4: Rendering</h3><ul>
+<li>对于每一个着色点，找到他们所处的Voxel；</li>
+<li>使用该Voxel中存储的Radiance<strong>（from all direction, 是一个SH表达的球面函数）</strong>，进行Shading；<ul>
+<li>因为存储的是球面函数形式的Radiance，所以既可以做Diffuse也可以做Gloosy</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/LPV_Step04.png" alt="LPV_Step04" style="zoom:67%;"></p>
+<ul>
+<li><p><strong>造成的问题：</strong> 由于同一个Voxel中Radiance相同，对于薄的几何体可能造成<strong>Light leaking</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/LPV_LightLeaking.png" alt="LPV_LightLeaking"></p>
+</li>
+</ul>
+<h1 id="d-Voxel-Global-Illumination-VXGI"><a href="#d-Voxel-Global-Illumination-VXGI" class="headerlink" title="d). Voxel Global Illumination (VXGI)"></a>d). Voxel Global Illumination (VXGI)</h1><ul>
+<li>与RSM两点主要的不同<ul>
+<li>将被光源直接照射的像素变为<strong>带有层级的体素（hierarchical voxels）</strong>（即Secondary light source不再看成surface patch，而是hierarchical voxels）</li>
+<li>光线传播方式：<ul>
+<li>从摄像机开始传播，进行锥形传播（Cone tracing，比如光线在Gloosy表面弹射，出射方向为一个锥形），计算锥体相交的Voxel对该点的Radiance贡献；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="d-1-做法"><a href="#d-1-做法" class="headerlink" title="d.1). 做法"></a>d.1). 做法</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/VXGI_00.png" alt="VXGI_00"></p>
+<hr>
+<h3 id="Pass-1-from-the-light"><a href="#Pass-1-from-the-light" class="headerlink" title="Pass 1: from the light"></a>Pass 1: from the light</h3><ul>
+<li>储存每个点的入射Radiance，并储存到对应的Voxel中；</li>
+<li>Voxel中存储Incident lighting和normal的分布，以便支持Gloosy等材质；<ul>
+<li>存储Lobe分布的基础：Cone Trace</li>
+</ul>
+</li>
+<li>根据这两个分布，即可得出 出射Radiance 的分布情况；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/VXGI_Pass01.png" alt="VXGI_Pass01"></p>
+<h3 id="Pass-2-from-the-camera"><a href="#Pass-2-from-the-camera" class="headerlink" title="Pass 2: from the camera"></a>Pass 2: from the camera</h3><ul>
+<li>对于Gloosy的表面，追踪1个朝向反射方向的圆锥；</li>
+<li>根据圆锥的（grow）大小，查询相应层级；</li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/VXGI_Pass02.png" alt="VXGI_Pass02"></p>
+<ul>
+<li><p>对于Diffuse，追踪多个Cones</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/VXGI_Pass02_Diffuse.png" alt="VXGI_Pass02_Diffuse"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Games202</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Games202</tag>
+        <tag>GI</tag>
       </tags>
   </entry>
   <entry>
@@ -573,222 +1773,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Games202-4 Real-time Global Illumination(in 3D)</title>
-    <url>/2023/02/02/Games202_04_Real-time%20Global%20Illumination/</url>
-    <content><![CDATA[<h1 id="Real-time-Global-Illumination-in-3D"><a href="#Real-time-Global-Illumination-in-3D" class="headerlink" title="Real-time Global Illumination(in 3D)"></a>Real-time Global Illumination(in 3D)</h1><h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><ul>
-<li>In RTR, people seek simple and fast solutions to <strong>one bounce indirect illumination</strong></li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/GI00b.png" alt="GI00b"></p>
-<ul>
-<li><p><strong>Primary LIght Source（真正的光源，太阳）</strong></p>
-</li>
-<li><p><strong>Secondary Light Source(次级光源，Q点)</strong></p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/GI00a.png" alt="GI00a"></p>
-</li>
-</ul>
-<ul>
-<li><strong>观察（要得到$p$点的间接光照我们需要做什么）：</strong><ol>
-<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
-<li><strong>方法：</strong> Shadow Mapping</li>
-</ul>
-</li>
-<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
-<li><strong>方法：</strong> 解渲染方程</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li>以下是实时渲染中常用的在3D空间中（意为渲染效果不取决于相机位置/屏幕空间）的GI方法（<strong>主要针对one bounce indirect illumination</strong>）：<ul>
-<li>Reflective Shadow Maps (RSM)</li>
-<li>Light Propagation Volumes (LPV)</li>
-<li>Voxel Global Illumination (VXGI)</li>
-</ul>
-</li>
-</ul>
-<span id="more"></span>
-<hr>
-<h1 id="b-Reflective-Shadow-Maps-RSM"><a href="#b-Reflective-Shadow-Maps-RSM" class="headerlink" title="b). Reflective Shadow Maps (RSM)"></a>b). Reflective Shadow Maps (RSM)</h1><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/GI00a.png" alt="GI00a"></p>
-<ul>
-<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
-<li>Shadow map中每一个Texel都是一个作为Secondary light sourc的面片（Surface patch）<ul>
-<li>Shadow map做阴影中是光源视角的$Depth$，和相机视角的比较；这里是光源视角的$Depth$和 点$p$ 视角比较</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
-<li>但是，对于不同的 点$p$ 次级光源入射方向是不一定的。即，即使观察角度固定，同一个Shadow map中的Surface patch，对不同的 $p$ 贡献不同；</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><strong>假设：</strong><ul>
-<li><strong>次级光源均为Diffuse</strong>（观察角度固定，同一个次级光源对不同 点$p$ 的贡献相同）</li>
-<li>Therefore, outgoing radiance is uniform toward all directions</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献"><a href="#b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献" class="headerlink" title="b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献"></a>b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献</h2><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_01a.png" alt="RSM_01a"></p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-L_{o}\left(\mathrm{p}, \omega_{o}\right) & =\int_{\Omega_{\mathrm{patch}}} L_{i}\left(\mathrm{p}, \omega_{i}\right) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \omega_{i}, \omega_{o}\right) \cos \theta_{i} \mathrm{~d} \omega_{i} \\
-& =\int_{A_{\mathrm{patch}}} L_{i}(\mathrm{q} \rightarrow \mathrm{p}) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \mathrm{q} \rightarrow \mathrm{p}, \omega_{o}\right) \frac{\cos \theta_{p} \cos \theta_{q}}{\|q-p\|^{2}} \mathrm{~d} A
-\end{aligned}</script><ul>
-<li><p>对于每个diffuse reflective patch(点$q$)</p>
-<ul>
-<li><p><strong>点$q$</strong> 的BRDF: $f_{rq} = \rho/\pi$ </p>
-</li>
-<li><p>$L_i(q\rightarrow p) = f_{rq} \cdot \frac{\Phi}{d A}$ ( $\Phi$ 是光源的辐射通量，将该式带入渲染方程，${d A}$ 被消除)</p>
-</li>
-<li><script type="math/tex; mode=display">
-E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{max}\{0,\langle n|x_{q}-x\rangle\}}{||x-x_{q}||^{4}}.</script><ul>
-<li>${||x-x_{q}||^{4}}$ 是因为分子上$x-x_{q}$是未归一化的向量；</li>
-<li>$\Phi_p$ 为 $f_{rq} \cdot {\Phi}$</li>
-<li>将$E_p(x,n)$ 乘上 点$p$ 的BRDF即可得出$L_o$</li>
-<li>$V$：Visibility项就不算了</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><strong>Not all pixels in the RSM can contribute</strong></p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_04.png" alt="RSM_04"></p>
-<ul>
-<li><p>Visibility (难处理，不管了)</p>
-</li>
-<li><p>Orientation（方向，Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响）</p>
-</li>
-<li><p>Distance（只有和Shading Point近的Reflector才做贡献）</p>
-<ul>
-<li><p><strong>假设：</strong> 世界坐标下，两点接近 $\rightarrow$ Shadow Map（世界空间转换到光源空间）中距离比较近，且深度相差不大；</p>
-</li>
-<li><p>进一步加速（类似于Step 1 and 3 in PCSS），在shading point转换到Shadow Map后对应点$(s,t)$ 的一定范围内，做随机采样</p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_Distance.png" alt="RSM_Distance"></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-2-光源视角下储存的信息（Shadow-Map）"><a href="#b-2-光源视角下储存的信息（Shadow-Map）" class="headerlink" title="b.2). 光源视角下储存的信息（Shadow Map）"></a>b.2). 光源视角下储存的信息（Shadow Map）</h2><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/RSM_Record.png" alt="RSM_Record"></p>
-<ul>
-<li>深度</li>
-<li>世界坐标</li>
-<li>法线</li>
-<li>辐射通量（flux）</li>
-<li>etc.</li>
-</ul>
-<h2 id="b-3-Pros-And-Cons"><a href="#b-3-Pros-And-Cons" class="headerlink" title="b.3). Pros And Cons"></a>b.3). Pros And Cons</h2><ul>
-<li>Pros:<ul>
-<li>好写（类似于Shadow Map）</li>
-</ul>
-</li>
-<li>Cons:<ul>
-<li>计算量随光源（Primary Light Source）数量增多线性增加</li>
-<li>Visibility无法处理</li>
-<li>很多假设：diffuse reflectors, depth as distance, etc.<ul>
-<li>只能处理次级光源为Diffuse</li>
-</ul>
-</li>
-<li>质量依赖于采样率</li>
-</ul>
-</li>
-</ul>
-<h1 id="c-Light-Propagation-Volumes-LPV"><a href="#c-Light-Propagation-Volumes-LPV" class="headerlink" title="c). Light Propagation Volumes(LPV)"></a>c). Light Propagation Volumes(LPV)</h1><ul>
-<li>CryEngine3 里用到了，在孤岛危机里应用<ul>
-<li>快而且质量好</li>
-<li>同样也只能处理次级光源为Diffuse</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_CryEngine.png" alt="LPV_CryEngine"></p>
-<ul>
-<li><strong>Key idea:</strong> 光线直线传播中，Radiance大小不变；</li>
-<li><strong>Key solution:</strong> 通过3D网格<strong>(体素，Voxel)</strong>，传播Secondary Light Source/dirctly illminated surfaces的Radiance到其他地方；</li>
-</ul>
-<ul>
-<li><strong>Steps:</strong><ol>
-<li><strong>生成</strong>场景中被直接光照照射到的<strong>Radiance point</strong>(即Secondary light source)；</li>
-<li>将Radiance point<strong>注入到体素</strong>中；</li>
-<li>Radiance在体素中<strong>传播</strong>；</li>
-<li>传播稳定后（一般迭代4、5次），通过体素中储存的Radiance进行Shading；</li>
-</ol>
-</li>
-</ul>
-<h2 id="c-1-做法"><a href="#c-1-做法" class="headerlink" title="c.1). 做法"></a>c.1). 做法</h2><h3 id="Step-1-Generation"><a href="#Step-1-Generation" class="headerlink" title="Step 1: Generation"></a>Step 1: Generation</h3><ul>
-<li>找到Secondary light source</li>
-<li>使用Reflective Shadow Maps (RSM)；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step01.png" alt="LPV_Step01" style="zoom: 50%;"></p>
-<h3 id="Step-2-Injection-注入"><a href="#Step-2-Injection-注入" class="headerlink" title="Step 2: Injection(注入)"></a>Step 2: Injection(注入)</h3><ul>
-<li>预先划分好3D网格（体素）；</li>
-<li>对于每一个体素，找到其内部的Secondary light source；</li>
-<li>将他们出射的Radiance大小和方向看做是球面函数，<strong>投影到2阶（4个）的球谐函数上</strong>；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step02.png" alt="LPV_Step02" style="zoom:33%;"></p>
-<h3 id="Step-3-Propagation-传播"><a href="#Step-3-Propagation-传播" class="headerlink" title="Step 3: Propagation(传播)"></a>Step 3: Propagation(传播)</h3><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step03.png" alt="LPV_Step03" style="zoom:50%;"></p>
-<ul>
-<li>对于每一个Voxel，都会传播到相邻的6个面（3D，前后左右上下，不会斜向传播），也会接收6个面的Radiance；</li>
-<li>接收6个面的Radiance并相加后，再次使用SH表示；</li>
-<li>重复上述步骤，直至传播接近稳定（一般整体迭代4-5次）</li>
-</ul>
-<h3 id="Step4-Rendering"><a href="#Step4-Rendering" class="headerlink" title="Step4: Rendering"></a>Step4: Rendering</h3><ul>
-<li>对于每一个着色点，找到他们所处的Voxel；</li>
-<li>使用该Voxel中存储的Radiance<strong>（from all direction, 是一个SH表达的球面函数）</strong>，进行Shading；<ul>
-<li>因为存储的是球面函数形式的Radiance，所以既可以做Diffuse也可以做Gloosy</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_Step04.png" alt="LPV_Step04" style="zoom:67%;"></p>
-<ul>
-<li><p><strong>造成的问题：</strong> 由于同一个Voxel中Radiance相同，对于薄的几何体可能造成<strong>Light leaking</strong></p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/LPV_LightLeaking.png" alt="LPV_LightLeaking"></p>
-</li>
-</ul>
-<h1 id="d-Voxel-Global-Illumination-VXGI"><a href="#d-Voxel-Global-Illumination-VXGI" class="headerlink" title="d). Voxel Global Illumination (VXGI)"></a>d). Voxel Global Illumination (VXGI)</h1><ul>
-<li>与RSM两点主要的不同<ul>
-<li>将被光源直接照射的像素变为<strong>带有层级的体素（hierarchical voxels）</strong>（即Secondary light source不再看成surface patch，而是hierarchical voxels）</li>
-<li>光线传播方式：<ul>
-<li>从摄像机开始传播，进行锥形传播（Cone tracing，比如光线在Gloosy表面弹射，出射方向为一个锥形），计算锥体相交的Voxel对该点的Radiance贡献；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="d-1-做法"><a href="#d-1-做法" class="headerlink" title="d.1). 做法"></a>d.1). 做法</h2><p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_00.png" alt="VXGI_00"></p>
-<hr>
-<h3 id="Pass-1-from-the-light"><a href="#Pass-1-from-the-light" class="headerlink" title="Pass 1: from the light"></a>Pass 1: from the light</h3><ul>
-<li>储存每个点的入射Radiance，并储存到对应的Voxel中；</li>
-<li>Voxel中存储Incident lighting和normal的分布，以便支持Gloosy等材质；<ul>
-<li>存储Lobe分布的基础：Cone Trace</li>
-</ul>
-</li>
-<li>根据这两个分布，即可得出 出射Radiance 的分布情况；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_Pass01.png" alt="VXGI_Pass01"></p>
-<h3 id="Pass-2-from-the-camera"><a href="#Pass-2-from-the-camera" class="headerlink" title="Pass 2: from the camera"></a>Pass 2: from the camera</h3><ul>
-<li>对于Gloosy的表面，追踪1个朝向反射方向的圆锥；</li>
-<li>根据圆锥的（grow）大小，查询相应层级；</li>
-</ul>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_Pass02.png" alt="VXGI_Pass02"></p>
-<ul>
-<li><p>对于Diffuse，追踪多个Cones</p>
-<p><img src="/2023/02/02/Games202_04_Real-time%20Global%20Illumination/VXGI_Pass02_Diffuse.png" alt="VXGI_Pass02_Diffuse"></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Games202</category>
-      </categories>
-      <tags>
-        <tag>图形学</tag>
-        <tag>Games202</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Games202-3 Real-time Environment Mapping</title>
     <url>/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/</url>
     <content><![CDATA[<p><a href="https:/docs.unrealengine.com/en-US/BuildingWorlds/LightingAndShadows/MeshDistanceFields/index.html">Mesh Distance Fields</a>，<a href="https:/cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf">Real Shading in Unreal Engine 4</a></p>
@@ -1145,6 +2129,7 @@ f(\omega)=\sum_{i} c_{i} \cdot B_{i}(\omega)</script><ul>
       <tags>
         <tag>图形学</tag>
         <tag>Games202</tag>
+        <tag>IBL</tag>
       </tags>
   </entry>
   <entry>
@@ -1573,6 +2558,7 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
       <tags>
         <tag>图形学</tag>
         <tag>Games202</tag>
+        <tag>Shadow</tag>
       </tags>
   </entry>
   <entry>
@@ -1730,142 +2716,6 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
 </li>
 </ul>
 <h1 id="Lecture20"><a href="#Lecture20" class="headerlink" title="Lecture20"></a>Lecture20</h1>]]></content>
-      <categories>
-        <category>Games101</category>
-      </categories>
-      <tags>
-        <tag>Games101</tag>
-        <tag>图形学</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Games101_21_22 Animation</title>
-    <url>/2022/10/03/Games101_21_22_Animation/</url>
-    <content><![CDATA[<h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
-<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
-<ul>
-<li><p><strong>Idealized spring</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
-<ul>
-<li>但永远不会停止，因此加入摩擦力</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
-<ul>
-<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
-<ul>
-<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
-</li>
-</ul>
-</li>
-<li><p>加入两条对角线，以及skip connection</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
-<ul>
-<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
-</ul>
-</li>
-<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
-</li>
-</ul>
-<hr>
-<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
-<ul>
-<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
-</ul>
-</li>
-</ul>
-<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
-<ul>
-<li><p>关节（Joint）分类：</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
-</li>
-</ul>
-<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
-<ul>
-<li>解决多个解的方法：梯度下降</li>
-</ul>
-<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
-<ul>
-<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
-</li>
-</ul>
-<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><span id="more"></span>
-<hr>
-<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
-<ul>
-<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
-</li>
-<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
-<ul>
-<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
-<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
-<ul>
-<li><p><strong>缺点：</strong></p>
-<ol>
-<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
-</li>
-<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
-</li>
-</ol>
-</li>
-</ul>
-<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
-<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
-<ul>
-<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
-<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
-<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
-<ul>
-<li>使用下一时刻的速度和加速度，并求解</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
-<ul>
-<li><p><strong>龙格库塔</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
-</li>
-</ul>
-<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
-<li>非基于物理<ul>
-<li>时间快</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
-<hr>
-<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
-<ul>
-<li>与单粒子类似</li>
-</ul>
-<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
-<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
-<ul>
-<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
-</li>
-<li><p>欧拉（网格法）：考虑不同位置的网格</p>
-</li>
-<li><p>Material Point Method (MPM ，混合上两种方法)</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
-</li>
-</ul>
-]]></content>
       <categories>
         <category>Games101</category>
       </categories>
@@ -2132,6 +2982,144 @@ f_{r}\left(\omega_{i} \rightarrow \omega_{r}\right) \geq 0</script></li>
       <tags>
         <tag>Games101</tag>
         <tag>图形学</tag>
+        <tag>Materials</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games101_21_22 Animation</title>
+    <url>/2022/10/03/Games101_21_22_Animation/</url>
+    <content><![CDATA[<h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+<ul>
+<li><p><strong>Idealized spring</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<ul>
+<li>但永远不会停止，因此加入摩擦力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<ul>
+<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
+<ul>
+<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
+</li>
+</ul>
+</li>
+<li><p>加入两条对角线，以及skip connection</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<ul>
+<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
+</ul>
+</li>
+<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+</li>
+</ul>
+<hr>
+<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+</ul>
+</li>
+</ul>
+<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<ul>
+<li><p>关节（Joint）分类：</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
+</li>
+</ul>
+<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
+<ul>
+<li>解决多个解的方法：梯度下降</li>
+</ul>
+<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<ul>
+<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
+</li>
+</ul>
+<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><span id="more"></span>
+<hr>
+<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
+<ul>
+<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
+</li>
+<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
+<ul>
+<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
+<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
+<ul>
+<li><p><strong>缺点：</strong></p>
+<ol>
+<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
+</li>
+<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
+<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
+<ul>
+<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
+<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
+<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
+<ul>
+<li>使用下一时刻的速度和加速度，并求解</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
+<ul>
+<li><p><strong>龙格库塔</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
+</li>
+</ul>
+<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
+<li>非基于物理<ul>
+<li>时间快</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
+<hr>
+<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
+<ul>
+<li>与单粒子类似</li>
+</ul>
+<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
+<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
+<ul>
+<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
+</li>
+<li><p>欧拉（网格法）：考虑不同位置的网格</p>
+</li>
+<li><p>Material Point Method (MPM ，混合上两种方法)</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Games101</category>
+      </categories>
+      <tags>
+        <tag>Games101</tag>
+        <tag>图形学</tag>
+        <tag>Animation</tag>
       </tags>
   </entry>
   <entry>
@@ -2711,6 +3699,7 @@ d \omega=\frac{d A \cos \theta^{\prime}}{\left\|x^{\prime}-x\right\|^{2}}
       <tags>
         <tag>Games101</tag>
         <tag>图形学</tag>
+        <tag>Ray-Tracing</tag>
       </tags>
   </entry>
   <entry>
