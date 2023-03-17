@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,125 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Art_2.3 硬表面基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-03 13:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T13:23:32+08:00">2023-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:49:21" itemprop="dateModified" datetime="2023-02-04T14:49:21+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-什么是硬表面"><a href="#a-什么是硬表面" class="headerlink" title="a). 什么是硬表面"></a>a). 什么是硬表面</h1><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面01.png" alt="硬表面01"></p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面02.png" alt="硬表面02"></p>
+<ol>
+<li><p><strong>从外表/建模来说：</strong>有着重工业质感、该平滑的时候平滑，该硬朗的时候硬朗。即平的平，弯的弯。</p>
+</li>
+<li><p><strong>从光影来说：</strong>光影变化均匀，硬朗，有经过打磨的感觉。</p>
+</li>
+</ol>
+<p>需要区别于LowPoly，Lowpoly有种纸片的拼凑感，更像是纸膜，主要是倒角所给予硬表面的厚度。即缺少最重要的倒角。</p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/Lowpoly.jpg" alt="Lowpoly"></p>
+<h1 id="b-如何制作硬表面（高模上倒角方法）"><a href="#b-如何制作硬表面（高模上倒角方法）" class="headerlink" title="b). 如何制作硬表面（高模上倒角方法）"></a>b). 如何制作硬表面（高模上倒角方法）</h1><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面_倒角01.png" alt="硬表面_倒角01"></p>
+<ul>
+<li><p>在游戏中硬表面通常是使用低模进行体现。因为硬表面的质感很大程度上取决于倒角。倒角会很大的增加模型面数。对于一些较小的结构，小凹槽，实际在低模上进行倒角或者卡边做出结构是不太划算的。本质上是<strong>要让高光的呈现更加集中</strong>，如果高光过于散开，就会显得较软，漂亮的高光边会表现很强的质感。</p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/硬表面_倒角02.png" alt="硬表面_倒角02"></p>
+</li>
+</ul>
+<h2 id="b-1-卡双线"><a href="#b-1-卡双线" class="headerlink" title="b.1). 卡双线"></a>b.1). 卡双线</h2><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/卡双线.png" alt="卡双线"></p>
+<p><strong>第一对线用于Smooth后形成倒角，第二对线用于收敛高光</strong></p>
+<h2 id="b-2-方倒角"><a href="#b-2-方倒角" class="headerlink" title="b.2). 方倒角"></a>b.2). 方倒角</h2><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/方倒角.png" alt="方倒角"></p>
+<p>对两个倒角卡双线</p>
+<h2 id="b-3-直接倒角"><a href="#b-3-直接倒角" class="headerlink" title="b.3). 直接倒角"></a>b.3). 直接倒角</h2><p>效果最好，可得到漂亮的高光边，但是因为增加的边数很多，过于密集，修改起来麻烦。</p>
+<h2 id="b-4-光滑组（软硬边）-卡单线"><a href="#b-4-光滑组（软硬边）-卡单线" class="headerlink" title="b.4). 光滑组（软硬边）+ 卡单线"></a>b.4). 光滑组（软硬边）+ 卡单线</h2><p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/光滑组00.png" alt="光滑组00"></p>
+<p>通过将两个面设为同一光滑组（Maya里则将连接边设为软边）+ 两边各卡一条线用于收敛高光区域</p>
+<h1 id="光滑组的本质：-改变点法线"><a href="#光滑组的本质：-改变点法线" class="headerlink" title="光滑组的本质： 改变点法线"></a>光滑组的本质： <font color="red">改变点法线</font></h1><p>光滑组的本质是<strong>改变点法线</strong>，进而影响面法线，进而影响三角线遍历中Normal的插值；</p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/Hard_VertexNormal.png" alt="Hard_VertexNormal"></p>
+<p><img src="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/Soft_VertexNormal.png" alt="Soft_VertexNormal"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/03/HPP_Art_02.3_%E7%A1%AC%E8%A1%A8%E9%9D%A2%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1328,118 +1447,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/10/03/Games101_13_16_RayTracing/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Games101_10_12_Geometry/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/02/Games101_10_12_Geometry/" class="post-title-link" itemprop="url">Games101_10_12 Geometry</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-02 16:35:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:35:10+08:00">2022-10-02</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:31:24" itemprop="dateModified" datetime="2023-02-04T14:31:24+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-10-11-Geometry-1-2"><a href="#Lecture-10-11-Geometry-1-2" class="headerlink" title="Lecture 10/11: Geometry 1 2"></a>Lecture 10/11: Geometry 1 2</h1><ul>
-<li>不可能所有物体都用三角面表示，一些复杂的物体如毛发、水滴等用三角面表示开销极大；</li>
-</ul>
-<h2 id="a-几何的表示形式"><a href="#a-几何的表示形式" class="headerlink" title="a). 几何的表示形式"></a>a). 几何的表示形式</h2><ul>
-<li>隐式（Implicit）<ul>
-<li>algebraic surface</li>
-<li>level sets</li>
-<li>distance functions</li>
-<li>…</li>
-</ul>
-</li>
-<li>显式（Explicit）<ul>
-<li>point cloud</li>
-<li>polygon mesh</li>
-<li>subdivision, NURBS</li>
-<li>…</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/02/Games101_10_12_Geometry/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

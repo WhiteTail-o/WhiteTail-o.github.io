@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -192,7 +192,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/" class="post-title-link" itemprop="url">HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</a>
+          <a href="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/" class="post-title-link" itemprop="url">HPP_Graphics_3.6 纹理压缩</a>
         </h2>
 
         <div class="post-meta-container">
@@ -223,14 +223,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
+      <time title="创建时间：2023-02-15 18:42:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:42:32+08:00">2023-02-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:10:35" itemprop="dateModified" datetime="2023-03-17T13:10:35+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-17 13:12:06" itemprop="dateModified" datetime="2023-03-17T13:12:06+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,56 +252,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
-<li>先回顾下深度测试</li>
+          <h1 id="a-纹理压缩简介"><a href="#a-纹理压缩简介" class="headerlink" title="a). 纹理压缩简介"></a>a). 纹理压缩简介</h1><ul>
+<li>纹理压缩是为了解决<strong>内存</strong>、<strong>带宽</strong>问题，专为在计算机图形渲染系统中存储<strong>纹理</strong>而使用的图像压缩技术；</li>
 </ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
+<h2 id="a-1-图片压缩-vs-纹理压缩（为什么要纹理压缩）"><a href="#a-1-图片压缩-vs-纹理压缩（为什么要纹理压缩）" class="headerlink" title="a.1). 图片压缩 vs. 纹理压缩（为什么要纹理压缩）"></a>a.1). 图片压缩 vs. 纹理压缩（为什么要纹理压缩）</h2><ul>
+<li>图片格式：JPG、PNG、GIF、BMP等；</li>
+<li><strong>纹理压缩格式：</strong> ETC、DXT、ASTC等</li>
+</ul>
+<p>图片压缩格式大部分都是整体依赖，即不支持像素随机访问（基于整张图片进行压缩，无法直接实现单个像素的解析），且图片压缩格式无法被GPU识别，还需要经CPU解压缩成非压缩纹理格式才能被识别。<strong>因此采用基于块压缩的纹理压缩，能够更快读取像素所属字节进行解压缩以支持<font color="red">随机访问</font>。</strong></p>
 <ul>
-<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
-<ul>
-<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
-</ul>
+<li><p><strong>纹理管线：</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/TexturePipeline.png" alt="TexturePipeline"></p>
 </li>
 </ul>
-<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
-<ul>
-<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
-<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
-<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
-</ul>
-</li>
-<li><em>Early-Z同样可以搭配使用模板测试</em></li>
-</ul>
-<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
-<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
-<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
-<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
-</ul>
-</li>
-<li>手动修改GPU插值得到的深度</li>
-<li>开启<strong>Alpha Blend</strong></li>
-<li>关闭深度测试Depth Test</li>
-</ol>
-<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
-<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
-<li><p>具体怎么排序？ </p>
-<ul>
-<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
-</ul>
-</li>
-<li><p>问题：</p>
-<ul>
-<li>复杂的场景，CPU性能消耗很大</li>
-<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
-</ul>
-</li>
-<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
-</li>
-</ul>
+<h1 id="b-常见纹理压缩格式"><a href="#b-常见纹理压缩格式" class="headerlink" title="b). 常见纹理压缩格式"></a>b). 常见纹理压缩格式</h1><p><img src="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/常见纹理压缩格式.png" alt="常见纹理压缩格式"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/#more" rel="contents">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -442,6 +409,146 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/" class="post-title-link" itemprop="url">HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:10:35" itemprop="dateModified" datetime="2023-03-17T13:10:35+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
+<li>先回顾下深度测试</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
+<ul>
+<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
+<ul>
+<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
+</ul>
+</li>
+</ul>
+<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
+<ul>
+<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
+<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
+<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
+</ul>
+</li>
+<li><em>Early-Z同样可以搭配使用模板测试</em></li>
+</ul>
+<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
+<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
+<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
+<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
+</ul>
+</li>
+<li>手动修改GPU插值得到的深度</li>
+<li>开启<strong>Alpha Blend</strong></li>
+<li>关闭深度测试Depth Test</li>
+</ol>
+<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
+<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
+<li><p>具体怎么排序？ </p>
+<ul>
+<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
+</ul>
+</li>
+<li><p>问题：</p>
+<ul>
+<li>复杂的场景，CPU性能消耗很大</li>
+<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
+</ul>
+</li>
+<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1264,112 +1371,6 @@
 </li>
 </ul>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.3_HLSL%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_2.3_HLSL%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">HPP_Graphics_2.3 HLSL常用函数介绍</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 17:26:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:26:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 12:53:35" itemprop="dateModified" datetime="2023-03-17T12:53:35+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="a-HLSL常用函数分类"><a href="#a-HLSL常用函数分类" class="headerlink" title="a). HLSL常用函数分类"></a>a). HLSL常用函数分类</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/eloudy/article/details/71258367">https://blog.csdn.net/eloudy/article/details/71258367</a></p>
-<ul>
-<li>基本数学运算</li>
-<li>幂指对函数</li>
-<li>数据范围类</li>
-<li>类型判断类</li>
-<li>三角函数与双曲线函数</li>
-<li>向量与矩阵类</li>
-<li>光线运算类</li>
-<li>1D纹理查找</li>
-<li>2D纹理查找</li>
-<li>立体纹理查找</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_2.3_HLSL%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 

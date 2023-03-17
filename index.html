@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-count">44</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">5</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,126 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/02/Demo/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/10/02/Demo/" class="post-title-link" itemprop="url">Demo</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <i class="fa fa-thumb-tack"></i>
+    <font color=222222>置顶</font>
+    <span class="post-meta-divider">|</span>
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-10-02 16:15:10" itemprop="dateCreated datePublished" datetime="2022-10-02T16:15:10+08:00">2022-10-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 15:59:37" itemprop="dateModified" datetime="2023-03-17T15:59:37+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Demo/" itemprop="url" rel="index"><span itemprop="name">Demo</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p>上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。</p>
+<h1 id="屏幕空间阴影"><a href="#屏幕空间阴影" class="headerlink" title="屏幕空间阴影"></a>屏幕空间阴影</h1><ul>
+<li><p>PCSS+SSAO</p>
+<p><img src="/2022/10/02/Demo/Untitled_1.1.1.png" alt="Untitled_1.1.1"></p>
+<p><img src="/2022/10/02/Demo/Untitled_1.5.1.png" alt="Untitled_1.5.1"></p>
+</li>
+<li><p>不同阴影方案的对比：</p>
+<p><img src="/2022/10/02/Demo/Untitled_2.2.1.png" alt="Untitled_2.2.1"></p>
+</li>
+</ul>
+<h1 id="PBR，屏幕空间反射，Bloom"><a href="#PBR，屏幕空间反射，Bloom" class="headerlink" title="PBR，屏幕空间反射，Bloom"></a>PBR，屏幕空间反射，Bloom</h1><ul>
+<li><p>此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。</p>
+<ul>
+<li>间接光照漫反射采用SH球谐函数</li>
+<li>间接光照高光则采用IBL的Split Sum</li>
+</ul>
+</li>
+<li><p>SSR，屏幕空间反射</p>
+</li>
+<li><p>Bloom泛光</p>
+<p><img src="/2022/10/02/Demo/Untitled_3.1.1-16790393917991.png" alt="Untitled_3.1.1"></p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2022/10/02/Demo/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -777,6 +897,128 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_4.2_SSAO/" class="post-title-link" itemprop="url">HPP_Graphics_4.2 SSAO</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 19:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T19:24:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:18:32" itemprop="dateModified" datetime="2023-03-17T13:18:32+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p>
+<h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p>
+<h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p>
+<ol>
+<li><p>获取深度、法线（View Space）缓冲；</p>
+<ul>
+<li><p>Normal Buffer：</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p>
+</li>
+</ul>
+</li>
+<li><p>重构像素相机空间中的坐标；</p>
+<ul>
+<li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p>
+<ul>
+<li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p>
+<ul>
+<li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li>
+</ul>
+</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_4.2_SSAO/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -997,128 +1239,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_4.2_SSAO/" class="post-title-link" itemprop="url">HPP_Graphics_4.2 SSAO</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 19:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T19:24:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:18:32" itemprop="dateModified" datetime="2023-03-17T13:18:32+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p>
-<h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p>
-<h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p>
-<ol>
-<li><p>获取深度、法线（View Space）缓冲；</p>
-<ul>
-<li><p>Normal Buffer：</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p>
-</li>
-</ul>
-</li>
-<li><p>重构像素相机空间中的坐标；</p>
-<ul>
-<li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p>
-<ul>
-<li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p>
-<ul>
-<li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li>
-</ul>
-</li>
-</ol>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_4.2_SSAO/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1211,113 +1331,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/" class="post-title-link" itemprop="url">HPP_Graphics_3.6 纹理压缩</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 18:42:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:42:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:12:06" itemprop="dateModified" datetime="2023-03-17T13:12:06+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-纹理压缩简介"><a href="#a-纹理压缩简介" class="headerlink" title="a). 纹理压缩简介"></a>a). 纹理压缩简介</h1><ul>
-<li>纹理压缩是为了解决<strong>内存</strong>、<strong>带宽</strong>问题，专为在计算机图形渲染系统中存储<strong>纹理</strong>而使用的图像压缩技术；</li>
-</ul>
-<h2 id="a-1-图片压缩-vs-纹理压缩（为什么要纹理压缩）"><a href="#a-1-图片压缩-vs-纹理压缩（为什么要纹理压缩）" class="headerlink" title="a.1). 图片压缩 vs. 纹理压缩（为什么要纹理压缩）"></a>a.1). 图片压缩 vs. 纹理压缩（为什么要纹理压缩）</h2><ul>
-<li>图片格式：JPG、PNG、GIF、BMP等；</li>
-<li><strong>纹理压缩格式：</strong> ETC、DXT、ASTC等</li>
-</ul>
-<p>图片压缩格式大部分都是整体依赖，即不支持像素随机访问（基于整张图片进行压缩，无法直接实现单个像素的解析），且图片压缩格式无法被GPU识别，还需要经CPU解压缩成非压缩纹理格式才能被识别。<strong>因此采用基于块压缩的纹理压缩，能够更快读取像素所属字节进行解压缩以支持<font color="red">随机访问</font>。</strong></p>
-<ul>
-<li><p><strong>纹理管线：</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/TexturePipeline.png" alt="TexturePipeline"></p>
-</li>
-</ul>
-<h1 id="b-常见纹理压缩格式"><a href="#b-常见纹理压缩格式" class="headerlink" title="b). 常见纹理压缩格式"></a>b). 常见纹理压缩格式</h1><p><img src="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/常见纹理压缩格式.png" alt="常见纹理压缩格式"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
