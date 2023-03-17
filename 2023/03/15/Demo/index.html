@@ -38,10 +38,10 @@
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.6.1.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.3.1.png">
 <meta property="article:published_time" content="2023-03-15T08:15:10.000Z">
-<meta property="article:modified_time" content="2023-03-17T08:16:13.429Z">
+<meta property="article:modified_time" content="2023-03-17T08:23:27.303Z">
 <meta property="article:author" content="WhiteTail">
-<meta property="article:tag" content="图形学">
 <meta property="article:tag" content="Demo">
+<meta property="article:tag" content="图形学">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.1.1.png">
 
@@ -269,7 +269,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 16:16:13" itemprop="dateModified" datetime="2023-03-17T16:16:13+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-17 16:23:27" itemprop="dateModified" datetime="2023-03-17T16:23:27+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -325,7 +325,7 @@
 <h1 id="皮肤渲染（预积分、屏幕空间次表面散射）"><a href="#皮肤渲染（预积分、屏幕空间次表面散射）" class="headerlink" title="皮肤渲染（预积分、屏幕空间次表面散射）"></a>皮肤渲染（预积分、屏幕空间次表面散射）</h1><ul>
 <li><p>此处采用的是使用SSSS实现SSS的SSSSS（:D，好绕），后续会专门写一个这个的文章，写一下各种Diffusion Profile，顺便把Burley Normalized中的PDF、CDF给写一下。</p>
 </li>
-<li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians，就是）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p>
+<li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p>
 <p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p>
 </li>
 </ul>
@@ -356,8 +356,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
               <a href="/tags/Demo/" rel="tag"># Demo</a>
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
           </div>
 
         
