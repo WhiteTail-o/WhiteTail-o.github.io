@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="图形 4.3 实时阴影介绍更深的可看笔记Games202 Real-time Shadow a). 基于图片实时阴影技术a.1). Shadow Map 关键思想：一个点在相机视角中可见，但在光源视角中不可见，那该点就处于阴影中。  做法： 在光源视角下渲染深度图。对于着色点$A$，将其转换到光源视角（其他空间也行，只要两者在同一坐标空间）后，与Shadow Map中对应点进行深度比较，判断一点是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Graphics_4.3 实时阴影介绍">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="图形 4.3 实时阴影介绍更深的可看笔记Games202 Real-time Shadow a). 基于图片实时阴影技术a.1). Shadow Map 关键思想：一个点在相机视角中可见，但在光源视角中不可见，那该点就处于阴影中。  做法： 在光源视角下渲染深度图。对于着色点$A$，将其转换到光源视角（其他空间也行，只要两者在同一坐标空间）后，与Shadow Map中对应点进行深度比较，判断一点是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/%E6%B7%B1%E5%BA%A6%E6%AF%94%E8%BE%83.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SelfOcclusion.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SelfOcclusion_Bias.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/DepthBias01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/NormalBias01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/Unity_Bias.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/ShadowMap_AA01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/%E9%80%8F%E8%A7%86%E8%B5%B0%E6%A0%B7.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/CSM.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS_Key.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS_How.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS_Region.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCF_02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS03.png">
+<meta property="article:published_time" content="2023-02-15T11:24:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T05:20:53.338Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="阴影">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/%E6%B7%B1%E5%BA%A6%E6%AF%94%E8%BE%83.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/","path":"2023/02/15/HPP_Graphics_4.3_实时阴影介绍/","title":"HPP_Graphics_4.3 实时阴影介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Graphics_4.3 实时阴影介绍 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E5%BD%A2-4-3-%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D"><span class="nav-text">图形 4.3 实时阴影介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-%E5%9F%BA%E4%BA%8E%E5%9B%BE%E7%89%87%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E6%8A%80%E6%9C%AF"><span class="nav-text">a). 基于图片实时阴影技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-1-Shadow-Map"><span class="nav-text">a.1). Shadow Map</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pass-1-Render-from-Light"><span class="nav-text">Pass 1: Render from Light</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pass-2-Render-from-Eye-Camera"><span class="nav-text">Pass 2: Render from Eye(Camera)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-2-Unity%E4%B8%AD%E7%9A%84%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E9%98%B4%E5%BD%B1%E6%98%A0%E5%B0%84"><span class="nav-text">a.2). Unity中的屏幕空间阴影映射</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E9%98%B4%E5%BD%B1%E6%98%A0%E5%B0%84%E4%BC%98%E5%8C%96"><span class="nav-text">b). 阴影映射优化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b-1-Self-occlusion-%E8%87%AA%E9%81%AE%E6%8C%A1"><span class="nav-text">b.1). Self occlusion(自遮挡)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-1-1-%E5%81%8F%E7%A7%BB%E4%BC%98%E5%8C%96%EF%BC%88Depth-Bias%EF%BC%89"><span class="nav-text">b.1.1). 偏移优化（Depth Bias）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#b-1-2-Unity%E4%B8%AD%E7%9A%84%E5%81%8F%E7%A7%BB%E4%BC%98%E5%8C%96"><span class="nav-text">b.1.2). Unity中的偏移优化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-2-%E8%B5%B0%E6%A0%B7"><span class="nav-text">b.2). 走样</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#b-2-1-%E5%88%9D%E5%A7%8B%E9%87%87%E6%A0%B7-%E9%80%8F%E8%A7%86%E8%B5%B0%E6%A0%B7"><span class="nav-text">b.2.1). 初始采样 - 透视走样</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-3-%E7%BA%A7%E8%81%94%E9%98%B4%E5%BD%B1%E6%98%A0%E5%B0%84%EF%BC%88Cascaded-Shadow-Map%EF%BC%89"><span class="nav-text">b.3). 级联阴影映射（Cascaded Shadow Map）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-PCSS-Percentage-Closer-Soft-Shadow"><span class="nav-text">c). PCSS(Percentage-Closer Soft Shadow)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-PCF-Percentage-Closer-Filtering"><span class="nav-text">c.1). PCF(Percentage Closer Filtering)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-PCSS-Percentage-Closer-Soft-Shadow"><span class="nav-text">c.2). PCSS(Percentage-Closer Soft Shadow)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-1-%E4%BB%80%E4%B9%88%E6%98%AFPCSS%EF%BC%9F"><span class="nav-text">c.2.1). 什么是PCSS？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-2-%E5%81%9A%E6%B3%95"><span class="nav-text">c.2.2). 做法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%A3%E4%B9%88PCSS%E4%B8%AD%E9%82%A3%E4%BA%9B%E6%AD%A5%E9%AA%A4%E4%BC%9A%E5%AF%BC%E8%87%B4%E9%80%9F%E5%BA%A6%E5%8F%98%E6%85%A2%EF%BC%9F"><span class="nav-text">那么PCSS中那些步骤会导致速度变慢？</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-3-Math"><span class="nav-text">c.2.3). Math</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Homework-%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4PCSS%E8%BD%AF%E9%98%B4%E5%BD%B1"><span class="nav-text">Homework - 屏幕空间PCSS软阴影</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/01/Games202_02_Real-Time%20Shadow/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-01</time>
+        <br>
+      Games202-2 Real-Time Shadow
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_4.5 DOF景深基础
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_1.2.3 MVP矩阵运算
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2022/10/02/Games101_02_04_Math/" rel="bookmark">
+        <time class="popular-posts-time">2022-10-02</time>
+        <br>
+      Games101-2-4 Math
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Graphics_4.3 实时阴影介绍 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Graphics_4.3 实时阴影介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 19:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T19:24:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:20:53" itemprop="dateModified" datetime="2023-03-17T13:20:53+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="图形-4-3-实时阴影介绍"><a href="#图形-4-3-实时阴影介绍" class="headerlink" title="图形 4.3 实时阴影介绍"></a>图形 4.3 实时阴影介绍</h1><p>更深的可看笔记Games202 Real-time Shadow</p>
+<h1 id="a-基于图片实时阴影技术"><a href="#a-基于图片实时阴影技术" class="headerlink" title="a). 基于图片实时阴影技术"></a>a). 基于图片实时阴影技术</h1><h2 id="a-1-Shadow-Map"><a href="#a-1-Shadow-Map" class="headerlink" title="a.1). Shadow Map"></a>a.1). Shadow Map</h2><ul>
+<li><p><strong>关键思想：</strong>一个点在相机视角中可见，但在光源视角中不可见，那该点就处于阴影中。</p>
+</li>
+<li><p><strong>做法：</strong> 在光源视角下渲染深度图。对于着色点$A$，将其转换到光源视角（其他空间也行，只要两者在同一坐标空间）后，与Shadow Map中对应点进行深度比较，判断一点是否在阴影中；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/深度比较.png" alt="深度比较" style="zoom:50%;"></p>
+</li>
+</ul>
+<blockquote>
+<p>A <strong>2-Pass</strong> Algorithm</p>
+<ol>
+<li>Light pass: Generate the SM(Shadow Map)</li>
+<li>Camera pass: uses the SM</li>
+</ol>
+</blockquote>
+<h3 id="Pass-1-Render-from-Light"><a href="#Pass-1-Render-from-Light" class="headerlink" title="Pass 1: Render from Light"></a>Pass 1: Render from Light</h3><ul>
+<li>输出一张<strong>光源视角</strong>的<strong>深度图（Depth Buffer）</strong></li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass01.png" alt="SM_Pass01"></p>
+<h3 id="Pass-2-Render-from-Eye-Camera"><a href="#Pass-2-Render-from-Eye-Camera" class="headerlink" title="Pass 2: Render from Eye(Camera)"></a>Pass 2: Render from Eye(Camera)</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass02.png" alt="SM_Pass02"></p>
+<ul>
+<li><p>将光源视角对应的深度转换到View Space, 与Camera视角的深度进行深度比较；</p>
+<ul>
+<li>如$Depth_{cam} &gt; Depth_{light}$ ，那说明该点<strong>在阴影中</strong>（相机可见，光源不可见）</li>
+<li>如$Depth_{cam} &lt; Depth_{light}$ ，那说明该点在<strong>不在阴影中</strong>（相机可见，光源可见）</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h2 id="a-2-Unity中的屏幕空间阴影映射"><a href="#a-2-Unity中的屏幕空间阴影映射" class="headerlink" title="a.2). Unity中的屏幕空间阴影映射"></a>a.2). Unity中的屏幕空间阴影映射</h2><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM00.png" alt="SM00" style="zoom:50%;"></p>
+<p>Unity的阴影映射是<strong>屏幕空间阴影映射</strong>，即<strong>逐像素</strong>生成屏幕空间的阴影贴图后，再在Shading中采样，进而着色。</p>
+<p><strong>Step1:</strong> 渲染屏幕空间的<strong>深度贴图</strong>；</p>
+<p><strong>Step2:</strong> 调用每个物体的Shadow Cast Pass，从光源方向<strong>生成Shadow Map</strong>；</p>
+<p><strong>Step3:</strong> 屏幕空间进行<strong>阴影收集（Shadow Collector）</strong>，即进行深度比较后，得到屏幕空间的阴影贴图；</p>
+<ul>
+<li>Unity采用了<strong>屏幕空间</strong>的阴影映射，在进行阴影收集时，是逐Pixel进行的。</li>
+</ul>
+<p><strong>Step4:</strong> Shading时，用屏幕空间的uv，采样Step3中得到的屏幕空间阴影贴图；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM01.png" alt="SM01" style="zoom: 33%;"></p>
+<h1 id="b-阴影映射优化"><a href="#b-阴影映射优化" class="headerlink" title="b). 阴影映射优化"></a>b). 阴影映射优化</h1><h2 id="b-1-Self-occlusion-自遮挡"><a href="#b-1-Self-occlusion-自遮挡" class="headerlink" title="b.1). Self occlusion(自遮挡)"></a>b.1). Self occlusion(自遮挡)</h2><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SelfOcclusion.png" alt="SelfOcclusion"></p>
+<ul>
+<li><strong>Self occlusion：</strong> 也被称作Z-Fighting，阴影自遮挡，造成阴影毛刺的现象；</li>
+<li><strong>原因：</strong> 如上图，<ul>
+<li>Shadow Map分辨率有限，一个像素内记录的深度值相同。如图中红色和橙色斜线表示Shadow Map中深度相同的位置（$Depth_A = Depth_{A’}$）；</li>
+<li>当计算平面中$B$点是否在阴影中时，$Depth_{light} = z1 = Depth_A$，而相机视角下的点$B$转换到光源视角下对应的深度为 $z2$ ，即$Depth_{cam} = z2 = Depth_B$</li>
+<li>因此，$Depth_{cam} &gt; Depth_{light}$ ，说明该点<strong>在阴影中</strong>，因此造成Self occlusion</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>解决方法：</strong> 引入<strong>Bias</strong>；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SelfOcclusion_Bias.png" alt="SelfOcclusion_Bias" style="zoom:50%;"></p>
+<ul>
+<li>认为对于$B$点，如$Depth_{cam} &gt; Depth_{light}$，但$Depth_{light}$ 处于橙色中，那该点仍然不在阴影中；</li>
+<li>即：<ul>
+<li>$Depth_{cam} &gt; Depth_{light}+bias$，才使得该点<strong>在阴影中</strong>；</li>
+<li>$Depth_{cam} &lt; Depth_{light}+bias$，该点<strong>不在阴影中</strong>；</li>
+</ul>
+</li>
+<li>易得，当光源方向垂直于平面时，所需的Bias最小，因此可引入光源与平面法线的夹角 $cos\alpha$ ，来调整Bias大小；</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>引入bias会造成的问题：Detached shadow(不接触阴影，Peter Panning)</li>
+</ul>
+<h3 id="b-1-1-偏移优化（Depth-Bias）"><a href="#b-1-1-偏移优化（Depth-Bias）" class="headerlink" title="b.1.1). 偏移优化（Depth Bias）"></a>b.1.1). 偏移优化（Depth Bias）</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/DepthBias01.png" alt="DepthBias01"></p>
+<ul>
+<li>深度偏移：简单添加Bias，使得该像素深度（Shading Point的深度，而不是SM中的深度）朝光源靠近；</li>
+<li>法线偏移：沿表面法线法线向外偏移；</li>
+<li>偏移单位是阴影纹理映射的纹素大小；</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/NormalBias01.png" alt="NormalBias01" style="zoom: 50%;"></p>
+<h3 id="b-1-2-Unity中的偏移优化"><a href="#b-1-2-Unity中的偏移优化" class="headerlink" title="b.1.2). Unity中的偏移优化"></a>b.1.2). Unity中的偏移优化</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/Unity_Bias.png" alt="Unity_Bias"></p>
+<hr>
+<h2 id="b-2-走样"><a href="#b-2-走样" class="headerlink" title="b.2). 走样"></a>b.2). 走样</h2><p>以信号重建的过程来审视阴影映射：</p>
+<ul>
+<li>初始采样：渲染Shadow Map;</li>
+<li>重采样：从摄影机视角对Shadow Map重采样；</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/ShadowMap_AA01.png" alt="ShadowMap_AA01"></p>
+<h3 id="b-2-1-初始采样-透视走样"><a href="#b-2-1-初始采样-透视走样" class="headerlink" title="b.2.1). 初始采样 - 透视走样"></a>b.2.1). 初始采样 - 透视走样</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/透视走样.png" alt="透视走样"></p>
+<ul>
+<li><strong>原因：</strong> 由于Shadow Map初始采样是在摄影机进行透视投影之前（左图），使得<strong>经过透视投影后，近景大量pixel与Shadow Map中的同一个texel对应</strong>造成走样。</li>
+<li><strong>解决方法：</strong> <ol>
+<li>在光源位置采样获得Shadow Map之前，我们先做一次透视投影。即采样经过透视投影后的场景；</li>
+<li><strong>级联阴影映射（Cascaded Shadow Map）</strong>，减小近景和远景对应到屏幕空间中像素大小的差异；</li>
+</ol>
+</li>
+</ul>
+<h2 id="b-3-级联阴影映射（Cascaded-Shadow-Map）"><a href="#b-3-级联阴影映射（Cascaded-Shadow-Map）" class="headerlink" title="b.3). 级联阴影映射（Cascaded Shadow Map）"></a>b.3). 级联阴影映射（Cascaded Shadow Map）</h2><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/CSM.png" alt="CSM"></p>
+<p><strong>实现：</strong>通过平行于视图方向的切片将视锥体截成多个子视锥体，每一个子视锥体都对应一张Shadow Map，每张Shadow Map独立计算但<strong>分辨率相同</strong>。</p>
+<ul>
+<li>如果在View Space也就是视锥体划分级联，一旦镜头转动会产生很严重的闪烁，所以<strong>一般划分级联是在光源空间中划分</strong>。(<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/92017307">https://zhuanlan.zhihu.com/p/92017307</a>)</li>
+</ul>
+<h1 id="c-PCSS-Percentage-Closer-Soft-Shadow"><a href="#c-PCSS-Percentage-Closer-Soft-Shadow" class="headerlink" title="c). PCSS(Percentage-Closer Soft Shadow)"></a>c). PCSS(Percentage-Closer Soft Shadow)</h1><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS.png" alt="PCSS"></p>
+<h2 id="c-1-PCF-Percentage-Closer-Filtering"><a href="#c-1-PCF-Percentage-Closer-Filtering" class="headerlink" title="c.1). PCF(Percentage Closer Filtering)"></a>c.1). PCF(Percentage Closer Filtering)</h2><ul>
+<li>PCF用于抗锯齿，而不用于软阴影（用于软阴影的叫PCSS，两者实质是一个东西，但应用不同叫法不同）</li>
+<li>在<strong>生成Shadow Map后，阴影比较时（即对阴影比较的结果）</strong>，进行Filtering<ul>
+<li>面光源生成Shadow Map：以面光源的中心点(放置相机)生成shadow map</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCF.png" alt="PCF"></p>
+<ul>
+<li><p><strong>做法：</strong> 不止对着色点与其在Shadow Map中的对应点进行深度比较，而是<strong>着色点深度</strong>与其<strong>在Shadow Map中对应点及其周围点深度</strong>进行比较，最后<strong>对各个Visibility的结果取平均值</strong>（或加权平均）</p>
+<ul>
+<li><strong>eg1</strong>. $P$点在Cam视角下深度为$Depth_p$，转换到光源视角下深度为$Depth_{p’}$，$Depth_{p’}$ 与其在Shadow Map中对应点周围3x3（<strong>Filter size</strong>）像素进行比较，得到结果<script type="math/tex; mode=display">
+\begin{array}{l}
+1,0,1 \\
+1,0,1 \\
+1,1,0
+\end{array}</script>取平均得到Visibility为 0.667</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>Filter size</strong><ul>
+<li>Small -&gt; sharper</li>
+<li>Large -&gt; softer</li>
+<li>为选取合适的Filter size，产生了PCSS</li>
+</ul>
+</li>
+</ul>
+<h2 id="c-2-PCSS-Percentage-Closer-Soft-Shadow"><a href="#c-2-PCSS-Percentage-Closer-Soft-Shadow" class="headerlink" title="c.2). PCSS(Percentage-Closer Soft Shadow)"></a>c.2). PCSS(Percentage-Closer Soft Shadow)</h2><h3 id="c-2-1-什么是PCSS？"><a href="#c-2-1-什么是PCSS？" class="headerlink" title="c.2.1). 什么是PCSS？"></a>c.2.1). 什么是PCSS？</h3><ul>
+<li><strong>关键：</strong> 自适应Filter size</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS01.png" alt="PCSS01"></p>
+<ul>
+<li>观察可得：<ul>
+<li>钢笔（Blocker）与接收平面（Receiver）的距离越小（笔尖），阴影越硬</li>
+<li>钢笔（Blocker）与接收平面（Receiver）的距离越大（笔尖），阴影越软</li>
+</ul>
+</li>
+<li>即阴影的软硬程度，一部分取决于Blocker和Receiver的距离</li>
+</ul>
+<hr>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS_Key.png" alt="PCSS_Key"></p>
+<ul>
+<li><p>阴影的软硬取决于</p>
+<ul>
+<li>$w_{Light}$ （光源的宽度）</li>
+<li>$d_{Blocker}$ 与 $d_{BtoR}$ 的比值；</li>
+</ul>
+</li>
+<li><p><strong>Blocker定义：</strong></p>
+<p>Shading point变换到Light视角，对应深度为$Depth_{scene}$ 。<strong>查询区域内</strong>，深度值$z &lt; Depth_{scene}$ 的texel即为Blocker；</p>
+</li>
+<li><p>$d_{Blocker}$ 为 <strong>Average blocker distance</strong></p>
+<ul>
+<li><p><strong>Average blocker distance：</strong> Shadow Map一定范围内的Blocker的深度平均值</p>
+</li>
+<li><p>类似eg1</p>
+<blockquote>
+<p><strong>eg1</strong>. $P$点在Cam视角下深度为$Depth_p$，转换到光源视角下深度为$Depth_{p’}$，$Depth_{p’}$ 与其在Shadow Map中对应点周围3x3（<strong>Filter size</strong>）像素进行比较，得到结果</p>
+<script type="math/tex; mode=display">
+\begin{array}{l}
+1,0,1 \\
+1,0,1 \\
+1,1,0
+\end{array}</script><p>取平均得到Visibility为 0.667</p>
+</blockquote>
+<p>其中，Visibility为0的点，即 处于阴影中，$Depth_{cam} &gt; Depth_{light}+bias$ 的点即为Blocker，对Blocker在Shadow Map中的深度值取平均值，即得到Average blocker distance</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-2-2-做法"><a href="#c-2-2-做法" class="headerlink" title="c.2.2). 做法"></a>c.2.2). 做法</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS_How.png" alt="PCSS_How"></p>
+<p>首先将shading point点$x$投应到shadow map上,找到其对应的像素点$P$。PCSS算法的实现流程如下：</p>
+<p>第一步：Blocker search，即获取<strong>某个区域</strong>的平均遮挡物深度（在点p附近取一个范围(这个范围是自己定义或动态计算的),将范围内各像素的最小深度与x的实际深度比较,从而判断哪些像素是遮挡物，把所有遮挡物的深度记下来取个平均值作为blocker distance。）</p>
+<p>第二步：Penumbra estimation，使用平均遮挡物深度计算滤波核尺寸（用取得的遮挡物深度距离来算在PCF中filtering的范围。）</p>
+<script type="math/tex; mode=display">
+w_{\text {Penumbra }}=\left(d_{\text {Receiver }}-d_{\text {Blocker }}\right) \cdot w_{\text {Light }} / d_{\text {Blocker }}</script><p>第三步：Percentage Closer Filtering，对应该滤波核尺寸应用PCF算法。</p>
+<ul>
+<li>如何动态计算Blocker search的<strong>“某个范围”</strong><ul>
+<li><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCSS_Region.png" alt="PCSS_Region"></li>
+<li>Light越远，Region越小；Light越近，Region越大；（好像和图不太对应，如非要对应，就类似与Shadow Map位置不变，Light距离变大/小）</li>
+</ul>
+</li>
+</ul>
+<h4 id="那么PCSS中那些步骤会导致速度变慢？"><a href="#那么PCSS中那些步骤会导致速度变慢？" class="headerlink" title="那么PCSS中那些步骤会导致速度变慢？"></a>那么PCSS中那些步骤会导致速度变慢？</h4><ul>
+<li><p>第一步：Blocker search，需要多次采样查询深度信息并比较，计算Blocker的平均深度$d_{Blocker}$</p>
+</li>
+<li><p>第三步：PCF，阴影越软→滤波核尺寸越大→采样查询次数变多→速度变慢</p>
+<ul>
+<li>由此可见，主要是多次采样并比较的方法使得速度变慢；</li>
+</ul>
+</li>
+<li><p><strong>加速方法：</strong></p>
+<ul>
+<li>随机采样，后降噪；</li>
+</ul>
+<blockquote>
+<p>如果觉得区域过大不想对每一个texels都进行比较,就可以通过随机采样其中的texels，而不是全部采样，会得到一个近似的结果,近似的结果就可能会导致出现噪声。工业的处理的方式就是先稀疏采样得到一个有噪声的visibility的图,接着再在图像空间进行降噪。</p>
+</blockquote>
+<ul>
+<li><strong>Variance Soft Shadow Mapping(VSSM)</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="c-2-3-Math"><a href="#c-2-3-Math" class="headerlink" title="c.2.3). Math"></a>c.2.3). Math</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/PCF_02.png" alt="PCF_02"></p>
+<script type="math/tex; mode=display">
+V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-D_{\text {scene }}(x)\right]</script><ul>
+<li>其中$\chi^{+}$ 类似于$step()$ 函数<ul>
+<li>$D_{\mathrm{SM}}(q)-D_{\text {scene }}(x) \geq 0$， 即$Depth_{ShadowMap} \geq Depth_{cam}$，$\chi^{+}\left[D_{\mathrm{SM}}(q)-D_{\text {scene }}(x)\right] = 1$</li>
+<li>$D_{\mathrm{SM}}(q)-D_{\text {scene }}(x) &lt; 0$， 即$Depth_{ShadowMap} &lt; Depth_{cam}$，$\chi^{+}\left[D_{\mathrm{SM}}(q)-D_{\text {scene }}(x)\right] = 0$</li>
+</ul>
+</li>
+</ul>
+<h1 id="Homework-屏幕空间PCSS软阴影"><a href="#Homework-屏幕空间PCSS软阴影" class="headerlink" title="Homework - 屏幕空间PCSS软阴影"></a>Homework - 屏幕空间PCSS软阴影</h1><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS.png" alt="HW_PCSS" style="zoom:50%;"></p>
+<p>本次实现了屏幕空间的软阴影。其主要步骤如下：</p>
+<ol>
+<li><p>渲染屏幕空间的<strong>深度贴图</strong>；</p>
+</li>
+<li><p>从光源方向<strong>生成Shadow Map</strong>；（下图深度经过EncodeFloatRGBA()，提高精度）</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS01.png" alt="HW_PCSS01" style="zoom:25%;"></p>
+</li>
+<li><p>屏幕空间进行<strong>阴影收集（Shadow Collector）</strong>，即进行深度比较后，得到屏幕空间的阴影贴图；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS02.png" alt="HW_PCSS02" style="zoom: 25%;"></p>
+</li>
+<li><p>Shading时，用屏幕空间的uv，采样Step3中得到的屏幕空间阴影贴图；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/HW_PCSS03.png" alt="HW_PCSS03" style="zoom:25%;"></p>
+</li>
+</ol>
+<p>至于为什么要使用屏幕空间的软阴影，而不是直接在Shader中实现阴影主要有以下考虑：</p>
+<ol>
+<li>屏幕空间的阴影可在一个Pass内完成，管理和调整方便，更贴近实际的应用；</li>
+<li>屏幕空间的阴影性能开销小；</li>
+<li>方便阴影的后处理；</li>
+<li>此方案主要考虑场景阴影，而不考虑角色阴影。</li>
+</ol>
+<p>此方案主要有2个C#脚本，3个Shader实现。</p>
+<ul>
+<li>C#：<ol>
+<li>DepthTextureCamera.cs: 实现从光源方向<strong>生成Shadow Map</strong>；</li>
+<li>ShadowCollector.cs: 屏幕空间进行<strong>阴影收集（Shadow Collector）</strong></li>
+</ol>
+</li>
+<li>Shader:<ol>
+<li>CustomCaster.shader: 用于渲染深度图；</li>
+<li>ShadowCollector.shader: 用于逐像素比较深度，并实现具体的PCSS算法；</li>
+<li>CustromReciver.shader: 用于应用ShadowCollector得到的阴影图片，并通过屏幕空间的坐标进行采样，得到Visibility项；</li>
+</ol>
+</li>
+</ul>
+<p>以下，给出PCSS的主要代码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">float findBlocker(float2 UVfromLight, float ZReciver) &#123;	// 返回Blocker的平均深度</span><br><span class="line">    float num_occ = 0.0f;</span><br><span class="line">    float Z_avg = 0.0f;</span><br><span class="line">    float filterSize = 30.0f / _cusShadowMap_TexelSize.z;</span><br><span class="line"></span><br><span class="line">    for (int i = 0; i&lt;BLOCKER_SEARCH_NUM_SAMPLES; i++) &#123;</span><br><span class="line">        float Z_SM = DecodeFloatRGBA(tex2D(_cusShadowMap, poissonDisk[i]*filterSize + UVfromLight));</span><br><span class="line">        if (Z_SM &lt; ZReciver) &#123;</span><br><span class="line">            num_occ++;</span><br><span class="line">            Z_avg += Z_SM;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    if (num_occ == 0) &#123;</span><br><span class="line">        return 1.0;</span><br><span class="line">    &#125;</span><br><span class="line">    return Z_avg / num_occ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">float PCSS(float4 coord) &#123;</span><br><span class="line">    float zReceiver = coord.z / coord.w;</span><br><span class="line">    float2 uv = coord.xy / coord.w;</span><br><span class="line">    uv = uv * 0.5 + 0.5;</span><br><span class="line">#if defined (SHADER_TARGET_GLSL)    //(-1, 1) -&gt; (0, 1)</span><br><span class="line">    zReceiver = zReceiver * 0.5 + 0.5;</span><br><span class="line"></span><br><span class="line">#elif defined (UNITY_REVERSED_Z)</span><br><span class="line">    zReceiver = 1 - zReceiver;</span><br><span class="line">#endif</span><br><span class="line">    poissonDiskSamples(uv);		// 泊松圆盘采样</span><br><span class="line">    float visibility = 0.0f;</span><br><span class="line"></span><br><span class="line">    float zBlocker = findBlocker(uv, zReceiver);</span><br><span class="line">    // 计算半影宽度</span><br><span class="line">    float wPenumbra = (zReceiver - zBlocker) * LIGHT_WIDTH / zBlocker;</span><br><span class="line"></span><br><span class="line">    float scale = 1.0f;</span><br><span class="line">    float filterSize = scale * wPenumbra / _cusShadowMap_TexelSize.z + 1.0f / _cusShadowMap_TexelSize.z;;</span><br><span class="line">	</span><br><span class="line">    // PCF</span><br><span class="line">    for (int i = 0; i &lt; PCF_NUM_SAMPLES; i++) &#123;</span><br><span class="line">        float zNear = DecodeFloatRGBA(tex2D(_cusShadowMap, poissonDisk[i]*filterSize + uv));</span><br><span class="line">        if (zNear &gt; zReceiver) &#123;</span><br><span class="line">            visibility += 1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    return visibility / PCF_NUM_SAMPLES;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E9%98%B4%E5%BD%B1/" rel="tag"># 阴影</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_4.2_SSAO/" rel="prev" title="HPP_Graphics_4.2 SSAO">
+                  <i class="fa fa-chevron-left"></i> HPP_Graphics_4.2 SSAO
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/" rel="next" title="HPP_Graphics_4.1 Bloom算法">
+                  HPP_Graphics_4.1 Bloom算法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

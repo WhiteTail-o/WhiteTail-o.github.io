@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). 名词解释System on Chip(Soc) Soc是把CPU、GPU、内存、通信基带、GPS模块等整合在一起的芯片的称呼。常见有A系Soc（苹果），骁龙Soc（高通），麒麟Soc（华为），联发科Soc，猎户座Soc（三星），去年苹果推出的M系Soc，暂用于Mac，但这说明手机、笔记本和PC的通用芯片已经出现了  物理内存 也就是我们常说的手机内存，也叫System Memory。Soc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Graphics_3.7 移动端TB(D)R架构基础">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). 名词解释System on Chip(Soc) Soc是把CPU、GPU、内存、通信基带、GPS模块等整合在一起的芯片的称呼。常见有A系Soc（苹果），骁龙Soc（高通），麒麟Soc（华为），联发科Soc，猎户座Soc（三星），去年苹果推出的M系Soc，暂用于Mac，但这说明手机、笔记本和PC的通用芯片已经出现了  物理内存 也就是我们常说的手机内存，也叫System Memory。Soc">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR_Pipeline.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR_Pipeline2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBR_TBDR_Flow.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBDR_Pipeline.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBDR_Pipeline2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBR_IMR.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/Binning.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/Forward%20Pixel%20Kill.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/HSR.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBDR_Pipeline.png">
+<meta property="article:published_time" content="2023-02-15T10:44:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T05:13:36.127Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="硬件">
+<meta property="article:tag" content="移动端">
+<meta property="article:tag" content="架构">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/","path":"2023/02/15/HPP_Graphics_3.7_移动端TB(D)R架构基础/","title":"HPP_Graphics_3.7 移动端TB(D)R架构基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Graphics_3.7 移动端TB(D)R架构基础 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-%E5%90%8D%E8%AF%8D%E8%A7%A3%E9%87%8A"><span class="nav-text">a). 名词解释</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#System-on-Chip-Soc"><span class="nav-text">System on Chip(Soc)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98"><span class="nav-text">物理内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#On-Chip-Buffer"><span class="nav-text">On-Chip Buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Stall"><span class="nav-text">Stall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FillRate"><span class="nav-text">FillRate</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TBR%EF%BC%88Tile-Based-Deferred-Rendering%EF%BC%89"><span class="nav-text">TBR（Tile-Based (Deferred) Rendering）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Deffer"><span class="nav-text">Deffer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E7%AB%8B%E5%8D%B3%E6%B8%B2%E6%9F%93%EF%BC%88IMR%EF%BC%8CImmediate-Mode-Rendering-%EF%BC%89"><span class="nav-text">b). 立即渲染（IMR，Immediate Mode Rendering ）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-%E5%9F%BA%E4%BA%8E%E5%9D%97%E5%85%83%E6%B8%B2%E6%9F%93%E7%9A%84TB-D-R"><span class="nav-text">c). 基于块元渲染的TB(D)R</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-TBDR-Pipeline"><span class="nav-text">c.1). TBDR Pipeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-TBR%E5%92%8CIMR%E5%AF%B9%E6%AF%94"><span class="nav-text">c.2). TBR和IMR对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#TBR%E4%BC%98%E7%82%B9%EF%BC%9A"><span class="nav-text">TBR优点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TBR%E7%BC%BA%E7%82%B9%EF%BC%9A"><span class="nav-text">TBR缺点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#d-%E7%AC%AC%E4%B8%80%E4%B8%AADefer%EF%BC%9ABinning"><span class="nav-text">d). 第一个Defer：Binning</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#e-%E7%AC%AC%E4%BA%8C%E4%B8%AADefer%EF%BC%9A%E4%B8%8D%E5%90%8CGPU-%E7%9A%84-Early-Depth-Test"><span class="nav-text">e). 第二个Defer：不同GPU 的 Early-Depth-Test</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Forward-Pixel-Kill"><span class="nav-text">Forward Pixel Kill</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HSR"><span class="nav-text">HSR</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#f-%E4%BC%98%E5%8C%96%E5%BB%BA%E8%AE%AE"><span class="nav-text">f). 优化建议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E3%80%90%E8%A1%A5%E5%85%85%E9%93%BE%E6%8E%A5%E3%80%91"><span class="nav-text">【补充链接】</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Graphics_3.7 移动端TB(D)R架构基础 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Graphics_3.7 移动端TB(D)R架构基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 18:44:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:44:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:13:36" itemprop="dateModified" datetime="2023-03-17T13:13:36+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="a-名词解释"><a href="#a-名词解释" class="headerlink" title="a). 名词解释"></a>a). 名词解释</h1><h2 id="System-on-Chip-Soc"><a href="#System-on-Chip-Soc" class="headerlink" title="System on Chip(Soc)"></a>System on Chip(Soc)</h2><ul>
+<li>Soc是把CPU、GPU、内存、通信基带、GPS模块等整合在一起的芯片的称呼。常见有A系Soc（苹果），骁龙Soc（高通），麒麟Soc（华为），联发科Soc，猎户座Soc（三星），去年苹果推出的M系Soc，暂用于Mac，但这说明手机、笔记本和PC的通用芯片已经出现了</li>
+</ul>
+<h2 id="物理内存"><a href="#物理内存" class="headerlink" title="物理内存"></a>物理内存</h2><ul>
+<li>也就是我们常说的手机内存，也叫<strong>System Memory</strong>。Soc中CPU和GPU共用一块片内LPDDR物理内存。此外CPU和GPU还分别有自己的告诉SRAM的Cache缓存，也叫<strong>On-chip Memory</strong>。读取System Memory的时间消耗大概是On-chip Memory的几倍到几十倍</li>
+</ul>
+<h2 id="On-Chip-Buffer"><a href="#On-Chip-Buffer" class="headerlink" title="On-Chip Buffer"></a>On-Chip Buffer</h2><p>在TB(D)R架构下会存储Tile的颜色、深度和模板缓冲，读写修改都非常快。如果Load/Store指令中缓冲需要被Preserve，将会被写入一份到System Memory中。</p>
+<h2 id="Stall"><a href="#Stall" class="headerlink" title="Stall"></a>Stall</h2><p>当GPU两次计算结果之间有依赖关系而必须串行时，等待的过程便是Stall</p>
+<h2 id="FillRate"><a href="#FillRate" class="headerlink" title="FillRate"></a>FillRate</h2><p>像素填充率 = ROP运行的时钟频率 x ROP的个数 x 每个时钟ROP可以处理的像素个数</p>
+<h2 id="TBR（Tile-Based-Deferred-Rendering）"><a href="#TBR（Tile-Based-Deferred-Rendering）" class="headerlink" title="TBR（Tile-Based (Deferred) Rendering）"></a>TBR（Tile-Based (Deferred) Rendering）</h2><p>TBR（Tile-Based (Deferred) Rendering）是目前主流的移动GPU渲染架构，对应一般PC上的GPU渲染架构则是IMR（Immediate Mode Rendering ）。</p>
+<ul>
+<li>TBR流水线：顶点着色器 - Defer - 光栅化 - 片元着色器</li>
+<li>TBDR流水线：顶点着色器 - Defer - 光栅化 - Defer - 片元着色器</li>
+</ul>
+<h2 id="Deffer"><a href="#Deffer" class="headerlink" title="Deffer"></a>Deffer</h2><p> 延迟，从渲染数据的角度来看，就是 ”阻塞+批处理“ GPU ”一帧“ 的多个数据，然后一起处理</p>
+<hr>
+<h1 id="b-立即渲染（IMR，Immediate-Mode-Rendering-）"><a href="#b-立即渲染（IMR，Immediate-Mode-Rendering-）" class="headerlink" title="b). 立即渲染（IMR，Immediate Mode Rendering ）"></a>b). 立即渲染（IMR，Immediate Mode Rendering ）</h1><ul>
+<li><p>IMR是PC上GPU采用的架构</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR.png" alt="IMR"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR_Pipeline.png" alt="IMR_Pipeline"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR_Pipeline2.png" alt="IMR_Pipeline2" style="zoom:33%;"></p>
+</li>
+</ul>
+<h1 id="c-基于块元渲染的TB-D-R"><a href="#c-基于块元渲染的TB-D-R" class="headerlink" title="c). 基于块元渲染的TB(D)R"></a>c). 基于块元渲染的TB(D)R</h1><p>TB(D)R宏观上总共分为两个阶段：</p>
+<ol>
+<li><strong>分图元：</strong> 第一阶段执行所有几何相关的处理，并生成Primitive List（图元列表），并且<strong>确定每个Tile上面有哪些Primitive</strong></li>
+<li>第二阶段逐Tile执行 光栅化后 写入Tile Buffer（片上内存），并在完成后将 Frame BUffer 从 Tile Buffer 写回到 System Memory中；</li>
+</ol>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBR_TBDR_Flow.png" alt="TBR_TBDR_Flow"></p>
+<span id="more"></span>
+<h2 id="c-1-TBDR-Pipeline"><a href="#c-1-TBDR-Pipeline" class="headerlink" title="c.1). TBDR Pipeline"></a>c.1). TBDR Pipeline</h2><p>下图为PowerVR的TBDR：</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBDR_Pipeline.png" alt="TBDR_Pipeline"></p>
+<ul>
+<li>Tilling后将图元列表和顶点数据传到System Memory，待需要光栅化时从System Memory取出。光栅化后进行HSR（因为是PowerVR的流程图所以是HSR）或Depth Test会将结果写入On-chip Buffer。同样，在逐片元操作后，会将Tile的结果写入Tile Buffer，并在完成Frame Buffer后从Tile Buffer写回到System Memory中</li>
+</ul>
+<p>下图为三星提出的流程图：</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBDR_Pipeline2.png" alt="TBDR_Pipeline2"></p>
+<h2 id="c-2-TBR和IMR对比"><a href="#c-2-TBR和IMR对比" class="headerlink" title="c.2). TBR和IMR对比"></a>c.2). TBR和IMR对比</h2><p>(a)为TBR，(b)为IMR</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBR_IMR.png" alt="TBR_IMR"></p>
+<ul>
+<li><p><strong>TBR</strong>的核心目的是<strong><font color="red">降低带宽，减少功耗</font></strong>，但渲染帧率上并不比<strong>IMR</strong>快</p>
+</li>
+<li><p>图（a）TBR架构</p>
+<ul>
+<li><p>几何处理数据形成了FrameData（放在System Memory上）</p>
+</li>
+<li><p>这些Frame Data经过片段处理，结果放在了Tile Buffer上（片的内存上）</p>
+</li>
+<li><p>最后的结果会刷到FrameBuffer中（System Memory上）</p>
+</li>
+</ul>
+</li>
+<li><p>图（b）IMR架构</p>
+<ul>
+<li>对比TBR有以下两种区别<ul>
+<li>几何处理数据直接到片段处理，没有中间数据（Frame Data）</li>
+<li>直接刷到System Memory上了，没有经过片内存（On-Chip Memory）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="TBR优点："><a href="#TBR优点：" class="headerlink" title="TBR优点："></a>TBR优点：</h3><ol>
+<li>TBR大大<strong>减少了Overdraw</strong>，PowerVR使用了<strong>HSR</strong>技术，Mali使用了<strong>Forward Pixel Killing</strong>技术，目的是为了最大限度减少被遮挡Pixel的Texturing和shading；</li>
+<li>TBR是Cache friendly，在cache里读写的速度比全局内存的速度要快得多，以降低帧率为代价，降低带宽，省电；</li>
+</ol>
+<h3 id="TBR缺点："><a href="#TBR缺点：" class="headerlink" title="TBR缺点："></a>TBR缺点：</h3><ol>
+<li>Binning过程在Vertex阶段之后，将输出的集合数据写入到System Memory，然后才被FS读取，<strong>集合数据过多的管线，容易在Binning过程产生性能瓶颈；</strong></li>
+<li>如一个三角形同时在多个Tile上，需要多次绘制（和Games101RayTracing中空间划分容易造成同一个Object存在多个叶子节点的原因类似）。这意味着总渲染时间高于IMR；</li>
+</ol>
+<h1 id="d-第一个Defer：Binning"><a href="#d-第一个Defer：Binning" class="headerlink" title="d). 第一个Defer：Binning"></a>d). 第一个Defer：Binning</h1><ul>
+<li><p><strong>概念：将图元分配到块元的过程</strong></p>
+</li>
+<li><p><strong>过程：</strong> </p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/Binning.png" alt="Binning"></p>
+</li>
+<li><p>注释：</p>
+<ul>
+<li>第二幅图里的红色三角形，只用一个块元就能渲染，所以它只会被分配到一个块元中</li>
+<li>第四幅图里的棕色三角形，需要多个块元才能渲染，所以它需要分配到9个块元中一起渲染</li>
+</ul>
+</li>
+<li><p><em>如果你的项目中binning过程相比其他耗时长的话，就要考虑一下是不是几何数据过多了</em></p>
+</li>
+</ul>
+<h1 id="e-第二个Defer：不同GPU-的-Early-Depth-Test"><a href="#e-第二个Defer：不同GPU-的-Early-Depth-Test" class="headerlink" title="e). 第二个Defer：不同GPU 的 Early-Depth-Test"></a>e). 第二个Defer：不同GPU 的 Early-Depth-Test</h1><h2 id="Forward-Pixel-Kill"><a href="#Forward-Pixel-Kill" class="headerlink" title="Forward Pixel Kill"></a>Forward Pixel Kill</h2><p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/Forward Pixel Kill.png" alt="Forward Pixel Kill"></p>
+<ul>
+<li><strong>Arm Mali</strong><ul>
+<li>采用Forward Pixel Kill技术</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>位于管线的位置：</strong></p>
+<ul>
+<li>发生在Early-z之后</li>
+</ul>
+</li>
+<li><p><strong>数据结构：</strong></p>
+<ul>
+<li>先进先出的队列</li>
+</ul>
+</li>
+<li><p><strong>简单概括一下：</strong></p>
+<ul>
+<li><p>队列中有4个Quad（可以理解为2×2像素的平面），每个Quad有屏幕上位置的数据和Z数据</p>
+</li>
+<li><p>Z越大代表离摄像机越远</p>
+</li>
+<li><p>根据屏幕上相同位置（pos）的不同z，对不透明的像素进行替换（有近的就不渲染远的），这个过程叫作killed</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="HSR"><a href="#HSR" class="headerlink" title="HSR"></a>HSR</h2><p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/HSR.png" alt="HSR"></p>
+<ul>
+<li><p>PowerVR的<strong>HSR</strong></p>
+<ul>
+<li>HSR = Hide Surface Removal隐形面剔除</li>
+</ul>
+</li>
+<li><p>大体实现原理：</p>
+<ul>
+<li>虚拟出一个射线，当它遇到第一个不透明的物体时就会停下来，这样就会打断后面三角形的后续ps处理</li>
+</ul>
+</li>
+</ul>
+<h1 id="f-优化建议"><a href="#f-优化建议" class="headerlink" title="f). 优化建议"></a>f). 优化建议</h1><ol>
+<li><p><strong>记得在不使用FrameBuffer的时候clear或discard</strong></p>
+<ul>
+<li><p>这样做主要是为了清空积存在tile buffer上的中间数据（前边提到的Frame Data），</p>
+</li>
+<li><p>所以对Unity里的rt（render texture）的使用也特别说明一下：</p>
+</li>
+<li><p>当我们不再使用这个rt的时候，尽量调用一次Discard</p>
+</li>
+<li><p>在OpenGl ES上，要善用glclear，glInvalidateFrameBuffer，避免不必要的Resolve（tile buff刷新到system memory）行为</p>
+</li>
+</ul>
+</li>
+<li><p><strong>不要在一帧里频繁的切换FrameBuffer的绑定</strong></p>
+<ul>
+<li>本质：减少tile buffer和system memory之间的stall（同步）操作</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><strong>对于移动平台，建议使用Alpha混合，而非Alpha测试。</strong><ul>
+<li>是一个经验性的结论</li>
+<li>在实际使用的过程中应该使用比较两者的表现</li>
+<li>通常情况下，移动端应该避免使用Alpha混合来实现透明，如果确实要用，尝试缩小混合区域的覆盖范围</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><strong>手机上必须用Alpha Test时，先做一遍Depth Prepass（参考Alpha Test 的双pass优化思路）</strong></li>
+<li><strong>图片尽量压缩</strong><ul>
+<li>例如ASTC 、ETC2</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p><strong>图片尽量走mipmap</strong></p>
+</li>
+<li><p><strong>尽量使用从vertex shader传来的Varying变量uv值采样贴图（连续的），不要在Fragment shader里动态计算贴图的uv值（非连续的），否则CacheMiss</strong></p>
+</li>
+<li><p><strong>在延迟渲染中，尽量利用Tile Buffer（参考传统延迟渲染和TBDR）</strong></p>
+</li>
+<li><p><strong>如果在Unity中调整ProjectSetting—-Quality—-Rendering—-Texture Quality的不同设置，或者不同分辨率下，帧率有很大的变化，大概率是带宽出问题了</strong></p>
+</li>
+<li><p><strong>MASS在TBDR下反而是非常快速的</strong></p>
+<ul>
+<li><p>MSAA是硬件上的，发生在片上的</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBDR_Pipeline.png" alt="TBDR_Pipeline"></p>
+<ul>
+<li>可以看到Tilling后的几何数据存到System Memory后，在Texture and Shade时仍然可以调用，这也为MSAA提供了便利</li>
+</ul>
+</li>
+<li><p>相比FSAA，MSAA在手机上是非常快的</p>
+</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li><p><strong>少在Fragment shader中使用discard函数，调用gl_FragDepth从而打断Early-DT的过程</strong></p>
+<ul>
+<li>（hlsl中为Clip，glsl中为discard）</li>
+</ul>
+</li>
+<li><p><strong>在shader使用浮点数精度值时，有目的的区分使用float，half</strong></p>
+<ul>
+<li>优点<ul>
+<li>带宽减少</li>
+<li>GPU中用的周期数减少，因为着色器编译器可以优化你的代码来提高并行化程度</li>
+<li>要求的统一变量寄存器的数量减少，这样反而又降低了寄存器数量溢出风险。</li>
+<li>具体参考：熊大的优化建议、shader数学计算优化技巧</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>在移动端的TBDR架构中，顶点处理部分（Binning过程）容易成为瓶颈</strong></p>
+<ul>
+<li>避免使用曲面细分shader，置换贴图等负操作</li>
+<li><p>提倡使用模型LOD，（本质上减少Frame Data的压力）</p>
+</li>
+<li><p>Unity中尽早的在应用阶段做umbra（Unity内置）遮挡剔除、gpu的occlusion cull</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="【补充链接】"><a href="#【补充链接】" class="headerlink" title="【补充链接】"></a>【补充链接】</h1><p><a target="_blank" rel="noopener" href="https://www.gpuinsight.com/gpu_performance/">GPU性能指标 </a>_</p>
+<p><a target="_blank" rel="noopener" href="https://developer.samsung.com/galaxy-gamedev/resources/articles/gpu-framebuffer.html">三星的GPU-FrameBuff指导</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.techpowerup.com/231129/on-nvidias-tile-based-rendering">英伟达的TBR教学文章</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.arm.com/solutions/graphics-and-gaming/developer-guides/learn-the-basics/tile-based-rendering/single-page">ARM的TBR教学文章</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.apple.com/library/archive/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/Performance/Performance.html">苹果OpenGL程序开发指南</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.seas.upenn.edu/~pcozzi/OpenGLInsights/OpenGLInsights-TileBasedArchitectures.pdf">OpenGL Insights</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/49141824">知乎文章：Tile-based 和 Full-screen 方式的 Rasterization 相比有什么优劣</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.evolife.cn/html/2016/87847_5.html">移动图形芯片的故事</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/112120206">移动设备GPU架构知识汇总</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33127345">再议移动平台的AlphaTest效率问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/347001411">移动平台GPU硬件学习与理解</a></p>
+<p><a target="_blank" rel="noopener" href="http://cdn.imgtec.com/sdk-documentation/Introduction_to_PowerVR_for_Developers.pdf">PowerVR开发者指南</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gameknife/p/3515714.html">Performance Tunning for Tile-Based Architecture Tile-Based架构下的性能调校</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/29904258">TBDR的HSR流程细节和使用AlphaBlend的效率提升程度</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68158277">当我们谈优化时，我们谈些什么</a></p>
+<p><a target="_blank" rel="noopener" href="https://edu.uwa4d.com/course-intro/1/179">https://edu.uwa4d.com/course-intro/1/179</a> 虽然是收费的 但是很值得买，推荐</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/58017068">Alpha Test的双pass 优化思路</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/killop/anything_about_game#gpu-architecture">个人收藏</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SeySx0TkluE&amp;pbjreload=101">Adreno Hardware Tutorial 3: Tile Based Rendering</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hamwj1991/p/12404551.html">Mali GPU的独有特性</a></p>
+<p><a target="_blank" rel="noopener" href="http://grmanet.sogang.ac.kr/ihm/cs170/20/HC27.25.531-Mali-T880-Bratt-ARM-2015_08_23.pdf">Mali-T880</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.xionggf.com/post/my_books/u3d_shader_annotation">《Unity3D内建着色器源码剖析》</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.xionggf.com/post/unity3d/shader/u3d_shader_optimization/">作者熊大的优化建议</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/22232448">GPU画像素的顺序是什么</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=Nc6R1hwXhL8&amp;t=973s&amp;pbjreload=101">Tile-based Rasterization in Nvidia GPUs with David Kanter of Real World Tech</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E7%A1%AC%E4%BB%B6/" rel="tag"># 硬件</a>
+              <a href="/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/" rel="tag"># 移动端</a>
+              <a href="/tags/%E6%9E%B6%E6%9E%84/" rel="tag"># 架构</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/" rel="prev" title="HPP_Graphics_3.6 纹理压缩">
+                  <i class="fa fa-chevron-left"></i> HPP_Graphics_3.6 纹理压缩
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_4.2_SSAO/" rel="next" title="HPP_Graphics_4.2 SSAO">
+                  HPP_Graphics_4.2 SSAO <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

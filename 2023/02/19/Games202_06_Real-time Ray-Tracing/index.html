@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). IntroductionReal-time Ray-Tracing vs. Ray-Tracing:  Real-time Ray-Tracing &#x3D;&#x3D; 1&#x2F;few sample per pixel(SPP)  Key technology: Denoising(降噪)    一个光路样本（1 SPP path tracing）：   第一步是Rasterization，而不是Ray的原因">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Games202-6 Real-time Ray-Tracing">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). IntroductionReal-time Ray-Tracing vs. Ray-Tracing:  Real-time Ray-Tracing &#x3D;&#x3D; 1&#x2F;few sample per pixel(SPP)  Key technology: Denoising(降噪)    一个光路样本（1 SPP path tracing）：   第一步是Rasterization，而不是Ray的原因">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT00.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/%E5%85%89%E7%BA%BF%E6%8A%95%E5%B0%84.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Denoising01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/G-Buffer01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/BackProj01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/BackProj03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/TemporalFailure01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Failure01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Failure02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Implementation01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/BilateralFiltering01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering_Example01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Large_Solution01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Large_Solution02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Large_Solution03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/ATW01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/ATW02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/%E9%A2%91%E8%B0%B1%E6%90%AC%E7%A7%BB.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval03.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF_Depth.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF_Normal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF_Color.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RAE.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RAE02.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Comparison.png">
+<meta property="article:published_time" content="2023-02-19T12:42:10.000Z">
+<meta property="article:modified_time" content="2023-03-17T05:34:38.145Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Ray-Tracing">
+<meta property="article:tag" content="Games202">
+<meta property="article:tag" content="Denoise">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT00.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/","path":"2023/02/19/Games202_06_Real-time Ray-Tracing/","title":"Games202-6 Real-time Ray-Tracing"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Games202-6 Real-time Ray-Tracing | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-Introduction"><span class="nav-text">a). Introduction</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-Temporal-denoising-%E6%97%B6%E5%9F%9F%E9%99%8D%E5%99%AA"><span class="nav-text">b). Temporal denoising(时域降噪)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b-1-G-Buffer"><span class="nav-text">b.1). G-Buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-2-Back-Projection"><span class="nav-text">b.2). Back Projection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-3-issues"><span class="nav-text">b.3). issues</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-4-Adjustments-to-Temp-Failure"><span class="nav-text">b.4). Adjustments to Temp. Failure</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-5-More-Temporal-Failure"><span class="nav-text">b.5). More Temporal Failure</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-Implementation-%E5%AE%9E%E7%8E%B0"><span class="nav-text">c). Implementation(实现)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-Bilateral-filtering-%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2"><span class="nav-text">c.1). Bilateral filtering(双边滤波)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-Joint-Bilateral-filtering-%E8%81%94%E5%90%88%E5%8F%8C%E8%BE%B9%E6%BB%A4%E6%B3%A2"><span class="nav-text">c.2). Joint Bilateral filtering(联合双边滤波)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#c-2-1-Example"><span class="nav-text">c.2.1). Example</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-Large-Filters"><span class="nav-text">c.2). Large Filters</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution-1-Separate-Passes"><span class="nav-text">Solution 1: Separate Passes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solution-2-Progressively-Growing-Sizes-%E9%80%90%E6%AD%A5%E5%A2%9E%E5%8A%A0%E5%B0%BA%E5%AF%B8"><span class="nav-text">Solution 2: Progressively Growing Sizes(逐步增加尺寸)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#d-Outlier-Removal-and-temporal-clamping"><span class="nav-text">d). Outlier Removal(and temporal clamping)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#d-1-Introduction"><span class="nav-text">d.1). Introduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-2-%E5%AE%9E%E7%8E%B0"><span class="nav-text">d.2). 实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#e-SVGF-Spatiotemporal-Variance-Guided-Filtering"><span class="nav-text">e). SVGF(Spatiotemporal Variance-Guided Filtering)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#e-1-SVGF-%E2%80%94-Joint-Bilateral-Filtering"><span class="nav-text">e.1). SVGF — Joint Bilateral Filtering</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#e-1-1-Depth"><span class="nav-text">e.1.1). Depth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#e-1-2-Normal"><span class="nav-text">e.1.2). Normal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#e-1-3-Luminance-grayscale-color-value"><span class="nav-text">e.1.3). Luminance(grayscale color value)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#f-RAE-Recurrent-AutoEncoder"><span class="nav-text">f). RAE(Recurrent AutoEncoder)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#g-Comparison"><span class="nav-text">g). Comparison</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_4.5 DOF景深基础
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Games202-6 Real-time Ray-Tracing | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Games202-6 Real-time Ray-Tracing
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-19 20:42:10" itemprop="dateCreated datePublished" datetime="2023-02-19T20:42:10+08:00">2023-02-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:34:38" itemprop="dateModified" datetime="2023-03-17T13:34:38+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><p><strong>Real-time Ray-Tracing vs. Ray-Tracing:</strong></p>
+<ul>
+<li><p>Real-time Ray-Tracing == <strong>1/few sample per pixel(SPP)</strong></p>
+</li>
+<li><p><strong>Key technology:</strong> Denoising(降噪)</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT00.png" alt="RTRT00" style="zoom: 50%;"></p>
+</li>
+</ul>
+<p><strong>一个光路样本（1 SPP path tracing）：</strong></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT01.png" alt="RTRT01" style="zoom:50%;"></p>
+<ul>
+<li><p><strong>第一步是Rasterization，而不是Ray的原因：</strong> 从摄影机发出经过各个像素的光线，即等同于进行一次光栅化，找到Primary hitpoint</p>
+<ul>
+<li><p>第一步如做光线求交，则为<strong>光线投射（Ray Casting）</strong>。而<strong>光线投射和光栅化没有本质区别</strong>（都是渲染一点的DI，只不过相当于深度测试被光线求交替代了）</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/光线投射.png" alt="光线投射" style="zoom: 50%;"></p>
+<blockquote id="fn_Ray Casting">
+<sup>Ray Casting</sup>. 注意和光线追踪的区别，Ray Casting基本只求交一次，而不迭代追踪<a href="#reffn_Ray Casting" title="Jump back to footnote [Ray Casting] in the text."> &#8617;</a>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RTRT02.png" alt="RTRT02" style="zoom:50%;"></p>
+<ul>
+<li>传统的降噪方式不是效果不好，就是太慢或不靠谱</li>
+</ul>
+<h1 id="b-Temporal-denoising-时域降噪"><a href="#b-Temporal-denoising-时域降噪" class="headerlink" title="b). Temporal denoising(时域降噪)"></a>b). Temporal denoising(时域降噪)</h1><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Denoising01.png" alt="Denoising01" style="zoom:50%;"></p>
+<p><strong>Key idea:</strong></p>
+<ul>
+<li>复用<strong>前面已经降噪过的一帧</strong>；</li>
+<li>使用<strong>motion vector</strong>来找到先前的位置；</li>
+<li>本质上是提高采样率；</li>
+</ul>
+<h2 id="b-1-G-Buffer"><a href="#b-1-G-Buffer" class="headerlink" title="b.1). G-Buffer"></a>b.1). G-Buffer</h2><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/G-Buffer01.png" alt="G-Buffer01"></p>
+<h2 id="b-2-Back-Projection"><a href="#b-2-Back-Projection" class="headerlink" title="b.2). Back Projection"></a>b.2). Back Projection</h2><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/BackProj01.png" alt="BackProj01" style="zoom:50%;"></p>
+<ul>
+<li><strong>Key idea：</strong>不同帧之间相同的点，意味着有着<strong>相同的世界位置（如不移动）或模型空间位置</strong>；</li>
+</ul>
+<p><strong>How：</strong></p>
+<ul>
+<li>如果世界坐标 $s$ 存在于G-Buffer中，即可直接使用；</li>
+<li>否则，$s = M^{-1}V^{-1}P^{-1}E^{-1}x$ （$E$ 为视口变换，即NDF到Viewport/Screen）</li>
+<li>运动（Motion）情况已知，$s’ = T^{-1} s$，$s’$ 为运动前的位置，$T$ 为运动的矩阵</li>
+<li>在 $i-1$ 帧，$s$ 对应的屏幕空间位置为 $x’=P’V’M’s’$</li>
+</ul>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/BackProj03.png" alt="BackProj03" style="zoom:50%;"></p>
+<span id="more"></span>
+<h2 id="b-3-issues"><a href="#b-3-issues" class="headerlink" title="b.3). issues"></a>b.3). issues</h2><ul>
+<li><p>Failure case 1: 切换场景</p>
+<ul>
+<li><strong>burn-in period</strong>(即需要一定时间积累降噪质量足够好的帧，如UE中的burn-in)</li>
+</ul>
+</li>
+<li><p>Failure case 2: walking backwards in a hallway</p>
+<ul>
+<li><strong>screen space issue</strong>（当前帧出现上一帧屏幕外的信息）</li>
+</ul>
+</li>
+<li><p>Failure case 3: suddenly appearing background</p>
+<ul>
+<li><p><strong>disocclusion</strong>（上一帧被遮挡的物体，当前帧未被遮挡）</p>
+</li>
+<li><p>可能造成<strong>拖尾（lagging）</strong></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/TemporalFailure01.png" alt="TemporalFailure01" style="zoom: 67%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-4-Adjustments-to-Temp-Failure"><a href="#b-4-Adjustments-to-Temp-Failure" class="headerlink" title="b.4). Adjustments to Temp. Failure"></a>b.4). Adjustments to Temp. Failure</h2><script type="math/tex; mode=display">
+\bar{C}^{(i)}=\alpha \bar{C}^{(i)}+(1-\alpha) C^{(i-1)}</script><ul>
+<li><p>Clamping</p>
+<ul>
+<li>Clamp上一帧的信息，使其接近当前帧。即Clamp $C^{(i-1)}$ </li>
+</ul>
+</li>
+<li><p>Detection(即不符合要求时，不使用Temp. denoising)</p>
+<ul>
+<li>Use e.g. object ID to detect temporal failure（ID通道）</li>
+<li>调整$\alpha$，上一帧不可靠时，调高$\alpha$<ul>
+<li>Problem：重新引入更多噪声；</li>
+</ul>
+</li>
+<li>可能需要增强空域降噪；</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-5-More-Temporal-Failure"><a href="#b-5-More-Temporal-Failure" class="headerlink" title="b.5). More Temporal Failure"></a>b.5). More Temporal Failure</h2><ul>
+<li><p>Detaching/lagging shadows(阴影拖尾)</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Failure01.png" alt="Failure01"></p>
+</li>
+<li><p>Temporal failure can also happen in shading</p>
+<ul>
+<li><p>如反射滞后；</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Failure02.png" alt="Failure02" style="zoom:67%;"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="c-Implementation-实现"><a href="#c-Implementation-实现" class="headerlink" title="c). Implementation(实现)"></a>c). Implementation(实现)</h1><p>eg. Gaussian filter</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Implementation01.png" alt="Implementation01"></p>
+<ul>
+<li>滤波核可以不归一化，但对于结果需要归一化；</li>
+</ul>
+<h2 id="c-1-Bilateral-filtering-双边滤波"><a href="#c-1-Bilateral-filtering-双边滤波" class="headerlink" title="c.1). Bilateral filtering(双边滤波)"></a>c.1). Bilateral filtering(双边滤波)</h2><p><strong>观察：</strong></p>
+<ul>
+<li>高斯模糊会将边界模糊，但我们需要保留边界；</li>
+<li>边界 = 颜色差异大</li>
+</ul>
+<p><strong>目的：</strong></p>
+<ul>
+<li><p>模糊同时保留边界；</p>
+</li>
+<li><p>当像素$j$ 和像素$i$ 颜色差异大时，$j$贡献变少（权重变小）</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/BilateralFiltering01.png" alt="BilateralFiltering01"></p>
+<ul>
+<li>像素$a$ 位置为$(i,j)$，像素$b$ 位置为$(k,l)$；</li>
+<li>$I(i,j)$ 表示$(i,j)$位置的像素值；</li>
+<li>$\sigma$ 控制对应项的作用范围，其值越大，对应项的局部影响<strong>范围</strong>就越大，分子变化影响越小</li>
+<li>类似于两个不同形式的高斯核<strong>相乘</strong>（指数相加），即两个标准（距离，颜色），2 metrics</li>
+<li>可以根据需求调整，如较为看重color dist. 对weight的影响，就可以将第二项的2 调为 1；</li>
+</ul>
+</li>
+</ul>
+<h2 id="c-2-Joint-Bilateral-filtering-联合双边滤波"><a href="#c-2-Joint-Bilateral-filtering-联合双边滤波" class="headerlink" title="c.2). Joint Bilateral filtering(联合双边滤波)"></a>c.2). Joint Bilateral filtering(联合双边滤波)</h2><p><strong>观察：</strong></p>
+<ul>
+<li>Gaussian filtering: 1 metric (distance)</li>
+<li>Bilateral filtering: 2 metrics (position dist. &amp; color dist.)</li>
+<li>因此，我们可以<strong>考虑更多的标准（metric），丰富滤波核，进行滤波（Key idea）</strong></li>
+</ul>
+<p><strong>定义：</strong>Joint Bilateral filtering是一系列考虑更多标准的滤波方法。</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering01.png" alt="JointBilateralFiltering01"></p>
+<p><strong>Note:</strong></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering02.png" alt="JointBilateralFiltering02"></p>
+<hr>
+<h3 id="c-2-1-Example"><a href="#c-2-1-Example" class="headerlink" title="c.2.1). Example"></a>c.2.1). Example</h3><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/JointBilateralFiltering_Example01.png" alt="JointBilateralFiltering_Example01"></p>
+<h2 id="c-2-Large-Filters"><a href="#c-2-Large-Filters" class="headerlink" title="c.2). Large Filters"></a>c.2). Large Filters</h2><p>对于大的滤波核，性能开销会非常大(e.g. 64x64)</p>
+<h3 id="Solution-1-Separate-Passes"><a href="#Solution-1-Separate-Passes" class="headerlink" title="Solution 1: Separate Passes"></a>Solution 1: Separate Passes</h3><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Large_Solution01.png" alt="Large_Solution01"></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Large_Solution02.png" alt="Large_Solution02"></p>
+<ul>
+<li>将NxN大小的2D高斯核，拆分为 1xN 和 Nx1 的1D高斯核。通过两个Pass进行滤波；（<strong>注意：</strong> 并不是所有滤波核都可拆分）</li>
+</ul>
+<hr>
+<p><strong>原因：</strong></p>
+<script type="math/tex; mode=display">
+w(i, j, k, l)=\exp \left(-\frac{(i-k)^{2}+(j-l)^{2}}{2 \sigma_{d}^{2}}\right)</script><p>2D高斯核的形式是可拆分的，如下：</p>
+<script type="math/tex; mode=display">
+G_{2D}(x, y) = G_{1D}(x) \cdot G_{1D}(y)</script><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Large_Solution03.png" alt="Large_Solution03"></p>
+<ul>
+<li><strong><font color="red">理论上</font>，双边滤波/联合双边滤波是不可拆分的</strong>（实现上，只要滤波核不特别大，如超过32x32，就可采用拆分方法）</li>
+</ul>
+<hr>
+<h3 id="Solution-2-Progressively-Growing-Sizes-逐步增加尺寸"><a href="#Solution-2-Progressively-Growing-Sizes-逐步增加尺寸" class="headerlink" title="Solution 2: Progressively Growing Sizes(逐步增加尺寸)"></a>Solution 2: Progressively Growing Sizes(逐步增加尺寸)</h3><p><strong>介绍：</strong> 逐Pass增加filter (间隙的)size，类似空洞卷积。第一次间隙为0，第二次间隙为1……</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/ATW01.png" alt="ATW01"></p>
+<hr>
+<p><strong>原因：</strong></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/ATW02.png" alt="ATW02"></p>
+<ul>
+<li><p><strong>逐步增加尺寸：</strong> 逐步减小信号的最高频率；</p>
+</li>
+<li><p><strong>增加采样间隙：</strong> 降低采样频率，频谱搬移距离逐渐减小；</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/频谱搬移.png" alt="频谱搬移" style="zoom: 67%;"></p>
+</li>
+</ul>
+<ul>
+<li><strong>逻辑：</strong> 减少信号高频部分，并增大采样间隙（频谱搬移，将信号左边界搬移到有边界），使得不会产生信号混叠；</li>
+</ul>
+<hr>
+<h1 id="d-Outlier-Removal-and-temporal-clamping"><a href="#d-Outlier-Removal-and-temporal-clamping" class="headerlink" title="d). Outlier Removal(and temporal clamping)"></a>d). Outlier Removal(and temporal clamping)</h1><h2 id="d-1-Introduction"><a href="#d-1-Introduction" class="headerlink" title="d.1). Introduction"></a>d.1). Introduction</h2><p><strong>Outlier:</strong> 场景中一些特别亮的噪声，即萤火虫噪声；</p>
+<ul>
+<li><strong>出现原因：</strong> 蒙特卡洛积分时，由于采样率不足，会出现特别亮和特别暗的点；</li>
+<li><p>无法用滤波解决，滤波后仍会存在，甚至从一点变为亮的色块（<strong>blocky</strong>）</p>
+</li>
+<li><p><strong>解决方法：</strong> Outlier removal(clamp)</p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval01.png" alt="OutlierRemoval01"></p>
+</li>
+</ul>
+<p><strong>Outlier removal:</strong></p>
+<ul>
+<li><strong>应用时间：</strong> 滤波<strong>之前</strong>（但会打破能量守恒，如不想打破就得提高采样率）</li>
+</ul>
+<h2 id="d-2-实现"><a href="#d-2-实现" class="headerlink" title="d.2). 实现"></a>d.2). 实现</h2><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval02.png" alt="OutlierRemoval02"></p>
+<ul>
+<li>$\mu$: 均值</li>
+<li>$\sigma$: 标准差</li>
+<li>即将各个点Clamp到一定范围内（如担心光源被clamp掉，可以先不Render光源。Outlier removal之后再加上光源）</li>
+</ul>
+<p><strong>之前提到的Temporal Clamping同理：</strong></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/OutlierRemoval03.png" alt="OutlierRemoval03"></p>
+<ul>
+<li>将上一帧Clamp向（经过空域降噪）这一帧</li>
+</ul>
+<h1 id="e-SVGF-Spatiotemporal-Variance-Guided-Filtering"><a href="#e-SVGF-Spatiotemporal-Variance-Guided-Filtering" class="headerlink" title="e). SVGF(Spatiotemporal Variance-Guided Filtering)"></a>e). SVGF(Spatiotemporal Variance-Guided Filtering)</h1><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF01.png" alt="SVGF01"></p>
+<ul>
+<li>降噪效果好，但仍然有拖影、反射滞后等问题；</li>
+<li>在Overblue和更多的noise之间，选择了Overblur</li>
+</ul>
+<h2 id="e-1-SVGF-—-Joint-Bilateral-Filtering"><a href="#e-1-SVGF-—-Joint-Bilateral-Filtering" class="headerlink" title="e.1). SVGF — Joint Bilateral Filtering"></a>e.1). SVGF — Joint Bilateral Filtering</h2><h3 id="e-1-1-Depth"><a href="#e-1-1-Depth" class="headerlink" title="e.1.1). Depth"></a>e.1.1). Depth</h3><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF_Depth.png" alt="SVGF_Depth"></p>
+<ul>
+<li>A、B在同平面深度却差异很大，使得互相之间贡献少。因此，在分母中引入梯度$\nabla z(p)$ ，该梯度为<strong>深度在对应点法线方向的变化率</strong>（注意：梯度为向量，其方向为法线方向；）。<ul>
+<li>当平面几乎垂直于屏幕时，$\nabla z(p)$ 变大，使得深度差异对权重的影响变小；</li>
+</ul>
+</li>
+</ul>
+<h3 id="e-1-2-Normal"><a href="#e-1-2-Normal" class="headerlink" title="e.1.2). Normal"></a>e.1.2). Normal</h3><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF_Normal.png" alt="SVGF_Normal"></p>
+<ul>
+<li>应使用几何法线，而不使用经过法线扰动的Normal</li>
+</ul>
+<h3 id="e-1-3-Luminance-grayscale-color-value"><a href="#e-1-3-Luminance-grayscale-color-value" class="headerlink" title="e.1.3). Luminance(grayscale color value)"></a>e.1.3). Luminance(grayscale color value)</h3><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/SVGF_Color.png" alt="SVGF_Color"></p>
+<ul>
+<li><p>使用亮度值；</p>
+</li>
+<li><p><strong>Variance:</strong></p>
+<ul>
+<li><p><strong>Step1:</strong> 计算<strong>空域</strong>中<strong>7x7的方差</strong>；</p>
+</li>
+<li><p><strong>Step2:</strong> 通过<strong>motion vectors</strong>在<strong>时域</strong>上<strong>平均</strong>（类似时域降噪）；</p>
+</li>
+<li><strong>Step3:</strong> 对平均后的结果再在<strong>空域</strong>上<strong>3x3的范围内平均</strong>；</li>
+<li>即，<strong>spatial filter —&gt; temporal filter —&gt; spatial filter</strong></li>
+</ul>
+</li>
+</ul>
+<h1 id="f-RAE-Recurrent-AutoEncoder"><a href="#f-RAE-Recurrent-AutoEncoder" class="headerlink" title="f). RAE(Recurrent AutoEncoder)"></a>f). RAE(Recurrent AutoEncoder)</h1><ul>
+<li>一种结构，对Monte carlo路径追踪得到的结果进行reconstruction-对RTRT做滤波。</li>
+<li>后期处理，把noise的图变clean。</li>
+<li>使用G-buffers</li>
+<li>神经网络会自动将temporal的结果累积起来</li>
+</ul>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RAE.png" alt="RAE"></p>
+<p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/RAE02.png" alt="RAE02"></p>
+<h1 id="g-Comparison"><a href="#g-Comparison" class="headerlink" title="g). Comparison"></a>g). Comparison</h1><p><img src="/2023/02/19/Games202_06_Real-time%20Ray-Tracing/Comparison.png" alt="Comparison"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Ray-Tracing/" rel="tag"># Ray-Tracing</a>
+              <a href="/tags/Games202/" rel="tag"># Games202</a>
+              <a href="/tags/Denoise/" rel="tag"># Denoise</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/18/Games202_05_Real-time%20Physically-based%20Materials/" rel="prev" title="Games202-5 Real-time Physically-based Materials">
+                  <i class="fa fa-chevron-left"></i> Games202-5 Real-time Physically-based Materials
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/20/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/" rel="next" title="Games202-7 A Glimpse of Industrial Solution">
+                  Games202-7 A Glimpse of Industrial Solution <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

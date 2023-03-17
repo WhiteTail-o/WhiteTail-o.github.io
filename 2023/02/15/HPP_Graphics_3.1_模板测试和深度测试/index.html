@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). 模板测试 处于逐片元操作中     a.1). Unity 中的模板测试 语法表示       可作为遮罩等操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Graphics_2.7 模板测试和深度测试">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). 模板测试 处于逐片元操作中     a.1). Unity 中的模板测试 语法表示       可作为遮罩等操作">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%9500.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%9501.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%9502.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilTest_Unity.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/ZTest.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Buffer.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Comp.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/EarlyZ.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Deepth.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_F.png">
+<meta property="article:published_time" content="2023-02-15T09:40:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T05:16:04.931Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="模板测试">
+<meta property="article:tag" content="深度测试">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%9500.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/","path":"2023/02/15/HPP_Graphics_3.1_模板测试和深度测试/","title":"HPP_Graphics_2.7 模板测试和深度测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Graphics_2.7 模板测试和深度测试 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95"><span class="nav-text">a). 模板测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-1-Unity-%E4%B8%AD%E7%9A%84%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95"><span class="nav-text">a.1). Unity 中的模板测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-%E4%BD%9C%E4%B8%9A%EF%BC%9AUnity%E4%B8%AD%E5%AE%9E%E7%8E%B0%E7%9A%84%E6%95%88%E6%9E%9C"><span class="nav-text">a.2). 作业：Unity中实现的效果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95"><span class="nav-text">b). 深度测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Z-Buffer"><span class="nav-text">Z-Buffer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Z-Write"><span class="nav-text">Z Write</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Z-Test%E6%AF%94%E8%BE%83%E6%93%8D%E4%BD%9C"><span class="nav-text">Z Test比较操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%B2%E6%9F%93%E9%98%9F%E5%88%97"><span class="nav-text">渲染队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unity%E4%B8%AD%E8%AE%BE%E7%BD%AE%E6%B8%B2%E6%9F%93%E9%98%9F%E5%88%97"><span class="nav-text">Unity中设置渲染队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Early-Z"><span class="nav-text">Early-Z</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E6%B7%B1%E5%BA%A6%E5%80%BC"><span class="nav-text">c). 深度值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%B7%B1%E5%BA%A6%E7%BC%93%E5%86%B2%E5%8C%BA%E5%AD%98%E5%82%A8%E9%9D%9E%E7%BA%BF%E6%80%A7%E6%B7%B1%E5%BA%A6%E5%91%A2%EF%BC%9F"><span class="nav-text">为什么深度缓冲区存储非线性深度呢？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Z-fighting"><span class="nav-text">Z-fighting</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_2.7 HDR和LDR
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_2.6 伽马校正
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Graphics_2.7 模板测试和深度测试 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Graphics_2.7 模板测试和深度测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:16:04" itemprop="dateModified" datetime="2023-03-17T13:16:04+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul>
+<li>处于<strong>逐片元操作</strong>中</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p>
+<h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul>
+<li><p>语法表示</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p>
+</li>
+</ul>
+<ul>
+<li><p>可作为遮罩等操作</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p>
+</li>
+</ul>
+<span id="more"></span>
+<h3 id="a-2-作业：Unity中实现的效果"><a href="#a-2-作业：Unity中实现的效果" class="headerlink" title="a.2). 作业：Unity中实现的效果"></a>a.2). 作业：Unity中实现的效果</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilTest_Unity.png" alt="StencilTest_Unity"></p>
+<hr>
+<p><strong>【链接补充】</strong></p>
+<p>[1]. <a target="_blank" rel="noopener" href="https://blog.csdn.net/u011047171/article/details/46928463">https://blog.csdn.net/u011047171/article/details/46928463</a></p>
+<p>[2]. <a target="_blank" rel="noopener" href="https://blog.csdn.net/liu_if_else/article/details/86316361">https://blog.csdn.net/liu_if_else/article/details/86316361</a></p>
+<p>[3]. <a target="_blank" rel="noopener" href="https://gameinstitute.qq.com/community/detail/127404">https://gameinstitute.qq.com/community/detail/127404</a></p>
+<p>[4]. <a target="_blank" rel="noopener" href="https://learnopengl-cn.readthedocs.io/zh/latest/04 Advanced OpenGL/02 Stencil testing/">https://learnopenglcn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/02%20Stencil%20testing/</a></p>
+<p>[5]. <a target="_blank" rel="noopener" href="https://www.patreon.com/posts/14832618">https://www.patreon.com/posts/14832618</a></p>
+<p>[6]. <a target="_blank" rel="noopener" href="https://www.udemy.com/course/unity-shaders/">https://www.udemy.com/course/unity-shaders/</a></p>
+<h2 id="b-深度测试"><a href="#b-深度测试" class="headerlink" title="b). 深度测试"></a>b). 深度测试</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/ZTest.png" alt="ZTest"></p>
+<ul>
+<li>模板测试后，透明度混合前</li>
+</ul>
+<h3 id="Z-Buffer"><a href="#Z-Buffer" class="headerlink" title="Z-Buffer"></a>Z-Buffer</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Buffer.png" alt="Z_Buffer"></p>
+<h3 id="Z-Write"><a href="#Z-Write" class="headerlink" title="Z Write"></a>Z Write</h3><p>深度写入包括<strong>两种状态：ZWrite On 与 ZWrite Off</strong></p>
+<p>当我们<strong>开启深度写入</strong>的时候，物体被渲染时针对物体在屏幕（更准确地说是frame buffer）上<strong>每个像素的深度都写入到深度缓冲区</strong>；反之，如果是<strong>ZWrite Off,</strong>那么物体的深度就<strong>不会写入深度缓冲区</strong>。但是，物体是否会写入深度，除了ZWrite这个状态之外，<strong>更重要的是需要深度测试通过</strong>，也就是ZTest通过，如果ZTest都没通过，那么也就不会写入深度了。</p>
+<p>ZTest分为通过和不通过两种情况，ZWrite分为开启和关闭两种情况的四种情况：</p>
+<ul>
+<li>深度测试通过，深度写入开启：写入深度缓冲区，写入颜色缓冲区。</li>
+<li>深度测试通过，深度写入关闭：不写深度缓冲区，写入颜色缓冲区。</li>
+<li>深度测试失败，深度写入开启：不写深度缓冲区，不写颜色缓冲区。</li>
+<li>深度测试失败，深度写入关闭：不写深度缓冲区，不屑颜色缓冲区。</li>
+</ul>
+<h3 id="Z-Test比较操作"><a href="#Z-Test比较操作" class="headerlink" title="Z Test比较操作"></a>Z Test比较操作</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Comp.png" alt="Z_Comp"></p>
+<h3 id="渲染队列"><a href="#渲染队列" class="headerlink" title="渲染队列"></a>渲染队列</h3><p>Unity中内置的几种渲染队列，按照渲染顺序，从先到后进行排序，<strong>队列数越小，越先渲染，队列数越大，越后渲染。</strong></p>
+<ul>
+<li><strong>Background(1000) ：</strong>最早被渲染的物体的队列。</li>
+<li><strong>Geometry(2000) ：</strong>不透明物体的渲染队列。大多数物体都应该使用该队列进行渲染，也是Unity Shader中默认的渲染队列。</li>
+<li><strong>AlphaTest(2450) ：</strong>有透明通道，需要进行Alpha Test的物体的队列，比在Geometry中更有效。</li>
+<li><strong>Transparent(3000) ：</strong> 半透物体的渲染队列。一般是不写深度的物体，Alpha Blend等的在该队列渲染。</li>
+<li><strong>Overlay(4000) ：</strong>最后被渲染的物体的队列，一般是覆盖效果，比如镜头光晕，屏幕贴片之类的。</li>
+</ul>
+<h3 id="Unity中设置渲染队列"><a href="#Unity中设置渲染队列" class="headerlink" title="Unity中设置渲染队列"></a>Unity中设置渲染队列</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认是Geometry</span></span><br><span class="line">Tags&#123;</span><br><span class="line">	<span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>不透明物体的渲染顺序：从前往后。</strong></li>
+<li><strong>透明物体的渲染顺序：从后往前。（OverDraw）</strong></li>
+<li>对于使用了多个Pass的物体，其渲染队列会设置为Pass中的最小值（如两个Pass中一个是Geometry(2000)，另一个是Transparent(3000)，那该物体会按Geometry的队列渲染，然后按Shader中从上到下执行Pass）。</li>
+</ul>
+<h3 id="Early-Z"><a href="#Early-Z" class="headerlink" title="Early-Z"></a>Early-Z</h3><p>传统的渲染管线中，ZTest其实是在Blending阶段，这时候进行深度测试，所有对象的像素着色器都会计算一遍，没有什么性能提升，仅仅是为了得出正确的遮挡结果，会造成大量的无用计算，因为每个像素点上肯定重叠了很多计算。<strong>因此现代GPU中运用了Early-Z的技术，在Vertex阶段和Fragment阶段之间（光栅化之后，fragment之前）进行一次深度测试，如果深度测试失败，就不必进行fragment阶段的计算了，因此在性能上会有很大的提升。但是最终的ZTest仍然需要进行，以保证最终的遮挡关系结果正确。</strong>前面的一次主要是<strong><em>Z-Cull</em></strong>为了裁剪以达到优化的目的，后一次主要是<strong><em>Z-Check</em></strong>，为了检查，如下图：</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/EarlyZ.png" alt="EarlyZ"></p>
+<h2 id="c-深度值"><a href="#c-深度值" class="headerlink" title="c). 深度值"></a>c). 深度值</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Deepth.png" alt="Deepth"></p>
+<h3 id="为什么深度缓冲区存储非线性深度呢？"><a href="#为什么深度缓冲区存储非线性深度呢？" class="headerlink" title="为什么深度缓冲区存储非线性深度呢？"></a>为什么深度缓冲区存储非线性深度呢？</h3><p><strong>正确的投影特性的非线性深度方程是和1/z成正比的，</strong>这样基本上做的是在<strong>Z很近的时候是高精度和Z很远的时候是底精度</strong>。这样就是模拟了人眼观察，<strong>近处的物体很清晰，而远处的物体很模糊。</strong>（和现在还用伽马校正的原因类似）</p>
+<script type="math/tex; mode=display">
+F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }}</script><h3 id="Z-fighting"><a href="#Z-fighting" class="headerlink" title="Z-fighting"></a>Z-fighting</h3><p>两个平面或三角形很<strong>紧密相互平行，深度缓冲区不具有足够的精度</strong>以至于无法得到哪一个靠前。导致了着两个形状<strong>不断切换顺序出现怪异问题</strong>。这被称为<strong>深度冲突（Z-fighting）</strong>，因为它看上去像形状争夺顶靠前的位置。（UE中重叠闪来闪去的那个）</p>
+<ul>
+<li><p>解决方法</p>
+<ul>
+<li><p>让物体之间不要离得太近。</p>
+</li>
+<li><p>尽可能把<strong>近平面</strong>设置得远一些。</p>
+</li>
+<li><p>放弃一部分性能来获得更高精度的深度值。</p>
+</li>
+<li>Z-Offset</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_F.png" alt="Z_F"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/" rel="tag"># 模板测试</a>
+              <a href="/tags/%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" rel="tag"># 深度测试</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_3.3_TessAndGs/" rel="prev" title="HPP_Graphics_3.3 曲面细分和几何着色器">
+                  <i class="fa fa-chevron-left"></i> HPP_Graphics_3.3 曲面细分和几何着色器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" rel="next" title="HPP_Graphics_3.4 前向渲染与延迟渲染">
+                  HPP_Graphics_3.4 前向渲染与延迟渲染 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

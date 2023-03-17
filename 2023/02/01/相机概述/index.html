@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="前言最近在搭建完整的PBR环境时，用到了挺多相机的知识。借此机会重新温习了下大一写摄影技术的词条，同时为了适应博客删掉了很多不必要的内容。 不过既然是大一写的，想必难免会有一些疏漏，而且当初的目标形式是词条，相应知识也不会过于深入，但大体上还是没问题的。 a). 摄影机成像原理一、小孔成像​        光线沿直线传播。用一个带小孔的板遮挡在物体与成像面间，物体反射的光线经过小孔，在成像面上形成">
+<meta property="og:type" content="article">
+<meta property="og:title" content="相机概述">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="前言最近在搭建完整的PBR环境时，用到了挺多相机的知识。借此机会重新温习了下大一写摄影技术的词条，同时为了适应博客删掉了很多不必要的内容。 不过既然是大一写的，想必难免会有一些疏漏，而且当初的目标形式是词条，相应知识也不会过于深入，但大体上还是没问题的。 a). 摄影机成像原理一、小孔成像​        光线沿直线传播。用一个带小孔的板遮挡在物体与成像面间，物体反射的光线经过小孔，在成像面上形成">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86_%E5%B0%8F%E5%AD%94%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86-16767225475721.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86_%E9%80%8F%E9%95%9C%E6%88%90%E5%83%8F_%E5%87%B8%E9%80%8F%E9%95%9C%EF%BC%88%E6%AD%A3%E9%80%8F%E9%95%9C%E3%80%81%E6%B1%87%E8%81%9A%E9%80%8F%E9%95%9C%EF%BC%89-16767225475732.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86_%E9%80%8F%E9%95%9C%E6%88%90%E5%83%8F_%E5%87%B9%E9%80%8F%E9%95%9C%EF%BC%88%E8%B4%9F%E9%80%8F%E9%95%9C%E3%80%81%E5%8F%91%E6%95%A3%E9%80%8F%E9%95%9C%EF%BC%89-16767225475733.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E9%95%9C%E5%A4%B4%E5%88%86%E7%B1%BB.jpg">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E6%A8%A1%E7%B3%8A%E5%9C%88%E4%B8%8E%E6%99%AF%E6%B7%B1_%E6%A8%A1%E7%B3%8A%E5%9C%88.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E6%A8%A1%E7%B3%8A%E5%9C%88%E4%B8%8E%E6%99%AF%E6%B7%B1_%E6%99%AF%E6%B7%B1.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E6%B2%99%E5%A7%86%E5%AE%9A%E5%BE%8B1.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E6%B2%99%E5%A7%86%E5%AE%9A%E5%BE%8B2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E4%B8%BB%E7%82%B9.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E8%8A%82%E7%82%B91.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E8%8A%82%E7%82%B92.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E9%80%8F%E9%95%9C%E5%83%8F%E5%B7%AE_%E7%90%83%E9%9D%A2%E5%83%8F%E5%B7%AE1.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E9%80%8F%E9%95%9C%E5%83%8F%E5%B7%AE_%E5%83%8F%E6%95%A3.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E9%80%8F%E9%95%9C%E5%83%8F%E5%B7%AE_%E5%83%8F%E5%9C%BA%E5%BC%AF%E6%9B%B2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E9%80%8F%E9%95%9C%E5%83%8F%E5%B7%AE_%E5%BD%97%E6%98%9F%E5%83%8F%E5%B7%AE.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84_%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4_%E9%80%8F%E9%95%9C%E5%83%8F%E5%B7%AE_%E8%89%B2%E5%B7%AE.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E5%BF%AB%E9%97%A8_%E6%9C%BA%E6%A2%B0%E5%BF%AB%E9%97%A8_%E7%84%A6%E5%B9%B3%E9%9D%A2%E5%BF%AB%E9%97%A81.gif">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E5%BF%AB%E9%97%A8_%E6%9C%BA%E6%A2%B0%E5%BF%AB%E9%97%A8_%E7%84%A6%E5%B9%B3%E9%9D%A2%E5%BF%AB%E9%97%A82.gif">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E7%94%B5%E5%AD%90%E6%84%9F%E5%85%89%E5%85%83%E4%BB%B6_%E4%BF%A1%E5%8F%B7%E7%94%B5%E8%8D%B7%E7%9A%84%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%8F%98%E6%8D%A2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E5%83%8F%E5%85%83.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E5%83%8F%E5%85%83_%E5%BD%A9%E8%89%B2%E6%BB%A4%E5%85%89%E9%98%B5%E5%88%97.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E5%83%8F%E5%85%83_%E5%BD%A9%E8%89%B2%E6%BB%A4%E5%85%89%E9%98%B5%E5%88%97_%E6%91%A9%E5%B0%94%E7%BA%B9.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E5%83%8F%E5%85%83_%E5%BD%A9%E8%89%B2%E6%BB%A4%E5%85%89%E9%98%B5%E5%88%97_Foveon%20X3%E6%84%9F%E5%85%89%E5%85%83%E4%BB%B6.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E5%83%8F%E5%85%83_%E5%89%8D%E7%85%A7%E5%BC%8F%E4%B8%8E%E8%83%8C%E7%85%A7%E5%BC%8F.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_%E5%83%8F%E5%85%83_%E5%A0%86%E6%A0%88%E5%BC%8F.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%A6%82%E5%BF%B51.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%A6%82%E5%BF%B52.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E7%94%B5%E8%8D%B7%E8%BD%AC%E7%A7%BB%E6%9C%BA%E5%88%B6.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E8%BD%AC%E7%A7%BB%E6%B2%9F%E9%81%93_%E4%BD%93%E6%B2%9F%E9%81%93.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%88%90%E5%83%8F%E9%98%B5%E5%88%97%E7%9A%84%E6%89%AB%E6%8F%8F.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%88%90%E5%83%8F%E9%98%B5%E5%88%97%E7%9A%84%E6%89%AB%E6%8F%8F_%E8%A1%8C%E9%97%B4%E8%BD%AC%E7%A7%BBCCD.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%8B%96%E5%B0%BE.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CMOS%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_%E6%A6%82%E5%BF%B5.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%84%9F%E5%85%89%E6%9D%90%E6%96%99%E4%B8%8E%E7%94%B5%E5%AD%90%E4%BC%A0%E6%84%9F%E5%99%A8_CMOS%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8_CMOS%E7%9A%84%E6%89%AB%E6%8F%8F%E6%96%B9%E5%BC%8F.png">
+<meta property="article:published_time" content="2023-02-01T09:23:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T05:33:23.590Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="相机">
+<meta property="article:tag" content="物理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/%E6%91%84%E5%BD%B1%E6%8A%80%E6%9C%AF_%E6%91%84%E5%BD%B1%E6%9C%BA%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86_%E5%B0%8F%E5%AD%94%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86-16767225475721.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/","path":"2023/02/01/相机概述/","title":"相机概述"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>相机概述 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-%E6%91%84%E5%BD%B1%E6%9C%BA%E6%88%90%E5%83%8F%E5%8E%9F%E7%90%86"><span class="nav-text">a). 摄影机成像原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%B0%8F%E5%AD%94%E6%88%90%E5%83%8F"><span class="nav-text">一、小孔成像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E9%80%8F%E9%95%9C%E6%88%90%E5%83%8F"><span class="nav-text">二、透镜成像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%87%B8%E9%80%8F%E9%95%9C-%E6%AD%A3%E9%80%8F%E9%95%9C%E3%80%81%E6%B1%87%E8%81%9A%E9%80%8F%E9%95%9C"><span class="nav-text">1. 凸透镜(正透镜、汇聚透镜)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%87%B9%E9%80%8F%E9%95%9C-%E8%B4%9F%E9%80%8F%E9%95%9C%E3%80%81%E5%8F%91%E6%95%A3%E9%80%8F%E9%95%9C"><span class="nav-text">2. 凹透镜(负透镜、发散透镜)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E5%85%89%E5%AD%A6%E9%95%9C%E5%A4%B4"><span class="nav-text">b). 光学镜头</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9A%E4%B9%89"><span class="nav-text">一、定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%9E%84%E9%80%A0"><span class="nav-text">二、构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%95%9C%E5%A4%B4%E7%AD%92"><span class="nav-text">1. 镜头筒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%95%9C%E7%89%87"><span class="nav-text">2. 镜片</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E9%95%9C%E5%A4%B4%E5%88%86%E7%B1%BB"><span class="nav-text">三、镜头分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%A0%87%E5%87%86%E9%95%9C%E5%A4%B4"><span class="nav-text">1. 标准镜头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%95%BF%E7%84%A6%E9%95%9C%E5%A4%B4"><span class="nav-text">2.长焦镜头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%B9%BF%E8%A7%92%E9%95%9C%E5%A4%B4"><span class="nav-text">3.广角镜头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E9%B1%BC%E7%9C%BC%E9%95%9C%E5%A4%B4"><span class="nav-text">4.鱼眼镜头</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E9%95%9C%E5%A4%B4%E5%8D%A1%E5%8F%A3-%E8%A1%A8%E6%A0%BC%E6%9D%A5%E8%87%AAWikipedia"><span class="nav-text">四、镜头卡口(表格来自Wikipedia)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E9%95%9C%E5%A4%B4%E7%9A%84%E5%85%89%E5%9C%88"><span class="nav-text">五、镜头的光圈</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-F%E5%80%BC%E5%85%89%E5%9C%88%E7%B3%BB%E6%95%B0"><span class="nav-text">1. F值光圈系数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-T%E5%80%BC%E5%85%89%E5%9C%88%E7%B3%BB%E6%95%B0"><span class="nav-text">2. T值光圈系数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%A8%A1%E7%B3%8A%E5%9C%88%E4%B8%8E%E6%99%AF%E6%B7%B1"><span class="nav-text">六、模糊圈与景深</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BC%A5%E6%95%A3%E5%9C%86-Circle-of-Confusion-CoC"><span class="nav-text">1. 弥散圆(Circle of Confusion, CoC)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%99%AF%E6%B7%B1"><span class="nav-text">2. 景深</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E8%B6%85%E7%84%A6%E8%B7%9D"><span class="nav-text">七、超焦距</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E6%B2%99%E5%A7%86%E5%AE%9A%E5%BE%8B"><span class="nav-text">八、沙姆定律</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E4%B8%BB%E7%82%B9%E5%92%8C%E4%B8%BB%E9%9D%A2-%E5%BC%95%E8%87%AAWikipedia"><span class="nav-text">九、主点和主面(引自Wikipedia)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E3%80%81%E8%8A%82%E7%82%B9"><span class="nav-text">十、节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%80%E3%80%81MTF%E6%9B%B2%E7%BA%BF"><span class="nav-text">十一、MTF曲线</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B0%83%E5%88%B6%E5%BA%A6"><span class="nav-text">1. 调制度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%83%8F%E5%9C%BA-%E5%BE%85%E8%A1%A5%E5%85%85"><span class="nav-text">2. 像场(待补充)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-MTF%E6%9B%B2%E7%BA%BF%E5%9B%BE-%E5%9B%BE%E7%89%87%E5%BE%85%E8%A1%A5%E5%85%85"><span class="nav-text">3. MTF曲线图(图片待补充)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E9%80%8F%E9%95%9C%E5%83%8F%E5%B7%AE"><span class="nav-text">十二、透镜像差</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%90%83%E9%9D%A2%E5%83%8F%E5%B7%AE"><span class="nav-text">1. 球面像差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%83%8F%E6%95%A3"><span class="nav-text">2. 像散</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%83%8F%E5%9C%BA%E5%BC%AF%E6%9B%B2"><span class="nav-text">3. 像场弯曲</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%BD%97%E6%98%9F%E5%83%8F%E5%B7%AE"><span class="nav-text">4. 彗星像差</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E8%89%B2%E5%B7%AE"><span class="nav-text">5. 色差</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E7%94%B5%E5%BD%B1%E9%95%9C%E5%A4%B4%E4%B8%8E%E7%9B%B8%E6%9C%BA%E9%95%9C%E5%A4%B4%E7%9A%84%E5%87%A0%E4%B8%AA%E4%B8%BB%E8%A6%81%E5%8C%BA%E5%88%AB"><span class="nav-text">十三、电影镜头与相机镜头的几个主要区别</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AF%B9%E7%84%A6"><span class="nav-text">1. 对焦</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%97%A0%E6%9E%81%E5%85%89%E5%9C%88"><span class="nav-text">2. 无极光圈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%BD%90%E7%84%A6-parfocal"><span class="nav-text">3. 齐焦(parfocal)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%91%BC%E5%90%B8%E6%95%88%E5%BA%94%E7%9A%84%E6%8E%A7%E5%88%B6"><span class="nav-text">4. 呼吸效应的控制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-%E5%BF%AB%E9%97%A8"><span class="nav-text">c). 快门</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%9C%BA%E6%A2%B0%E5%BF%AB%E9%97%A8"><span class="nav-text">一、机械快门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%95%9C%E5%89%8D%E5%BF%AB%E9%97%A8"><span class="nav-text">1. 镜前快门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%95%9C%E9%97%B4%E5%BF%AB%E9%97%A8"><span class="nav-text">2. 镜间快门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%95%9C%E5%90%8E%E5%BF%AB%E9%97%A8"><span class="nav-text">3. 镜后快门</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%84%A6%E5%B9%B3%E9%9D%A2%E5%BF%AB%E9%97%A8"><span class="nav-text">4. 焦平面快门</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%94%B5%E5%AD%90%E5%BF%AB%E9%97%A8"><span class="nav-text">二、电子快门</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%8D%B7%E5%B8%98%E5%BC%8F%E5%BF%AB%E9%97%A8-Rolling-Shutter"><span class="nav-text">3. 卷帘式快门(Rolling Shutter)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%85%A8%E5%B1%80%E5%BC%8F%E5%BF%AB%E9%97%A8-Global-Shutter"><span class="nav-text">4. 全局式快门(Global Shutter)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%94%B5%E5%AD%90%E5%89%8D%E5%B8%98%E5%BF%AB%E9%97%A8"><span class="nav-text">三、电子前帘快门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E5%8F%B6%E5%AD%90%E6%9D%BF%EF%BC%88%E5%9B%BE%E7%89%87%E5%BE%85%E8%A1%A5%E5%85%85%EF%BC%89"><span class="nav-text">四、叶子板（图片待补充）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%BF%AB%E9%97%A8%E9%80%9F%E5%BA%A6%E4%B8%8E%E5%BF%AB%E9%97%A8%E8%A7%92%E5%BA%A6"><span class="nav-text">五、快门速度与快门角度</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BF%AB%E9%97%A8%E9%80%9F%E5%BA%A6"><span class="nav-text">1. 快门速度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BF%AB%E9%97%A8%E8%A7%92%E5%BA%A6"><span class="nav-text">2. 快门角度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#d-%E7%94%B5%E5%AD%90%E6%84%9F%E5%85%89%E5%99%A8%E4%BB%B6"><span class="nav-text">d). 电子感光器件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%85%89%E7%94%B5%E8%BD%AC%E6%8D%A2"><span class="nav-text">一、光电转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%94%B5%E8%8D%B7%E7%9A%84%E6%94%B6%E9%9B%86%E4%B8%8E%E7%A7%AF%E7%B4%AF"><span class="nav-text">二、电荷的收集与积累</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E7%94%B5%E8%8D%B7%E7%A7%AF%E5%88%86%E6%A8%A1%E5%BC%8F-%E5%9B%BE%E7%89%87%E5%BE%85%E8%A1%A5%E5%85%85"><span class="nav-text">1. 传感器的电荷积分模式(图片待补充)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E4%BF%A1%E5%8F%B7%E7%94%B5%E8%8D%B7%E7%9A%84%E6%A3%80%E6%B5%8B%E4%B8%8E%E5%8F%98%E6%8D%A2"><span class="nav-text">三、信号电荷的检测与变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%94%B5%E8%8D%B7%E6%A3%80%E6%B5%8B"><span class="nav-text">1. 电荷检测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%BD%AC%E6%8D%A2%E5%A2%9E%E7%9B%8A-Conversion-Gain"><span class="nav-text">2. 转换增益(Conversion Gain)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#e-%E5%83%8F%E5%85%83"><span class="nav-text">e). 像元</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BD%A9%E8%89%B2%E6%BB%A4%E5%85%89%E9%98%B5%E5%88%97"><span class="nav-text">一、彩色滤光阵列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%8B%9C%E5%B0%94%E9%98%B5%E5%88%97"><span class="nav-text">1. 拜尔阵列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Foveon-X3%E6%84%9F%E5%85%89%E5%85%83%E4%BB%B6"><span class="nav-text">2. Foveon X3感光元件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%BE%AE%E5%9E%8B%E9%80%8F%E9%95%9C%E9%98%B5%E5%88%97"><span class="nav-text">二、微型透镜阵列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81MOS%E4%BA%8C%E6%9E%81%E7%AE%A1-%E5%9B%BE%E7%89%87%E5%BE%85%E8%A1%A5%E5%85%85"><span class="nav-text">三、MOS二极管(图片待补充)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BB%93%E6%9E%84"><span class="nav-text">四、结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%89%8D%E7%85%A7%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-text">1. 前照式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%83%8C%E7%85%A7%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-text">2. 背照式结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%A0%86%E6%A0%88%E5%BC%8F%E7%BB%93%E6%9E%84"><span class="nav-text">3. 堆栈式结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%9C%89%E6%BA%90%E5%83%8F%E7%B4%A0%E5%92%8C%E6%97%A0%E6%BA%90%E5%83%8F%E7%B4%A0"><span class="nav-text">四、有源像素和无源像素</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%BF%E9%98%B1"><span class="nav-text">势阱</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%AE%9A%E4%B9%89%E5%8F%8A%E8%A7%A3%E9%87%8A"><span class="nav-text">一、定义及解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E6%BB%A1%E9%98%B1%E5%AE%B9%E9%87%8F"><span class="nav-text">二、满阱容量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#f-CCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="nav-text">f). CCD图像传感器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E5%BF%B5"><span class="nav-text">一、概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81CCD%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-text">二、CCD基本工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%94%B5%E8%8D%B7%E8%BD%AC%E7%A7%BB%E6%9C%BA%E5%88%B6-1-67-68"><span class="nav-text">二、电荷转移机制[1]67-68</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%87%AA%E6%BF%80%E6%BC%82%E7%A7%BB"><span class="nav-text">1. 自激漂移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%83%AD%E6%89%A9%E6%95%A3"><span class="nav-text">2. 热扩散</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%BE%B9%E7%BC%98%E5%9C%BA%E6%95%88%E5%BA%94"><span class="nav-text">3. 边缘场效应</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E8%BD%AC%E7%A7%BB%E6%B2%9F%E9%81%93"><span class="nav-text">三、转移沟道</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%A1%A8%E9%9D%A2%E6%B2%9F%E9%81%93CCD"><span class="nav-text">1. 表面沟道CCD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%93%E6%B2%9F%E9%81%93CCD"><span class="nav-text">2.体沟道CCD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%88%90%E5%83%8F%E9%98%B5%E5%88%97%E7%9A%84%E6%89%AB%E6%8F%8F"><span class="nav-text">四、成像阵列的扫描</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%B8%A7%E8%BD%AC%E7%A7%BBCCD"><span class="nav-text">1. 帧转移CCD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%84%E5%8F%8A%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-text">(1) 结构及工作方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%89%B9%E7%82%B9"><span class="nav-text">(2) 特点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%85%A8%E5%B8%A7%E8%BD%AC%E7%A7%BBCCD"><span class="nav-text">2. 全帧转移CCD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%A1%8C%E9%97%B4%E8%BD%AC%E7%A7%BBCCD"><span class="nav-text">3. 行间转移CCD</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E7%BB%93%E6%9E%84%E5%8F%8A%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F-1"><span class="nav-text">(1) 结构及工作方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E7%89%B9%E7%82%B9-1"><span class="nav-text">(2) 特点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%B8%A7-%E8%A1%8C%E9%97%B4%E8%BD%AC%E7%A7%BBCCD"><span class="nav-text">4. 帧-行间转移CCD</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E6%8B%96%E5%B0%BE"><span class="nav-text">五、拖尾</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#g-CMOS%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8"><span class="nav-text">g). CMOS图像传感器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E5%BF%B5-%E5%9B%BE%E7%89%87%E5%BE%85%E8%A1%A5%E5%85%85-1-141"><span class="nav-text">一、概念(图片待补充[1]141)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81CMOS%E5%9F%BA%E6%9C%AC%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-text">二、CMOS基本工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81CMOS%E7%9A%84%E6%89%AB%E6%8F%8F%E6%96%B9%E5%BC%8F"><span class="nav-text">三、CMOS的扫描方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81CMOS%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8%E4%B8%8ECCD%E5%9B%BE%E5%83%8F%E4%BC%A0%E6%84%9F%E5%99%A8%E7%9A%84%E5%AF%B9%E6%AF%94"><span class="nav-text">四、CMOS图像传感器与CCD图像传感器的对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%AF%BB%E5%87%BA%E7%81%B5%E6%B4%BB%E6%80%A7"><span class="nav-text">1. 读出灵活性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E8%83%BD%E8%80%97"><span class="nav-text">2. 能耗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E6%80%A7%E8%83%BD"><span class="nav-text">3. 性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E6%88%90%E6%9C%AC"><span class="nav-text">4. 成本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#h-%E5%8A%A8%E6%80%81%E8%8C%83%E5%9B%B4"><span class="nav-text">h). 动态范围</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#i-%E5%99%AA%E5%A3%B0-%E5%88%86%E7%B1%BB%E6%96%B9%E5%BC%8F%E6%9A%82%E5%AE%9A"><span class="nav-text">i). 噪声(分类方式暂定)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#j-%E4%BF%A1%E5%99%AA%E6%AF%94"><span class="nav-text">j). 信噪比</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#k-%E6%84%9F%E5%85%89%E5%BA%A6-ISO"><span class="nav-text">k). 感光度(ISO)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8E%9F%E7%94%9FISO"><span class="nav-text">一、原生ISO</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#l-%E5%A2%9E%E7%9B%8A-Gain"><span class="nav-text">l). 增益(Gain)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E8%BD%AC%E6%8D%A2%E5%A2%9E%E7%9B%8A-Conversion-Gain"><span class="nav-text">一、转换增益(Conversion Gain)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#m-%E5%8F%8C%E5%A2%9E%E7%9B%8A%E5%92%8C%E5%8F%8C%E5%8E%9F%E7%94%9FISO"><span class="nav-text">m). 双增益和双原生ISO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8F%8C%E8%BD%AC%E6%8D%A2%E5%A2%9E%E7%9B%8A-Dual-Gain"><span class="nav-text">一、双转换增益(Dual Gain)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8F%8C%E5%8E%9F%E7%94%9FISO-Dual-ISO"><span class="nav-text">二、双原生ISO(Dual ISO)</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#n-%E5%8F%96%E6%99%AF%E5%99%A8"><span class="nav-text">n). 取景器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%85%89%E5%AD%A6%E5%8F%96%E6%99%AF%E5%99%A8-Optical-View-Finder"><span class="nav-text">一、光学取景器(Optical View Finder)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%97%81%E8%BD%B4%E5%8F%96%E6%99%AF%E5%99%A8"><span class="nav-text">1. 旁轴取景器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8F%8D%E5%B0%84%E5%BC%8F%E5%8F%96%E6%99%AF%E5%99%A8-TTL%E5%8F%96%E6%99%AF%E5%99%A8"><span class="nav-text">2. 反射式取景器(TTL取景器)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BE%A7%E9%9D%A2%E5%8F%96%E6%99%AF%E5%99%A8"><span class="nav-text">3. 侧面取景器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%84%A6%E5%B9%B3%E9%9D%A2%E5%BC%8F%E5%8F%96%E6%99%AF%E5%99%A8"><span class="nav-text">4. 焦平面式取景器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%88%86%E5%85%89%E5%BC%8F%E5%8F%96%E6%99%AF%E5%99%A8"><span class="nav-text">5. 分光式取景器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%94%B5%E5%AD%90%E5%8F%96%E6%99%AF%E5%99%A8-Electronic-View-Finder"><span class="nav-text">二、电子取景器(Electronic View Finder)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="相机概述 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          相机概述
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-01 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-01T17:23:32+08:00">2023-02-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:33:23" itemprop="dateModified" datetime="2023-03-17T13:33:23+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%9B%B8%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">相机</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在搭建完整的PBR环境时，用到了挺多相机的知识。借此机会重新温习了下大一写摄影技术的词条，同时为了适应博客删掉了很多不必要的内容。</p>
+<p>不过既然是大一写的，想必难免会有一些疏漏，而且当初的目标形式是词条，相应知识也不会过于深入，但大体上还是没问题的。</p>
+<h1 id="a-摄影机成像原理"><a href="#a-摄影机成像原理" class="headerlink" title="a). 摄影机成像原理"></a>a). 摄影机成像原理</h1><h2 id="一、小孔成像"><a href="#一、小孔成像" class="headerlink" title="一、小孔成像"></a>一、小孔成像</h2><p>​        光线沿直线传播。用一个带小孔的板遮挡在物体与成像面间，物体反射的光线经过小孔，在成像面上形成倒立的像。在一定范围内，小孔越小，成像越清晰，但小孔过小会导致发生衍射，使成像模糊。</p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机成像原理_小孔成像原理-16767225475721.png" alt="摄影技术_摄影机成像原理_小孔成像原理" style="zoom: 50%;"></p>
+<span id="more"></span>
+<h2 id="二、透镜成像"><a href="#二、透镜成像" class="headerlink" title="二、透镜成像"></a>二、透镜成像</h2><h3 id="1-凸透镜-正透镜、汇聚透镜"><a href="#1-凸透镜-正透镜、汇聚透镜" class="headerlink" title="1. 凸透镜(正透镜、汇聚透镜)"></a>1. 凸透镜(正透镜、汇聚透镜)</h3><p>​        中间厚、两边薄的透镜。平行于光轴的方向入射的光线会汇聚于光轴上的一点，这个点称为焦点，焦点到透镜中心点的距离称为焦距。</p>
+<p> <img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机成像原理_透镜成像_凸透镜（正透镜、汇聚透镜）-16767225475732.png" alt="摄影技术_摄影机成像原理_透镜成像_凸透镜（正透镜、汇聚透镜）" style="zoom:67%;"></p>
+<h3 id="2-凹透镜-负透镜、发散透镜"><a href="#2-凹透镜-负透镜、发散透镜" class="headerlink" title="2. 凹透镜(负透镜、发散透镜)"></a>2. 凹透镜(负透镜、发散透镜)</h3><p>​        中间薄、两边厚的透镜。平行于光轴的方向入射的光线穿过镜身后会发散。发散后的光线的反向延长线会交于光轴上的一点，这个点称为虚焦点，虚焦点到透镜中心点的距离的负值为凹透镜的焦距。</p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机成像原理_透镜成像_凹透镜（负透镜、发散透镜）-16767225475733.png" alt="摄影技术_摄影机成像原理_透镜成像_凹透镜（负透镜、发散透镜）" style="zoom:67%;"></p>
+<h1 id="b-光学镜头"><a href="#b-光学镜头" class="headerlink" title="b). 光学镜头"></a>b). 光学镜头</h1><h2 id="一、定义"><a href="#一、定义" class="headerlink" title="一、定义"></a>一、定义</h2><p>​        由一块或多块(一般在三块以上)光学玻璃组成的透镜组，用于使物体成像在照相胶片、电子传感器或其他能以化学或电子方式储存图象的媒体上。光学镜头也称摄影物镜。</p>
+<h2 id="二、构造"><a href="#二、构造" class="headerlink" title="二、构造"></a>二、构造</h2><h3 id="1-镜头筒"><a href="#1-镜头筒" class="headerlink" title="1. 镜头筒"></a>1. 镜头筒</h3><p>​        摄影机物镜镜片的支撑体。镜头筒上附有调节光圈、焦距等参数的装置。现代变焦镜头具有多重的镜头组合和复杂的手动或自动调节系统。这些调节装置设计得越精细，使用者操作起来就越方便。[1]</p>
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:144.</p>
+<h3 id="2-镜片"><a href="#2-镜片" class="headerlink" title="2. 镜片"></a>2. 镜片</h3><p>​        构成物镜成像系统的光学玻璃。</p>
+<h2 id="三、镜头分类"><a href="#三、镜头分类" class="headerlink" title="三、镜头分类"></a>三、镜头分类</h2><p>​        镜头按是否具备变焦能力，可分为变焦镜头和定焦镜头。按焦距的长短(视角的大小)，可分为远摄镜头、标准镜头、广角镜头、鱼眼镜头等。</p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_镜头分类.jpg" alt="摄影技术_摄影机的基本结构_光学镜头_镜头分类" style="zoom:67%;"></p>
+<h3 id="1-标准镜头"><a href="#1-标准镜头" class="headerlink" title="1. 标准镜头"></a>1. 标准镜头</h3><p>​        学名为标准摄影物镜。指接近人眼观察视角的镜头。</p>
+<p>​        在摄影中，标准镜头的焦距大致与底片或传感器对角线的长度大致相等，其视角约为53度。如将由标准镜头拍摄出的图像，放置于观察者前方约等于图像对角线长度的距离，观察者看到的图像的大小将会与在拍摄地用肉眼观察到的真实场景相同。对于全画幅相机，标准镜头焦距通常为50mm。</p>
+<p>​        在电影中，电影的标准镜头的镜头焦距近似于图像对角线的2倍。SMPTE(the Society of Motion Picture and Television Engineers，电影和电视工程师协会)在几乎一个世纪前制定了此标准。他们认为这符合当时人们的观影习惯，可给观众席中央(处于屏幕和投影仪之间的位置)的观众提供更自然的视野。[1]这是因为人们对电影和照片有着不同的观看习惯，在当时观众观看电影时，与电影屏幕的距离通常是电影屏幕对角线两倍。</p>
+<p>[1] 参考自<a target="_blank" rel="noopener" href="https://neiloseman.com/the-normal-lens/">https://neiloseman.com/the-normal-lens/</a></p>
+<h3 id="2-长焦镜头"><a href="#2-长焦镜头" class="headerlink" title="2.长焦镜头"></a>2.长焦镜头</h3><p>​        又称长焦距镜头、远摄镜头、望远镜头。焦距大于标准镜头焦距的镜头。具有焦距长、视角小、景深小的特点。</p>
+<h3 id="3-广角镜头"><a href="#3-广角镜头" class="headerlink" title="3.广角镜头"></a>3.广角镜头</h3><p>​        又称短焦镜头。焦距小于标准镜头焦距的镜头。具有焦距短、视角大、景深大的特点。根据视场角大小可分为普通广角镜头和超广角镜头。</p>
+<h3 id="4-鱼眼镜头"><a href="#4-鱼眼镜头" class="headerlink" title="4.鱼眼镜头"></a>4.鱼眼镜头</h3><p>​        又称全景摄影镜。视角为180°左右到220°。全画幅中，焦距在16mm及以下的镜头通常可被称为鱼眼镜头。</p>
+<h2 id="四、镜头卡口-表格来自Wikipedia"><a href="#四、镜头卡口-表格来自Wikipedia" class="headerlink" title="四、镜头卡口(表格来自Wikipedia)"></a>四、镜头卡口(表格来自Wikipedia)</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">机身像场定位距离（mm）</th>
+<th style="text-align:center">卡口环直径（mm）</th>
+<th style="text-align:center">卡口环类型</th>
+<th style="text-align:center">旋转方向</th>
+<th style="text-align:center">常见相机品牌</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">4/3</td>
+<td style="text-align:center">38.6</td>
+<td style="text-align:center">46.5</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/奧林巴斯">奥林巴斯</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/松下">松下</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Leica">Leica</a></td>
+</tr>
+<tr>
+<td style="text-align:center">AR</td>
+<td style="text-align:center">40.5</td>
+<td style="text-align:center">47.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/柯尼卡">柯尼卡</a></td>
+</tr>
+<tr>
+<td style="text-align:center">FD/FL</td>
+<td style="text-align:center">42.1</td>
+<td style="text-align:center">48.0</td>
+<td style="text-align:center">外三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/佳能">佳能</a>T、A、F</td>
+</tr>
+<tr>
+<td style="text-align:center">MD/MC</td>
+<td style="text-align:center">43.5</td>
+<td style="text-align:center">45.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/美能达">美能达</a>、海鸥</td>
+</tr>
+<tr>
+<td style="text-align:center">AX</td>
+<td style="text-align:center">43.5</td>
+<td style="text-align:center">49.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center">Fujica</td>
+</tr>
+<tr>
+<td style="text-align:center">EF</td>
+<td style="text-align:center">44.0</td>
+<td style="text-align:center">54.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/佳能EOS系列">佳能EOS系列</a></td>
+</tr>
+<tr>
+<td style="text-align:center">SA</td>
+<td style="text-align:center">44.0</td>
+<td style="text-align:center">48.5</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/适马">适马</a></td>
+</tr>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center">44.5</td>
+<td style="text-align:center">50.0</td>
+<td style="text-align:center">内外三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/索尼">索尼</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/柯尼卡美能达">柯尼卡美能达</a>、美能达AF</td>
+</tr>
+<tr>
+<td style="text-align:center">C/Y</td>
+<td style="text-align:center">45.5</td>
+<td style="text-align:center">48.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Contax">Contax</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/w/index.php?title=Yashica&amp;action=edit&amp;redlink=1">Yashica</a>、凤凰</td>
+</tr>
+<tr>
+<td style="text-align:center">Kyocera/Yashica AF</td>
+<td style="text-align:center">45.5</td>
+<td style="text-align:center">50.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Kyocera">Kyocera</a>、Yashica AF</td>
+</tr>
+<tr>
+<td style="text-align:center">K/PK/RK</td>
+<td style="text-align:center">45.5</td>
+<td style="text-align:center">48.5</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/賓得">宾得</a>、<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/理光">理光</a>、Chinon、Cosina、凤凰</td>
+</tr>
+<tr>
+<td style="text-align:center">M42</td>
+<td style="text-align:center">45.5</td>
+<td style="text-align:center">50.0</td>
+<td style="text-align:center">螺纹</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">Mamiya</td>
+<td style="text-align:center">45.5</td>
+<td style="text-align:center">49.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center">Mamiya NC/ZE系列照相机</td>
+</tr>
+<tr>
+<td style="text-align:center">OM</td>
+<td style="text-align:center">46.0</td>
+<td style="text-align:center">47.5</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center">奥林巴斯</td>
+</tr>
+<tr>
+<td style="text-align:center">F</td>
+<td style="text-align:center">46.5</td>
+<td style="text-align:center">47.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center"><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/尼康">尼康</a>、凤凰</td>
+</tr>
+<tr>
+<td style="text-align:center">R</td>
+<td style="text-align:center">46.9</td>
+<td style="text-align:center">49.0</td>
+<td style="text-align:center">螺纹</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center">Leica R</td>
+</tr>
+<tr>
+<td style="text-align:center">Kyocera Contax-N</td>
+<td style="text-align:center">48.0</td>
+<td style="text-align:center">55.0</td>
+<td style="text-align:center">内三爪</td>
+<td style="text-align:center">顺时针</td>
+<td style="text-align:center">Contax N</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="五、镜头的光圈"><a href="#五、镜头的光圈" class="headerlink" title="五、镜头的光圈"></a>五、镜头的光圈</h2><p>​        系指摄影物镜中的可变光阑，由若干薄片构成，用于控制镜头的孔径大小，与快门协同控制进光量。照相机和摄影机中都装有可变的孔径光阑，俗称光圈。[1]</p>
+<p>​        光圈的大小用F值或T值表示，普通照相机镜头通常使用F值，电影镜头则使用T值</p>
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:146.</p>
+<h3 id="1-F值光圈系数"><a href="#1-F值光圈系数" class="headerlink" title="1. F值光圈系数"></a>1. F值光圈系数</h3><p>​        又称F光圈数。F值等于相对孔径的倒数，即镜头焦距与摄影物镜的入瞳之比。这样定义的原因是，在忽略镜头玻璃对光线的吸收的情况下，快门速度不变，F值恒定可保持曝光量(像平面照度与曝光时间的乘积)相等，而不受镜头焦距影响。</p>
+<script type="math/tex; mode=display">
+F值={f\over D}，其中f为镜头焦距，D为入瞳孔径</script><p>​        国际通用的F值为根号2的等比级数分级，即1、1.4、2、2.8、4、5.6、8、11、16、22。两级之间曝光量相差一倍。F值越大，相对孔径越小，通光越少；F值越小，相对孔径越大，通光越多。</p>
+<h3 id="2-T值光圈系数"><a href="#2-T值光圈系数" class="headerlink" title="2. T值光圈系数"></a>2. T值光圈系数</h3><p>​        T值表征摄影物镜实际透光能力的参数，简称T光圈或T值。T值等于相对孔径的倒数除以物镜透光率的开平方。理想条件下，即一个镜头的透光率为100%时，其T值与F值相等。但在实际情况中，同一个镜头的T值一定大于它的F值。</p>
+<p>​        </p>
+<script type="math/tex; mode=display">
+T值={F值光圈系数\over\sqrt{物镜透光率}}</script><p>​        一般在专业摄影机镜头上，F值用白色刻度标明，T值用红色刻度标明。</p>
+<h2 id="六、模糊圈与景深"><a href="#六、模糊圈与景深" class="headerlink" title="六、模糊圈与景深"></a>六、模糊圈与景深</h2><h3 id="1-弥散圆-Circle-of-Confusion-CoC"><a href="#1-弥散圆-Circle-of-Confusion-CoC" class="headerlink" title="1. 弥散圆(Circle of Confusion, CoC)"></a>1. 弥散圆(Circle of Confusion, CoC)</h3><p>​        也称模糊圆。</p>
+<p>​        点光源发射出的光线经过镜头折射汇聚于一点，经过此点放置一块垂直于光轴的屏幕，并沿平行于光轴的方向移动点光源一定距离。此时，点光源在屏幕上会呈现出一个可辨认为圆形的像，这个圆形的像被称为<strong>弥散圆</strong>。当点光源向最初始的位置移动时，弥散圆逐渐变小，当它小到一定程度而人眼不可辨认时，我们将其视为一个清晰的点像，此时弥散圆被称作<strong>容许弥散圆</strong>（<strong>最小弥散圆</strong>）。        </p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_模糊圈与景深_模糊圈.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">       图片引自Wikipedia      </div> </center>
+
+<p>​        <strong>传感器或底片上最小弥散圆直径与拍摄照片的机器的传感器或底片对角线的长度一般成正比。</strong>假设在我们正前方距离<strong><em>L</em></strong>的地方放置一个屏幕，屏幕对角线长度为<strong><em>a</em></strong>，这种情况我们观看屏幕的最小弥散圆直径为<strong><em>d</em></strong>（或可引入人眼最小分辨角<strong><em>θ</em></strong>，计算得最小弥散圆直径为2L*tan(θ/2)）。摄影机的传感器对角线长度为<strong><em>b</em></strong>,将摄影机拍得的照片投影到屏幕上，照片的放大倍数<strong><em>K</em></strong>=<strong><em>a/b</em></strong>，那传感器上最小弥散圆直径就为<strong><em>d/K</em></strong>,即<strong><em>b\</em>d/a*</strong>，其中<strong><em>d/a</em></strong>为常数。但由于最小弥散圆直径还受许多主客观因素影响，不同相机厂商所给定的弥散圆直径会略微不同。</p>
+<h3 id="2-景深"><a href="#2-景深" class="headerlink" title="2. 景深"></a>2. 景深</h3><p>​        景深是一个空间范围，凡在此范围内的被摄物体都能够在成像元件上形成足够清晰的影像。</p>
+<p>​        在临界焦点前后两侧各存在一个区域，在这两个区域合起来的区域范围内，被摄物体上各个点在影片上都能呈现为等于或小于最小弥散圆的一个圆，这个区域称之为景深。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_模糊圈与景深_景深.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">       图片引自http://www2.xitek.com/info/showarticle.php?id=1148      </div> </center>
+
+<p>​        聚焦的被摄物的前后景深并非是一样的，一般估计后景深为前景深的两倍。因此，如果两个物体距离镜头远近不同，要想使两者都再现得清晰，应当把聚焦点取在从较近物体算到较远物体距离1/3处。[1]</p>
+<p>​        景深随焦距、对焦距离、光圈值的变化而变化。焦距和对焦距离不变时，光圈值越小，即光孔越大，景深越浅。</p>
+<p>​        附景深计算公式：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>δ</td>
+<td>容许弥散圆直径</td>
+</tr>
+<tr>
+<td>f</td>
+<td>镜头焦距</td>
+</tr>
+<tr>
+<td>F</td>
+<td>镜头的拍摄光圈值</td>
+</tr>
+<tr>
+<td>L</td>
+<td>对焦距离</td>
+</tr>
+<tr>
+<td>ΔL1</td>
+<td>前景深</td>
+</tr>
+<tr>
+<td>ΔL2</td>
+<td>后景深</td>
+</tr>
+<tr>
+<td>ΔL</td>
+<td>景深</td>
+</tr>
+</tbody>
+</table>
+</div>
+<script type="math/tex; mode=display">
+ΔL1={FδL^2\over f^2+FδL},ΔL2={FδL^2\over f^2-FδL}</script><script type="math/tex; mode=display">
+ΔL={2f^2FδL^2\over f^4-F^2δ^2L^2}</script><p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:147.</p>
+<h2 id="七、超焦距"><a href="#七、超焦距" class="headerlink" title="七、超焦距"></a>七、超焦距</h2><p>​        给定光圈和焦距，逐渐调大对焦距离，当景深后界被扩展到无穷远时，景深前界到镜头中心点的距离即为超焦距。当调焦到超焦距时，从超焦距的二分之一处到无穷远的景物都可在感光元件上呈现清晰的像。超焦距计算公式：</p>
+<script type="math/tex; mode=display">
+H={f^2\over FE},f为焦距，F为光圈系数，E为容许弥散圆直径</script><h2 id="八、沙姆定律"><a href="#八、沙姆定律" class="headerlink" title="八、沙姆定律"></a>八、沙姆定律</h2><p>​        沙姆定律最初是由奥地利军官沙姆发现的，用于航空摄影中校正透视变形。沙姆定律的内容为：如果像平面与镜头平面不平行，而是交与一条直线<strong><em>l</em></strong>，那么能清晰成像于像平面上的物平面(即合焦平面)同样经过直线<strong><em>l</em></strong>。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_沙姆定律1.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">       图片引自Wikipedia      </div> </center>
+
+<p>​        沙姆定律常用于移轴摄影。(图片引自<a target="_blank" rel="noopener" href="https://www.smashingmagazine.com/2008/11/beautiful-examples-of-tilt-shift-photography/">50 Beautiful Examples Of Tilt-Shift Photography</a>)</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_沙姆定律2.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">       移轴摄影      </div> </center>
+
+<h2 id="九、主点和主面-引自Wikipedia"><a href="#九、主点和主面-引自Wikipedia" class="headerlink" title="九、主点和主面(引自Wikipedia)"></a>九、主点和主面(引自Wikipedia)</h2><p>​        主点(Principal points)，是厚透镜光轴上的一对共轭点。平行于光轴的一条入射光线穿过透镜后的折射光线会经过焦点,两条光线之延长线会相交于一点,<strong>所有这类的交点(</strong>主点为其中特例<strong>)构成一个曲面</strong>。</p>
+<p>​        就接近光轴附近而言，该曲面近似一个平面，称之为<strong>主面</strong>(Principal plane)主面与光轴的交点,即为主点。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_主点.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">       P 为前侧主点、 P' 为后侧主点      </div> </center>
+
+
+
+
+
+<h2 id="十、节点"><a href="#十、节点" class="headerlink" title="十、节点"></a>十、节点</h2><p>​        节点(Nodal points)，是厚透镜光轴上的一对共轭点。一条朝节点方向射入的光线，经透镜折射后的折射光线的反向延长线经过另一条节点，且两条光线于光轴所成的夹角大小相等(角向放大率为+1)。如果光学系统两侧的介质相同(如空气)，则前后节点分别与前后主点重合。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_节点1.png" width="30%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">       N, N' 分别是厚透镜的前后节点      </div> </center>
+
+<p>​        当相机绕着镜头节点旋转时，物体的透视关系不会发生变化，利用此特点，我们在拼接照片时可以保证拼接的精度。定焦镜头只有一个固定的节点，而变焦镜头在不同的焦段有不同的节点。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_节点2.png" width="66%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      当相机绕着镜头节点旋转时，物体的透视关系不会发生变化。图片引自http://www.xiletuphoto.com/zx/20160928/36.html      </div> </center>
+
+<p>​        </p>
+<h2 id="十一、MTF曲线"><a href="#十一、MTF曲线" class="headerlink" title="十一、MTF曲线"></a>十一、MTF曲线</h2><p>​        MTF(Modulation Transfer Function,调制传递函数，模量传递函数)是衡量镜头性能的一个重要指标，可用于评价镜头还原调制度(对比度)的能力。</p>
+<p>​        MTF所表示的是镜头实际成像与理想成像之间调制度之比随空间频率和像场位置变化的函数。</p>
+<script type="math/tex; mode=display">
+MTF={输出图像调制度\over输入图像调制度}</script><h3 id="1-调制度"><a href="#1-调制度" class="headerlink" title="1. 调制度"></a>1. 调制度</h3><p>​        在研究摄影镜头成像质量时，调制度等于景物最大亮度和景物最小亮度之差于景物最大亮度和景物最小亮度之和的比值。</p>
+<script type="math/tex; mode=display">
+M={L_{max}-L_{min}\over L_{max}+L_{min}}</script><h3 id="2-像场-待补充"><a href="#2-像场-待补充" class="headerlink" title="2. 像场(待补充)"></a>2. 像场(待补充)</h3><h3 id="3-MTF曲线图-图片待补充"><a href="#3-MTF曲线图-图片待补充" class="headerlink" title="3. MTF曲线图(图片待补充)"></a>3. MTF曲线图(图片待补充)</h3><p>​        MTF曲线图的纵坐标为调制传递函数值，根据横坐标的不同最主要分为两种类型，即以空间频率为横坐标绘制的频幅曲线和以到像场中心的距离为横坐标绘制的场幅曲线。</p>
+<h2 id="十二、透镜像差"><a href="#十二、透镜像差" class="headerlink" title="十二、透镜像差"></a>十二、透镜像差</h2><p>​        在光学系统中，<strong>像差</strong>指实际成像与理想成像的偏差。普通的像差有如下几种：</p>
+<h3 id="1-球面像差"><a href="#1-球面像差" class="headerlink" title="1. 球面像差"></a>1. 球面像差</h3><p>​        简称球面差、球差，镜头不能使被摄物体中一个光点重现为一个点像。[1]这是因近轴光线和远轴光线经过透镜后折射的程度不同而造成的。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_透镜像差_球面像差1.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自https://en.wikipedia.org/wiki/Spherical_aberration      </div> </center>
+
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:148.</p>
+<h3 id="2-像散"><a href="#2-像散" class="headerlink" title="2. 像散"></a>2. 像散</h3><p>​        发光物体不处于主光轴时，子午方向入射光线与和弧矢方向的入射光线汇聚于不同平面。像散常会使一个点光源在画面上形成一个十字。它表现为在分辨率(解像力)测试标板上的可分辨的横竖线条的不同。[1]</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_透镜像差_像散.png" width="33%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      蓝色子午方向入射光线经过透镜汇聚于S1，红色弧矢方向入射光线经透镜汇聚于T1    图片引自https://zh.wikipedia.org/wiki/%E5%83%8F%E6%95%A3      </div> </center>
+
+<h3 id="3-像场弯曲"><a href="#3-像场弯曲" class="headerlink" title="3. 像场弯曲"></a>3. 像场弯曲</h3><p>​        简称场曲，垂直于主光轴的被摄物体经过透镜折射后，最清晰的实像面不是一个平面，而是一个弯曲的曲面。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_透镜像差_像场弯曲.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自Wikipedia      </div> </center>
+
+<h3 id="4-彗星像差"><a href="#4-彗星像差" class="headerlink" title="4. 彗星像差"></a>4. 彗星像差</h3><p>​        简称彗差，不处于主光轴上的点光源经过透镜后成像变形，产生出类似彗星的尾部。且点光源离视野中心越远，慧差越明显。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_透镜像差_彗星像差.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自Wikipedia      </div> </center>
+
+<h3 id="5-色差"><a href="#5-色差" class="headerlink" title="5. 色差"></a>5. 色差</h3><p>​        不同波长( 不同颜色)的光线在同一介质中折射率不同，使镜头无法将不同波长的色光汇聚于一点，从而形成色差。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机的基本结构_光学镜头_透镜像差_色差.png" width="40%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自Wikipedia      </div> </center>
+
+<h2 id="十三、电影镜头与相机镜头的几个主要区别"><a href="#十三、电影镜头与相机镜头的几个主要区别" class="headerlink" title="十三、电影镜头与相机镜头的几个主要区别"></a>十三、电影镜头与相机镜头的几个主要区别</h2><h3 id="1-对焦"><a href="#1-对焦" class="headerlink" title="1. 对焦"></a>1. 对焦</h3><h3 id="2-无极光圈"><a href="#2-无极光圈" class="headerlink" title="2. 无极光圈"></a>2. 无极光圈</h3><h3 id="3-齐焦-parfocal"><a href="#3-齐焦-parfocal" class="headerlink" title="3. 齐焦(parfocal)"></a>3. 齐焦(parfocal)</h3><h3 id="4-呼吸效应的控制"><a href="#4-呼吸效应的控制" class="headerlink" title="4. 呼吸效应的控制"></a>4. 呼吸效应的控制</h3><h1 id="c-快门"><a href="#c-快门" class="headerlink" title="c). 快门"></a>c). 快门</h1><p>​        又称为<strong>光闸</strong>，是照相机中控制曝光时间的重要部件。快门时间越短，即快门速度越快，曝光时间越短。总体可分为机械快门和电子快门。一些电影摄影机使用的快门称为旋转快门，又称叶子板。</p>
+<h2 id="一、机械快门"><a href="#一、机械快门" class="headerlink" title="一、机械快门"></a>一、机械快门</h2><p>根据机械快门在相机中的位置，可分为：</p>
+<h3 id="1-镜前快门"><a href="#1-镜前快门" class="headerlink" title="1. 镜前快门"></a>1. 镜前快门</h3><p>​        最早的快门就是镜前盖。由于早期感光材料的效率低，需要的曝光时间较长，在当时直接采用摘除镜头盖进行曝光的方法。后来改进为气动二叶快门，多用于微型相机。</p>
+<h3 id="2-镜间快门"><a href="#2-镜间快门" class="headerlink" title="2. 镜间快门"></a>2. 镜间快门</h3><p>​        结构与光圈类似，由金属叶片组成，位于镜头内部，现今不少中画幅及大画幅相机仍采用镜间快门。使用镜间快门可减小拍摄时的相机震动，防止果冻效应，且在所有快门速度下都可做到闪灯同步，但缺点是由于采用的是弹簧结构，受弹簧特性影响最高快门速度较低(一般不超过1/500)，且每一个镜头都需一个快门。    </p>
+<h3 id="3-镜后快门"><a href="#3-镜后快门" class="headerlink" title="3. 镜后快门"></a>3. 镜后快门</h3><p>​        结构与镜间快门类似，较镜间快门位置更靠后。</p>
+<h3 id="4-焦平面快门"><a href="#4-焦平面快门" class="headerlink" title="4. 焦平面快门"></a>4. 焦平面快门</h3><p>​        位于胶片或感光元件前方，接近焦平面，因此得名。根据运动方向不同，焦平面快门可分为纵走式和横走式。现今绝大多数单反相机和微单采用焦平面快门。焦平面快门由两块快门帘组成，分别为前帘和后帘。在大多数单反相机中，单个帘幕越过胶片的时间最短时间约为1/60秒或1/125秒。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_快门_机械快门_焦平面快门1.gif" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      单反相机中焦平面快门的工作过程 图片引自Wikipedia      </div> </center>
+
+<p>​        为了实现更高的快门速度，焦平面快门采用了逐行曝光的方法。以纵走式为例，对于单反相机，在单反相机未拍照时，反光镜降落，焦平面快门闭合。按下快门后，反光镜升起，后帘上升，之后前帘下降，开始曝光，在前帘下降一段距离后后帘下降，此时前帘和后帘之间的区域进行曝光。待所有像素曝光完成后前、后帘回到初始位置。对于微单，微单未拍照时，焦平面快门为了电子取景处于开放状态。按下快门后，前帘上升，待传感器上电荷清空后前帘下降，开始曝光，在前帘下降一段距离后后帘下降。通过逐行曝光的方法，焦平面快门甚至可实现1/16000秒的快门速度。但采用逐行曝光的方法也带来了果冻效应，以及搭配高速闪光灯时闪光同步的问题。（一些相机在不使用闪光灯高速同步时，会限制最高快门速度）</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_快门_机械快门_焦平面快门2.gif" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      不同快门速度下焦平面快门的表现 图片引自Wikipedia      </div> </center>
+
+<h2 id="二、电子快门"><a href="#二、电子快门" class="headerlink" title="二、电子快门"></a>二、电子快门</h2><p>​        在胶片时代，电子快门是指驱动动力由马达或电磁铁提供，或是快门速度由石英计时电路来控制的快门。现今，电子快门多指<strong>电子断流快门</strong>，它是“以电子方式控制摄像机曝光时间的装置”。以下电子快门均指<strong>电子断流快门</strong>。电子快门不存在任何机械结构，本质上是电路控制，控制传感器的积分时间。在传感器通电时受到光信号可积累电荷，断电时受到光信号不可积累电荷。</p>
+<p>​        因此，使用电子快门时，可以得到比机械快门大得多的快门速度，并不会引起机器震动，可实现静音拍摄。但由于缺乏机械遮光，容易产生暗电流校准不良，导致成片曝光错误。为了缓解这种情况，常会搭配电子元件进行“电荷清零”。但“电荷清零”会导致一定的快门延时。电子快门常用于手机和部分数码相机。</p>
+<p>​        电子快门通常有两种快门方式：卷帘式快门(Rolling Shutter)和全局式快门(Global Shutter)。</p>
+<h3 id="3-卷帘式快门-Rolling-Shutter"><a href="#3-卷帘式快门-Rolling-Shutter" class="headerlink" title="3. 卷帘式快门(Rolling Shutter)"></a>3. 卷帘式快门(Rolling Shutter)</h3><p>​        通过快速扫描来捕获画面的技术，画面中的部分并不是在同一个瞬间记录的。</p>
+<p>​        卷帘式快门于全局快门不同，它是通过控制芯片逐行曝光的方式实现的。卷帘式快门是通过通断电控制传感器，使其不同部分在不同时间下对光的敏感度不同。逐行进行曝光，直至所有像素点都被曝光。一般情况为1/48至1/60秒。[1]</p>
+<p>​        由于使用卷帘式快门时，其扫描速度比焦平面快门慢，常会引起相较于焦平面快门更严重的果冻效应。卷帘式快门多用于CMOS。</p>
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:142.</p>
+<h3 id="4-全局式快门-Global-Shutter"><a href="#4-全局式快门-Global-Shutter" class="headerlink" title="4. 全局式快门(Global Shutter)"></a>4. 全局式快门(Global Shutter)</h3><p>​        全局快门可使整幅图片在同一时间曝光。传感器所有像素点在同一时间收集光线，积累电荷，使曝光同时开始。曝光时间到时，传感器断电，同时停止曝光。</p>
+<p>​        使用全局快门可防止果冻效应。全局快门多用于CCD，但现今也有使用全局快门的CMOS出现。</p>
+<h2 id="三、电子前帘快门"><a href="#三、电子前帘快门" class="headerlink" title="三、电子前帘快门"></a>三、电子前帘快门</h2><p>​        通过控制芯片来模拟前帘，并使用机械后帘。电子前帘快门通过类似于卷帘式快门的方式开始逐行曝光，并用机械后帘结束曝光。相比于卷帘式快门，它的果冻效应更轻微；相比于焦平面快门，它造成的机器震动更小。</p>
+<h2 id="四、叶子板（图片待补充）"><a href="#四、叶子板（图片待补充）" class="headerlink" title="四、叶子板（图片待补充）"></a>四、叶子板（图片待补充）</h2><p>​        又称旋转快门。在以前使用胶片拍摄时，一秒会记录24帧，即一秒曝光24格胶片。为了控制曝光时间，并防止胶片移动时持续曝光形成拖尾，胶片摄影机引入了叶子板。叶子板为有着一定开角的圆形，通过不断的旋转控制胶片曝光的时长。当开口移动到胶片前方时，胶片进行曝光。当开口移开后，胶片停止曝光，并前进一格。</p>
+<p>​        通过控制叶子板的开角大小，可调整胶片的曝光时间。例如，在拍摄24帧每秒时，当叶子板开角为180°时，叶子板旋转一周的时间内有1/2的时间胶片进行曝光，因此胶片曝光时间为1/48。</p>
+<p>​        一些数字摄影机也采用机械式叶子板作为快门，如ARRI ALEXA Studio。</p>
+<h2 id="五、快门速度与快门角度"><a href="#五、快门速度与快门角度" class="headerlink" title="五、快门速度与快门角度"></a>五、快门速度与快门角度</h2><h3 id="1-快门速度"><a href="#1-快门速度" class="headerlink" title="1. 快门速度"></a>1. 快门速度</h3><p>​        快门速度是摄影中用于表达曝光时间的术语，表示胶片或传感器整体进行曝光的等效时间。光圈一定时，总的曝光量和快门速度呈正比。对待运动物体时，高速的快门可凝固具有一定速度的物体，减少画面中的运动模糊；慢速的快门则可使运动模糊更明显。常见的快门速度标准有：1，1/2，1/4，1/8，1/15，1/30，1/60，1/125，1/250，1/500，1/1000，1/2000。</p>
+<p>​        在进行长时间曝光时，除呈数值的快门速度外，还有两个另外的设置：</p>
+<ul>
+<li><p>B门：快门按下后开始曝光，释放后结束曝光。</p>
+</li>
+<li><p>T门：快门按下开始曝光，再次按下结束曝光。</p>
+</li>
+</ul>
+<h3 id="2-快门角度"><a href="#2-快门角度" class="headerlink" title="2. 快门角度"></a>2. 快门角度</h3><p>​        在以前，快门角度是在胶片摄像机中用于表达曝光时间的术语，即用叶子板的开角角度表示曝光时间。但现今一些不使用叶子板的数字摄像机仍用快门角度来表达曝光时间，如BMPCC 4K。</p>
+<p>​        快门角度与快门速度的转换公式：</p>
+<script type="math/tex; mode=display">
+快门速度={快门角度\over360°}×帧率</script><h1 id="d-电子感光器件"><a href="#d-电子感光器件" class="headerlink" title="d). 电子感光器件"></a>d). 电子感光器件</h1><p>​        又称作光电成像器件(photo-electronic imaging device)。是利用光电效应将景物或图像转换为可进行记录、传输、存储、显示以及处理等操作的器件系列的总称。或简述为完成图像信息光电转换的功能器件。</p>
+<p>​        光电成像器件的类型众多，在影视技术应用中主要有：</p>
+<ul>
+<li><p>固体图像传感器，包括CCD图像传感器和CMOS图像传感器；</p>
+</li>
+<li><p>摄像管，包括光电发射摄像管和光电导摄像管。[1]</p>
+<p>下面给出CCD和CMOS中几个具有相似工作原理的工作环节：</p>
+</li>
+</ul>
+<h2 id="一、光电转换"><a href="#一、光电转换" class="headerlink" title="一、光电转换"></a>一、光电转换</h2><p>​    将光信号转换为电信号。一定通量的光子以高于半导体带隙(导带能量最低点与价带能量最高点的能量只差)的能量进入半导体，使处于价带的电子被激发到导带，成为自由电子。这些电子就成为转换后的信号电荷。</p>
+<h2 id="二、电荷的收集与积累"><a href="#二、电荷的收集与积累" class="headerlink" title="二、电荷的收集与积累"></a>二、电荷的收集与积累</h2><h3 id="1-传感器的电荷积分模式-图片待补充"><a href="#1-传感器的电荷积分模式-图片待补充" class="headerlink" title="1. 传感器的电荷积分模式(图片待补充)"></a>1. 传感器的电荷积分模式(图片待补充)</h3><p>​        数码相机的CMOS和CCD图像传感器将光电二极管用作电荷收集器件。例如，二极管P型区域接低电势，N型区域首先被复位到高电势。之后光电二极管保持反偏并进入悬空状态。由于P型区域和N型区域的多数载流子的扩散作用，二极管内产生由N型区域指向P型区域的内建电场。被光子激发出的电子受内建电场作用，在N型区域聚集。在这种情况下，电子就是信号电荷。</p>
+<h2 id="三、信号电荷的检测与变换"><a href="#三、信号电荷的检测与变换" class="headerlink" title="三、信号电荷的检测与变换"></a>三、信号电荷的检测与变换</h2><h3 id="1-电荷检测"><a href="#1-电荷检测" class="headerlink" title="1. 电荷检测"></a>1. 电荷检测</h3><p>​        即将信号电荷转变为信号电压。其原理在CCD图像传感器和大部分CMOS图像传感器是基本相同的。<strong>但CCD和CMOS进行电荷检测的位置不相同，CCD在输出放大器中实现电荷检测，而CMOS是在像素内实现电荷检测。实际上，CCD中有着专门的放大器和模数转换芯片，而CMOS的每一个感光元件都整合了放大器和模数转换逻辑</strong>。电荷检测与变换的基本过程为：电压放大器连接势阱以监测阱中信号电荷的变化，若有电荷Q<sub>sig</sub>进入阱中，则其引起的电压变化为</p>
+<script type="math/tex; mode=display">
+ΔV_{FD}={Q_{sig}\over C_{FD}}(1.1)</script><p>式中，C<sub>FD</sub>是放大器所连接到的势阱的电容，并充当电荷到电压的转换电容。输出电压的变化如下：</p>
+<script type="math/tex; mode=display">
+ΔV_{OUT}=A_VΔV_{FD}(1.2)</script><p>式中，A<sub>V</sub>代表电压放大器的电压增益。<sup>[2]</sup></p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_电子感光元件_信号电荷的检测与变换.png" alt="摄影技术_感光材料与电子传感器_信号电荷的检测与变换" style="zoom:80%;"></p>
+<h3 id="2-转换增益-Conversion-Gain"><a href="#2-转换增益-Conversion-Gain" class="headerlink" title="2. 转换增益(Conversion Gain)"></a>2. 转换增益(Conversion Gain)</h3><p>​        转换增益(Conversion Gain)表面了在电荷检测节点处，一个电子引起的电压变化大小。由式(1.1)可求得增益如下<sup>[1]</sup>：    </p>
+<script type="math/tex; mode=display">
+C.G={q\over C_{FD}}(2.1)</script><p>​        式中，<em>q</em>表示元电荷，<em>C<sub>FD</sub></em>表示输出放大器所连接到的势阱的电容。</p>
+<hr>
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:137.</p>
+<p>[2] Junichi Nakamura.数码相机中的图像传感器和信号处理[M].北京:清华大学出版社,2015:40.</p>
+<h1 id="e-像元"><a href="#e-像元" class="headerlink" title="e). 像元"></a>e). 像元</h1><p>​        像元即像素点，是组成传感器的最小单元。下图为简化的像素结构</p>
+<p>​        </p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_像元.png" width="40%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      简化的像素结构 图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+
+
+<h2 id="一、彩色滤光阵列"><a href="#一、彩色滤光阵列" class="headerlink" title="一、彩色滤光阵列"></a>一、彩色滤光阵列</h2><p>​        为使图像传感器能够还原出彩色图像，必须采用分离颜色的技术。对于消费领域的数码相机来说，可以在光敏二极管上用片上<strong>彩色滤光阵列(color filter array,CFA)</strong>,这是一种经济合算的解决方案，可以将色彩信息分离并满足数码相机的微小化需求。</p>
+<p>​        根据彩色滤光阵列使用的色彩模式的不同，可分为<strong>RGB基色滤光阵列</strong>和<strong>CMY互补色滤光阵列</strong>。RGB滤光阵列有着更优的色彩再现能力和更高的彩色信噪比，因为它具有良好的波长敏感性;CMY互补色滤光阵列由于采用的模式的各个互补色滤光片的光穿透范围较宽，可以获得更高的色彩敏感度，量子效率较高。然而，为了输出显示而将互补色成分转换成RGB的减法操作会带来信噪比的下降，色彩再现也通常没有RGB基色滤光那么准确。<sup>[1]</sup></p>
+<h3 id="1-拜尔阵列"><a href="#1-拜尔阵列" class="headerlink" title="1. 拜尔阵列"></a>1. 拜尔阵列</h3><p>​        最常用的RGB基色滤光模式叫做“拜尔”模式，采用这种模式的阵列也叫<strong>拜尔阵列</strong>。拜尔阵列是一种马赛克彩色滤色阵列，由Bryce Edward Bayer提出。考虑到人眼对绿光最敏感的生理特性，这种滤色阵列中，绿色滤光器占50%，红色和蓝色滤光器分别占25%，这种排列方式称为RGGB。要从拜耳阵列传感器采样生成的图像得到全色彩图像必须要去马赛克，进行反马赛克运算。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_像元_彩色滤光阵列.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      拜尔阵列 图片引自Wikipedia      </div> </center>
+
+<p>​        在带拜耳阵列的传感器中，当输入信号的最高频率超过一定值(奈奎斯特频率)，接近于感光元件里像素的空间频率时，就会产生信号的混叠。根据差拍原理，即两个频率接近的等幅正弦波叠加，合成信号的幅度将按照两个频率之差变化。在这种情况下，图像上就会产生<strong>摩尔纹</strong>。                        </p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_像元_彩色滤光阵列_摩尔纹.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      透过重叠两相似图样（转动α度）得到之摩列 图片引自Wikipedia      </div> </center>        
+
+<h3 id="2-Foveon-X3感光元件"><a href="#2-Foveon-X3感光元件" class="headerlink" title="2. Foveon X3感光元件"></a>2. Foveon X3感光元件</h3><p>​        Foveon X3利用可见光不同的波长拥有不同的穿透力的原理感光元件，在每个像素具有三层感光元件所以可以同时侦测红、蓝、绿三种波长的强度。Foveon X3解决了摩尔纹的问题，其采样频率和色彩还原度远高于传统的拜耳阵列。</p>
+<p>​        但由于图像传感器是垂直叠起的，导致许多电路层设计问题。往往会使信噪比和动态范围下降。Foveon X3用于部分sigma旗下的数码相机。</p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_像元_彩色滤光阵列_Foveon X3感光元件.png" alt="摄影技术_感光材料与电子传感器_像元_彩色滤光阵列_Foveon X3感光元件" style="zoom:67%;"></p>
+<hr>
+<p>​        传统的拜尔阵列以及一些拜耳阵列的改良型(如富士的X-Trans),这类能在单片结构上感测彩色影像的成像器件属于<strong>单片成像器件</strong>。Foveon X3这类使用三片成像器件分别感测红、绿、蓝三种原色的器件属于<strong>三片成像器件</strong>。广播级摄影机多采用三片成像器件。</p>
+<h2 id="二、微型透镜阵列"><a href="#二、微型透镜阵列" class="headerlink" title="二、微型透镜阵列"></a>二、微型透镜阵列</h2><p>​        <strong>片上微型透镜阵列(on-chipmicrolens array,OMA)</strong>是由众多片上微透镜组成，用于将入射光汇聚到光电二极管的结构。</p>
+<h2 id="三、MOS二极管-图片待补充"><a href="#三、MOS二极管-图片待补充" class="headerlink" title="三、MOS二极管(图片待补充)"></a>三、MOS二极管(图片待补充)</h2><p>​        <strong>MOS(Metal Oxide Semiconductor)二极管</strong>是由金属—氧化物—半导体构成的光电管。这种结构最上层是金属(常用铝或铝化合物)，中间是氧化物(一般为SiO<sub>2</sub>),下层为半导体，半导体的基础材料是硅晶体，根据使用的半导体的多数载流子的类型的不同分为P(positive)型衬底和N(negative)型衬底。由于电子迁移率高，所以大多数CCD选用P型硅衬底。[1]当在金属端加上一个偏置电压(栅极电压)，使MOS二极管处于反偏状态时，P型硅衬底的多数载流子(空穴)从硅表面区域被排斥走，随之在硅表面区域形成耗尽层，这样耗尽区就可以收集自由电子。</p>
+<h2 id="四、结构"><a href="#四、结构" class="headerlink" title="四、结构"></a>四、结构</h2><h3 id="1-前照式结构"><a href="#1-前照式结构" class="headerlink" title="1. 前照式结构"></a>1. 前照式结构</h3><p>​        如图左侧，光子由像素正面入射。使用正面照明的像素结构又被称为<strong>前照式结构</strong>。光子到达光电二极管前需要经过金属线路，易被阻挡或反射串扰邻近像素。正面入射时量子效率为40%左右。为了解决前照式的开口率小以及光串扰问题，佳能将微透镜阵列进行优化，造出无缝微透镜阵列。而索尼则实现了背照式结构。</p>
+<h3 id="2-背照式结构"><a href="#2-背照式结构" class="headerlink" title="2. 背照式结构"></a>2. 背照式结构</h3><p>​        如图右侧，光子由像素背面入射。使用背面照明的像素结构又被称为<strong>背照式结构</strong>。背照式结构将金属线路放到光电二极管下面，使传感器可更好地利用入射光线。背面照射时，量子效率可达80%以上。</p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_像元_前照式与背照式.png" alt="摄影技术_感光材料与电子传感器_像元_前照式与背照式" style="zoom:75%;"></p>
+<h3 id="3-堆栈式结构"><a href="#3-堆栈式结构" class="headerlink" title="3. 堆栈式结构"></a>3. 堆栈式结构</h3><p>​        CMOS图像传感器的像素为有源像素，集合了具有信号放大及输出等功能的电路，使得CMOS的像素表面有一部分为处理回路，这部分无法接收光信号。而堆栈式结构则将处理回路安置在像素区域下方。堆栈式结构可实现更小尺寸的传感器，画质方面也得到了一定的优化。</p>
+<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_像元_堆栈式.png" alt="摄影技术_感光材料与电子传感器_像元_前照式与背照式" style="zoom:75%;"></p>
+<h2 id="四、有源像素和无源像素"><a href="#四、有源像素和无源像素" class="headerlink" title="四、有源像素和无源像素"></a>四、有源像素和无源像素</h2><p>​        根据电荷包传输出像素时是否经过信号放大，可将像素分为有源像素和无源像素。有源像素即是电荷包在传递出初始像素后，已经经过信号放大。无源像素即是电荷包在传递出初始像素后，未经过信号放大。</p>
+<p>​        CCD图像传感器被归类为无源像素的图像传感器，因为光生电荷在从像素传递到寄存器后端的输出放大器时才发生信号放大。CMOS图像传感器<strong>大多</strong>为使用有源像素的图像传感器，其中光生电荷在传递出初始像素后已经经过信号放大，放大后的信号再被读出。采用有源像素可以有效地抑制信号读出路径上产生和引入的噪声，采用无源像素可降低单个像素的大小。</p>
+<hr>
+<p>[1] Junichi Nakamura.数码相机中的图像传感器和信号处理[M].北京:清华大学出版社,2015:42-43.</p>
+<h1 id="势阱"><a href="#势阱" class="headerlink" title="势阱"></a>势阱</h1><h2 id="一、定义及解释"><a href="#一、定义及解释" class="headerlink" title="一、定义及解释"></a>一、定义及解释</h2><p>​        势阱定义：粒子在某立场中运动，势能函数曲线在空间的某一有限范围内势能最小，形如陷阱，称为<strong>势阱</strong>。在MOS管中，当在金属端加上一个偏置电压(即金属端为高电势，P型衬底为低电势)，使MOS二极管处于反偏状态时，P型硅衬底的多数载流子(空穴)从硅表面区域被排斥走，随之在硅表面区域形成耗尽层。对于电子而言，耗尽层是低势能区，因此耗尽层可俘获电子。当使用同一光源的光线照射到MOS管的硅片上时，势阱内俘获的光子数与光强度成正比。</p>
+<p>​        势阱的深度与电极上所施加的电压有关，电极上价带电压越高，势阱就越深。一个势阱所收集的光生电荷称为一个<strong>点荷包</strong>。</p>
+<h2 id="二、满阱容量"><a href="#二、满阱容量" class="headerlink" title="二、满阱容量"></a>二、满阱容量</h2><p>​        <strong>满阱容量(full-well capacity,FWC)</strong>是一个光电二极管所能积累的最大电荷量，即一个像元所能积累的最大电荷量。满阱容量与势阱的深度有关，下面给出相应公式：</p>
+<script type="math/tex; mode=display">
+N_{sat}={1\over q}\int_{V_{reset}}^{V_{max}}C_{PD}(V)·dV[electrons]</script><p>​        式中，N<sub>sat</sub>即为满阱容量，q为元电荷，C<sub>PD</sub>为光电二极管的电容，V<sub>reset</sub>与V<sub>max</sub>分别为二极管两侧的初始电压和最大电压。</p>
+<h1 id="f-CCD图像传感器"><a href="#f-CCD图像传感器" class="headerlink" title="f). CCD图像传感器"></a>f). CCD图像传感器</h1><h2 id="一、概念"><a href="#一、概念" class="headerlink" title="一、概念"></a>一、概念</h2><p>​        <strong>CCD(charge coupled device，电荷耦合器件)</strong>是一种能够在半导体中以电荷包的形式储存和传输信号电子(少部分传输空穴)的器件。如图4.1(a),CCD的主要结构为MOS电容器。当在金属电极加正电压时，P型硅衬底的多数载流子(空穴)从硅表面区域被排斥走，随之在硅表面区域形成耗尽层，从电极出发的电场线终止于耗尽层中由受主离子形成的负空间电荷区。在这种非热平衡条件下，注入的少数载流子(电子)就会被吸引到电极下的Si-SiO<sub>2</sub>界面，如图4.1(b)所示，这意味着在Si-SiO<sub>2</sub>界面形成了一个电子的势阱。通常，我们用如图4.1(c)的流体模型来描述点荷包储存和转移的情况。<sup>[1]</sup></p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_概念1.png" width="60%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+<p>​        之后，我们考虑相邻MOS电容之间的交互作用，即电荷转移。当MOS电容的排列不够紧密时，相临的MOS电容的势阱无法沟通，也就无法转移电荷，如图4.2(a),G1中储存的电荷包无法到达G2。所以，必须使相邻的MOS电容排列更紧密，使其势阱互相沟通。两个MOS电容势阱互相沟通的状态称为<strong>耦合</strong>。在相邻两个MOS电容耦合之后，储存在G1中的电子电荷包将由G1与G2之下耦合势阱共享，如图4.2(b)所示。因为信号电荷总是向势阱深处转移，我们可以通过调整各个MOS电容的栅极电压来调整各个电容的势阱，进而使电荷包在CCD中按照确定方向转移。如图4.2(c)，即通过降低G1上的电压，将G1中的电荷包完全转移到G2中。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_概念2.png" width="70%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+<h2 id="二、CCD基本工作流程"><a href="#二、CCD基本工作流程" class="headerlink" title="二、CCD基本工作流程"></a>二、CCD基本工作流程</h2><p>​        CCD的基本工作流程：</p>
+<p>​        信号电荷产生，即光子电荷转换；</p>
+<p>​        信号电荷储存，即信号电荷的收集与存储，实现光积分；</p>
+<p>​        信号电荷转移，即信号电荷的传输；</p>
+<p>​        信号电荷的检测与变换，即将信号电荷转换成电信号输出。<sup>[2]</sup></p>
+<h2 id="二、电荷转移机制-1-67-68"><a href="#二、电荷转移机制-1-67-68" class="headerlink" title="二、电荷转移机制[1]67-68"></a>二、电荷转移机制<sup>[1]67-68</sup></h2><p>​        CCD中基本电荷的转移取决于3个机制(或者说3个驱动力)：自激漂移(self-induced drift)、热扩散(thermal diffusion)和边缘场效应(fringing field dirft)。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_电荷转移机制.png" width="40%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+<h3 id="1-自激漂移"><a href="#1-自激漂移" class="headerlink" title="1. 自激漂移"></a>1. 自激漂移</h3><p>​        如图4.3(a)，当电荷包较大时(例如在电荷转移刚开始的时候)，驱动电荷转移的主要机制为自激漂移。自激漂移是指由载流子的静电排斥作用引起的电荷转移。其中，电荷衰减速度与初始电荷密度大致成正比。</p>
+<p>​        下面给出转移t时间之后G2下剩余的电荷的相关公式：</p>
+<script type="math/tex; mode=display">
+{Q(t)\over Q_0}\approx {t_0\over (t_0+t)}</script><script type="math/tex; mode=display">
+t_{0}={\frac{\pi L^{3}W C_{e f f}}{2\mu Q_{0}}}={\frac{\pi}{2}}\cdot{\frac{L^{2}}{\mu(V_{1}-V_{0})}}</script><p>式中，<em>L</em>和<em>W</em>分别表示电极G2的长和宽;<em>μ</em>表示载流子(电子)迁移率;<em>C<sub>eff</sub></em>表示单位面积有效储存电容，它与MOS电容中的栅氧化层有关。<em>V<sub>1</sub>-V<sub>0</sub>=Q<sub>0</sub>/LWC<sub>eff</sub></em>是将载流子移动至相邻电极G3的初始电压。</p>
+<h3 id="2-热扩散"><a href="#2-热扩散" class="headerlink" title="2. 热扩散"></a>2. 热扩散</h3><p>​        当MOS电容中的剩余电荷产生的沟道电压低至阈值电压时，如图4.3(b)所示，转移过程的驱动力主要是热扩散，这就使得G2下存储的电荷以指数形式减少。热扩散的时间常量<em>τ<sub>th</sub></em>可以用以下公式表示：</p>
+<script type="math/tex; mode=display">
+τ_{th}={4L^2\over {\pi}^2D}</script><p>式中，<em>D</em>是载流子扩散系数，<em>L</em>和电极G2的长。</p>
+<h3 id="3-边缘场效应"><a href="#3-边缘场效应" class="headerlink" title="3. 边缘场效应"></a>3. 边缘场效应</h3><p>​        在实际情况中，平行电容器的电场线并不都是直线，而是越靠近边缘的地方弯曲程度越大。如图4.3(c),在电荷转移过程中， 边缘场<em>E<sub>y</sub></em>加快了最后阶段的电荷转移。</p>
+<p>​        边缘场的强度和形状取决于栅氧化层厚度、硅中杂质分布情况和电极的压差。单位载流子通过长度为<em>L</em>的电极的渡越时间<em>t<sub>tr</sub></em>为</p>
+<script type="math/tex; mode=display">
+t_{t r}=\frac{1}{\mu} \int_{0}^{L} \frac{1}{E_{y}} d y</script><p>​        在高速操作中，例如时钟频率为10MHz时，边缘场是最重要的一个电荷转移的驱动力。因此，在设计CCD时必须要考虑到如何增强边缘场。</p>
+<h2 id="三、转移沟道"><a href="#三、转移沟道" class="headerlink" title="三、转移沟道"></a>三、转移沟道</h2><p>​        根据电荷包在CCD中存储和传输的位置不同，我们可以将CCD分为<strong>表面沟道CCD(SCCD)</strong>和<strong>体沟道CCD(BCCD)</strong>。</p>
+<h3 id="1-表面沟道CCD"><a href="#1-表面沟道CCD" class="headerlink" title="1. 表面沟道CCD"></a>1. 表面沟道CCD</h3><p>​        表面沟道CCD(surface CCD,SCCD)是指电荷包在MOS电容的氧化物-半导体分界附近进行存储与传输的CCD。这类CCD的工艺简单，但由于硅表面的晶格极不规则，在硅表面的禁带(在半导体中处于导带与价带之间，禁带宽度及带隙)引入了高密度的载流子陷阱能级，这又被称为表面态或界面态。<sup>[1]69</sup>即2电荷在表面沟道中转移时易被俘获，导致传输过程中会损失较多电子。因此，这种传输方式不适合大规模CCD。</p>
+<h3 id="2-体沟道CCD"><a href="#2-体沟道CCD" class="headerlink" title="2.体沟道CCD"></a>2.体沟道CCD</h3><p>​        <strong>体沟道(body CCD,BCCD)</strong>又被称为<strong>掩埋沟道</strong>。体沟道CCD的电荷包存储与传输的地方位于衬底内部，此方式有效解决了表面态对电荷传输的影响，提高了传输效率。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_转移沟道_体沟道.png" width="40%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      CCD掩埋沟道剖面图(参照Walden,R. H. et al. ,BellSyst. Tech. J. ,51,1635-1640,1972.)      </div> </center>
+
+<h2 id="四、成像阵列的扫描"><a href="#四、成像阵列的扫描" class="headerlink" title="四、成像阵列的扫描"></a>四、成像阵列的扫描</h2><p>​        积累的电荷，或者相应的电压或者电流信号需要从图像传感器芯片的像素中读出到外部电路。这些分布在二维空间的信号应该被转换为时序信号，这个过程称为”扫描“。<sup>[1]39</sup></p>
+<p>​        CCD的扫描方式主要有以下几种：<strong>帧转移(frame transfer,FT)</strong>、<strong>全帧转移(full-frame transfer,FFT)</strong>、<strong>行间转移(interlinetransfer,IT)</strong>和<strong>帧-行间转移(frame-interline transfer,FIT)</strong>结构。下图展示了FTCCD、ITCCD和FITCCD的结构。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_成像阵列的扫描.png" width="50%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+<h3 id="1-帧转移CCD"><a href="#1-帧转移CCD" class="headerlink" title="1. 帧转移CCD"></a>1. 帧转移CCD</h3><h4 id="1-结构及工作方式"><a href="#1-结构及工作方式" class="headerlink" title="(1) 结构及工作方式"></a>(1) 结构及工作方式</h4><p>​        如图4.18(a),<strong>帧转移(frame transfer,FT)CCD</strong>由成像区域、电荷存储区域、水平电荷转移CCD(HCCD)和输出电路组成。成像区和电荷存储区由一个多通道垂直转移CCD(VCCD)组成,可以在垂直方向上转移电荷包。存储区和HCCD被金属覆盖以屏蔽入射光。<sup>[1]76</sup></p>
+<p>​        当入射光照射到成像区上，所有像素开始曝光，光子将硅衬底中的电子激发到导带，形成电子-空穴对。这些光生电子被附近的势阱所俘获，形成电荷包，并进行垂直方向上的转移。经过一定的曝光时间后，信号电荷并行传输到存储区。之后，一条水平线上的电荷包转移到水平CCD，并经水平CCD一个一个地转移到输出电路。</p>
+<h4 id="2-特点"><a href="#2-特点" class="headerlink" title="(2) 特点"></a>(2) 特点</h4><p>​        像素结构简单，可以相对容易地做成小面积的像素。但由于电荷包在成像区中转移时，光生载流子会叠加到信号中，会产生许多杂散信号，这种现象也叫漏光(在CCD中，漏光现象即是拖尾)。</p>
+<h3 id="2-全帧转移CCD"><a href="#2-全帧转移CCD" class="headerlink" title="2. 全帧转移CCD"></a>2. 全帧转移CCD</h3><p>​        <strong>全帧转移(full-frame transfer,FFT)CCD</strong>的结构与帧转移CCD相似，但没有存储区域。适用于仅使用机械快门拍摄静止图像，且连拍速度不太快的情况。</p>
+<h3 id="3-行间转移CCD"><a href="#3-行间转移CCD" class="headerlink" title="3. 行间转移CCD"></a>3. 行间转移CCD</h3><h4 id="1-结构及工作方式-1"><a href="#1-结构及工作方式-1" class="headerlink" title="(1) 结构及工作方式"></a>(1) 结构及工作方式</h4><p>​        <strong>行间转移(interlinetransfer,IT)CCD</strong>是使用CCD的摄像机和数码相机中最常用的类型。如图4.18(b)所示，ITCCD中光电二极管和垂直转移CCD(VCCD)隔行分布。其中VCCD被遮挡不受光，不作为信号电荷的产生源，而是作为存储区和电荷垂直转移的通道。</p>
+<p>​        当光电二极管接收到光信号时，其中电子被激发，形成电子-空穴对。这些光生电子被附近的势阱所俘获，形成电荷包。经过极短的时间，光电二极管中的电荷包被转移到VCCD。之后，一条水平线上的电荷包转移到水平CCD，并经水平CCD一个一个地转移到输出电路。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_成像阵列的扫描_行间转移CCD.png" width="35%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      ITCCD像素横截图 图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+<h4 id="2-特点-1"><a href="#2-特点-1" class="headerlink" title="(2) 特点"></a>(2) 特点</h4><p>​        大大减轻了漏光现象。且因为光电二极管和VCCD分离，不用过多考虑集成问题，因此各自可被设计成最优结构从而提高传感器的性能。</p>
+<h3 id="4-帧-行间转移CCD"><a href="#4-帧-行间转移CCD" class="headerlink" title="4. 帧-行间转移CCD"></a>4. 帧-行间转移CCD</h3><p>​        <strong>帧-行间转移(frame-interline transfer,FIT)CCD</strong>即有如FTCCD的存储区域，也有如ITCCD光电二极管和VCCD隔行排列的结构。</p>
+<p>​        尽管以及减轻了许多，但在ITCCD中仍存在漏光现象(转移过程中光电二极管产生光生电子)，而FITCCD则进一步减轻了漏光现象。但由于实现FITCCD需要一块额外的存储区以及较高的时钟频率，导致传感器的面积增大、功耗增大、成本也相应增大。</p>
+<h2 id="五、拖尾"><a href="#五、拖尾" class="headerlink" title="五、拖尾"></a>五、拖尾</h2><p>​        拖尾是CCD图像传感器的一个特殊现象，它是由那些多余电子产生的，例如在ITCCD电荷转移的过程中，由光电二极管产生扩散到VCCD中的干扰电荷。</p>
+<p>​        拖尾被定义为低于像素阵列中心有效成像像素10%高度照射下的拖尾信号比，表现为白色垂直条纹图像。当强光照射时，造成造成高光溢出，使拖尾现象尤为明显。        </p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CCD图像传感器_拖尾.png" width="35%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      拖尾现象      </div> </center>
+
+<hr>
+<p>[1] Junichi Nakamura.数码相机中的图像传感器和信号处理[M].北京:清华大学出版社,2015:66.</p>
+<p>[2] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:137.    </p>
+<h1 id="g-CMOS图像传感器"><a href="#g-CMOS图像传感器" class="headerlink" title="g). CMOS图像传感器"></a>g). CMOS图像传感器</h1><h2 id="一、概念-图片待补充-1-141"><a href="#一、概念-图片待补充-1-141" class="headerlink" title="一、概念(图片待补充[1]141)"></a>一、概念(图片待补充[1]141)</h2><p>​        <strong>CMOS(Complementary Metal-Oxide-Semiconductor,互补式金属氧化物半导体)</strong>是用于数字信号、模拟信号和混合信号应用的主流技术。CMOS图像传感器即是使用这项材料制作的传感器，其在数码相机、摄影机中尤为常见。</p>
+<p>​        CMOS图像传感器的原理组成如图所示，通常由光(像)敏单元阵列、行驱动器、列时序控制逻辑、A/D转换器(模拟数字转换器,ADC)、数据总线输出接口、控制接口等几部分组成，这几部分通常都被集成在同一块硅片上。<sup>[1]</sup></p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CMOS图像传感器_概念.png" width="60%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      图片引自《电影制作技术手册》       </div> </center>
+
+<h2 id="二、CMOS基本工作流程"><a href="#二、CMOS基本工作流程" class="headerlink" title="二、CMOS基本工作流程"></a>二、CMOS基本工作流程</h2><ul>
+<li>光电转换</li>
+<li>行选择逻辑单元选通相应的行像素单元；</li>
+<li>信号通过各自所在列的信号总线传输到对应的模拟信号处理单元以及ADC；</li>
+<li>电压输出。<sup>[2]141-142</sup></li>
+</ul>
+<h2 id="三、CMOS的扫描方式"><a href="#三、CMOS的扫描方式" class="headerlink" title="三、CMOS的扫描方式"></a>三、CMOS的扫描方式</h2><p>​        CMOS图像传感器常用的扫描方式为<strong>X-Y寻址方案</strong>(下图b)。CMOS中，视频信号是通过行(垂直)扫描器和列(水平)扫描器对像素阵列进行光栅扫描获得的。一般情况下，行扫描器在每一帧时间内产生一个行选择脉冲和一个复位脉冲并送入选定行的像素中，列扫描器在每一个行周期扫描各列。CMOS 图像传感器中两种常见的扫描器是<strong>移位寄存器</strong>和<strong>解码器</strong>。移位寄存器的优点是结构简单，翻转噪声低，在一些改进结构中读出更加灵活。而解码器具有比移位寄存器更大的扫描灵活性，可以应用窗选读出或跳跃式读出。<sup>[2]</sup>扫描后，时序信号进入ADC，进行模数转换。</p>
+<center>    <img style="border-radius: 0.3125em;    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);" src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_感光材料与电子传感器_CMOS图像传感器_CMOS的扫描方式.png" width="60%" alt>    <br>    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    display: inline-block;    color: #999;    padding: 2px;">      ITCCD的扫描方式与CMOS的X-Y寻址扫描方式的对比     图片引自《数码相机中的图像传感器和信号处理》 Junichi Nakamura 著      </div> </center>
+
+<h2 id="四、CMOS图像传感器与CCD图像传感器的对比"><a href="#四、CMOS图像传感器与CCD图像传感器的对比" class="headerlink" title="四、CMOS图像传感器与CCD图像传感器的对比"></a>四、CMOS图像传感器与CCD图像传感器的对比</h2><h3 id="1-读出灵活性"><a href="#1-读出灵活性" class="headerlink" title="1. 读出灵活性"></a>1. 读出灵活性</h3><p>​        基于CMOS使用的X-Y寻址方案可进行行选择，X-Y寻址方案提供了多个读出方式，如窗选读出和跳跃式读出等。这使CMOS的读出灵活性高于CCD。</p>
+<h3 id="2-能耗"><a href="#2-能耗" class="headerlink" title="2. 能耗"></a>2. 能耗</h3><p>​        CMOS在读出时具有行选择，且只有选中的像素才会被激活。此外，CMOS电路的工作电压可低于CCD电路的工作电压及片上功能实现都可降低系统功耗。这些使得CMOS的能耗要远小于CCD。</p>
+<h3 id="3-性能"><a href="#3-性能" class="headerlink" title="3. 性能"></a>3. 性能</h3><p>​        灵敏度：<strong>在像素尺寸相同时</strong>，因为CMOS有源像素中至少需要3个晶体管(复位晶体管、源跟随器晶体管和行选择晶体管),且它们被遮光金属所覆盖。<sup>[2]42</sup>这使像素的感光面积减小，填充因子(像素中感光区域与像素面积的比率)小，最终导致<strong>CMOS灵敏度低于CCD</strong>。</p>
+<p>​        分辨率：<strong>在传感器具有相同尺寸时，CMOS分辨率低于CCD</strong>。CMOS单个像素中集成较多元件，使面积增大。</p>
+<p>​        噪声：CCD的随机噪声较高，CMOS的固定噪声较高。</p>
+<p>​        读取速度：<strong>CMOS读取速度快于CCD</strong>。由于所有的电荷都要通过统一的电路转换并输出，因此CCD传感器的读取速度比较慢。当然新一代的CCD在这方面有改善，但是是以牺牲灵敏度为代价的。</p>
+<h3 id="4-成本"><a href="#4-成本" class="headerlink" title="4. 成本"></a>4. 成本</h3><p>​        相同尺寸下，CMOS成本一般远低于CCD。</p>
+<hr>
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:141.    </p>
+<p>[2] Junichi Nakamura.数码相机中的图像传感器和信号处理[M].北京:清华大学出版社,2015:105.</p>
+<h1 id="h-动态范围"><a href="#h-动态范围" class="headerlink" title="h). 动态范围"></a>h). 动态范围</h1><p>​        <strong>动态范围(Dynamic range,DR)</strong>定义为满阱容量与本底噪声之间的比值(等效于传感器中不过曝下的最大输出与无光子照射时的输出的比值),用于衡量感光元件记录景物亮度范围的大小。动态范围的公式如下：</p>
+<script type="math/tex; mode=display">
+DR=20lg({N_{sat}\over n_{read}})[dB]</script><p>式中，<em>N<sub>sat</sub></em>为满阱容量的电子数，<em>n<sub>read</sub></em>为本底噪声的电子数。</p>
+<h1 id="i-噪声-分类方式暂定"><a href="#i-噪声-分类方式暂定" class="headerlink" title="i). 噪声(分类方式暂定)"></a>i). 噪声(分类方式暂定)</h1><p>​        噪声为接收信号并输出后的图像中的不均匀部分，会导致图像质量的下降。噪声大致可分为：<strong>固定模式噪声(fixed-pattern noise,FPN)</strong>和<strong>暂态噪声</strong>。</p>
+<p>​        固定模式噪声(fixed-pattern noise,FPN)主要由暗信号非一致性、像素随机、阴影、暗电流的非一致性、光响应的非一致性等因素导致。</p>
+<p>​        暂态噪声主要由读出噪声、放大器噪声、光子散粒噪声等组成。</p>
+<h1 id="j-信噪比"><a href="#j-信噪比" class="headerlink" title="j). 信噪比"></a>j). 信噪比</h1><p>​        <strong>信噪比(Signal-to-noise ratio,STR)</strong>是给定输入电压下信号和噪声的比值，可以衡量噪声对图像的干扰程度。信噪比越高，图像质量越好。信噪比的公式如下：</p>
+<script type="math/tex; mode=display">
+SNR=20lg({N_{sig}\over n})[dB]</script><p>式中，<em>N<sub>sig</sub></em>为信号电平，<em>n</em>为信号电平为<em>N<sub>sig</sub></em>时的总暂态噪声。</p>
+<h1 id="k-感光度-ISO"><a href="#k-感光度-ISO" class="headerlink" title="k). 感光度(ISO)"></a>k). 感光度(ISO)</h1><p>​        感光度是指底片或感光元件对光线的灵敏程度。现感光度用<strong>ISO</strong>表示，感光度又叫ISO值。国际标准组织(International Organization for Standardization ,ISO)制定的胶卷生产标准，现也用于感光元件。在传感器中，ISO的改变实际上是改变电信号的放大程度，并没改变实际曝光量。过度地提高ISO会导致动态范围、色彩灵敏度、信噪比的大幅度下降。</p>
+<h2 id="一、原生ISO"><a href="#一、原生ISO" class="headerlink" title="一、原生ISO"></a>一、原生ISO</h2><p>​        在CMOS中，由于初始模拟信号过弱，在输出时一般会先经过模拟信号放大，再进行模拟数字信号转换。</p>
+<p>​        原生ISO(native ISO)是由满阱容量决定的，指电子感光元件在特定的转换增益下，模拟信号不经过数字放大所得到的原始ISO。</p>
+<h1 id="l-增益-Gain"><a href="#l-增益-Gain" class="headerlink" title="l). 增益(Gain)"></a>l). 增益(Gain)</h1><p>​        信号强度的改变，ISO的改变实际上就是改变可编程增益放大器中信号的放大程度。模拟增益的对象是模拟信号，处于模数转换之前，因此模拟增益不会造成色阶、亮度断层。在模数转换之后，对数字信号进行的增益为数字增益(数字放大)，后期调整曝光即为数字增益。</p>
+<h2 id="一、转换增益-Conversion-Gain"><a href="#一、转换增益-Conversion-Gain" class="headerlink" title="一、转换增益(Conversion Gain)"></a>一、转换增益(Conversion Gain)</h2><p>​        转换增益(Conversion Gain)表面了在电荷检测节点处，一个电子引起的电压变化大小。<sup>[1]</sup>增益可由下式求得(公式详见信号电荷的检测与变换-转换增益)：    </p>
+<script type="math/tex; mode=display">
+C.G={q\over C_{FD}}</script><p>​        当输入的光信号导致积累的电荷达到满阱容量时，其对应的输出即为纯白，因此，满阱容量实际也会影响增益(可以从动态范围的定义理解)。<strong>增益（Gain）</strong>实际上是就通过改变施加给光电二极管的电压，进而改变该像素的满阱容量，起到增益的效果。大阱容可以提高动态范围，但是也意味着低增益，导致的后果就是在弱光情况下，难以压制本底噪声，即对于暗部，本底噪声在信号中占较大比例，造成暗部细节丢失、信噪比低。为了解决这个问题，一些传感器上采用了双增益(Dual Gain)。</p>
+<hr>
+<p>[1] Junichi Nakamura.数码相机中的图像传感器和信号处理[M].北京:清华大学出版社,2015:41.</p>
+<h1 id="m-双增益和双原生ISO"><a href="#m-双增益和双原生ISO" class="headerlink" title="m). 双增益和双原生ISO"></a>m). 双增益和双原生ISO</h1><p>​        为了兼顾高感光度和低感光度，主要有两种解决方案，分别为<strong>双增益(Dual Gain)</strong>和<strong>双原生ISO(Dual ISO)</strong>。</p>
+<h2 id="一、双转换增益-Dual-Gain"><a href="#一、双转换增益-Dual-Gain" class="headerlink" title="一、双转换增益(Dual Gain)"></a>一、双转换增益(Dual Gain)</h2><p>​        即在不同光线情况下使用不同的转换增益。在光线强时增大传感器的满阱容量，即低ISO模式，以提高传感器保留高光的能力；在光线弱时减小满阱容量，即高ISO模式，压制本底噪声，以获得更好的暗部细节。</p>
+<h2 id="二、双原生ISO-Dual-ISO"><a href="#二、双原生ISO-Dual-ISO" class="headerlink" title="二、双原生ISO(Dual ISO)"></a>二、双原生ISO(Dual ISO)</h2><p>​        <strong>双原生ISO(Dual ISO)</strong>也被称为双电路增益。双原生ISO并没有改变传感器的阱容，而是在高ISO和低ISO下使用不同的放大电路，放大模拟信号后进行模数转换。双原生ISO不仅可兼顾高低感，还可用来进行HDR合成。比如小米手机中使用的双原生ISO Fusion技术，即将两条放大电路同时打开，高增益的电路用于还原暗部细节，低增益的电路用于保护高光细节，之后再进行像素的合成。</p>
+<h1 id="n-取景器"><a href="#n-取景器" class="headerlink" title="n). 取景器"></a>n). 取景器</h1><p>​        取景器是摄影机上用来给摄影师提供正确选择被摄景物、检查和修改画面构图以及验证画面清晰程度的必要装置。[1]取景器大体可分为<strong>光学取景器</strong>和<strong>电子取景器</strong>两大类，每一大类下又可分为若干小类。</p>
+<h2 id="一、光学取景器-Optical-View-Finder"><a href="#一、光学取景器-Optical-View-Finder" class="headerlink" title="一、光学取景器(Optical View Finder)"></a>一、光学取景器(Optical View Finder)</h2><h3 id="1-旁轴取景器"><a href="#1-旁轴取景器" class="headerlink" title="1. 旁轴取景器"></a>1. 旁轴取景器</h3><p>​    旁轴取景器一般用于胶片袖珍相机、早期的消费级卡片型数码相机。具有光学取景的无延迟、无拖影、基本不耗电等特点。但因为取景窗与镜头之间有一段距离，导致拍摄者在取景器中观察到的画面与最终得到的影像有着一定的视差。</p>
+<h3 id="2-反射式取景器-TTL取景器"><a href="#2-反射式取景器-TTL取景器" class="headerlink" title="2. 反射式取景器(TTL取景器)"></a>2. 反射式取景器(TTL取景器)</h3><p>​    反射式取景器多用于单反相机，利用反光镜和五棱镜(或五面镜)，将通过镜头的光线反射到取景器的目镜。反射式取景器不光有光学取景的优点，还解决了视差问题。但反光式取景器也有着结构复杂、体积较大等缺点，且因为在按下快门后反光镜升起，相较与无反相机会产生较大的机器震动。<br>​    在部分使用机械式叶子板的摄影机中，会将叶子板的一侧制成反光材质。在叶子板遮挡胶片时，将叶子板作为反射系统的一部分用于取景。这种方式同样做到了实时、无视差。但由于叶子板存在开口会使取景目镜看到的影像交替出现，出现闪烁感。一些摄影机使用无光黑的反射扇面，将反射镜面分为两部分，使目镜中的影像出现的次数增加为49次/秒，以达到减弱闪烁感的目的。[2]</p>
+<h3 id="3-侧面取景器"><a href="#3-侧面取景器" class="headerlink" title="3. 侧面取景器"></a>3. 侧面取景器</h3><p>​    与旁轴取景器类似，取景器位于摄影机机体侧面用于部分胶片摄影机。<br>机体侧移式取景器<br>​    这种取景方式用于部分胶片摄影机。取景器位于摄影机机体的侧面，摄影机的机体则安装在一个可侧移到滑轨上。当取景时，将摄影机侧移，使取景器镜头位于原先摄影物镜的位置。取景完成后，将摄影机复位，使摄影物镜位于初始位置。这种取景方式可解决视差问题，当无法做到实时取景，因此不适合拍摄运动物体。</p>
+<h3 id="4-焦平面式取景器"><a href="#4-焦平面式取景器" class="headerlink" title="4. 焦平面式取景器"></a>4. 焦平面式取景器</h3><p>​    将一块磨砂玻璃置于焦平面处，取景时用它来代替胶片，由被摄物体反射来的光线在其上聚焦并形成影像，然后通过棱镜光学系统，观看磨砂玻璃上的取景景物。这种取景器因为取景器是通过拍摄镜头观看被摄景物的，因此不存在视差问题。但是，它不能在拍摄时取景，只能在拍摄前取景，所以也不适于运动拍摄。[3]</p>
+<h3 id="5-分光式取景器"><a href="#5-分光式取景器" class="headerlink" title="5. 分光式取景器"></a>5. 分光式取景器</h3><p>​        多用于小型胶片摄影机。在叶子板前方安装一个分光镜，将进入镜头的光线的一部分反射到取景器。这类取景方式看到的画面是实时且无闪烁的，但由于分光镜会分走一部分光线，导致削减了到达胶片的光线强度。</p>
+<h2 id="二、电子取景器-Electronic-View-Finder"><a href="#二、电子取景器-Electronic-View-Finder" class="headerlink" title="二、电子取景器(Electronic View Finder)"></a>二、电子取景器(Electronic View Finder)</h2><p>​        电子取景器将一块微型显示屏放在取景器目镜的内部。根据放置显示器的类型的不同可分为LCD取景器和OLED取景器。取景时快门开启，传感器接收光线，再显示到电子取景器上。相较于光学取景器，电子取景器中看到的画面即是传感器上的实际成像，可以实时查看调节光圈、快门速度等参数给画面带来的影响。但也存在着场景还原度不如光学取景器、耗电较大、不利于传感器的保护等缺点。</p>
+<p>​        </p>
+<p>[1] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:137.</p>
+<p>[2] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:153.</p>
+<p>[3] 常乐，车欣等.电影制作技术手册[M].北京:北京联合出版公司,2017:153.</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%9B%B8%E6%9C%BA/" rel="tag"># 相机</a>
+              <a href="/tags/%E7%89%A9%E7%90%86/" rel="tag"># 物理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" rel="prev" title="Games202-3 Real-time Environment Mapping">
+                  <i class="fa fa-chevron-left"></i> Games202-3 Real-time Environment Mapping
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/03/HPP_Art_01_%E7%BE%8E%E6%9C%AF%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" rel="next" title="HPP_Art_1 美术理论基础(角色/场景设计精要)">
+                  HPP_Art_1 美术理论基础(角色/场景设计精要) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

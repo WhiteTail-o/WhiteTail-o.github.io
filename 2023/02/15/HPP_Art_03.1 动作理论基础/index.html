@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). 动画基础知识  蒙皮： 定义骨骼数据如何驱动顶点数据；   引擎内不支持双四元数蒙皮，那使用线性混合蒙皮如何改善关节形状： JCM(Maya中叫PSD)：性能开销相对大； RBF：加几根辅助骨骼；      b). 动画类型 逐帧动画：sprite（精灵）动画  骨骼动画：3D动画、spine动画（2D骨骼）  顶点动画：物理模拟后的动画数据，不便于用骨骼驱动，如布料，流体、破碎等  VA">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Art_3.1 动作理论基础">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). 动画基础知识  蒙皮： 定义骨骼数据如何驱动顶点数据；   引擎内不支持双四元数蒙皮，那使用线性混合蒙皮如何改善关节形状： JCM(Maya中叫PSD)：性能开销相对大； RBF：加几根辅助骨骼；      b). 动画类型 逐帧动画：sprite（精灵）动画  骨骼动画：3D动画、spine动画（2D骨骼）  顶点动画：物理模拟后的动画数据，不便于用骨骼驱动，如布料，流体、破碎等  VA">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E5%8A%A8%E4%BD%9C01.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/Skinning.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/IK_FK.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/IK.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E5%8A%A8%E7%94%BB%E8%B4%A8%E9%87%8F%E5%92%8C%E6%B5%81%E7%95%85%E5%BA%A6.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E6%8C%A4%E5%8E%8B.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E6%8C%A4%E5%8E%8B2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E6%8B%96%E5%B0%BE.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E6%8B%96%E5%B0%BE2.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E9%80%8F%E8%A7%8601.png">
+<meta property="article:published_time" content="2023-02-15T09:23:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T04:43:44.446Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="美术">
+<meta property="article:tag" content="动画">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/%E5%8A%A8%E4%BD%9C01.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/","path":"2023/02/15/HPP_Art_03.1 动作理论基础/","title":"HPP_Art_3.1 动作理论基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Art_3.1 动作理论基础 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-%E5%8A%A8%E7%94%BB%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="nav-text">a). 动画基础知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E5%8A%A8%E7%94%BB%E7%B1%BB%E5%9E%8B"><span class="nav-text">b). 动画类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-%E5%8A%A8%E7%94%BB%E8%A1%A8%E7%8E%B0%E6%8F%90%E5%8D%87%E7%82%B9"><span class="nav-text">c). 动画表现提升点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#c-1-IK-%E5%92%8C-FK"><span class="nav-text">c.1). IK 和 FK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-2-%E5%8A%A8%E7%94%BB%E8%B4%A8%E9%87%8F%E5%92%8C%E6%B5%81%E7%95%85%E5%BA%A6"><span class="nav-text">c.2). 动画质量和流畅度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-3-%E6%89%93%E5%87%BB%E6%84%9F"><span class="nav-text">c.3). 打击感</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-4-%E5%A4%B8%E5%BC%A0"><span class="nav-text">c.4). 夸张</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Art_3.1 动作理论基础 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Art_3.1 动作理论基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:43:44" itemprop="dateModified" datetime="2023-03-17T12:43:44+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="a-动画基础知识"><a href="#a-动画基础知识" class="headerlink" title="a). 动画基础知识"></a>a). 动画基础知识</h1><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/动作01.png" alt="动作01"></p>
+<ul>
+<li><p><strong>蒙皮：</strong> 定义骨骼数据如何驱动顶点数据；</p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/Skinning.png" alt="Skinning"></p>
+<ul>
+<li>引擎内不支持双四元数蒙皮，那使用线性混合蒙皮如何改善关节形状：<ol>
+<li>JCM(Maya中叫PSD)：性能开销相对大；</li>
+<li>RBF：加几根辅助骨骼；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="b-动画类型"><a href="#b-动画类型" class="headerlink" title="b). 动画类型"></a>b). 动画类型</h1><ul>
+<li><p><strong>逐帧动画：</strong>sprite（精灵）动画</p>
+</li>
+<li><p><strong>骨骼动画：</strong>3D动画、spine动画（2D骨骼）</p>
+</li>
+<li><p><strong>顶点动画：</strong>物理模拟后的动画数据，不便于用骨骼驱动，如布料，流体、破碎等</p>
+<ul>
+<li><p><strong>VAT(Vertex Animation Texture)</strong></p>
+<blockquote>
+<p>VAT（Vertex Animation Texture）通常包括两张纹理：PositionTexture和RotationTexture。他们分别记录了一个Mesh在指定帧数下的位置、旋转变化。VAT的行坐标表示动画帧索引，列坐标表示对应顶点的位移数据。因此，VAT的高度一般对应整个动画的总帧数，而宽度对应着Mesh中根据Animation变化的顶点数。(<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/585471941">https://zhuanlan.zhihu.com/p/585471941</a>)</p>
+</blockquote>
+</li>
+<li><p>Shader顶点动画</p>
+</li>
+<li><p>离线顶点动画</p>
+</li>
+<li><p>…….</p>
+</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="c-动画表现提升点"><a href="#c-动画表现提升点" class="headerlink" title="c). 动画表现提升点"></a>c). 动画表现提升点</h1><h2 id="c-1-IK-和-FK"><a href="#c-1-IK-和-FK" class="headerlink" title="c.1). IK 和 FK"></a>c.1). IK 和 FK</h2><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/IK_FK.png" alt="IK_FK" style="zoom:50%;"></p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/IK.png" alt="IK" style="zoom:50%;"></p>
+<h2 id="c-2-动画质量和流畅度"><a href="#c-2-动画质量和流畅度" class="headerlink" title="c.2). 动画质量和流畅度"></a>c.2). 动画质量和流畅度</h2><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/动画质量和流畅度.png" alt="动画质量和流畅度"></p>
+<ul>
+<li>好的动画看起来流畅——<strong>符合运动规律</strong>，运动轨迹是<strong>弧线</strong></li>
+</ul>
+<h2 id="c-3-打击感"><a href="#c-3-打击感" class="headerlink" title="c.3). 打击感"></a>c.3). 打击感</h2><ol>
+<li><p>合理的打击反馈，被打击方在受到攻击时一般会做出相应的受击反馈</p>
+<ul>
+<li>受击、击退、击飞、浮空等受击反馈，浮空怪物下落的加速度、被击飞呈抛物线飞出</li>
+</ul>
+</li>
+<li><p>打击抽帧/顿帧</p>
+<ul>
+<li>抽帧：省略动作的中间过程；</li>
+<li>顿帧：动作的停顿，画面震动；</li>
+</ul>
+</li>
+<li><p>攻击节奏和按键反馈</p>
+<ul>
+<li>大技能—小技能—小技能—大技能切换，保持一定节奏的攻击方式</li>
+</ul>
+</li>
+<li><p>硬直和打断</p>
+</li>
+</ol>
+<h2 id="c-4-夸张"><a href="#c-4-夸张" class="headerlink" title="c.4). 夸张"></a>c.4). 夸张</h2><ul>
+<li><p>挤压和拉伸</p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/挤压.png" alt="挤压" style="zoom:25%;"></p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/挤压2.png" alt="挤压2" style="zoom:25%;"></p>
+</li>
+<li><p>拖尾和变形</p>
+<ul>
+<li><p>模仿视觉残留，在写实中是运动模糊。非写实则是模型形变</p>
+</li>
+<li><p>三维动画实现上比较麻烦，美式卡通更倾向于做模型上的挤压拉伸，但日式更多会做像速度线，色块残留的OBAKE（OBAKE：日式作画中表现高速运动的作画技巧）</p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/拖尾.png" alt="拖尾"></p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/拖尾2.png" alt="拖尾2"></p>
+</li>
+</ul>
+</li>
+<li><p>不正确的透视</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1o7411v7sD">【动画原画笔记】透视不对？透视不对就对了！</a></li>
+</ul>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/透视01.png" alt="透视01"></p>
+</li>
+<li><p>时间操控</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E7%BE%8E%E6%9C%AF/" rel="tag"># 美术</a>
+              <a href="/tags/%E5%8A%A8%E7%94%BB/" rel="tag"># 动画</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/" rel="prev" title="Games202-5 Non-Photorealistic Rendering (NPR)">
+                  <i class="fa fa-chevron-left"></i> Games202-5 Non-Photorealistic Rendering (NPR)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" rel="next" title="HPP_Graphics_1.2.3 MVP矩阵运算">
+                  HPP_Graphics_1.2.3 MVP矩阵运算 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

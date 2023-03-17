@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). 渲染管线与模型基础1.图形渲染管线一如既往熟悉的渲染管线，蓝色背景的都是可编程的，稍微复习下：  顶点着色器：将顶点坐标从模型空间转换到齐次裁剪空间，我们可以通过在顶点着色器中改变顶点位置实现动画；（可参考实战篇中的幽灵小人） ； 片段着色器：将光栅化阶段所插值的模型信息进行计算，可以进行一些光照计算；  2.模型的实现原理 先是点，点连成线，线构成面，最后组合成多边形模型。 3.UV 在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Graphics_2.2 模型与材质">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). 渲染管线与模型基础1.图形渲染管线一如既往熟悉的渲染管线，蓝色背景的都是可编程的，稍微复习下：  顶点着色器：将顶点坐标从模型空间转换到齐次裁剪空间，我们可以通过在顶点着色器中改变顶点位置实现动画；（可参考实战篇中的幽灵小人） ； 片段着色器：将光栅化阶段所插值的模型信息进行计算，可以进行一些光照计算；  2.模型的实现原理 先是点，点连成线，线构成面，最后组合成多边形模型。 3.UV 在">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412151638172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412153049988.gif">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/202104121546398.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412164100134.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412165101471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412172100173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412170941548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412171006177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021041217250899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021041217281017.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412173730174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412174322329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412174656156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021041217525293.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412175944301.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412180941887.gif">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412181830485.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412181844747.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210401211428481.gif">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412182836391.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412183129313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412183314680.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412183354402.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2021041218343677.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20210412183709474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/Hard_VertexNormal.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/Soft_VertexNormal.png">
+<meta property="article:published_time" content="2023-02-15T09:25:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T04:52:38.012Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="材质">
+<meta property="article:tag" content="模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/20210412151638172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/","path":"2023/02/15/HPP_Graphics_2.2 模型与材质/","title":"HPP_Graphics_2.2 模型与材质"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Graphics_2.2 模型与材质 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF%E4%B8%8E%E6%A8%A1%E5%9E%8B%E5%9F%BA%E7%A1%80"><span class="nav-text">a). 渲染管线与模型基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E6%9D%90%E8%B4%A8%E5%9F%BA%E7%A1%80"><span class="nav-text">b). 材质基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E6%A8%A1%E5%9E%8B%E6%95%B0%E6%8D%AE%E8%A7%A3%E6%9E%90"><span class="nav-text">c). 模型数据解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-%E9%A1%B6%E7%82%B9%E8%89%B2%E4%BD%9C%E7%94%A8%E3%80%81%E5%85%89%E6%BB%91%E7%BB%84%E5%AF%B9%E6%B3%95%E7%BA%BF%E7%9A%84%E5%BD%B1%E5%93%8D"><span class="nav-text">d). 顶点色作用、光滑组对法线的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-%E6%B3%95%E7%BA%BF%E7%83%98%E7%84%99%E5%8E%9F%E7%90%86"><span class="nav-text">e). 法线烘焙原理</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_2.4_%E4%BC%A0%E7%BB%9F%E7%BB%8F%E9%AA%8C%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_2.4 传统经验光照模型
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Graphics_2.2 模型与材质 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Graphics_2.2 模型与材质
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:25:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:25:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:52:38" itemprop="dateModified" datetime="2023-03-17T12:52:38+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="a-渲染管线与模型基础"><a href="#a-渲染管线与模型基础" class="headerlink" title="a). 渲染管线与模型基础"></a>a). 渲染管线与模型基础</h2><p><strong>1.图形渲染管线</strong><br><img src="https://img-blog.csdnimg.cn/20210412151638172.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>一如既往熟悉的渲染管线，蓝色背景的都是可编程的，稍微复习下：</p>
+<ul>
+<li>顶点着色器：将顶点坐标从模型空间转换到齐次裁剪空间，我们可以通过在顶点着色器中改变顶点位置实现动画；（可参考实战篇中的幽灵小人） ；</li>
+<li>片段着色器：将光栅化阶段所插值的模型信息进行计算，可以进行一些光照计算；</li>
+</ul>
+<p><strong>2.模型的实现原理</strong></p>
+<p>先是点，点连成线，线构成面，最后组合成多边形模型。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210412153049988.gif" alt="在这里插入图片描述"><br><strong>3.UV</strong><br><img src="https://img-blog.csdnimg.cn/202104121546398.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>在建模过程中，有一部非常重要的操作，就是展UV，那么UV是个啥？</p>
+<ul>
+<li>通俗地理解，展UV可以理解为将原本是三维的模型给全部剪开成面，平铺好的所有面放在一个以U轴（横向）和V轴（纵向）为坐标轴的正方形里就是UV，UV上的点和三维模型上的点一一对应，其位置就是顶点的纹理坐标。比如小学美术课用卡纸做骰子，将其拆开可以直接拆成六个面，这个过程就叫展UV。当在这个面上绘制数字时，对应的最后做好的骰子也会有所显示，这一步就是在UV上绘制贴图。</li>
+<li>UV展好的话，其表现平整干净，就像是直接从模型上扒下来的纸张，展不好的话，其效果表现就是扒下来的纸张像是叠了好几次，皱皱巴巴的。</li>
+<li>在片段着色器阶段，利用纹理坐标可以获取贴图所存储的信息。</li>
+<li>展开好后的UV，一般利用Substance Painter(简称SP，次时代建模流程必备工具)，BodyPainter（老一代的绘制贴图工具），Photoshop(PS绘图没啥好说的，SAI估计也行和PS同理)；</li>
+<li>绘制贴图不仅仅只输出一个简单的颜色贴图，根据项目需求还需要法线贴图，金属度贴图，AO贴图等。各种贴图存储的信息不同，所占据的通道有多有少。<br>所以我们还可以将一些通道不够占满RGBA的贴图进行整合，放在一张贴图里的不同通道，达到采样一次，获取多个信息的目的，可以有效提高性能。常见的如将没有透明度，仅存储RGB的颜色贴图与AO贴图压在一张图，AO贴图放在A通道。<br>缺点是不同通道直接还是可能会有相互影响，但是不明显，按需取舍。</li>
+</ul>
+<span id="more"></span>
+<p><strong>4.模型包含的信息（OBJ为例）</strong></p>
+<p>包含顶点位置信息（v开头），纹理坐标（vt开头），法线信息（vn开头），还有片元材质信息（最后f开头）可参考下面；</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"># This file uses centimeters as units for non-parametric coordinates.</span><br><span class="line"></span><br><span class="line">mtllib 2.mtl</span><br><span class="line">g default</span><br><span class="line">v -0.500000 -0.500000 0.500000</span><br><span class="line">v 0.500000 -0.500000 0.500000</span><br><span class="line">v -0.500000 0.500000 0.500000</span><br><span class="line">v 0.500000 0.500000 0.500000</span><br><span class="line">v -0.500000 0.500000 -0.500000</span><br><span class="line">v 0.500000 0.500000 -0.500000</span><br><span class="line">v -0.500000 -0.500000 -0.500000</span><br><span class="line">v 0.500000 -0.500000 -0.500000</span><br><span class="line">vt 0.375000 0.000000</span><br><span class="line">vt 0.625000 0.000000</span><br><span class="line">vt 0.375000 0.250000</span><br><span class="line">vt 0.625000 0.250000</span><br><span class="line">vt 0.375000 0.500000</span><br><span class="line">vt 0.625000 0.500000</span><br><span class="line">vt 0.375000 0.750000</span><br><span class="line">vt 0.625000 0.750000</span><br><span class="line">vt 0.375000 1.000000</span><br><span class="line">vt 0.625000 1.000000</span><br><span class="line">vt 0.875000 0.000000</span><br><span class="line">vt 0.875000 0.250000</span><br><span class="line">vt 0.125000 0.000000</span><br><span class="line">vt 0.125000 0.250000</span><br><span class="line">vn 0.000000 0.000000 1.000000</span><br><span class="line">vn 0.000000 0.000000 1.000000</span><br><span class="line">vn 0.000000 0.000000 1.000000</span><br><span class="line">vn 0.000000 0.000000 1.000000</span><br><span class="line">vn 0.000000 1.000000 0.000000</span><br><span class="line">vn 0.000000 1.000000 0.000000</span><br><span class="line">vn 0.000000 1.000000 0.000000</span><br><span class="line">vn 0.000000 1.000000 0.000000</span><br><span class="line">vn 0.000000 0.000000 -1.000000</span><br><span class="line">vn 0.000000 0.000000 -1.000000</span><br><span class="line">vn 0.000000 0.000000 -1.000000</span><br><span class="line">vn 0.000000 0.000000 -1.000000</span><br><span class="line">vn 0.000000 -1.000000 0.000000</span><br><span class="line">vn 0.000000 -1.000000 0.000000</span><br><span class="line">vn 0.000000 -1.000000 0.000000</span><br><span class="line">vn 0.000000 -1.000000 0.000000</span><br><span class="line">vn 1.000000 0.000000 0.000000</span><br><span class="line">vn 1.000000 0.000000 0.000000</span><br><span class="line">vn 1.000000 0.000000 0.000000</span><br><span class="line">vn 1.000000 0.000000 0.000000</span><br><span class="line">vn -1.000000 0.000000 0.000000</span><br><span class="line">vn -1.000000 0.000000 0.000000</span><br><span class="line">vn -1.000000 0.000000 0.000000</span><br><span class="line">vn -1.000000 0.000000 0.000000</span><br><span class="line">s off</span><br><span class="line">g pCube1</span><br><span class="line">usemtl initialShadingGroup</span><br><span class="line">f 1/1/1 2/2/2 4/4/3 3/3/4</span><br><span class="line">f 3/3/5 4/4/6 6/6/7 5/5/8</span><br><span class="line">f 5/5/9 6/6/10 8/8/11 7/7/12</span><br><span class="line">f 7/7/13 8/8/14 2/10/15 1/9/16</span><br><span class="line">f 2/2/17 8/11/18 6/12/19 4/4/20</span><br><span class="line">f 7/13/21 1/1/22 3/3/23 5/14/24</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>关于视频中讲到OBJ文件中存储顶点颜色的信息，我个人在用MAYA绘制顶点色后输出查看是不存在的。FBX是可以的，这一点在实践篇中也是有用到。</p>
+<p><strong>5.OBJ与FBX格式</strong><br><img src="https://img-blog.csdnimg.cn/20210412164100134.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="b-材质基础"><a href="#b-材质基础" class="headerlink" title="b). 材质基础"></a>b). 材质基础</h2><p>在上一篇光的那里讲过，人眼看见的物体颜色是光经过反射或折射后的。现实中，看不同的物体有不同的感觉，其材质的表现也和光密切相关。</p>
+<p><strong>1.漫反射</strong><br>最容易也是较基础的。常用的漫反射模型是兰伯特（Lambertian），它简单粗暴地认为光线均匀反射出去。<br>兰伯特是基于法线向量与指向光源的向量点积结果。在向量基础里我们就简单的介绍过兰伯特模型的点积结果与颜色关系。<br><img src="https://img-blog.csdnimg.cn/20210412165101471.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>2.镜面反射</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210412172100173.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>光滑镜面反射。镜面反射就是将入射光线根据表面法线进行反射，并且只有在反射方向有能量，其他方向能量均为0。常用的镜面反射模型有Phong和Blinn-Phong。下面两张ShaderForge节点图中，上面的是Phong，下面是Blinn-Phong。<br><img src="https://img-blog.csdnimg.cn/20210412170941548.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><img src="https://img-blog.csdnimg.cn/20210412171006177.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p><strong>3.折射</strong><br><img src="https://img-blog.csdnimg.cn/2021041217250899.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>提及折射一般想起的肯定是水面了，一部分光反射出去，另一部分则发生折射。反射和折射分别占多少占比可根据菲涅尔定律决定。<br>关于菲涅尔在实践篇中也做过简单的运用，多是把它作为边缘光来使用。</p>
+<p><strong>4.粗糙镜面反射</strong><br><img src="https://img-blog.csdnimg.cn/2021041217281017.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>法线偏移较小，反射集中在一个区域，有磨砂感。<br>关于这个在实践篇中倒是未曾涉猎。为了表现磨砂感，一般用CubeMap调整Mip去处理。</p>
+<p><strong>5.粗糙镜面折射</strong><br><img src="https://img-blog.csdnimg.cn/20210412173730174.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>与粗糙镜面反射类似，不过比起粗糙镜面反射，粗糙镜面折射中有一部分光可以透过去发生折射。</p>
+<p><strong>6.多层材质</strong><br><img src="https://img-blog.csdnimg.cn/20210412174322329.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">涂漆的地板上有木纹，有漆面的质感。<br><strong>7.次表面散射</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210412174656156.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">如皮肤，牛奶，玉石等，玉石的制作在实践篇中以调子映射制作，皮肤则是用Lut图。</p>
+<p><strong>8.关于皮肤</strong><br><img src="https://img-blog.csdnimg.cn/2021041217525293.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<p>皮肤可以看成三层：油脂，表皮，真皮。油脂层直接把光反射出去，所以皮肤上才出现高光，未被反射的光通过折射进入子表面层，进入该层后，部分被吸收和散射，再从皮肤中入射点附近出射点射出从而形成次表面散射效果。参考上图。</p>
+<p><strong>9.改变材质表面</strong><br>现实中不存在绝对光滑的表面，且一个模型顶点所带法线有限。而漫反射，镜面反射，折射都有法线参与。改变法线就可以影响光照计算结果。在卡通渲染中，我们可以利用修改法线的方式，对效果进行一定的优化。如《火影忍者：究极风暴》中先膨胀法线，然后计算光照后再用到原模型上，降低三维感。<br><img src="https://img-blog.csdnimg.cn/20210412175944301.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>顺带模型和材质都会影响画面是否好看，模型做得好用zbrush直接雕刻一个人像，就可以表现皮肤的皱纹，模型做不好，就算是再好的贴图和渲染方案也拯救不了。</p>
+<h2 id="c-模型数据解析"><a href="#c-模型数据解析" class="headerlink" title="c). 模型数据解析"></a>c). 模型数据解析</h2><p><strong>1.模型数据在渲染中的作用</strong></p>
+<p>可以用于顶点动画，纹理动画，顶点色，这三点在实践篇中的赛博朋克特效小人里都有所涉及。</p>
+<p><strong>2.纹理动画</strong><br>包括UV扰动，UV流动，序列帧播放其实也可以算在UV流动里，个人感觉它是特意规定特殊流动方向的UV流动。</p>
+<p>下图的gif里就包括UV扰动，对水面下的纹理进行干扰变换，UV流动，自左往右。<br><img src="https://img-blog.csdnimg.cn/20210412180941887.gif" alt="在这里插入图片描述"><br>关于这俩的实现，都是对UV坐标进行改变进而干涉采样结果。其中UV扰动中还利用GrabPass去获取背后的物体，将其渲染成一张纹理再进行干扰。视频中还使用了法线贴图。</p>
+<p>原理1通过对法线改变，从而导致左上角中纹理采样进行改变。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210412181830485.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>原理2就是之前讲的通过改变UV坐标实现动画<br><img src="https://img-blog.csdnimg.cn/20210412181844747.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><strong>3.顶点动画</strong></p>
+<ul>
+<li>通过在顶点着色器中对模型顶点操作，进而产生动画。</li>
+<li>顶点着色器计算的是每一个顶点，各点数据不同，进而同一个公司在不同顶点有不同效果。</li>
+<li>K帧也可以看做是一种顶点动画，比如在某轴上平移就是对所有顶点数据的某个轴上加上一个值。</li>
+<li>顶点动画想要做好看，请尽可能多加顶点，如果顶点不够，其表现就不会如下图这般丝滑，且会效果不明显。<br><img src="https://img-blog.csdnimg.cn/20210401211428481.gif" alt="在这里插入图片描述"><br><strong>4.顶点色</strong><br>我们可以利用绘制顶点色的做法，从而达到类似遮罩的效果。<br>在MAYA中绘制顶点色时可以明显看到是三角面。因为在渲染或导入游戏引擎时，四边面被转成了三角形进行计算。三角形内像素点的色彩会在光栅化时进行插值混合。<br><img src="https://img-blog.csdnimg.cn/20210412182836391.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">插值原理：根据重心坐标进行计算。<br><img src="https://img-blog.csdnimg.cn/20210412183129313.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">例子<br><img src="https://img-blog.csdnimg.cn/20210412183314680.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>5.顶点法线和面法线</strong></li>
+</ul>
+<p>面法线其实还是顶点法线不过是存储方式不同罢了。<br><img src="https://img-blog.csdnimg.cn/20210412183354402.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><img src="https://img-blog.csdnimg.cn/2021041218343677.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述">当前像素点的法线是通过周围顶点法线插值获得的，而从下图中可以明显看到面法线与顶点法线因为方向不同，插值结果也不同。其中面法线三个点共用一个法线。</p>
+<p><img src="https://img-blog.csdnimg.cn/20210412183709474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzMjEwMzM0,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>面法线有多少面存储多少法线，顶点法线则是有多少顶点存多少法线。<br>在卡渲中，描边时，通常使用罪恶装备的Backfacing外扩边描线法。也就是在顶点着色器中将法线方向偏移。该方法在处理硬表面时会出现断裂的情况。这是因为没有对法线进行平滑，导致法线不连续，进而描边不连续。</p>
+<h2 id="d-顶点色作用、光滑组对法线的影响"><a href="#d-顶点色作用、光滑组对法线的影响" class="headerlink" title="d). 顶点色作用、光滑组对法线的影响"></a>d). 顶点色作用、光滑组对法线的影响</h2><p><a target="_blank" rel="noopener" href="https://www.yuque.com/sugelameiyoudi-jadcc/okgm7e/fxvhxl#b4lco">https://www.yuque.com/sugelameiyoudi-jadcc/okgm7e/fxvhxl#b4lco</a></p>
+<p>光滑组的本质是<strong>改变点法线</strong>，进而影响面法线，进而影响三角线遍历中Normal的插值；</p>
+<p><img src="/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/Hard_VertexNormal.png" alt="Hard_VertexNormal" style="zoom:25%;"></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/Soft_VertexNormal.png" alt="Soft_VertexNormal" style="zoom: 25%;"></p>
+<h2 id="e-法线烘焙原理"><a href="#e-法线烘焙原理" class="headerlink" title="e). 法线烘焙原理"></a>e). 法线烘焙原理</h2><p>烘焙低模时，在切线空间计算低模与高模的法线差异。即低模切线空间中，高模对应位置法线的方向。烘焙为贴图。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E6%9D%90%E8%B4%A8/" rel="tag"># 材质</a>
+              <a href="/tags/%E6%A8%A1%E5%9E%8B/" rel="tag"># 模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/" rel="prev" title="HPP_Graphics_1.3 纹理的秘密">
+                  <i class="fa fa-chevron-left"></i> HPP_Graphics_1.3 纹理的秘密
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_2.3_HLSL%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D/" rel="next" title="HPP_Graphics_2.3 HLSL常用函数介绍">
+                  HPP_Graphics_2.3 HLSL常用函数介绍 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

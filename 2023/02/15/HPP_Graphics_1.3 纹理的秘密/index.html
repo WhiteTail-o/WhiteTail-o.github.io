@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="a). 什么是纹理一种可供着色器读写的结构化存储形式（采样器变量的形式，sampler） b). 纹理管线 模型空间位置→投影函数（不同与摄像机投影矩阵，是展UV其中一步）→纹理映射→纹理坐标→通讯函数→新纹理坐标→纹理采样（避免依赖纹理读取，如果片元着色器中不是使用顶点着色器中传递的数值，而是经过计算，那么就会产生依赖纹理读取，影响性能。因此，uv的偏移通常在顶点着色器中完成）→纹理值  c).">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Graphics_1.3 纹理的秘密">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="a). 什么是纹理一种可供着色器读写的结构化存储形式（采样器变量的形式，sampler） b). 纹理管线 模型空间位置→投影函数（不同与摄像机投影矩阵，是展UV其中一步）→纹理映射→纹理坐标→通讯函数→新纹理坐标→纹理采样（避免依赖纹理读取，如果片元着色器中不是使用顶点着色器中传递的数值，而是经过计算，那么就会产生依赖纹理读取，影响性能。因此，uv的偏移通常在顶点着色器中完成）→纹理值  c).">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E7%BA%B9%E7%90%86%E7%AE%A1%E7%BA%BF.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E7%BA%B9%E7%90%86%E7%AE%A1%E7%BA%BFeg.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/Warp%20Mode.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E5%8F%8C%E7%BA%BF%E6%80%A7%E6%8F%92%E5%80%BC.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E7%AB%8B%E6%96%B9%E5%8D%B7%E7%A7%AF%E6%8F%92%E5%80%BC.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E5%85%89%E6%BB%91%E6%9B%B2%E7%BA%BF%E6%8F%92%E5%80%BC.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E5%85%89%E6%BB%91%E6%9B%B2%E7%BA%BF%E6%8F%92%E5%80%BCeg.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/FilterMode%E7%BC%A9%E5%B0%8F.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/mipmap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/mipmap_level.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E5%90%84%E5%90%91%E5%BC%82%E6%80%A7%E8%BF%87%E6%BB%A4.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/SAT.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E9%87%8D%E7%94%A8mipmap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/CPU%E4%BC%98%E5%8C%96.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/GPU%E4%BC%98%E5%8C%96.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/Cubemap.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/bumpmapping.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E4%BD%8D%E7%A7%BB%E8%B4%B4%E5%9B%BE.png">
+<meta property="article:published_time" content="2023-02-15T09:24:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T04:50:50.421Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="百人计划">
+<meta property="article:tag" content="材质">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/%E7%BA%B9%E7%90%86%E7%AE%A1%E7%BA%BF.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/","path":"2023/02/15/HPP_Graphics_1.3 纹理的秘密/","title":"HPP_Graphics_1.3 纹理的秘密"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Graphics_1.3 纹理的秘密 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-%E4%BB%80%E4%B9%88%E6%98%AF%E7%BA%B9%E7%90%86"><span class="nav-text">a). 什么是纹理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-%E7%BA%B9%E7%90%86%E7%AE%A1%E7%BA%BF"><span class="nav-text">b). 纹理管线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-Wrap-Mode"><span class="nav-text">c). Wrap Mode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-Filter-Mode"><span class="nav-text">d). Filter Mode</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#d-1-%E6%94%BE%E5%A4%A7%EF%BC%88Magnification%EF%BC%89"><span class="nav-text">d.1) 放大（Magnification）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#d-2-%E7%BC%A9%E5%B0%8F"><span class="nav-text">d.2) 缩小</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-Mipmap"><span class="nav-text">e). Mipmap</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#e-1-ddx%E3%80%81ddy-%E7%89%87%E5%85%83%E7%9D%80%E8%89%B2%E5%99%A8%E6%8C%87%E4%BB%A4%EF%BC%8C%E6%B3%A8%E6%84%8F%E6%98%AF%E5%9C%A8%E7%89%87%E5%85%83%E7%9D%80%E8%89%B2%E5%99%A8%E4%B8%AD%E7%9A%84%EF%BC%81"><span class="nav-text">e.1) ddx、ddy(片元着色器指令，注意是在片元着色器中的！)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#f-%E5%90%84%E5%90%91%E5%BC%82%E6%80%A7%E8%BF%87%E6%BB%A4%EF%BC%88Anisotropic-Filtering%EF%BC%89"><span class="nav-text">f). 各向异性过滤（Anisotropic Filtering）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#f-1-Ripmap"><span class="nav-text">f.1) Ripmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#f-2-%E7%A7%AF%E5%88%86%E5%9B%BE%EF%BC%88SAT-Summed-Area-Table%EF%BC%89"><span class="nav-text">f.2) 积分图（SAT, Summed-Area Table）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#f-3-%E9%87%8D%E7%94%A8Mipmap"><span class="nav-text">f.3) 重用Mipmap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#g-CPU%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E5%B8%B8%E8%A7%81%E6%96%B9%E5%BC%8F"><span class="nav-text">g). CPU渲染优化常见方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#h-GPU%E6%B8%B2%E6%9F%93%E4%BC%98%E5%8C%96%E5%B8%B8%E8%A7%81%E6%96%B9%E5%BC%8F"><span class="nav-text">h). GPU渲染优化常见方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#i-Other-texture"><span class="nav-text">i). Other texture</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#i-1-Cubemap"><span class="nav-text">i.1) Cubemap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#i-2-Bump-Mapping"><span class="nav-text">i.2) Bump Mapping</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#i-3-Displacement-Mapping"><span class="nav-text">i.3) Displacement Mapping</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/" rel="bookmark">
+        <time class="popular-posts-time">2023-02-15</time>
+        <br>
+      HPP_Graphics_4.5 DOF景深基础
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Graphics_1.3 纹理的秘密 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Graphics_1.3 纹理的秘密
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:24:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:50:50" itemprop="dateModified" datetime="2023-03-17T12:50:50+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="a-什么是纹理"><a href="#a-什么是纹理" class="headerlink" title="a). 什么是纹理"></a>a). 什么是纹理</h2><p>一种可供着色器读写的结构化存储形式（采样器变量的形式，sampler）</p>
+<h2 id="b-纹理管线"><a href="#b-纹理管线" class="headerlink" title="b). 纹理管线"></a>b). 纹理管线</h2><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/纹理管线.png" alt="纹理管线"></p>
+<p><strong>模型空间位置</strong>→<strong>投影函数</strong>（不同与摄像机投影矩阵，是展UV其中一步）→<strong>纹理映射</strong>→<strong>纹理坐标</strong>→<strong>通讯函数</strong>→<strong>新纹理坐标</strong>→<strong>纹理采样</strong>（避免<strong>依赖纹理读取</strong>，如果片元着色器中不是使用顶点着色器中传递的数值，而是经过计算，那么就会产生依赖纹理读取，影响性能。<strong>因此，uv的偏移通常在顶点着色器中完成</strong>）→<strong>纹理值</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/纹理管线eg.png" alt="纹理管线eg"></p>
+<h2 id="c-Wrap-Mode"><a href="#c-Wrap-Mode" class="headerlink" title="c). Wrap Mode"></a>c). Wrap Mode</h2><ul>
+<li><strong>简介：</strong><ul>
+<li>决定uv[0, 1]以外的表现</li>
+<li>OpenGL —— 包装模式（Wrapping Mode）</li>
+<li>DirectX —— 纹理寻址模式（Texture Addressing Mode）</li>
+</ul>
+</li>
+<li><strong>类型：</strong><ul>
+<li>Repeat</li>
+<li>Mirror</li>
+<li>Clamp</li>
+<li>Border</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/Warp Mode.png" alt="Warp Mode"></p>
+<h2 id="d-Filter-Mode"><a href="#d-Filter-Mode" class="headerlink" title="d). Filter Mode"></a>d). Filter Mode</h2><ul>
+<li>在不同形状、大小、缩放比时，纹理过滤模式，可由专用硬件实现，也可由软件中实现，也可软硬件搭配完成</li>
+</ul>
+<h3 id="d-1-放大（Magnification）"><a href="#d-1-放大（Magnification）" class="headerlink" title="d.1) 放大（Magnification）"></a>d.1) 放大（Magnification）</h3><ul>
+<li><strong>最近邻</strong>（性能消耗小，放大时每个像素读取最邻近的纹素，可能出现马赛克像素风格）</li>
+<li><strong>双线性插值</strong>——对于每一个像素点都寻找邻近的四个像素点（实际），在二维空间进行的线性插值得到的最终混合值<ul>
+<li>双线型内插值算法就是一种比较好的图像缩放算法，它充分的利用了<strong>源图</strong>中<strong>虚拟点</strong>四周的<strong>四个真实存在的像素值</strong>来共同决定目标图中的一个像素值，因此缩放效果比简单的最邻近插值要好很多</li>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/双线性插值.png" alt="双线性插值"></li>
+<li>$P(u,v)$是屏幕空间的坐标，屏幕空间左下角为$(0, 0)$，而左下角第一个像素的像素中心坐标为$(0.5, 0.5)$</li>
+<li><a target="_blank" rel="noopener" href="http://www.realtimerendering.com/blog/the-center-of-the-pixel-is-0-50-5/">The Center of the Pixel is (0.5,0.5)</a></li>
+</ul>
+</li>
+<li><strong>立方卷积插值</strong><ul>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/立方卷积插值.png" alt="立方卷积插值"></li>
+</ul>
+</li>
+<li><strong>兰索斯插值</strong>（不常见，性能开销大）</li>
+<li><strong>Quilez 的光滑曲线插值</strong> —— 在立方卷积插值与双线性插值的一个折中效果，画面表现效果要比双线性插值好，比立方卷积插值差<ul>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/光滑曲线插值.png" alt="光滑曲线插值"></li>
+<li><strong>在纹理坐标带入到双线性插值过程之前再额外进行了一步处理</strong></li>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/光滑曲线插值eg.png" alt="光滑曲线插值eg"></li>
+</ul>
+</li>
+<li><strong>效果对比：</strong><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/效果对比.png" alt="效果对比"></li>
+</ul>
+<h3 id="d-2-缩小"><a href="#d-2-缩小" class="headerlink" title="d.2) 缩小"></a>d.2) 缩小</h3><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/FilterMode缩小.png" alt="FilterMode缩小"></p>
+<ul>
+<li><p><strong>可能出现的问题：</strong>出现颜色丢失与闪烁（奈奎斯特定律）</p>
+</li>
+<li><p><strong>解决方式：</strong></p>
+<ol>
+<li>最邻近、双线性插值（有限地增加采样频率）</li>
+<li>Mipmap（减小纹理频率）</li>
+</ol>
+</li>
+</ul>
+<span id="more"></span>
+<h2 id="e-Mipmap"><a href="#e-Mipmap" class="headerlink" title="e). Mipmap"></a>e). Mipmap</h2><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/mipmap.png" alt="mipmap"></p>
+<ul>
+<li><strong>特点：</strong>每一级纹理的大小都是上一级的1/4,因此整套纹理只比原来的单张多占1/3内存（等比数列）</li>
+</ul>
+<h3 id="e-1-ddx、ddy-片元着色器指令，注意是在片元着色器中的！"><a href="#e-1-ddx、ddy-片元着色器指令，注意是在片元着色器中的！" class="headerlink" title="e.1) ddx、ddy(片元着色器指令，注意是在片元着色器中的！)"></a>e.1) ddx、ddy(片元着色器指令，注意是在片元着色器中的！)</h3><ul>
+<li><p>GPU并不是一个个Pixel执行的，而是分成2*2的组，分块并行执行</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.aclockworkberry.com/shader-derivative-functions/#footnote_3_1104">通过ddx、ddy可对各种数据（uv、normal……）求偏导</a></li>
+</ul>
+</li>
+<li><p>ddx、ddy是x、y方向上的偏导数，通过ddx、ddy可对各种数据（uv、normal……）求偏导，可用于</p>
+<ul>
+<li>mipmap：通过ddx、ddy求uv的偏导，得到的<strong>最长边</strong>用于确定mipmap的level</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/mipmap_level.png" alt="mipmap_level"></p>
+<ul>
+<li>可求法线</li>
+</ul>
+</li>
+<li><p>三线性插值（待看）</p>
+</li>
+<li><strong>特点：</strong>mipmap内存大<strong>1/3</strong>，但带宽压力变小（有时候只用传输小的贴图就行）</li>
+<li><strong>缺点：</strong>假设各向同性，但当缩放不一致（倾斜角过大）时可能模糊</li>
+<li><strong>解决方式：</strong>各向异性过滤（Anisotropic Filtering）</li>
+</ul>
+<h2 id="f-各向异性过滤（Anisotropic-Filtering）"><a href="#f-各向异性过滤（Anisotropic-Filtering）" class="headerlink" title="f). 各向异性过滤（Anisotropic Filtering）"></a>f). 各向异性过滤（Anisotropic Filtering）</h2><ul>
+<li><p><strong>作用：</strong>减少模糊，保护在极端观察角度下的细节</p>
+</li>
+<li><p>当纹理在x坐标方向和在y坐标方向缩放的比例不一样，纹理的缩放是<strong>各异向</strong>的，Pmax/Pmin代表了各异向的程度。举个例子来说，64 x 64的纹理贴到一个开始平行于xy平面的正方形上，但是正方形绕y轴旋转60度，最后投影到屏幕上占了16 x 32的象素矩阵。纹理在x坐标方向上缩放的比例因子为64/16等于4，在y坐标方向缩放的比例因子为64/32等于2，Pmax等于4，Pmin等于2。缩放的<strong>各异向程度</strong>为2。(<a target="_blank" rel="noopener" href="https://blog.csdn.net/u013467442/article/details/44466069">https://blog.csdn.net/u013467442/article/details/44466069</a>)</p>
+</li>
+<li>各向异性过滤是一系列过滤方法，是<strong>搭配其他过滤方式一起使用的</strong>，常见的方法有<strong>Ripmap</strong>、<strong>积分图（SAT, Summed-Area Table）</strong>、<strong>重用mipmap</strong>等</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/各向异性过滤.png" alt="各向异性过滤"></p>
+<h3 id="f-1-Ripmap"><a href="#f-1-Ripmap" class="headerlink" title="f.1) Ripmap"></a>f.1) Ripmap</h3><ul>
+<li>做各种比例的预处理，<strong>部分解决</strong>问题</li>
+<li>内存会大三倍</li>
+</ul>
+<h3 id="f-2-积分图（SAT-Summed-Area-Table）"><a href="#f-2-积分图（SAT-Summed-Area-Table）" class="headerlink" title="f.2) 积分图（SAT, Summed-Area Table）"></a>f.2) 积分图（SAT, Summed-Area Table）</h3><ul>
+<li>每一位以更多位数储存，储存与左上纹素的总和（具体等看GAMES202补充）</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/SAT.png" alt="SAT"></p>
+<ul>
+<li>右边表格的数据怎么来的呢？就跟图上上面的公式是一样的 比如2行2列的8 就是 2 + 3 + 3 + 0 再比如一行四列的8 就是 2 + 3 + 2 + 1以此类推</li>
+</ul>
+<h3 id="f-3-重用Mipmap"><a href="#f-3-重用Mipmap" class="headerlink" title="f.3) 重用Mipmap"></a>f.3) 重用Mipmap</h3><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/重用mipmap.png" alt="重用mipmap"></p>
+<ul>
+<li>不是用ripmap，而是重用mipmap，屏幕像素反向投影到纹理空间，通过纹理空间中长方形的最短边确定level。缩放的各异向程度后（看前面例子），创建各向异性线，穿过方块中心，根据程度，确定采样次数，并沿线段进行采样、混合</li>
+<li>目前GPU一般支持16x的各向异性过滤</li>
+<li>一般基于三线性过滤</li>
+</ul>
+<h2 id="g-CPU渲染优化常见方式"><a href="#g-CPU渲染优化常见方式" class="headerlink" title="g). CPU渲染优化常见方式"></a>g). CPU渲染优化常见方式</h2><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/CPU优化.png" alt="CPU优化"></p>
+<ul>
+<li>减少DrawCall<ul>
+<li>纹理图集、纹理数组</li>
+</ul>
+</li>
+</ul>
+<h2 id="h-GPU渲染优化常见方式"><a href="#h-GPU渲染优化常见方式" class="headerlink" title="h). GPU渲染优化常见方式"></a>h). GPU渲染优化常见方式</h2><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/GPU优化.png" alt="GPU优化"></p>
+<ul>
+<li>降低显存带宽压力<ul>
+<li>纹理压缩</li>
+</ul>
+</li>
+</ul>
+<h2 id="i-Other-texture"><a href="#i-Other-texture" class="headerlink" title="i). Other texture"></a>i). Other texture</h2><h3 id="i-1-Cubemap"><a href="#i-1-Cubemap" class="headerlink" title="i.1) Cubemap"></a>i.1) Cubemap</h3><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/Cubemap.png" alt="Cubemap"></p>
+<ul>
+<li>纹理左下角(0, 0)</li>
+</ul>
+<h3 id="i-2-Bump-Mapping"><a href="#i-2-Bump-Mapping" class="headerlink" title="i.2) Bump Mapping"></a>i.2) Bump Mapping</h3><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/bumpmapping.png" alt="bumpmapping"></p>
+<h3 id="i-3-Displacement-Mapping"><a href="#i-3-Displacement-Mapping" class="headerlink" title="i.3) Displacement Mapping"></a>i.3) Displacement Mapping</h3><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/位移贴图.png" alt="位移贴图"></p>
+<ul>
+<li>搭配曲面细分着色器</li>
+</ul>
+<hr>
+<p>【Work】</p>
+<p>Filter Mode：</p>
+<p>纹理优化方式及其原理：</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+              <a href="/tags/%E6%9D%90%E8%B4%A8/" rel="tag"># 材质</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" rel="prev" title="HPP_Graphics_1.2.3 MVP矩阵运算">
+                  <i class="fa fa-chevron-left"></i> HPP_Graphics_1.2.3 MVP矩阵运算
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/" rel="next" title="HPP_Graphics_2.2 模型与材质">
+                  HPP_Graphics_2.2 模型与材质 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

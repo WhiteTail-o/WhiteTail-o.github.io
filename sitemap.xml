@@ -2,16 +2,232 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/</loc>
+    <loc>https://whitetail-o.github.io/2023/02/18/Games202_05_Real-time%20Physically-based%20Materials/</loc>
     
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/2023/02/10/Games202_05_Real-time%20Physically-based%20Materials/</loc>
+    <loc>https://whitetail-o.github.io/2023/02/19/Games202_06_Real-time%20Ray-Tracing/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/20/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7.2_GPU%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.4_%E4%BC%A0%E7%BB%9F%E7%BB%8F%E9%AA%8C%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.3_HLSL%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0%E4%BB%8B%E7%BB%8D/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.2%20%E6%A8%A1%E5%9E%8B%E4%B8%8E%E6%9D%90%E8%B4%A8/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2023-03-17</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/</loc>
     
     <lastmod>2023-02-12</lastmod>
     
@@ -77,42 +293,6 @@
     <loc>https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/</loc>
     
     <lastmod>2023-02-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/12/Q&A/</loc>
-    
-    <lastmod>2023-02-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/10/Games202_07_A%20Glimpse%20of%20Industrial%20Solution/</loc>
-    
-    <lastmod>2023-02-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/10/Games202_06_Real-time%20Ray-Tracing/</loc>
-    
-    <lastmod>2023-02-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/2023/02/08/Todo/</loc>
-    
-    <lastmod>2023-02-08</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -245,7 +425,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/repository/index.html</loc>
+    <loc>https://whitetail-o.github.io/links/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -254,7 +434,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/links/index.html</loc>
+    <loc>https://whitetail-o.github.io/repository/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -274,7 +454,7 @@
 
   <url>
     <loc>https://whitetail-o.github.io/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -282,133 +462,273 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Games101/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
-    <lastmod>2023-02-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/Ray-Tracing/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Materials/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Animation/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/Ray-Tracing/</loc>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Games202/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Shadow/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/IBL/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/GI/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/NPR/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/PBR/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/Denoise/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E7%BE%8E%E6%9C%AF/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E7%BE%8E%E6%9C%AF%E7%90%86%E8%AE%BA/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E6%A8%A1%E5%9E%8B%E5%88%B6%E4%BD%9C%E6%B5%81%E7%A8%8B/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Q-A/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <loc>https://whitetail-o.github.io/tags/%E6%95%B0%E5%AD%A6/</loc>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Todo/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <loc>https://whitetail-o.github.io/tags/%E5%8A%A8%E7%94%BB/</loc>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/%E8%AE%BA%E6%96%87%E5%A4%8D%E7%8E%B0/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <loc>https://whitetail-o.github.io/tags/%E6%9D%90%E8%B4%A8/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/HLSL/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%A8%A1%E5%9E%8B/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/Bump-Mapping/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E8%89%B2%E5%BD%A9%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%A1%AC%E4%BB%B6/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%BA%B9%E7%90%86/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%A7%BB%E5%8A%A8%E7%AB%AF/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%9E%B6%E6%9E%84/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%9B%B8%E6%9C%BA/</loc>
+    <lastmod>2023-03-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%89%A9%E7%90%86/</loc>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -417,35 +737,28 @@
   
   <url>
     <loc>https://whitetail-o.github.io/categories/Games101/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/categories/Games202/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/categories/Q-A/</loc>
-    <lastmod>2023-02-12</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/categories/Todo/</loc>
-    <lastmod>2023-02-12</lastmod>
+    <loc>https://whitetail-o.github.io/categories/%E7%9B%B8%E6%9C%BA/</loc>
+    <lastmod>2023-03-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="引擎为了提高性能，并且artist friendly，用漫反射项补偿微表面BRDF（打破能量守恒，如想在RTR中实现较为准确的能量补充，应使用Kulla-Conty Approximation）。使得其方便控制，如对于非金属4%的 $F_0$ 也可呈现颜色。并且把BRDF分母的 $\pi$ ,写为4。 因此，引擎中PBR的Shading常有以下几项，并通过系数控制其不过与打破能量守恒： 直接光">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HPP_Graphics_5.1 PBR基础 BRDF介绍">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="引擎为了提高性能，并且artist friendly，用漫反射项补偿微表面BRDF（打破能量守恒，如想在RTR中实现较为准确的能量补充，应使用Kulla-Conty Approximation）。使得其方便控制，如对于非金属4%的 $F_0$ 也可呈现颜色。并且把BRDF分母的 $\pi$ ,写为4。 因此，引擎中PBR的Shading常有以下几项，并通过系数控制其不过与打破能量守恒： 直接光">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/Cook-Torrance.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/5bedec7e9fd8594bb6ffcbff3aaeb9ad.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/c1b2fc1ec5d1e5c6380ffacfb31cff28.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/6fb3430619d35fecc4267b24f0edf6cd.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/071dcb665386a2a56f1cb84352dc60ce.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/0138e3d33d920148a6a652f2f47158d3.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/cab428cf33e54a71d70cc9fc05c856c3.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/5336bcb848115d87c783424111bcf204.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/071dcb665386a2a56f1cb84352dc60ce.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/DisneyBRDF.jpg">
+<meta property="article:published_time" content="2023-02-15T12:24:32.000Z">
+<meta property="article:modified_time" content="2023-03-17T05:34:06.267Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="PBR">
+<meta property="article:tag" content="百人计划">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/Cook-Torrance.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/","path":"2023/02/15/HPP_Graphics_5.1_PBR基础/","title":"HPP_Graphics_5.1 PBR基础 BRDF介绍"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>HPP_Graphics_5.1 PBR基础 BRDF介绍 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#a-Unity%E4%B8%AD%E7%9A%84PBR%EF%BC%88Disney%E2%80%98s-Principled-BRDF%EF%BC%89"><span class="nav-text">a). Unity中的PBR（Disney‘s Principled BRDF）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-1-%E7%9B%B4%E6%8E%A5%E5%85%89%E7%85%A7%E6%BC%AB%E5%8F%8D%E5%B0%84BRDF"><span class="nav-text">a.1). 直接光照漫反射BRDF</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-2-%E7%9B%B4%E6%8E%A5%E5%85%89%E7%85%A7%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84BRDF"><span class="nav-text">a.2). 直接光照镜面反射BRDF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-1-%E6%B3%95%E7%BA%BF%E5%88%86%E5%B8%83%E9%A1%B9%EF%BC%88Specular-D%EF%BC%89%EF%BC%9AGTR"><span class="nav-text">a.2.1). 法线分布项（Specular D）：GTR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-2-%E8%8F%B2%E6%B6%85%E5%B0%94%E9%A1%B9%EF%BC%88Specular-F%EF%BC%89%EF%BC%9ASchlick-Fresnel"><span class="nav-text">a.2.2). 菲涅尔项（Specular F）：Schlick Fresnel</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-3-%E5%87%A0%E4%BD%95%E9%A1%B9-Shadowing-Masking%EF%BC%88Specular-G%EF%BC%89%EF%BC%9ASmith-GGX"><span class="nav-text">a.2.3). 几何项&#x2F;Shadowing-Masking（Specular G）：Smith-GGX</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-3-%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7%E6%BC%AB%E5%8F%8D%E5%B0%84"><span class="nav-text">a.3). 间接光照漫反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-4-%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7%E9%95%9C%E9%9D%A2%E5%8F%8D%E5%B0%84"><span class="nav-text">a.4). 间接光照镜面反射</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-5-%E5%90%84%E9%A1%B9%E6%AF%94%E4%BE%8B"><span class="nav-text">a.5). 各项比例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-5-1-%E7%9B%B4%E6%8E%A5%E5%85%89%E7%85%A7"><span class="nav-text">a.5.1). 直接光照</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-5-2-%E9%97%B4%E6%8E%A5%E5%85%89%E7%85%A7"><span class="nav-text">a.5.2). 间接光照</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-6-%E7%BB%93%E6%9E%9C"><span class="nav-text">a.6). 结果</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">43</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">39</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="HPP_Graphics_5.1 PBR基础 BRDF介绍 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          HPP_Graphics_5.1 PBR基础 BRDF介绍
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 20:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T20:24:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:34:06" itemprop="dateModified" datetime="2023-03-17T13:34:06+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/Cook-Torrance.png" alt="Cook-Torrance"></p>
+<ul>
+<li>引擎为了提高性能，并且artist friendly，用漫反射项补偿微表面BRDF（打破能量守恒，如想在RTR中实现较为准确的能量补充，应使用Kulla-Conty Approximation）。使得其方便控制，如对于非金属4%的 $F_0$ 也可呈现颜色。并且把BRDF分母的 $\pi$ ,写为4。<ul>
+<li>因此，引擎中PBR的Shading常有以下几项，并通过系数控制其不过与打破能量守恒：<ol>
+<li>直接光照漫反射；</li>
+<li>直接光照镜面反射；</li>
+<li>间接光照漫反射；</li>
+<li>间接光照镜面反射；<ul>
+<li><strong>这样做的结果是容易打破能量守恒，但是artist friendly，而且可表现更多外观。</strong></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>更多请看<em>Games202 Real-time Physically-based Materials</em>，或以下Reference</li>
+<li><strong>Ref:</strong><ol>
+<li><a target="_blank" rel="noopener" href="https://learnopengl-cn.github.io/07%20PBR/01%20Theory/#pbr">LearnOpenGL CN</a></li>
+<li><a target="_blank" rel="noopener" href="https://aras-p.info/texts/files/201403-GDC_UnityPhysicallyBasedShading_notes.pdf">201403-GDC_UnityPhysicallyBasedShading</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.zhihu.com/column/game-programming">基于物理的渲染（PBR）白皮书</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.uwa4d.com/archives/1582.html">基于物理的渲染—更精确的微表面分布函数GGX</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/68025039">如何在Unity中造一个PBR Shader轮子</a></li>
+<li><a target="_blank" rel="noopener" href="https://bruop.github.io/ibl/">Image Based Lighting with Multiple Scattering</a></li>
+</ol>
+</li>
+</ul>
+<h1 id="a-Unity中的PBR（Disney‘s-Principled-BRDF）"><a href="#a-Unity中的PBR（Disney‘s-Principled-BRDF）" class="headerlink" title="a). Unity中的PBR（Disney‘s Principled BRDF）"></a>a). Unity中的PBR（Disney‘s Principled BRDF）</h1><p>Unity中Standard Shader基本采用Disney’s Principled BRDF，但有些许不同。Disney’s Principled BRDF可具体看其他文章，如毛星云大佬的PBR白皮书，以下就写一些实现上的不同处和细节。</p>
+<span id="more"></span>
+<h2 id="a-1-直接光照漫反射BRDF"><a href="#a-1-直接光照漫反射BRDF" class="headerlink" title="a.1). 直接光照漫反射BRDF"></a>a.1). 直接光照漫反射BRDF</h2><p>Unity中采用的漫反射BRDF不是Lambertian漫反射，而是Disney开发了的一种用于漫反射的新的经验模型。</p>
+<blockquote>
+<p>Disney表示，Lambert漫反射模型在边缘上通常太暗，而通过尝试添加菲涅尔因子以使其在物理上更合理，但会导致其更暗。</p>
+<p>思路方面，Disney使用了Schlick Fresnel近似，并修改掠射逆反射（grazing retroreflection response）以达到其特定值由粗糙度值确定，而不是简单为0。</p>
+</blockquote>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/5bedec7e9fd8594bb6ffcbff3aaeb9ad.png" alt="5bedec7e9fd8594bb6ffcbff3aaeb9ad"></p>
+<blockquote id="fn_Diffuse BRDF">
+<sup>Diffuse BRDF</sup>. 上图为Diffuse BRDF<a href="#reffn_Diffuse BRDF" title="Jump back to footnote [Diffuse BRDF] in the text."> &#8617;</a>
+</blockquote>
+<p>为保证shader看起来和Legacy版本差不多亮 ，并且避免在ibl部分对非重要光源做特殊处理，Unity会把分母中的 $\pi$ 拿掉。同时也会在直接光照的镜面反射项上多乘上一个 $\pi$</p>
+<h2 id="a-2-直接光照镜面反射BRDF"><a href="#a-2-直接光照镜面反射BRDF" class="headerlink" title="a.2). 直接光照镜面反射BRDF"></a>a.2). 直接光照镜面反射BRDF</h2><p>镜面反射即采用微表面BRDF，即</p>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/c1b2fc1ec5d1e5c6380ffacfb31cff28.png" alt="c1b2fc1ec5d1e5c6380ffacfb31cff28"></p>
+<ul>
+<li><p>D为微平面分布函数，主要负责镜面反射波峰（specular peak）的形状。</p>
+</li>
+<li><p>F为菲涅尔反射系数（Fresnel reflection coefficient）</p>
+</li>
+<li><p>G为几何衰减（geometric attenuation）/ 阴影项（shadowing factor）</p>
+</li>
+</ul>
+<h3 id="a-2-1-法线分布项（Specular-D）：GTR"><a href="#a-2-1-法线分布项（Specular-D）：GTR" class="headerlink" title="a.2.1). 法线分布项（Specular D）：GTR"></a>a.2.1). 法线分布项（Specular D）：GTR</h3><p>Unity中采用法线分布项为GGX，这里采用GTR模型。</p>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/6fb3430619d35fecc4267b24f0edf6cd.png" alt="6fb3430619d35fecc4267b24f0edf6cd"></p>
+<p>其中，γ取2，即GGX</p>
+<p>另外，在Disney Principled BRDF中，实际上有两个镜面反射波瓣（Specular lobe），并且都用GTR模型。其中γ=2的GRT代表基础底层材质，而γ=1的GRT则代表清漆层的反射。</p>
+<h3 id="a-2-2-菲涅尔项（Specular-F）：Schlick-Fresnel"><a href="#a-2-2-菲涅尔项（Specular-F）：Schlick-Fresnel" class="headerlink" title="a.2.2). 菲涅尔项（Specular F）：Schlick Fresnel"></a>a.2.2). 菲涅尔项（Specular F）：Schlick Fresnel</h3><p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/071dcb665386a2a56f1cb84352dc60ce.png" alt="071dcb665386a2a56f1cb84352dc60ce"></p>
+<p>由于原始的菲涅尔项表示过于复杂，人们会常用其他数值近似的方法。其中，应用地较为广泛的为Schlick Fresnel。<strong><font color="red">本质上是考虑能量的反射和折射</font></strong>（即考虑BRDF就会有因为颜色的合理的能量损失）</p>
+<p>这里需要注意的有两点。</p>
+<ol>
+<li><p>$\theta_d$ 为半角向量h和视线v之间的夹角，而不是宏观法线n和视线v的夹角。<strong>$(i, h)$和$(i, n)$的区别其实就是宏观和微观。在微表面BRDF中，$D(h)$筛选出了沿$h$方向的normal。那此时菲涅尔项中应该使用的normal即为$h$</strong></p>
+</li>
+<li><p>电介质（绝缘体）的$F_0$ 为float，金属的 $F_0$ 为float3。而最终用于菲涅尔项的 $F_0$ 常常会根据金属度在0.04(引擎中电介质默认的$F_0$)和albedo之间根据金属度Metallic插值。</p>
+</li>
+</ol>
+<h3 id="a-2-3-几何项-Shadowing-Masking（Specular-G）：Smith-GGX"><a href="#a-2-3-几何项-Shadowing-Masking（Specular-G）：Smith-GGX" class="headerlink" title="a.2.3). 几何项/Shadowing-Masking（Specular G）：Smith-GGX"></a>a.2.3). 几何项/Shadowing-Masking（Specular G）：Smith-GGX</h3><p>几何项（Specular G）方面，对于主镜面波瓣（primary specular lobe），Disney参考了 Walter的近似方法，使用Smith GGX导出的G项，并将粗糙度参数进行重映射以减少光泽表面的极端增益，即将α 从[0, 1]重映射到[0.5, 1]，α的值为(0.5 + roughness/2)^2。从而使几何项的粗糙度变化更加平滑，更便于美术人员的使用。</p>
+<p>以下为Smith GGX的几何项的表达式：</p>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/0138e3d33d920148a6a652f2f47158d3.png" alt></p>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/cab428cf33e54a71d70cc9fc05c856c3.png" alt></p>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/5336bcb848115d87c783424111bcf204.png" alt></p>
+<p>另外，对于对清漆层进行处理的次级波瓣（secondary lobe），Disney没有使用Smith G推导，而是直接使用固定粗糙度为0.25的GGX的 G项，便可以得到合理且很好的视觉效果。</p>
+<h2 id="a-3-间接光照漫反射"><a href="#a-3-间接光照漫反射" class="headerlink" title="a.3). 间接光照漫反射"></a>a.3). 间接光照漫反射</h2><p>间接光照漫反射频率基本集中的低频，因此采用球谐函数取近似（Unity中采用前三阶）。</p>
+<p><em>详见Games202 Real-time Environment Mapping</em></p>
+<h2 id="a-4-间接光照镜面反射"><a href="#a-4-间接光照镜面反射" class="headerlink" title="a.4). 间接光照镜面反射"></a>a.4). 间接光照镜面反射</h2><p>间接光照镜面反射采用IBL，并通过prefiltering后采用模拟对Lighting的积分，通过Split sum对BRDF积分。（<em>详见Games202 Real-time Environment Mapping</em>）其中，mip和roughness之间的关系为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">float m = roughness*roughness;</span><br><span class="line">const float fEps = 1.192092896e-07F;</span><br><span class="line">float n =  (2.0 / max(fEps, m * m)) - 2.0;</span><br><span class="line">n /= 4;</span><br><span class="line">roughness = pow( 2 / (n + 2), 0.25);</span><br></pre></td></tr></table></figure>
+<p>Unity中，则通过 $mip = r(1.7 - 0.7r)$ 来拟合。</p>
+<p><a target="_blank" rel="noopener" href="http://jbit.net/~sparky/academic/mm_brdf.pdf">http://jbit.net/~sparky/academic/mm_brdf.pdf</a></p>
+<h2 id="a-5-各项比例"><a href="#a-5-各项比例" class="headerlink" title="a.5). 各项比例"></a>a.5). 各项比例</h2><p>至此，我们已经可以把各项的表达式都写出来了。那么最后需要解决的就是各项之间的比例。</p>
+<h3 id="a-5-1-直接光照"><a href="#a-5-1-直接光照" class="headerlink" title="a.5.1). 直接光照"></a>a.5.1). 直接光照</h3><p>首先，我们考虑直接光照。直接光照中，漫反射和镜面反射的关键在于菲涅尔项。菲涅尔项本质上是考虑能量的反射和折射，而光线折射后会发生吸收和散射。而散射的尺度要是足够小，就变成了漫反射（尺度大，如大于一个像素区域时，散射变现为次表面散射，即SSS）。</p>
+<p>镜面反射的比例已经在微表面BRDF中的F项中计算过了，因此漫反射的比例即为1 - F。同时，因为我们采用的Disney principled BRDF需要根据金属度在漫反射和镜面反射之间插值，因此漫反射项的比例为$(1 - F) \cdot (1-Metallic) $ 。</p>
+<h3 id="a-5-2-间接光照"><a href="#a-5-2-间接光照" class="headerlink" title="a.5.2). 间接光照"></a>a.5.2). 间接光照</h3><p>在间接光照中，与直接光照不同的地方在于在求间接光照的镜面反射时，我们对BRDF求了积分（Split sum）。因此，我们菲涅尔的不再是微表面的菲涅尔，而是使用宏观法线的菲涅尔。即，<strong>$\theta_d$ 为法线$n$和视线$v$之间的夹角</strong>。</p>
+<p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/071dcb665386a2a56f1cb84352dc60ce.png" alt="071dcb665386a2a56f1cb84352dc60ce"></p>
+<p>这里$F_0$ 与albedo之间lerp使用Roughness，而不是Metallic。（一种经验化的做法，方法来自：<a target="_blank" rel="noopener" href="https://seblagarde.wordpress.com/2011/08/17/hello-world/）">https://seblagarde.wordpress.com/2011/08/17/hello-world/）</a></p>
+<p>附上最终Shader</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line">Shader &quot;PBR/DisneyPBR&quot;</span><br><span class="line">&#123;</span><br><span class="line">    Properties</span><br><span class="line">    &#123;</span><br><span class="line">        _MainTex (&quot;Texture&quot;, 2D) = &quot;white&quot; &#123;&#125;</span><br><span class="line">        _Roughness (&quot;Roughness&quot;, Range(0, 1.0)) = 0.3</span><br><span class="line">        _Metallic (&quot;Metallic&quot;, Range(0.0, 1.0)) = 0.2</span><br><span class="line">        _IBLlut (&quot;IBL Lut&quot;, 2D) = &quot;while&quot; &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    SubShader</span><br><span class="line">    &#123;</span><br><span class="line">        Tags &#123; &quot;RenderType&quot;=&quot;Opaque&quot; &#125;</span><br><span class="line"></span><br><span class="line">        CGINCLUDE</span><br><span class="line">        #include &quot;UnityCG.cginc&quot;</span><br><span class="line">        #include &quot;UnityStandardBRDF.cginc&quot;</span><br><span class="line">        #include &quot;UnityStandardUtils.cginc&quot;</span><br><span class="line"></span><br><span class="line">        half DI_DisneyDiffuse(half NdotV, half NdotL, half NdotH, half perceptualRoughness) &#123;</span><br><span class="line">            half F90 = 0.5 + 2 * perceptualRoughness * NdotH * NdotH;</span><br><span class="line">            half lightScatter = 1 + (F90 - 1) * Pow5(1 - NdotL);</span><br><span class="line">            half viewScatter = 1 + (F90 - 1) * Pow5(1 - NdotV);</span><br><span class="line"></span><br><span class="line">            return lightScatter * viewScatter;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        half SmithJointGGX(half NdotV, half NdotL, half perceptualRoughness) &#123;</span><br><span class="line">            half a = 0.5 + perceptualRoughness/2;</span><br><span class="line">            a *= a;</span><br><span class="line">            half a2 = a * a;</span><br><span class="line"></span><br><span class="line">            half lightGGX = 2 * NdotL / (NdotL + sqrt(a2 + (NdotL - a2 * NdotL) * NdotL));</span><br><span class="line">            half viewGGX = 2 * NdotV / (NdotV + sqrt(a2 + (NdotV - a2 * NdotV) * NdotV));</span><br><span class="line"></span><br><span class="line">            return lightGGX * viewGGX;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        half GTR2(half NdotH, half perceptualRoughness) &#123;</span><br><span class="line">            half a2 = perceptualRoughness * perceptualRoughness;</span><br><span class="line">            half cos2 = NdotH * NdotH;</span><br><span class="line">            half denom = (1 + (a2 - 1) * cos2);</span><br><span class="line"></span><br><span class="line">            return a2 * UNITY_INV_PI / (denom * denom);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        half3 F_schlick(half3 F0, half HdotV) &#123;</span><br><span class="line">            return F0 + (1 - F0) * Pow5(1 - HdotV);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        half3 IBL_LightSample(float3 dir, half perceptualRoughness) &#123;</span><br><span class="line">            float mip_roughness = perceptualRoughness * (1.7 - 0.7 * perceptualRoughness);</span><br><span class="line">            half mip = mip_roughness * UNITY_SPECCUBE_LOD_STEPS;</span><br><span class="line"></span><br><span class="line">            half4 hdr_col = UNITY_SAMPLE_TEXCUBE_LOD(unity_SpecCube0, dir, mip);</span><br><span class="line">            float3 ldr_col = DecodeHDR(hdr_col, unity_SpecCube0_HDR);</span><br><span class="line"></span><br><span class="line">            return ldr_col;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        float3 fresnelSchlickRoughness(float cosTheta, float3 F0, float roughness)</span><br><span class="line">        &#123;</span><br><span class="line">            return F0 + (max(float3(1.0 - roughness, 1.0 - roughness, 1.0 - roughness), F0) - F0) * Pow5(1.0 - cosTheta);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        struct a2v</span><br><span class="line">        &#123;</span><br><span class="line">            float4 vertex : POSITION;</span><br><span class="line">            float3 normal : NORMAL;</span><br><span class="line">            float2 uv : TEXCOORD0;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        struct v2f</span><br><span class="line">        &#123;</span><br><span class="line">            float2 uv : TEXCOORD0;</span><br><span class="line">            float3 worldNormal : TEXCOORD1;</span><br><span class="line">            float3 worldPos : TEXCOORD2;</span><br><span class="line">            float4 vertex : SV_POSITION;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        sampler2D _MainTex;</span><br><span class="line">        sampler2D _IBLlut;</span><br><span class="line">        float4 _MainTex_ST;</span><br><span class="line">        float _Roughness;</span><br><span class="line">        float _Metallic;</span><br><span class="line"></span><br><span class="line">        v2f vert (a2v v)</span><br><span class="line">        &#123;</span><br><span class="line">            v2f o;</span><br><span class="line">            o.vertex = UnityObjectToClipPos(v.vertex);</span><br><span class="line">            o.uv = TRANSFORM_TEX(v.uv, _MainTex);</span><br><span class="line">            o.worldNormal = UnityObjectToWorldNormal(v.normal);</span><br><span class="line">            o.worldPos = mul(unity_ObjectToWorld, v.vertex);</span><br><span class="line">            return o;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        fixed4 frag (v2f i) : SV_Target</span><br><span class="line">        &#123;</span><br><span class="line">            float3 worldNormal = normalize(i.worldNormal);</span><br><span class="line">            float3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));</span><br><span class="line">            float3 worldViewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));</span><br><span class="line">            float3 worldHalfDir = normalize(worldLightDir + worldViewDir);</span><br><span class="line"></span><br><span class="line">            float NdotV = max(dot(worldNormal, worldViewDir), 0.0001);</span><br><span class="line">            float NdotL = max(dot(worldNormal, worldLightDir), 0.0001);</span><br><span class="line">            float NdotH = max(dot(worldNormal, worldHalfDir), 0.0001);</span><br><span class="line">            float HdotV = max(dot(worldHalfDir, worldViewDir), 0.0001);</span><br><span class="line"></span><br><span class="line">            fixed4 albedo = tex2D(_MainTex, i.uv);</span><br><span class="line"></span><br><span class="line">            float roughness = lerp(0.004, 0.9, _Roughness);</span><br><span class="line"></span><br><span class="line">            //DI</span><br><span class="line">            // DisneyDiffuse没有乘上Pi</span><br><span class="line">            fixed3 DisneyDiffuse = albedo.rgb * DI_DisneyDiffuse(NdotV, NdotL, NdotH, roughness); //  * UNITY_INV_PI</span><br><span class="line"></span><br><span class="line">            fixed3 F0 = lerp(unity_ColorSpaceDielectricSpec.rgb, albedo, _Metallic);</span><br><span class="line"></span><br><span class="line">            float D = GTR2(NdotH, roughness);</span><br><span class="line">            float3 F = F_schlick(F0, HdotV);</span><br><span class="line">            float G = SmithJointGGX(NdotV, NdotL, roughness);</span><br><span class="line"></span><br><span class="line">            half3 SpeBRDF = F * D * G / (4 * NdotL * NdotV);</span><br><span class="line"></span><br><span class="line">            fixed3 LightColor = _LightColor0;</span><br><span class="line"></span><br><span class="line">            half kd = OneMinusReflectivityFromMetallic(_Metallic);</span><br><span class="line"></span><br><span class="line">            fixed3 Ambient = albedo * UNITY_LIGHTMODEL_AMBIENT.rgb;</span><br><span class="line">            fixed3 Diffuse = (1-F) * kd * LightColor * DisneyDiffuse * NdotL;</span><br><span class="line">            fixed3 Specular = LightColor * SpeBRDF * NdotL * UNITY_PI; // 乘上Pi和Diffuse等比例变化；</span><br><span class="line"></span><br><span class="line">            // Environment Map</span><br><span class="line"></span><br><span class="line">            half3 ambient_contrib = ShadeSH9(half4(worldNormal, 1));</span><br><span class="line"></span><br><span class="line">            float3 iblLight = IBL_LightSample(reflect(-worldViewDir, worldNormal), roughness);</span><br><span class="line"></span><br><span class="line">            float2 envLut = tex2D(_IBLlut, float2(lerp(0, 0.99, NdotV), roughness)).rg;</span><br><span class="line"></span><br><span class="line">            float3 F0_Roughness = lerp(unity_ColorSpaceDielectricSpec.rgb, albedo, roughness);</span><br><span class="line">            float3 Flast = fresnelSchlickRoughness(max(NdotV, 0.001), F0, roughness);</span><br><span class="line">            float kdLast = (1 - Flast) * (1 - _Metallic);</span><br><span class="line"></span><br><span class="line">            float3 iblDiffuse = (ambient_contrib + Ambient) * albedo * kdLast;</span><br><span class="line">            float3 iblSpec = (iblLight * (Flast * envLut.r + envLut.g));</span><br><span class="line"></span><br><span class="line">            return fixed4(Diffuse + Specular + iblDiffuse + iblSpec, 1);</span><br><span class="line">            // return fixed4(iblDiffuse, 1);</span><br><span class="line">        &#125;</span><br><span class="line">        ENDCG</span><br><span class="line">        Pass</span><br><span class="line">        &#123;</span><br><span class="line">            Tags &#123;</span><br><span class="line">				&quot;LightMode&quot; = &quot;ForwardBase&quot;</span><br><span class="line">			&#125;</span><br><span class="line">            CGPROGRAM</span><br><span class="line">            #pragma vertex vert</span><br><span class="line">            #pragma fragment frag</span><br><span class="line">            ENDCG</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="a-6-结果"><a href="#a-6-结果" class="headerlink" title="a.6). 结果"></a>a.6). 结果</h2><p><img src="/2023/02/15/HPP_Graphics_5.1_PBR%E5%9F%BA%E7%A1%80/DisneyBRDF.jpg" alt="DisneyBRDF"></p>
+<blockquote id="fn_Custom PBR">
+<sup>Custom PBR</sup>. 同参数下，与Standard Shader的对比（左侧为Custom PBR）<a href="#reffn_Custom PBR" title="Jump back to footnote [Custom PBR] in the text."> &#8617;</a>
+</blockquote>
+<p>为获得更长的拖尾，将GTR的γ取3以区别Standard。</p>
+<p>可以看到，实现的Shader基本与Unity的Standard Shader一致。但因为法线分布使用了GTR，高光拖尾更长，更柔和。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/PBR/" rel="tag"># PBR</a>
+              <a href="/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" rel="tag"># 百人计划</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/" rel="prev" title="HPP_Graphics_4.5 DOF景深基础">
+                  <i class="fa fa-chevron-left"></i> HPP_Graphics_4.5 DOF景深基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/02/18/Games202_05_Real-time%20Physically-based%20Materials/" rel="next" title="Games202-5 Real-time Physically-based Materials">
+                  Games202-5 Real-time Physically-based Materials <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
