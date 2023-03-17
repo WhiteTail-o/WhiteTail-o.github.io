@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,6 +183,128 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Graphics_3.7 移动端TB(D)R架构基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 18:44:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:44:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:13:36" itemprop="dateModified" datetime="2023-03-17T13:13:36+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-名词解释"><a href="#a-名词解释" class="headerlink" title="a). 名词解释"></a>a). 名词解释</h1><h2 id="System-on-Chip-Soc"><a href="#System-on-Chip-Soc" class="headerlink" title="System on Chip(Soc)"></a>System on Chip(Soc)</h2><ul>
+<li>Soc是把CPU、GPU、内存、通信基带、GPS模块等整合在一起的芯片的称呼。常见有A系Soc（苹果），骁龙Soc（高通），麒麟Soc（华为），联发科Soc，猎户座Soc（三星），去年苹果推出的M系Soc，暂用于Mac，但这说明手机、笔记本和PC的通用芯片已经出现了</li>
+</ul>
+<h2 id="物理内存"><a href="#物理内存" class="headerlink" title="物理内存"></a>物理内存</h2><ul>
+<li>也就是我们常说的手机内存，也叫<strong>System Memory</strong>。Soc中CPU和GPU共用一块片内LPDDR物理内存。此外CPU和GPU还分别有自己的告诉SRAM的Cache缓存，也叫<strong>On-chip Memory</strong>。读取System Memory的时间消耗大概是On-chip Memory的几倍到几十倍</li>
+</ul>
+<h2 id="On-Chip-Buffer"><a href="#On-Chip-Buffer" class="headerlink" title="On-Chip Buffer"></a>On-Chip Buffer</h2><p>在TB(D)R架构下会存储Tile的颜色、深度和模板缓冲，读写修改都非常快。如果Load/Store指令中缓冲需要被Preserve，将会被写入一份到System Memory中。</p>
+<h2 id="Stall"><a href="#Stall" class="headerlink" title="Stall"></a>Stall</h2><p>当GPU两次计算结果之间有依赖关系而必须串行时，等待的过程便是Stall</p>
+<h2 id="FillRate"><a href="#FillRate" class="headerlink" title="FillRate"></a>FillRate</h2><p>像素填充率 = ROP运行的时钟频率 x ROP的个数 x 每个时钟ROP可以处理的像素个数</p>
+<h2 id="TBR（Tile-Based-Deferred-Rendering）"><a href="#TBR（Tile-Based-Deferred-Rendering）" class="headerlink" title="TBR（Tile-Based (Deferred) Rendering）"></a>TBR（Tile-Based (Deferred) Rendering）</h2><p>TBR（Tile-Based (Deferred) Rendering）是目前主流的移动GPU渲染架构，对应一般PC上的GPU渲染架构则是IMR（Immediate Mode Rendering ）。</p>
+<ul>
+<li>TBR流水线：顶点着色器 - Defer - 光栅化 - 片元着色器</li>
+<li>TBDR流水线：顶点着色器 - Defer - 光栅化 - Defer - 片元着色器</li>
+</ul>
+<h2 id="Deffer"><a href="#Deffer" class="headerlink" title="Deffer"></a>Deffer</h2><p> 延迟，从渲染数据的角度来看，就是 ”阻塞+批处理“ GPU ”一帧“ 的多个数据，然后一起处理</p>
+<hr>
+<h1 id="b-立即渲染（IMR，Immediate-Mode-Rendering-）"><a href="#b-立即渲染（IMR，Immediate-Mode-Rendering-）" class="headerlink" title="b). 立即渲染（IMR，Immediate Mode Rendering ）"></a>b). 立即渲染（IMR，Immediate Mode Rendering ）</h1><ul>
+<li><p>IMR是PC上GPU采用的架构</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR.png" alt="IMR"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR_Pipeline.png" alt="IMR_Pipeline"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/IMR_Pipeline2.png" alt="IMR_Pipeline2" style="zoom:33%;"></p>
+</li>
+</ul>
+<h1 id="c-基于块元渲染的TB-D-R"><a href="#c-基于块元渲染的TB-D-R" class="headerlink" title="c). 基于块元渲染的TB(D)R"></a>c). 基于块元渲染的TB(D)R</h1><p>TB(D)R宏观上总共分为两个阶段：</p>
+<ol>
+<li><strong>分图元：</strong> 第一阶段执行所有几何相关的处理，并生成Primitive List（图元列表），并且<strong>确定每个Tile上面有哪些Primitive</strong></li>
+<li>第二阶段逐Tile执行 光栅化后 写入Tile Buffer（片上内存），并在完成后将 Frame BUffer 从 Tile Buffer 写回到 System Memory中；</li>
+</ol>
+<p><img src="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/TBR_TBDR_Flow.png" alt="TBR_TBDR_Flow"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -269,146 +391,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/" class="post-title-link" itemprop="url">HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:10:35" itemprop="dateModified" datetime="2023-03-17T13:10:35+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
-<li>先回顾下深度测试</li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
-<ul>
-<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
-<ul>
-<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
-</ul>
-</li>
-</ul>
-<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
-<ul>
-<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
-<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
-<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
-</ul>
-</li>
-<li><em>Early-Z同样可以搭配使用模板测试</em></li>
-</ul>
-<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
-<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
-<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
-<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
-</ul>
-</li>
-<li>手动修改GPU插值得到的深度</li>
-<li>开启<strong>Alpha Blend</strong></li>
-<li>关闭深度测试Depth Test</li>
-</ol>
-<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
-<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
-<li><p>具体怎么排序？ </p>
-<ul>
-<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
-</ul>
-</li>
-<li><p>问题：</p>
-<ul>
-<li>复杂的场景，CPU性能消耗很大</li>
-<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
-</ul>
-</li>
-<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -579,7 +561,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -597,7 +579,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">HPP_Graphics_2.7 模板测试和深度测试</a>
+          <a href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/" class="post-title-link" itemprop="url">HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -610,14 +592,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
+      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:16:04" itemprop="dateModified" datetime="2023-03-17T13:16:04+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-17 13:10:35" itemprop="dateModified" datetime="2023-03-17T13:10:35+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -639,27 +621,56 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul>
-<li>处于<strong>逐片元操作</strong>中</li>
+          <h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
+<li>先回顾下深度测试</li>
 </ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p>
-<h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul>
-<li><p>语法表示</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
+<ul>
+<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
+<ul>
+<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
+</ul>
 </li>
 </ul>
+<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
 <ul>
-<li><p>可作为遮罩等操作</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p>
+<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
+<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
+<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
+</ul>
+</li>
+<li><em>Early-Z同样可以搭配使用模板测试</em></li>
+</ul>
+<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
+<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
+<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
+<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
+</ul>
+</li>
+<li>手动修改GPU插值得到的深度</li>
+<li>开启<strong>Alpha Blend</strong></li>
+<li>关闭深度测试Depth Test</li>
+</ol>
+<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
+<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
+<li><p>具体怎么排序？ </p>
+<ul>
+<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
+</ul>
+</li>
+<li><p>问题：</p>
+<ul>
+<li>复杂的场景，CPU性能消耗很大</li>
+<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
+</ul>
+</li>
+<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
 </li>
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/#more" rel="contents">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -779,6 +790,117 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/15/HPP_Graphics_3.3_TessAndGs/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">HPP_Graphics_2.7 模板测试和深度测试</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:16:04" itemprop="dateModified" datetime="2023-03-17T13:16:04+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul>
+<li>处于<strong>逐片元操作</strong>中</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p>
+<h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul>
+<li><p>语法表示</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p>
+</li>
+</ul>
+<ul>
+<li><p>可作为遮罩等操作</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1264,113 +1386,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.4_%E4%BC%A0%E7%BB%9F%E7%BB%8F%E9%AA%8C%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_2.4_%E4%BC%A0%E7%BB%9F%E7%BB%8F%E9%AA%8C%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">HPP_Graphics_2.4 传统经验光照模型</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 17:27:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:27:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 12:55:16" itemprop="dateModified" datetime="2023-03-17T12:55:16+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="图形2-4-传统经验光照模型"><a href="#图形2-4-传统经验光照模型" class="headerlink" title="图形2.4 传统经验光照模型"></a>图形2.4 传统经验光照模型</h1><ul>
-<li><p>Lambert</p>
-</li>
-<li><p>Phong</p>
-</li>
-<li><p>Blinn-Phong</p>
-<ul>
-<li><p>Blinn-Phong对比Phong的优点：</p>
-<ol>
-<li><p>halfDir好计算</p>
-</li>
-<li><p>半角向量和法线点乘不会截断（saturate），即夹角总小于90°，不会断层</p>
-<p><img src="/2023/02/15/HPP_Graphics_2.4_%E4%BC%A0%E7%BB%9F%E7%BB%8F%E9%AA%8C%E5%85%89%E7%85%A7%E6%A8%A1%E5%9E%8B/Blinn-Phong Half.png" alt="Blinn-Phong Half"></p>
-</li>
-</ol>
-</li>
-</ul>
-</li>
-<li><p>Cubemap：texCubelod</p>
-</li>
-</ul>
-
       
     </div>
 

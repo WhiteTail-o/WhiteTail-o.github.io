@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,6 +183,116 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/" class="post-title-link" itemprop="url">HPP_Art_2.5 模型常见问题及规范</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-03 15:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T15:23:32+08:00">2023-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:49:15" itemprop="dateModified" datetime="2023-02-04T14:49:15+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-布线合理性"><a href="#a-布线合理性" class="headerlink" title="a). 布线合理性"></a>a). 布线合理性</h1><ul>
+<li><p><strong>动画角度：</strong></p>
+<p>横平竖直，均匀清晰，结构线密度足够（动画线一般为三根）（动画线即关节线：脖子，肩膀，肘关节，腰，膝关节，踝关节），由于肘关节和膝关节一般是单向弯曲，所以在面数有限的情况下，也可以使用前三后二的布线</p>
+</li>
+<li><p><strong>模型角度：</strong></p>
+<p>尽量把线使用在体现剪影上，单纯的在平面上加线是没有意义的，平面上的细节会在之后的制作中用法线来体现</p>
+</li>
+</ul>
+<h2 id="注意事项1：多星点"><a href="#注意事项1：多星点" class="headerlink" title="注意事项1：多星点"></a>注意事项1：多星点</h2><p><img src="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/多星点.png" alt="多星点"></p>
+<p><strong>多星点（度大于4的顶点）：</strong>如果是在中模阶段，减少使用多星点，因为会在细分时出现凸点的问题，<strong>如果要使用多星点，请通过布线技巧把它移动至平面处，不要让它出现在倒角边缘</strong>。</p>
+<p>在模型上挖洞，且要保证都是四边面的情况下，是必然会出现五星点的，五星点不可避免，但可以优化。也有把五星点转换为假四边的方法（模型师把这种布线叫做假四边）</p>
+<p><strong>五星点同样会影响点法线。</strong> 如使用了面积权重，那可能会导致点法线发生偏移。</p>
+<p><img src="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/五星点_点法线.png" alt="五星点_点法线" style="zoom: 50%;"></p>
+<p><img src="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/五星点_点法线2.png" alt="五星点_点法线2"></p>
+<h2 id="注意事项1：预连接"><a href="#注意事项1：预连接" class="headerlink" title="注意事项1：预连接"></a>注意事项1：预连接</h2><p>对于<strong>”不在同一个平面“的四边形</strong>，不同软件的预连接是不同的。 <strong>所以如果四边形的四个点不在一个平面里时，请连接对角线</strong>，否则会出现如下图情况，这个同样会影响到之后的法线烘焙。</p>
+<p><img src="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/预连.png" alt="预连"></p>
+<hr>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/03/HPP_Art_02.5_%E6%A8%A1%E5%9E%8B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%8F%8A%E8%A7%84%E8%8C%83/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1316,137 +1426,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/10/03/Games101_21_22_Animation/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_13_16_RayTracing/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/Games101_13_16_RayTracing/" class="post-title-link" itemprop="url">Games101-13-16 RayTracing</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-03 18:15:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:15:10+08:00">2022-10-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:18:29" itemprop="dateModified" datetime="2023-02-12T21:18:29+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-13-Ray-Tracing"><a href="#Lecture-13-Ray-Tracing" class="headerlink" title="Lecture 13 Ray Tracing"></a>Lecture 13 Ray Tracing</h1><h2 id="a-vs-Rasterization"><a href="#a-vs-Rasterization" class="headerlink" title="a). vs. Rasterization"></a>a). vs. Rasterization</h2><ul>
-<li><p>光栅化难以表现<strong>全局（global）</strong>效果，如</p>
-<ul>
-<li>（软）阴影（Soft shadows）</li>
-<li>光线反弹<strong>超过一次</strong>（Glossy reflection）</li>
-<li>Indirect illumination（间接光照）</li>
-</ul>
-<p><img src="/2022/10/03/Games101_13_16_RayTracing/vs.Rsaterization.png" alt="vs.Rsaterization"></p>
-</li>
-<li><p>Rasterization is fast, but quality is relatively low；</p>
-</li>
-</ul>
-<p><img src="/2022/10/03/Games101_13_16_RayTracing/RayTracing00.png" alt="RayTracing00"></p>
-<h2 id="b-Basic-Ray-Tracing-Algorithm"><a href="#b-Basic-Ray-Tracing-Algorithm" class="headerlink" title="b.). Basic Ray-Tracing Algorithm"></a>b.). Basic Ray-Tracing Algorithm</h2><ul>
-<li><p><strong>光追中光线的性质：</strong></p>
-<ol>
-<li>光是沿直线传播的；</li>
-<li>光相交时，并不产生干扰；</li>
-<li>光从光源出发，传播到眼睛（由于光路可逆，也可是光线从眼睛出发，传播到光源）</li>
-</ol>
-<p><img src="/2022/10/03/Games101_13_16_RayTracing/EmissionTheory.png" alt="EmissionTheory"></p>
-</li>
-</ul>
-<h3 id="b-1-Ray-Casting"><a href="#b-1-Ray-Casting" class="headerlink" title="b.1). Ray Casting"></a>b.1). Ray Casting</h3><ul>
-<li><p><strong>做法：</strong></p>
-<ol>
-<li>Generate an image by <strong>casting one ray per pixel</strong>;（生成从眼睛出发的光线）</li>
-<li>Check for shadows by <strong>sending a ray to the light</strong>;（检查光线投射点是否可传播到光源）</li>
-</ol>
-</li>
-<li><div align="center"> <img src="/2022/10/03/Games101_13_16_RayTracing/CastingRay.png" height="300px" alt="CastingRay"> <img src="/2022/10/03/Games101_13_16_RayTracing/CastingRay01.png" height="300px" alt="CastingRay01"> </div>
-
-<ul>
-<li>光线由眼睛出发，可不再使用深度缓存；</li>
-<li>投射点到光源发射<strong>Shadow Ray</strong>，查看该点是否在阴影里（是否对光源可见）；</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/03/Games101_13_16_RayTracing/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
