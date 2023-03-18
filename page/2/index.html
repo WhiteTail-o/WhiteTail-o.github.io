@@ -421,146 +421,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/" class="post-title-link" itemprop="url">HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:10:35" itemprop="dateModified" datetime="2023-03-17T13:10:35+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
-<li>先回顾下深度测试</li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
-<ul>
-<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
-<ul>
-<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
-</ul>
-</li>
-</ul>
-<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
-<ul>
-<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
-<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
-<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
-</ul>
-</li>
-<li><em>Early-Z同样可以搭配使用模板测试</em></li>
-</ul>
-<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
-<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
-<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
-<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
-</ul>
-</li>
-<li>手动修改GPU插值得到的深度</li>
-<li>开启<strong>Alpha Blend</strong></li>
-<li>关闭深度测试Depth Test</li>
-</ol>
-<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
-<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
-<li><p>具体怎么排序？ </p>
-<ul>
-<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
-</ul>
-</li>
-<li><p>问题：</p>
-<ul>
-<li>复杂的场景，CPU性能消耗很大</li>
-<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
-</ul>
-</li>
-<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -701,7 +561,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -719,7 +579,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.3_TessAndGs/" class="post-title-link" itemprop="url">HPP_Graphics_3.3 曲面细分和几何着色器</a>
+          <a href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/" class="post-title-link" itemprop="url">HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</a>
         </h2>
 
         <div class="post-meta-container">
@@ -732,14 +592,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
+      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:15:54" itemprop="dateModified" datetime="2023-03-17T13:15:54+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-17 13:10:35" itemprop="dateModified" datetime="2023-03-17T13:10:35+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -761,35 +621,56 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="一、两者的应用列举"><a href="#一、两者的应用列举" class="headerlink" title="一、两者的应用列举"></a>一、两者的应用列举</h1><h2 id="1-1-曲面着色器的应用"><a href="#1-1-曲面着色器的应用" class="headerlink" title="1-1.曲面着色器的应用"></a>1-1.曲面着色器的应用</h2><h3 id="①海浪、雪地等"><a href="#①海浪、雪地等" class="headerlink" title="①海浪、雪地等"></a>①海浪、雪地等</h3><ul>
-<li><ul>
-<li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1625196811887-90a8c810-ef28-49b5-a69c-c5296b02b72f.png" alt="img"></li>
-<li>如右图一样，将一条直线进行细分，向一条曲线慢慢逼近</li>
+          <h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
+<li>先回顾下深度测试</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
+<ul>
+<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
+<ul>
+<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
 </ul>
 </li>
 </ul>
-<h3 id="②著名的应用：和置换贴图（DIsplacement-mapping，也叫位移贴图）结合使用"><a href="#②著名的应用：和置换贴图（DIsplacement-mapping，也叫位移贴图）结合使用" class="headerlink" title="②著名的应用：和置换贴图（DIsplacement mapping，也叫位移贴图）结合使用"></a>②著名的应用：和置换贴图（DIsplacement mapping，也叫位移贴图）结合使用</h3><ul>
-<li><ul>
-<li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1625196936041-6fc1b0a9-43c6-495a-9665-ba7568289168.png" alt="img"></li>
+<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
+<ul>
+<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
+<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
+<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
 </ul>
 </li>
-<li><p>使用普通法线的模型，在边缘部分的凹凸感会不理想</p>
-</li>
-<li>如果使用置换贴图，因为它是真正改变物体的形状，所以边缘部分的凹凸感就会很真实</li>
-<li><p>注意：使用置换贴图，对模型的面数有要求。</p>
-</li>
-<li><p>正是这个原因，让它和曲面细分着色器有着很好的契合度。</p>
-</li>
+<li><em>Early-Z同样可以搭配使用模板测试</em></li>
 </ul>
-<h3 id="③雪地里出现的脚印"><a href="#③雪地里出现的脚印" class="headerlink" title="③雪地里出现的脚印"></a>③雪地里出现的脚印</h3><ul>
-<li>可以用曲面细分着色器进行优化</li>
+<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
+<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
+<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
+<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
 </ul>
-<h2 id="1-2-为什么不用复杂的模型，而要用曲面细分着色器？"><a href="#1-2-为什么不用复杂的模型，而要用曲面细分着色器？" class="headerlink" title="1-2.为什么不用复杂的模型，而要用曲面细分着色器？"></a>1-2.为什么不用复杂的模型，而要用曲面细分着色器？</h2><ul>
-<li>曲面细分着色器可以根据距离/一些规则，动态的调整模型的复杂度，带来更好的性能。</li>
+</li>
+<li>手动修改GPU插值得到的深度</li>
+<li>开启<strong>Alpha Blend</strong></li>
+<li>关闭深度测试Depth Test</li>
+</ol>
+<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
+<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
+<li><p>具体怎么排序？ </p>
+<ul>
+<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
+</ul>
+</li>
+<li><p>问题：</p>
+<ul>
+<li>复杂的场景，CPU性能消耗很大</li>
+<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
+</ul>
+</li>
+<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
+</li>
 </ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.3_TessAndGs/#more" rel="contents">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -901,6 +782,125 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_3.3_TessAndGs/" class="post-title-link" itemprop="url">HPP_Graphics_3.3 曲面细分和几何着色器</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:15:54" itemprop="dateModified" datetime="2023-03-17T13:15:54+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="一、两者的应用列举"><a href="#一、两者的应用列举" class="headerlink" title="一、两者的应用列举"></a>一、两者的应用列举</h1><h2 id="1-1-曲面着色器的应用"><a href="#1-1-曲面着色器的应用" class="headerlink" title="1-1.曲面着色器的应用"></a>1-1.曲面着色器的应用</h2><h3 id="①海浪、雪地等"><a href="#①海浪、雪地等" class="headerlink" title="①海浪、雪地等"></a>①海浪、雪地等</h3><ul>
+<li><ul>
+<li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1625196811887-90a8c810-ef28-49b5-a69c-c5296b02b72f.png" alt="img"></li>
+<li>如右图一样，将一条直线进行细分，向一条曲线慢慢逼近</li>
+</ul>
+</li>
+</ul>
+<h3 id="②著名的应用：和置换贴图（DIsplacement-mapping，也叫位移贴图）结合使用"><a href="#②著名的应用：和置换贴图（DIsplacement-mapping，也叫位移贴图）结合使用" class="headerlink" title="②著名的应用：和置换贴图（DIsplacement mapping，也叫位移贴图）结合使用"></a>②著名的应用：和置换贴图（DIsplacement mapping，也叫位移贴图）结合使用</h3><ul>
+<li><ul>
+<li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1625196936041-6fc1b0a9-43c6-495a-9665-ba7568289168.png" alt="img"></li>
+</ul>
+</li>
+<li><p>使用普通法线的模型，在边缘部分的凹凸感会不理想</p>
+</li>
+<li>如果使用置换贴图，因为它是真正改变物体的形状，所以边缘部分的凹凸感就会很真实</li>
+<li><p>注意：使用置换贴图，对模型的面数有要求。</p>
+</li>
+<li><p>正是这个原因，让它和曲面细分着色器有着很好的契合度。</p>
+</li>
+</ul>
+<h3 id="③雪地里出现的脚印"><a href="#③雪地里出现的脚印" class="headerlink" title="③雪地里出现的脚印"></a>③雪地里出现的脚印</h3><ul>
+<li>可以用曲面细分着色器进行优化</li>
+</ul>
+<h2 id="1-2-为什么不用复杂的模型，而要用曲面细分着色器？"><a href="#1-2-为什么不用复杂的模型，而要用曲面细分着色器？" class="headerlink" title="1-2.为什么不用复杂的模型，而要用曲面细分着色器？"></a>1-2.为什么不用复杂的模型，而要用曲面细分着色器？</h2><ul>
+<li>曲面细分着色器可以根据距离/一些规则，动态的调整模型的复杂度，带来更好的性能。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.3_TessAndGs/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
