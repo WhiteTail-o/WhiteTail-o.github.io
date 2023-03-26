@@ -62,6 +62,141 @@
       </tags>
   </entry>
   <entry>
+    <title>目录</title>
+    <url>/2023/03/15/%E6%96%B0%E5%BB%BA%20Markdown%20File/</url>
+    <content><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul>
+<li>通过Maya实现将平滑法线写入顶点色；</li>
+<li>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</li>
+<li>战双帕弥什的角色渲染分析；</li>
+</ul>
+<h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul>
+<li>DX12龙书学习笔记；</li>
+<li>SRP整理；</li>
+</ul>
+]]></content>
+      <categories>
+        <category>目录</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>【转载】为不同的图形 API 编写着色器（Unity）</title>
+    <url>/2023/03/18/%E3%80%90%E8%BD%AC%E8%BD%BD%E3%80%91%E4%B8%BA%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9B%BE%E5%BD%A2%20API%20%E7%BC%96%E5%86%99%E7%9D%80%E8%89%B2%E5%99%A8/</url>
+    <content><![CDATA[<p>之前刚想写一篇DX12和OpenGL在Unity Shader中的差异，没想到官网就写了……</p>
+<p>附上链接：<a href="https://docs.unity3d.com/cn/current/Manual/SL-PlatformDifferences.html">为不同的图形 API 编写着色器 - Unity 手册 (unity3d.com)</a> </p>
+<p>以下正文</p>
+<hr>
+<p>在某些情况下，不同图形 API 之间的图形渲染行为方式存在差异。大多数情况下，Unity 编辑器会隐藏这些差异，但在某些情况下，编辑器无法为您执行此操作。下面列出了这些情况以及发生这些情况时需要采取的操作。</p>
+<h2 id="渲染纹理坐标"><a href="#渲染纹理坐标" class="headerlink" title="渲染纹理坐标"></a>渲染纹理坐标</h2><p>垂直纹理坐标约定在两种类型的平台之间有所不同，分别是 Direct3D 类和 OpenGL 类平台。</p>
+<ul>
+<li><strong>Direct3D 类</strong>：顶部坐标为 0 并向下增加。此类型适用于 Direct3D、Metal 和游戏主机。</li>
+<li><strong>OpenGL 类</strong>：底部坐标为 0 并向上增加。此类适用于 OpenGL 和 OpenGL ES。</li>
+</ul>
+<p>除了渲染到<a href="https://docs.unity3d.com/cn/current/Manual/class-RenderTexture.html">渲染纹理</a>的情况下，这种差异不会对您的项目产生任何影响。在 Direct3D 类平台上渲染到纹理时，Unity 会在内部上下翻转渲染。这样就会使坐标约定在平台之间匹配，并以 OpenGL 类平台约定作为标准。</p>
+<p>在着色器中，有两种常见情况需要您采取操作确保不同的坐标约定不会在项目中产生问题，这两种情况就是图像效果和 UV 空间中的渲染。</p>
+<span id="more"></span>
+<h3 id="图像效果"><a href="#图像效果" class="headerlink" title="图像效果"></a>图像效果</h3><p>使用<a href="https://docs.unity3d.com/Packages/com.unity.postprocessing@latest">图像效果</a>和抗锯齿时，系统不会翻转为图像效果生成的源纹理来匹配 OpenGL 类平台约定。在这种情况下，Unity 渲染到屏幕以获得抗锯齿效果，然后将渲染解析为渲染纹理，以便通过图像效果进行进一步处理。</p>
+<p>如果您的图像效果是一次处理一个渲染纹理的简单图像效果，则 <a href="https://docs.unity3d.com/cn/current/ScriptReference/Graphics.Blit.html">Graphics.Blit</a> 会处理不一致的坐标。但是，如果您在<a href="https://docs.unity3d.com/Packages/com.unity.postprocessing@latest">图像效果</a>中一起处理多个<a href="https://docs.unity3d.com/cn/current/Manual/class-RenderTexture.html">渲染纹理</a>，则在 Direct3D 类平台中以及在您使用抗锯齿时，渲染纹理很可能以不同的垂直方向出现。要标准化坐标，必须在顶点着色器中手动上下“翻转”屏幕纹理，使其与 OpenGL 类坐标标准匹配。</p>
+<p>以下代码示例演示了如何执行此操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 翻转纹理的采样：</span><br><span class="line">// 主纹理的</span><br><span class="line">// 纹理像素大小将具有负 Y。</span><br><span class="line"></span><br><span class="line"># if UNITY_UV_STARTS_AT_TOP</span><br><span class="line">if (_MainTex_TexelSize.y &lt; 0)</span><br><span class="line">        uv.y = 1-uv.y;</span><br><span class="line"># endif</span><br></pre></td></tr></table></figure>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/SL-GrabPass.html">GrabPass</a> 也出现了类似的情况。生成的渲染纹理实际上可能不会在 Direct3D 类（非 OpenGL 类）平台上进行上下翻转。如果着色器代码对 GrabPass 纹理进行采样，请使用 <a href="https://docs.unity3d.com/cn/current/Manual/SL-BuiltinFunctions.html">UnityCG include</a> 文件中的 <code>ComputeGrabScreenPos</code> 函数。</p>
+<h3 id="在-UV-空间中渲染"><a href="#在-UV-空间中渲染" class="headerlink" title="在 UV 空间中渲染"></a>在 UV 空间中渲染</h3><p>在纹理坐标 (UV) 空间中渲染特殊效果或工具时，您可能需要调整着色器，以便在 Direct3D 类和 OpenGL 类系统之间进行一致渲染。您还可能需要在渲染到屏幕和渲染到纹理之间进行渲染调整。为进行此类调整，应上下翻转 Direct3D 类投影，使其坐标与 OpenGL 类投影坐标相匹配。</p>
+<p><a href="https://docs.unity3d.com/cn/current/Manual/SL-UnityShaderVariables.html">内置变量</a> <code>ProjectionParams.x</code> 包含值 <code>+1</code> 或 <code>–1</code>。<code>-1</code> 表示投影已上下翻转以匹配 OpenGL 类投影坐标，而 <code>+1</code> 表示尚未翻转。 您可以在着色器中检查此值，然后执行不同的操作。下面的示例将检查是否已翻转投影，如果已翻转，则再次进行翻转，然后返回 UV 坐标以便匹配。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">float4 vert(float2 uv : TEXCOORD0) : SV_POSITION</span><br><span class="line">&#123;</span><br><span class="line">    float4 pos;</span><br><span class="line">    pos.xy = uv;</span><br><span class="line">    // 此示例使用上下翻转的投影进行渲染，</span><br><span class="line">    // 因此也翻转垂直 UV 坐标</span><br><span class="line">    if (_ProjectionParams.x &lt; 0)</span><br><span class="line">        pos.y = 1 - pos.y;</span><br><span class="line">    pos.z = 0;</span><br><span class="line">    pos.w = 1;</span><br><span class="line">    return pos;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="裁剪空间坐标"><a href="#裁剪空间坐标" class="headerlink" title="裁剪空间坐标"></a>裁剪空间坐标</h2><p>与纹理坐标类似，裁剪空间坐标（也称为投影后空间坐标）在 Direct3D 类和 OpenGL 类平台之间有所不同：</p>
+<ul>
+<li><strong>Direct3D 类</strong>：裁剪空间深度从近平面的 +1.0 到远平面的 0.0。此类型适用于 Direct3D、Metal 和游戏主机。</li>
+<li><strong>OpenGL 类</strong>：裁剪空间深度从近平面的 –1.0 到远平面的 +1.0。此类适用于 OpenGL 和 OpenGL ES。</li>
+</ul>
+<p>在着色器代码内，可使用<a href="https://docs.unity3d.com/cn/current/Manual/SL-BuiltinMacros.html">内置宏</a> <code>UNITY_NEAR_CLIP_VALUE</code> 来获取基于平台的近平面值。</p>
+<p>在脚本代码内，使用 <a href="https://docs.unity3d.com/cn/current/ScriptReference/GL.GetGPUProjectionMatrix.html">GL.GetGPUProjectionMatrix</a> 将 Unity 的坐标系（遵循 OpenGL 类约定）转换为 Direct3D 类坐标（如果这是平台所期望的）。</p>
+<h2 id="着色器计算的精度"><a href="#着色器计算的精度" class="headerlink" title="着色器计算的精度"></a>着色器计算的精度</h2><p>要避免精度问题，请确保在目标平台上测试着色器。移动设备和 PC 中的 GPU 在处理浮点类型方面有所不同。PC GPU 将所有浮点类型（浮点精度、半精度和固定精度）视为相同；PC GPU 使用完整 32 位精度进行所有计算，而许多移动设备 GPU 并不是这样做。</p>
+<p>有关详细信息，请参阅<a href="https://docs.unity3d.com/cn/current/Manual/SL-DataTypesAndPrecision.html">数据类型和精度</a>的文档。</p>
+<h2 id="着色器中的-const-声明"><a href="#着色器中的-const-声明" class="headerlink" title="着色器中的 const 声明"></a>着色器中的 const 声明</h2><p><code>const</code> 的使用在 Microsoft HSL（请参阅 <a href="http://msdn.microsoft.com/">msdn.microsoft.com</a>）和 OpenGL 的 GLSL（请参阅 <a href="https://en.wikipedia.org/wiki/OpenGL_Shading_Language">Wikipedia</a>）着色器语言之间有所不同。</p>
+<ul>
+<li>Microsoft 的 HLSL <code>const</code> 与 C# 和 C++ 中的含义大致相同：声明的变量在其作用域内是只读的，但可按任何方式初始化。</li>
+<li>OpenGL 的 GLSL <code>const</code> 表示变量实际上是编译时常量，因此必须使用编译时约束（文字值或其他对于 <code>const</code> 的计算）进行初始化。</li>
+</ul>
+<p>最好是遵循 OpenGL 的 GLSL 语义，并且只有当变量真正不变时才将变量声明为 <code>const</code>。避免使用其他一些可变值初始化 <code>const</code> 变量（例如，作为函数中的局部变量）。这一原则也适用于 Microsoft 的 HLSL，因此以这种方式使用 <code>const</code> 可以避免在某些平台上混淆错误。</p>
+<h2 id="着色器使用的语义"><a href="#着色器使用的语义" class="headerlink" title="着色器使用的语义"></a>着色器使用的语义</h2><p>要让着色器在所有平台上运行，一些着色器值应该使用以下语义：</p>
+<ul>
+<li><strong>顶点着色器输出（裁剪空间）位置</strong>：<code>SV_POSITION</code>。有时，着色器使用 POSITION 语义来使着色器在所有平台上运行。请注意，这不适用于 Sony PS4 或有曲面细分的情况。</li>
+<li><strong>片元着色器输出颜色</strong>：<code>SV_Target</code>。有时，着色器使用 <code>COLOR</code> 或 <code>COLOR0</code> 来使着色器在所有平台上运行。请注意，这不适用于 Sony PS4。</li>
+</ul>
+<p>将网格渲染为点时，从顶点着色器输出 <code>PSIZE</code> 语义（例如，将其设置为 1）。某些平台（如 OpenGL ES 或 Metal）在未从着色器写入点大小时会将点大小视为“未定义”。</p>
+<p>有关更多详细信息，请参阅有关<a href="https://docs.unity3d.com/cn/current/Manual/SL-ShaderSemantics.html">着色器语义</a>的文档。</p>
+<h2 id="Direct3D-着色器编译器语法"><a href="#Direct3D-着色器编译器语法" class="headerlink" title="Direct3D 着色器编译器语法"></a>Direct3D 着色器编译器语法</h2><p>Direct3D 平台使用 Microsoft 的 <a href="https://docs.unity3d.com/cn/current/Manual/shader-compilation.html">HLSL 着色器编译器</a>。对于各种细微的着色器错误，HLSL 编译器比其他编译器更严格。例如，它不接受未正确初始化的函数输出值。</p>
+<p>使用此编译器时，您可能遇到的最常见情况是：</p>
+<ul>
+<li>具有 <code>out</code> 参数的<a href="https://docs.unity3d.com/cn/current/Manual/SL-SurfaceShaders.html">表面着色器</a>顶点修改器。按如下方式初始化输出：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void vert (inout appdata_full v, out Input o) </span><br><span class="line">    &#123;</span><br><span class="line">      **UNITY_INITIALIZE_OUTPUT(Input,o);**</span><br><span class="line">      // ...</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>部分初始化的值。例如，函数返回 <code>float4</code>，但代码只设置它的 <code>.xyz</code> 值。如果只需要三个值，请设置所有值或更改为 <code>float3</code>。</li>
+<li>在顶点着色器中使用 <code>tex2D</code>。这是无效的，因为顶点着色器中不存在 UV 导数。这种情况下，您需要采样显式 Mip 级别；例如，使用 <code>tex2Dlod</code> (<code>tex, float4(uv,0,0)</code>)。此外，还需要添加 <code>#pragma target 3.0</code>，因为 <code>tex2Dlod</code> 是着色器模型 3.0 的功能。</li>
+</ul>
+<h2 id="着色器中的-DirectX-11-DX11-HLSL-语法"><a href="#着色器中的-DirectX-11-DX11-HLSL-语法" class="headerlink" title="着色器中的 DirectX 11 (DX11) HLSL 语法"></a>着色器中的 DirectX 11 (DX11) HLSL 语法</h2><p><a href="https://docs.unity3d.com/cn/current/Manual/SL-SurfaceShaders.html">表面着色器</a>编译管线的某些部分不能理解特定于 DirectX 11 的 HLSL（Microsoft 的着色器语言）语法。</p>
+<p>如果您正在使用 HLSL 功能（比如 <code>StructuredBuffers</code>、<code>RWTextures</code> 和其他非 DirectX 9 语法），请将它们包裹在 DirectX X11 专用的预处理器宏中，如下例所示。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># ifdef SHADER_API_D3D11</span><br><span class="line">// DirectX11 专用代码，例如</span><br><span class="line">StructuredBuffer&lt;float4&gt; myColors;</span><br><span class="line">RWTexture2D&lt;float4&gt; myRandomWriteTexture;</span><br><span class="line"># endif</span><br></pre></td></tr></table></figure>
+<h2 id="使用着色器帧缓冲提取"><a href="#使用着色器帧缓冲提取" class="headerlink" title="使用着色器帧缓冲提取"></a>使用着色器帧缓冲提取</h2><p>一些 GPU（最明显的是 iOS 上基于 PowerVR 的 GPU）允许您通过提供当前片元颜色作为片元着色器的输入来进行某种可编程混合（请参阅 <a href="https://www.khronos.org/registry/gles/extensions/EXT/EXT_shader_framebuffer_fetch.txt">khronos.org</a> 上的 <code>EXT_shader_framebuffer_fetch</code>）。</p>
+<p>可在 Unity 中编写使用帧缓冲提取功能的着色器。要执行此操作，请在使用 HLSL（Microsoft 的着色语言，请参阅 <a href="http://msdn.microsoft.com/">msdn.microsoft.com</a>）或 Cg（Nvidia 的着色语言，请参阅 <a href="http://www.nvidia.co.uk/">nvidia.co.uk</a>）编写片元着色器时使用 <code>inout</code> 颜色参数。</p>
+<p>以下示例采用的是 Cg 语言。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">CGPROGRAM</span><br><span class="line">// 只为可能支持该功能的平台（目前是 gles、gles3 和 metal）</span><br><span class="line">// 编译着色器</span><br><span class="line"># pragma only_renderers framebufferfetch</span><br><span class="line"></span><br><span class="line">void frag (v2f i, inout half4 ocol : SV_Target)</span><br><span class="line">&#123;</span><br><span class="line">    // ocol 可以被读取（当前帧缓冲区颜色）</span><br><span class="line">    // 并且可以被写入（将颜色更改为该颜色）</span><br><span class="line">    // ...</span><br><span class="line">&#125;   </span><br><span class="line">ENDCG</span><br></pre></td></tr></table></figure>
+<h2 id="着色器中的深度-Z-方向"><a href="#着色器中的深度-Z-方向" class="headerlink" title="着色器中的深度 (Z) 方向"></a>着色器中的深度 (Z) 方向</h2><p>深度 (Z) 方向在不同的着色器平台上不同。</p>
+<p><strong>DirectX 11, DirectX 12, Metal: Reversed direction</strong></p>
+<ul>
+<li>深度 (Z) 缓冲区在近平面处为 1.0，在远平面处减小到 0.0。</li>
+<li>裁剪空间范围是 [near,0]（表示近平面处的近平面距离，在远平面处减小到 0.0）。</li>
+</ul>
+<p><strong>其他平台：传统方向</strong></p>
+<ul>
+<li>深度 (Z) 缓冲区值在近平面处为 0.0，在远平面处为 1.0。</li>
+<li>裁剪空间取决于具体平台：<ul>
+<li>在 Direct3D 类平台上，范围是 [0,far]（表示在近平面处为 0.0，在远平面处增加到远平面距离）。</li>
+<li>在 OpenGL 类平台上，范围是 [-near,far]（表示在近平面处为负的近平面距离，在远平面处增加到远平面距离）。</li>
+</ul>
+</li>
+</ul>
+<p>请注意，使反转方向深度 (Z) 与浮点深度缓冲区相结合，可显著提高相对于传统方向的深度缓冲区精度。这样做的优点是降低 Z 坐标的冲突并改善阴影，特别是在使用小的近平面和大的远平面时。</p>
+<p>因此，在使用深度 (Z) 发生反转的平台上的着色器时：</p>
+<ul>
+<li>定义了 UNITY_REVERSED_Z。</li>
+<li><code>_CameraDepth</code> 纹理的纹理范围是 1（近平面）到 0（远平面）。</li>
+<li>裁剪空间范围是“near”（近平面）到 0（远平面）。</li>
+</ul>
+<p>但是，以下宏和函数会自动计算出深度 (Z) 方向的任何差异：</p>
+<ul>
+<li><code>Linear01Depth(float z)</code></li>
+<li><code>LinearEyeDepth(float z)</code></li>
+<li>UNITY_CALC_FOG_FACTOR(coord)</li>
+</ul>
+<h3 id="提取深度缓冲区"><a href="#提取深度缓冲区" class="headerlink" title="提取深度缓冲区"></a>提取深度缓冲区</h3><p>如果要手动提取深度 (Z) 缓冲区值，则可能需要检查缓冲区方向。以下是执行此操作的示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">float z = tex2D(_CameraDepthTexture, uv);</span><br><span class="line"># if defined(UNITY_REVERSED_Z)</span><br><span class="line">    z = 1.0f - z;</span><br><span class="line"># endif</span><br></pre></td></tr></table></figure>
+<h3 id="使用裁剪空间"><a href="#使用裁剪空间" class="headerlink" title="使用裁剪空间"></a>使用裁剪空间</h3><p>如果要手动使用裁剪空间 (Z) 深度，则可能还需要使用以下宏来抽象化平台差异：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">float clipSpaceRange01 = UNITY_Z_0_FAR_FROM_CLIPSPACE(rawClipSpace);</span><br></pre></td></tr></table></figure>
+<p><strong>注意</strong>：此宏不会改变 OpenGL 或 OpenGL ES 平台上的裁剪空间，因此在这些平台上，此宏返回“-near”1（近平面）到 far（远平面）之间的值。</p>
+<h3 id="投影矩阵"><a href="#投影矩阵" class="headerlink" title="投影矩阵"></a>投影矩阵</h3><p>如果处于深度 (Z) 发生反转的平台上，则 <a href="https://docs.unity3d.com/cn/current/ScriptReference/GL.GetGPUProjectionMatrix.html">GL.GetGPUProjectionMatrix()</a> 返回一个还原了 z 的矩阵。 但是，如果要手动从投影矩阵中进行合成（例如，对于自定义阴影或深度渲染），您需要通过脚本按需自行还原深度 (Z) 方向。</p>
+<p>以下是执行此操作的示例：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">var shadowProjection = Matrix4x4.Ortho(...); //阴影摄像机投影矩阵</span><br><span class="line">var shadowViewMat = ...     //阴影摄像机视图矩阵</span><br><span class="line">var shadowSpaceMatrix = ... //从裁剪空间到阴影贴图纹理空间</span><br><span class="line">    </span><br><span class="line">//当引擎通过摄像机投影计算设备投影矩阵时，</span><br><span class="line">//&quot;m_shadowCamera.projectionMatrix&quot;被隐式反转</span><br><span class="line">m_shadowCamera.projectionMatrix = shadowProjection; </span><br><span class="line"></span><br><span class="line">//&quot;shadowProjection&quot;在连接到&quot;m_shadowMatrix&quot;之前被手动翻转，</span><br><span class="line">//因为它被视为着色器的其他矩阵。</span><br><span class="line">if(SystemInfo.usesReversedZBuffer) </span><br><span class="line">&#123;</span><br><span class="line">    shadowProjection[2, 0] = -shadowProjection[2, 0];</span><br><span class="line">    shadowProjection[2, 1] = -shadowProjection[2, 1];</span><br><span class="line">    shadowProjection[2, 2] = -shadowProjection[2, 2];</span><br><span class="line">    shadowProjection[2, 3] = -shadowProjection[2, 3];</span><br><span class="line">&#125;</span><br><span class="line">    m_shadowMatrix = shadowSpaceMatrix * shadowProjection * shadowViewMat;</span><br></pre></td></tr></table></figure>
+<h3 id="深度-Z-偏差"><a href="#深度-Z-偏差" class="headerlink" title="深度 (Z) 偏差"></a>深度 (Z) 偏差</h3><p>Unity 自动处理深度 (Z) 偏差，以确保其与 Unity 的深度 (Z) 方向匹配。但是，如果要使用本机代码渲染插件，则需要在 C 或 C++ 代码中消除（反转）深度 (Z) 偏差。</p>
+<h4 id="深度-Z-方向检查工具"><a href="#深度-Z-方向检查工具" class="headerlink" title="深度 (Z) 方向检查工具"></a>深度 (Z) 方向检查工具</h4><ul>
+<li>使用 <a href="https://docs.unity3d.com/cn/current/ScriptReference/SystemInfo-usesReversedZBuffer.html">SystemInfo.usesReversedZBuffer</a> 可确认所在平台是否使用反转深度 (Z)。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Unity</category>
+      </categories>
+      <tags>
+        <tag>图形 API</tag>
+        <tag>Unity</tag>
+        <tag>转载</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Games202 作业汇总</title>
     <url>/2023/02/20/Games202HW/</url>
     <content><![CDATA[<h1 id="阴影PCSS"><a href="#阴影PCSS" class="headerlink" title="阴影PCSS"></a>阴影PCSS</h1><p><img src="/2023/02/20/Games202HW/PCSS.png" alt="PCSS"></p>

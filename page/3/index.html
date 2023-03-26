@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,241 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/" class="post-title-link" itemprop="url">HPP_Graphics_2.6 伽马校正</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:30:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:30:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:59:14" itemprop="dateModified" datetime="2023-03-17T12:59:14+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li>渲染时，着色器中<strong>计算颜色最好在线性空间</strong>下（从辐射度量学的角度来看，是计算radiance和Irradiance）</li>
+</ul>
+<h2 id="a-Unity中的色彩管理"><a href="#a-Unity中的色彩管理" class="headerlink" title="a). Unity中的色彩管理"></a>a). Unity中的色彩管理</h2><p><a target="_blank" rel="noopener" href="https://docs.unity.cn/cn/current/Manual/LinearLighting.html">https://docs.unity.cn/cn/current/Manual/LinearLighting.html</a></p>
+<ul>
+<li><p>Unity中选择色彩空间为Gamma时，渲染管线将使用伽马颜色空间中存储的所有颜色（比如灯光的颜色）和纹理。着色器不会对输入的贴图做sRGB采样，同时也不会对灯光颜色进行伽马转线性</p>
+</li>
+<li><p>Unity中色彩空间设置为Linear时，Unity会默认勾选sRGB，着色器会对勾选sRGB的进行sRGB采样（伽马转线性），详见后图</p>
+<blockquote>
+<p>选择 <strong>Color Space:</strong> <strong>Linear</strong> 将假设纹理位于伽马颜色空间内。Unity 在默认情况下使用 GPU 的 sRGB 采样器从伽马颜色空间跨越到线性颜色空间。如果纹理是在线性颜色空间内创建的，则需要绕过 sRGB 采样。请参阅有关<a target="_blank" rel="noopener" href="https://docs.unity.cn/cn/current/Manual/LinearRendering-LinearTextures.html">使用线性纹理</a>的文档以了解更多信息。</p>
+</blockquote>
+<p><img src="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/Hardware.png" alt="Hardware"></p>
+</li>
+<li><p><strong>SP-U3D</strong>（SP的新版色彩管理OpenColorIO非常好，不清楚就去看看）</p>
+<p><img src="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/SP_U3D.png" alt="SP_U3D"></p>
+</li>
+<li><p><strong>PS-U3D</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/PS_U3D.png" alt="PS_U3D"></p>
+<ul>
+<li><p>PS的色彩管理</p>
+<p><img src="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/PS_ColorManage.png" alt="PS_ColorManage"></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.6_%E4%BC%BD%E9%A9%AC%E6%A0%A1%E6%AD%A3/PS_ColorManage2.png" alt="PS_ColorManage2"></p>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/" class="post-title-link" itemprop="url">HPP_Graphics_2.5 Bump Mapping</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:28:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:28:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:59:00" itemprop="dateModified" datetime="2023-03-17T12:59:00+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="a-Bump-Map的分类"><a href="#a-Bump-Map的分类" class="headerlink" title="a). Bump Map的分类"></a>a). Bump Map的分类</h2><p><img src="/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/BumpMap00.png" alt="BumpMap00"></p>
+<h2 id="b-Normal-Map"><a href="#b-Normal-Map" class="headerlink" title="b). Normal Map"></a>b). Normal Map</h2><ul>
+<li>法线贴图：存有物体局部（切线空间）表面法线信息的一张贴图</li>
+</ul>
+<p><a href="../../../../Other/NOTE.md">Link1 NOTE.md</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.yuque.com/sugelameiyoudi-jadcc/okgm7e/nspda5">Link2</a></p>
+<ul>
+<li><strong>储存空间：</strong><ul>
+<li>（一般采用）切线空间</li>
+<li>模型空间</li>
+</ul>
+</li>
+</ul>
+<h3 id="b-1-Tangent-Space"><a href="#b-1-Tangent-Space" class="headerlink" title="b.1). Tangent Space"></a>b.1). Tangent Space</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Motarookie/article/details/123507610?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167309067916800225519095%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167309067916800225519095&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-123507610-null-null.142^v70^pc_new_rank,201^v4^add_ask&amp;utm_term=%E5%88%87%E7%BA%BF%E7%A9%BA%E9%97%B4&amp;spm=1018.2226.3001.4187">Link3 切线空间(Tangent Space)</a></p>
+<ul>
+<li><p>切线空间中，x轴为切线，y轴为副切线，z轴为表面初始法线</p>
+<p><img src="/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/TangentSpace00.png" alt="TangentSpace00"></p>
+<ul>
+<li>其中，切线的方向对应UV空间的 $u$ 轴，副切线对应 $v$ 轴（详见Link1、Link3）</li>
+</ul>
+</li>
+<li><p><strong>使用切线空间的优点：</strong></p>
+<ol>
+<li>自由度高，可复用</li>
+<li>可进行uv动画</li>
+<li>可压缩</li>
+</ol>
+</li>
+</ul>
+<h2 id="c-Unity中的法线压缩格式"><a href="#c-Unity中的法线压缩格式" class="headerlink" title="c). Unity中的法线压缩格式"></a>c). Unity中的法线压缩格式</h2><p><img src="/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/UnityNormalZip.png" alt="UnityNormalZip"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_2.5_Bump%20Mapping/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1161,344 +1396,6 @@ V=\left[\begin{array}{cccc}
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/" class="post-title-link" itemprop="url">Games202-4 Real-time Global Illumination(in 3D)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-10 16:42:10" itemprop="dateCreated datePublished" datetime="2023-02-10T16:42:10+08:00">2023-02-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:16:55" itemprop="dateModified" datetime="2023-02-12T21:16:55+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><ul>
-<li>In RTR, people seek simple and fast solutions to <strong>one bounce indirect illumination</strong></li>
-</ul>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00b.png" alt="GI00b"></p>
-<ul>
-<li><p><strong>Primary LIght Source（真正的光源，太阳）</strong></p>
-</li>
-<li><p><strong>Secondary Light Source(次级光源，Q点)</strong></p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00a.png" alt="GI00a"></p>
-</li>
-</ul>
-<ul>
-<li><strong>观察（要得到$p$点的间接光照我们需要做什么）：</strong><ol>
-<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
-<li><strong>方法：</strong> Shadow Mapping</li>
-</ul>
-</li>
-<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
-<li><strong>方法：</strong> 解渲染方程</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<ul>
-<li>以下是实时渲染中常用的在3D空间中（意为渲染效果不取决于相机位置/屏幕空间）的GI方法（<strong>主要针对one bounce indirect illumination</strong>）：<ul>
-<li>Reflective Shadow Maps (RSM)</li>
-<li>Light Propagation Volumes (LPV)</li>
-<li>Voxel Global Illumination (VXGI)</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1 id="b-Reflective-Shadow-Maps-RSM"><a href="#b-Reflective-Shadow-Maps-RSM" class="headerlink" title="b). Reflective Shadow Maps (RSM)"></a>b). Reflective Shadow Maps (RSM)</h1><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00a.png" alt="GI00a"></p>
-<ul>
-<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
-<li>Shadow map中每一个Texel都是一个作为Secondary light sourc的面片（Surface patch）<ul>
-<li>Shadow map做阴影中是光源视角的$Depth$，和相机视角的比较；这里是光源视角的$Depth$和 点$p$ 视角比较</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
-<li>但是，对于不同的 点$p$ 次级光源入射方向是不一定的。即，即使观察角度固定，同一个Shadow map中的Surface patch，对不同的 $p$ 贡献不同；</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><strong>假设：</strong><ul>
-<li><strong>次级光源均为Diffuse</strong>（观察角度固定，同一个次级光源对不同 点$p$ 的贡献相同）</li>
-<li>Therefore, outgoing radiance is uniform toward all directions</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献"><a href="#b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献" class="headerlink" title="b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献"></a>b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_01a.png" alt="RSM_01a"></p>
-<script type="math/tex; mode=display">
-\begin{aligned}
-L_{o}\left(\mathrm{p}, \omega_{o}\right) & =\int_{\Omega_{\mathrm{patch}}} L_{i}\left(\mathrm{p}, \omega_{i}\right) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \omega_{i}, \omega_{o}\right) \cos \theta_{i} \mathrm{~d} \omega_{i} \\
-& =\int_{A_{\mathrm{patch}}} L_{i}(\mathrm{q} \rightarrow \mathrm{p}) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \mathrm{q} \rightarrow \mathrm{p}, \omega_{o}\right) \frac{\cos \theta_{p} \cos \theta_{q}}{\|q-p\|^{2}} \mathrm{~d} A
-\end{aligned}</script><ul>
-<li><p>对于每个diffuse reflective patch(点$q$)</p>
-<ul>
-<li><p><strong>点$q$</strong> 的BRDF: $f_{rq} = \rho/\pi$ </p>
-</li>
-<li><p>$L_i(q\rightarrow p) = f_{rq} \cdot \frac{\Phi}{d A}$ ( $\Phi$ 是光源的辐射通量，将该式带入渲染方程，${d A}$ 被消除)</p>
-</li>
-<li><script type="math/tex; mode=display">
-E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{max}\{0,\langle n|x_{q}-x\rangle\}}{||x-x_{q}||^{4}}.</script><ul>
-<li>${||x-x_{q}||^{4}}$ 是因为分子上$x-x_{q}$是未归一化的向量；</li>
-<li>$\Phi_p$ 为 $f_{rq} \cdot {\Phi}$</li>
-<li>将$E_p(x,n)$ 乘上 点$p$ 的BRDF即可得出$L_o$</li>
-<li>$V$：Visibility项就不算了</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><strong>Not all pixels in the RSM can contribute</strong></p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_04.png" alt="RSM_04"></p>
-<ul>
-<li><p>Visibility (难处理，不管了)</p>
-</li>
-<li><p>Orientation（方向，Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响）</p>
-</li>
-<li><p>Distance（只有和Shading Point近的Reflector才做贡献）</p>
-<ul>
-<li><p><strong>假设：</strong> 世界坐标下，两点接近 $\rightarrow$ Shadow Map（世界空间转换到光源空间）中距离比较近，且深度相差不大；</p>
-</li>
-<li><p>进一步加速（类似于Step 1 and 3 in PCSS），在shading point转换到Shadow Map后对应点$(s,t)$ 的一定范围内，做随机采样</p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_Distance.png" alt="RSM_Distance"></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-2-光源视角下储存的信息（Shadow-Map）"><a href="#b-2-光源视角下储存的信息（Shadow-Map）" class="headerlink" title="b.2). 光源视角下储存的信息（Shadow Map）"></a>b.2). 光源视角下储存的信息（Shadow Map）</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_Record.png" alt="RSM_Record"></p>
-<ul>
-<li>深度</li>
-<li>世界坐标</li>
-<li>法线</li>
-<li>辐射通量（flux）</li>
-<li>etc.</li>
-</ul>
-<h2 id="b-3-Pros-And-Cons"><a href="#b-3-Pros-And-Cons" class="headerlink" title="b.3). Pros And Cons"></a>b.3). Pros And Cons</h2><ul>
-<li>Pros:<ul>
-<li>好写（类似于Shadow Map）</li>
-</ul>
-</li>
-<li>Cons:<ul>
-<li>计算量随光源（Primary Light Source）数量增多线性增加</li>
-<li>Visibility无法处理</li>
-<li>很多假设：diffuse reflectors, depth as distance, etc.<ul>
-<li>只能处理次级光源为Diffuse</li>
-</ul>
-</li>
-<li>质量依赖于采样率</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">HPP_Art_2.7 Metallic与Speculer流程</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-03 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T17:23:32+08:00">2023-02-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:49:27" itemprop="dateModified" datetime="2023-02-04T14:49:27+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-PBR模型"><a href="#a-PBR模型" class="headerlink" title="a). PBR模型"></a>a). PBR模型</h1><p>基于物理的渲染模型，是当前主流游戏引擎使用的真实感3D渲染模型。</p>
-<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/PBR_model.png" alt="PBR_model" style="zoom:50%;"></p>
-<h2 id="a-1-两种工作流"><a href="#a-1-两种工作流" class="headerlink" title="a.1). 两种工作流"></a>a.1). 两种工作流</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/260973533">游戏资源中常见的贴图类型</a></p>
-<p><a target="_blank" rel="noopener" href="https://substance3d.adobe.com/tutorials/courses/the-pbr-guide-part-1-zh">PBR Guide</a></p>
-<p>PBR流程中，常用的有两种工作流程：</p>
-<ul>
-<li>金属/粗糙度工作流(Metal/Roughness)<ul>
-<li>符合直觉，容易调参</li>
-<li>更不容易打破能量守恒</li>
-</ul>
-</li>
-<li>高光（镜面反射）/光泽度（Specular/Glossiness）工作流<ul>
-<li>可自由调节$F_0$（零度菲涅尔反射）值</li>
-<li>容易打破能量守恒</li>
-</ul>
-</li>
-</ul>
-<h2 id="a-2-F0反射率值"><a href="#a-2-F0反射率值" class="headerlink" title="a.2). F0反射率值"></a>a.2). F0反射率值</h2><p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0.png" alt="F0"></p>
-<p>大多数常用的电介质的F0范围从0.02-0.05（线性值）。对于导体，F0值 范围为0.5-1.0。因此表面的反射率由折射率决定，正如下面的方程式所示（Lagarde 2011）。</p>
-<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0a.png" alt="F0a"></p>
-<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_eg.png" alt="F0_eg" style="zoom:50%;"></p>
-<blockquote id="fn_图1">
-<sup>图1</sup>. 金属和非金属的$F_0$​值<a href="#reffn_图1" title="Jump back to footnote [图1] in the text."> &#8617;</a>
-</blockquote>
-<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_D_M.png" alt="F0_D_M"></p>
-<blockquote id="fn_图2">
-<sup>图2</sup>. 电介质$F_0$值和金属反射率值<a href="#reffn_图2" title="Jump back to footnote [图2] in the text."> &#8617;</a>
-</blockquote>
-<ul>
-<li>通用贴图：法线贴图、AO贴图、高度贴图等</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">45</span>
+          <span class="site-state-item-count">47</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">43</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,344 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/" class="post-title-link" itemprop="url">Games202-4 Real-time Global Illumination(in 3D)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-10 16:42:10" itemprop="dateCreated datePublished" datetime="2023-02-10T16:42:10+08:00">2023-02-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-12 21:16:55" itemprop="dateModified" datetime="2023-02-12T21:16:55+08:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-Introduction"><a href="#a-Introduction" class="headerlink" title="a). Introduction"></a>a). Introduction</h1><ul>
+<li>In RTR, people seek simple and fast solutions to <strong>one bounce indirect illumination</strong></li>
+</ul>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00b.png" alt="GI00b"></p>
+<ul>
+<li><p><strong>Primary LIght Source（真正的光源，太阳）</strong></p>
+</li>
+<li><p><strong>Secondary Light Source(次级光源，Q点)</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00a.png" alt="GI00a"></p>
+</li>
+</ul>
+<ul>
+<li><strong>观察（要得到$p$点的间接光照我们需要做什么）：</strong><ol>
+<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
+<li><strong>方法：</strong> Shadow Mapping</li>
+</ul>
+</li>
+<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
+<li><strong>方法：</strong> 解渲染方程</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li>以下是实时渲染中常用的在3D空间中（意为渲染效果不取决于相机位置/屏幕空间）的GI方法（<strong>主要针对one bounce indirect illumination</strong>）：<ul>
+<li>Reflective Shadow Maps (RSM)</li>
+<li>Light Propagation Volumes (LPV)</li>
+<li>Voxel Global Illumination (VXGI)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="b-Reflective-Shadow-Maps-RSM"><a href="#b-Reflective-Shadow-Maps-RSM" class="headerlink" title="b). Reflective Shadow Maps (RSM)"></a>b). Reflective Shadow Maps (RSM)</h1><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/GI00a.png" alt="GI00a"></p>
+<ul>
+<li>得到<strong>Secondary light source</strong>（哪些点被光源照射到）<ul>
+<li>Shadow map中每一个Texel都是一个作为Secondary light sourc的面片（Surface patch）<ul>
+<li>Shadow map做阴影中是光源视角的$Depth$，和相机视角的比较；这里是光源视角的$Depth$和 点$p$ 视角比较</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>得到各个<strong>Secondary light source对 $p$点 Radiance的贡献</strong><ul>
+<li>但是，对于不同的 点$p$ 次级光源入射方向是不一定的。即，即使观察角度固定，同一个Shadow map中的Surface patch，对不同的 $p$ 贡献不同；</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>假设：</strong><ul>
+<li><strong>次级光源均为Diffuse</strong>（观察角度固定，同一个次级光源对不同 点$p$ 的贡献相同）</li>
+<li>Therefore, outgoing radiance is uniform toward all directions</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献"><a href="#b-1-得到各个Secondary-light-source对-p-点-Radiance的贡献" class="headerlink" title="b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献"></a>b.1). 得到各个Secondary light source对 $p$点 Radiance的贡献</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_01a.png" alt="RSM_01a"></p>
+<script type="math/tex; mode=display">
+\begin{aligned}
+L_{o}\left(\mathrm{p}, \omega_{o}\right) & =\int_{\Omega_{\mathrm{patch}}} L_{i}\left(\mathrm{p}, \omega_{i}\right) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \omega_{i}, \omega_{o}\right) \cos \theta_{i} \mathrm{~d} \omega_{i} \\
+& =\int_{A_{\mathrm{patch}}} L_{i}(\mathrm{q} \rightarrow \mathrm{p}) V\left(\mathrm{p}, \omega_{i}\right) f_{r}\left(\mathrm{p}, \mathrm{q} \rightarrow \mathrm{p}, \omega_{o}\right) \frac{\cos \theta_{p} \cos \theta_{q}}{\|q-p\|^{2}} \mathrm{~d} A
+\end{aligned}</script><ul>
+<li><p>对于每个diffuse reflective patch(点$q$)</p>
+<ul>
+<li><p><strong>点$q$</strong> 的BRDF: $f_{rq} = \rho/\pi$ </p>
+</li>
+<li><p>$L_i(q\rightarrow p) = f_{rq} \cdot \frac{\Phi}{d A}$ ( $\Phi$ 是光源的辐射通量，将该式带入渲染方程，${d A}$ 被消除)</p>
+</li>
+<li><script type="math/tex; mode=display">
+E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{max}\{0,\langle n|x_{q}-x\rangle\}}{||x-x_{q}||^{4}}.</script><ul>
+<li>${||x-x_{q}||^{4}}$ 是因为分子上$x-x_{q}$是未归一化的向量；</li>
+<li>$\Phi_p$ 为 $f_{rq} \cdot {\Phi}$</li>
+<li>将$E_p(x,n)$ 乘上 点$p$ 的BRDF即可得出$L_o$</li>
+<li>$V$：Visibility项就不算了</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>Not all pixels in the RSM can contribute</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_04.png" alt="RSM_04"></p>
+<ul>
+<li><p>Visibility (难处理，不管了)</p>
+</li>
+<li><p>Orientation（方向，Reflector的反射方向只在法向半球上，法向半球的方向覆盖不到的Shading Point自然不受该Reflector的影响）</p>
+</li>
+<li><p>Distance（只有和Shading Point近的Reflector才做贡献）</p>
+<ul>
+<li><p><strong>假设：</strong> 世界坐标下，两点接近 $\rightarrow$ Shadow Map（世界空间转换到光源空间）中距离比较近，且深度相差不大；</p>
+</li>
+<li><p>进一步加速（类似于Step 1 and 3 in PCSS），在shading point转换到Shadow Map后对应点$(s,t)$ 的一定范围内，做随机采样</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_Distance.png" alt="RSM_Distance"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-2-光源视角下储存的信息（Shadow-Map）"><a href="#b-2-光源视角下储存的信息（Shadow-Map）" class="headerlink" title="b.2). 光源视角下储存的信息（Shadow Map）"></a>b.2). 光源视角下储存的信息（Shadow Map）</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/RSM_Record.png" alt="RSM_Record"></p>
+<ul>
+<li>深度</li>
+<li>世界坐标</li>
+<li>法线</li>
+<li>辐射通量（flux）</li>
+<li>etc.</li>
+</ul>
+<h2 id="b-3-Pros-And-Cons"><a href="#b-3-Pros-And-Cons" class="headerlink" title="b.3). Pros And Cons"></a>b.3). Pros And Cons</h2><ul>
+<li>Pros:<ul>
+<li>好写（类似于Shadow Map）</li>
+</ul>
+</li>
+<li>Cons:<ul>
+<li>计算量随光源（Primary Light Source）数量增多线性增加</li>
+<li>Visibility无法处理</li>
+<li>很多假设：diffuse reflectors, depth as distance, etc.<ul>
+<li>只能处理次级光源为Diffuse</li>
+</ul>
+</li>
+<li>质量依赖于采样率</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(in%203D)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/" class="post-title-link" itemprop="url">HPP_Art_2.7 Metallic与Speculer流程</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-03 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-03T17:23:32+08:00">2023-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-04 14:49:27" itemprop="dateModified" datetime="2023-02-04T14:49:27+08:00">2023-02-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-PBR模型"><a href="#a-PBR模型" class="headerlink" title="a). PBR模型"></a>a). PBR模型</h1><p>基于物理的渲染模型，是当前主流游戏引擎使用的真实感3D渲染模型。</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/PBR_model.png" alt="PBR_model" style="zoom:50%;"></p>
+<h2 id="a-1-两种工作流"><a href="#a-1-两种工作流" class="headerlink" title="a.1). 两种工作流"></a>a.1). 两种工作流</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/260973533">游戏资源中常见的贴图类型</a></p>
+<p><a target="_blank" rel="noopener" href="https://substance3d.adobe.com/tutorials/courses/the-pbr-guide-part-1-zh">PBR Guide</a></p>
+<p>PBR流程中，常用的有两种工作流程：</p>
+<ul>
+<li>金属/粗糙度工作流(Metal/Roughness)<ul>
+<li>符合直觉，容易调参</li>
+<li>更不容易打破能量守恒</li>
+</ul>
+</li>
+<li>高光（镜面反射）/光泽度（Specular/Glossiness）工作流<ul>
+<li>可自由调节$F_0$（零度菲涅尔反射）值</li>
+<li>容易打破能量守恒</li>
+</ul>
+</li>
+</ul>
+<h2 id="a-2-F0反射率值"><a href="#a-2-F0反射率值" class="headerlink" title="a.2). F0反射率值"></a>a.2). F0反射率值</h2><p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0.png" alt="F0"></p>
+<p>大多数常用的电介质的F0范围从0.02-0.05（线性值）。对于导体，F0值 范围为0.5-1.0。因此表面的反射率由折射率决定，正如下面的方程式所示（Lagarde 2011）。</p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0a.png" alt="F0a"></p>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_eg.png" alt="F0_eg" style="zoom:50%;"></p>
+<blockquote id="fn_图1">
+<sup>图1</sup>. 金属和非金属的$F_0$​值<a href="#reffn_图1" title="Jump back to footnote [图1] in the text."> &#8617;</a>
+</blockquote>
+<p><img src="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/F0_D_M.png" alt="F0_D_M"></p>
+<blockquote id="fn_图2">
+<sup>图2</sup>. 电介质$F_0$值和金属反射率值<a href="#reffn_图2" title="Jump back to footnote [图2] in the text."> &#8617;</a>
+</blockquote>
+<ul>
+<li>通用贴图：法线贴图、AO贴图、高度贴图等</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/03/HPP_Art_02.7_Metallic%E4%B8%8ESpeculer%E6%B5%81%E7%A8%8B/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1123,309 +1461,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_17_18_Materials/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/Games101_17_18_Materials/" class="post-title-link" itemprop="url">Games101_17_18 Materials</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:17:44" itemprop="dateModified" datetime="2023-02-12T21:17:44+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-17-Materials-and-Appearances"><a href="#Lecture-17-Materials-and-Appearances" class="headerlink" title="Lecture 17 Materials and Appearances"></a>Lecture 17 Materials and Appearances</h1><p><strong>Material == BRDF</strong></p>
-<h2 id="a-Diffuse-Lambertian-Material"><a href="#a-Diffuse-Lambertian-Material" class="headerlink" title="a). Diffuse / Lambertian Material"></a>a). Diffuse / Lambertian Material</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat.png" alt="Diffuse_Lambertian_Mat"></p>
-<ul>
-<li><p>对于此类材质，当假定各方向9入射的光线radiance相同，反射的光同样是Uniform的。因为能量守恒（假定不发光，不吸收），使得进入的 <strong><em>Irradiance<sub>入</sub></em></strong> 和出去的 <strong><em>Irradiance<sub>出 </sub></em></strong>相同；</p>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Diffuse_Lambertian_Mat02.png" alt="Diffuse_Lambertian_Mat02"></p>
-<ul>
-<li><p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1Bt41187ZF/?spm_id_from=333.337.search-card.all.click&amp;vd_source=627aabb12e63b6a55ebc4e4799bb0408"><em>二重积分</em></a></p>
-<table frame="void">
-    <tr>
-    <td><center><img src="/2022/10/03/Games101_17_18_Materials/半球积分.png" alt="半球积分" height="250"></center></td>
-    <td><center><img src="/2022/10/03/Games101_17_18_Materials/半球积分2.jpg" alt="半球积分2" height="250"></center></td>
-    </tr>
-</table>
-
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-Glossy-material"><a href="#b-Glossy-material" class="headerlink" title="b). Glossy material"></a>b). Glossy material</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Glossy_Mat.png" alt="Glossy_Mat"></p>
-<h2 id="c-Ideal-reflective-refractive-material-BSDF"><a href="#c-Ideal-reflective-refractive-material-BSDF" class="headerlink" title="c). Ideal reflective / refractive material(BSDF)"></a>c). Ideal reflective / refractive material(BSDF)</h2><p><img src="/2022/10/03/Games101_17_18_Materials/Reflective_Refractive_Mat.png" alt="Reflective_Refractive_Mat"></p>
-<ul>
-<li><p>计算镜面反射方向</p>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Perfect_Specular_Reflection.png" alt="Perfect_Specular_Reflection"></p>
-<ul>
-<li>几何</li>
-<li>方位角</li>
-</ul>
-</li>
-</ul>
-<h3 id="c-1-Specular-Refraction"><a href="#c-1-Specular-Refraction" class="headerlink" title="c.1). Specular Refraction"></a>c.1). Specular Refraction</h3><p><img src="/2022/10/03/Games101_17_18_Materials/Specular Refraction.png" alt="Specular Refraction"></p>
-<ul>
-<li><p>现象：色散、Caustic等</p>
-</li>
-<li><p><strong>Snell’s Law</strong></p>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Snell Law.png" alt="Snell Law"></p>
-<ul>
-<li><p>可推出只有当光密到光疏介质时，才有可能发生折射；（${n_i\over n_t}&gt;1$）</p>
-<p><img src="/2022/10/03/Games101_17_18_Materials/Snell Law_02.png" alt="Snell Law_02"></p>
-</li>
-</ul>
-</li>
-<li><p>折射属于BT(Transmit)DF;</p>
-<ul>
-<li><strong>BTDF + BRDF = BSDF</strong> </li>
-</ul>
-</li>
-</ul>
-<h3 id="c-2-Fresnel-Reflection-菲涅尔"><a href="#c-2-Fresnel-Reflection-菲涅尔" class="headerlink" title="c.2). Fresnel Reflection(菲涅尔)"></a>c.2). Fresnel Reflection(菲涅尔)</h3><ul>
-<li>反应了特定方向的入射光的反射和折射的比例；</li>
-</ul>
-<table frame="void">
-    <tr>
-    <td><center><img src="/2022/10/03/Games101_17_18_Materials/绝缘体_Fresnel.png" alt="绝缘体_Fresnel" height="250"></center></td>
-    <td><center><img src="/2022/10/03/Games101_17_18_Materials/导体(金属)_Fresnel.png" alt="导体(金属)_Fresnel" height="250"></center></td>
-    </tr>
-</table>
-
-<ul>
-<li>左图是绝缘体的菲涅尔项，右图是导体（金属）的菲涅尔项</li>
-</ul>
-<p><img src="/2022/10/03/Games101_17_18_Materials/FresnelTerm.png" alt="FresnelTerm"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/03/Games101_17_18_Materials/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_21_22_Animation/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/Games101_21_22_Animation/" class="post-title-link" itemprop="url">Games101_21_22 Animation</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-03 18:20:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:20:10+08:00">2022-10-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:17:31" itemprop="dateModified" datetime="2023-02-12T21:17:31+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
-<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
-<ul>
-<li><p><strong>Idealized spring</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
-<ul>
-<li>但永远不会停止，因此加入摩擦力</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
-<ul>
-<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
-<ul>
-<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
-</li>
-</ul>
-</li>
-<li><p>加入两条对角线，以及skip connection</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
-<ul>
-<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
-</ul>
-</li>
-<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
-</li>
-</ul>
-<hr>
-<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
-<ul>
-<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
-</ul>
-</li>
-</ul>
-<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
-<ul>
-<li><p>关节（Joint）分类：</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
-</li>
-</ul>
-<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
-<ul>
-<li>解决多个解的方法：梯度下降</li>
-</ul>
-<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
-<ul>
-<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
-</li>
-</ul>
-<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/03/Games101_21_22_Animation/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
