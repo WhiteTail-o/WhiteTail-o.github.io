@@ -31,6 +31,8 @@
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_2.2.1.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.21.1.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Test1.0826.jpeg">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/image_005_0000.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.10.2.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.11.1.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.15.1.png">
@@ -38,10 +40,10 @@
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.6.1.png">
 <meta property="og:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.3.1.png">
 <meta property="article:published_time" content="2023-03-15T08:15:10.000Z">
-<meta property="article:modified_time" content="2023-03-17T09:09:44.577Z">
+<meta property="article:modified_time" content="2023-03-26T17:45:46.513Z">
 <meta property="article:author" content="WhiteTail">
-<meta property="article:tag" content="Demo">
 <meta property="article:tag" content="图形学">
+<meta property="article:tag" content="Demo">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://whitetail-o.github.io/2023/03/15/Demo/Untitled_1.1.1.png">
 
@@ -153,7 +155,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E9%98%B4%E5%BD%B1"><span class="nav-text">屏幕空间阴影</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PBR%EF%BC%8C%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E5%8F%8D%E5%B0%84%EF%BC%8CBloom"><span class="nav-text">PBR，屏幕空间反射，Bloom</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9A%AE%E8%82%A4%E6%B8%B2%E6%9F%93%EF%BC%88%E9%A2%84%E7%A7%AF%E5%88%86%E3%80%81%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E6%AC%A1%E8%A1%A8%E9%9D%A2%E6%95%A3%E5%B0%84%EF%BC%89"><span class="nav-text">皮肤渲染（预积分、屏幕空间次表面散射）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%EF%BC%8C%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8-DOF%E6%99%AF%E6%B7%B1"><span class="nav-text">曲面细分，几何着色器 + DOF景深</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82Pass%E7%9F%AD%E6%AF%9B%E6%B8%B2%E6%9F%93"><span class="nav-text">多层Pass短毛渲染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EUE5%E7%9A%84%E5%8A%A8%E6%8D%95%E7%9F%AD%E7%89%87"><span class="nav-text">基于UE5的动捕短片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mapping"><span class="nav-text">Mapping</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E9%98%B4%E5%BD%B1"><span class="nav-text">屏幕空间阴影</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#PBR%EF%BC%8C%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E5%8F%8D%E5%B0%84%EF%BC%8CBloom"><span class="nav-text">PBR，屏幕空间反射，Bloom</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9A%AE%E8%82%A4%E6%B8%B2%E6%9F%93%EF%BC%88%E9%A2%84%E7%A7%AF%E5%88%86%E3%80%81%E5%B1%8F%E5%B9%95%E7%A9%BA%E9%97%B4%E6%AC%A1%E8%A1%A8%E9%9D%A2%E6%95%A3%E5%B0%84%EF%BC%89"><span class="nav-text">皮肤渲染（预积分、屏幕空间次表面散射）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NPR"><span class="nav-text">NPR</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%EF%BC%8C%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8-DOF%E6%99%AF%E6%B7%B1"><span class="nav-text">曲面细分，几何着色器 + DOF景深</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A4%9A%E5%B1%82Pass%E7%9F%AD%E6%AF%9B%E6%B8%B2%E6%9F%93"><span class="nav-text">多层Pass短毛渲染</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8EUE5%E7%9A%84%E5%8A%A8%E6%8D%95%E7%9F%AD%E7%89%87"><span class="nav-text">基于UE5的动捕短片</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mapping"><span class="nav-text">Mapping</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-text">其他</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -276,7 +278,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 17:09:44" itemprop="dateModified" datetime="2023-03-17T17:09:44+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-27 01:45:46" itemprop="dateModified" datetime="2023-03-27T01:45:46+08:00">2023-03-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -336,6 +338,10 @@
 <p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p>
 </li>
 </ul>
+<h1 id="NPR"><a href="#NPR" class="headerlink" title="NPR"></a>NPR</h1><p>主播女孩重度依赖——超天酱</p>
+<p><img src="/2023/03/15/Demo/Test1.0826.jpeg" alt="Test1.0826"></p>
+<p>战双帕弥什——露西亚（NPR结合PBR）</p>
+<p><img src="/2023/03/15/Demo/image_005_0000.png" alt="image_005_0000"></p>
 <h1 id="曲面细分，几何着色器-DOF景深"><a href="#曲面细分，几何着色器-DOF景深" class="headerlink" title="曲面细分，几何着色器 + DOF景深"></a>曲面细分，几何着色器 + DOF景深</h1><p><img src="/2023/03/15/Demo/Untitled_1.10.2.png" alt="Untitled_1.10.2"></p>
 <h1 id="多层Pass短毛渲染"><a href="#多层Pass短毛渲染" class="headerlink" title="多层Pass短毛渲染"></a>多层Pass短毛渲染</h1><ul>
 <li>这里采用了30层Pass</li>
@@ -363,8 +369,8 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Demo/" rel="tag"># Demo</a>
               <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/Demo/" rel="tag"># Demo</a>
           </div>
 
         
