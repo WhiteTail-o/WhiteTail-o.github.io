@@ -113,9 +113,9 @@
     <category term="Demo" scheme="https://whitetail-o.github.io/categories/Demo/"/>
     
     
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
     <category term="Demo" scheme="https://whitetail-o.github.io/tags/Demo/"/>
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
   </entry>
   
@@ -394,6 +394,38 @@
   </entry>
   
   <entry>
+    <title>HPP_Graphics_4.1 Bloom算法</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:01.920Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
+&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
+&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
+&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>HPP_Graphics_4.2 SSAO</title>
     <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
     <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
@@ -432,38 +464,6 @@
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.1 Bloom算法</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:01.920Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
-&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
-&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
-&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
     
     
     
@@ -632,79 +632,6 @@
   </entry>
   
   <entry>
-    <title>HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/</id>
-    <published>2023-02-15T10:40:32.000Z</published>
-    <updated>2023-03-17T05:10:35.950Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul><li>先回顾下深度测试</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p><ul><li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p><ul><li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li></ul></li></ul><h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p><ul><li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul><li>提前的深度测试叫作<strong>Z-Cull</strong></li><li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li></ul></li><li><em>Early-Z同样可以搭配使用模板测试</em></li></ul><h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol><li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul><li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li><li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li></ul></li><li>手动修改GPU插值得到的深度</li><li>开启<strong>Alpha Blend</strong></li><li>关闭深度测试Depth Test</li></ol><h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul><li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li><li><p>具体怎么排序？ </p><ul><li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li></ul></li><li><p>问题：</p><ul><li>复杂的场景，CPU性能消耗很大</li><li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li></ul></li><li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p></li></ul><span id="more"></span><h1 id="c-Pre-Z"><a href="#c-Pre-Z" class="headerlink" title="c). Pre-Z"></a>c). Pre-Z</h1><ul><li>用于解决使用early-Z可能造成的Overdraw问题（用Drawcall或Set Pass Call的消耗换取减少Overdraw，因此使用时需要进行权衡）</li></ul><h2 id="Method1-双Pass"><a href="#Method1-双Pass" class="headerlink" title="Method1: 双Pass"></a>Method1: 双Pass</h2><p>使用两个Pass：</p><ul><li><p>第一个Pass（<strong>Z-Prepass</strong>）：仅写入深度；</p></li><li><p>第二个Pass：关闭深度写入，并将深度测试比较符改为等于；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/D-pass_shader.png" alt="D-pass_shader" style="zoom: 33%;"></p></li></ul><p>造成问题：</p><ol><li><p>在Unity中，无法动态批处理（多Pass的Shader无法进行动态批处理）</p></li><li><p>增多DrawCall；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Z_Pre_Drawcall.png" alt="Z_Pre_Drawcall" style="zoom: 33%;"></p></li></ol><p>因此，我们可以提前分离Prepass，以便其可以<a href="https://blog.csdn.net/lsjsoft/article/details/90734932">进行动态批处理，减少Set pass call</a></p><h2 id="Method2-提前分离的Prepass"><a href="#Method2-提前分离的Prepass" class="headerlink" title="Method2: 提前分离的Prepass"></a>Method2: 提前分离的Prepass</h2><ul><li>将Z-Prepass分离出一个shader，用这个shader将场景中不透明物体先渲染一遍；</li><li>而原先材质只剩下原先的第二个Pass，仍然关闭深度写入，并且将深度比较函数设置为相等。</li></ul><blockquote><p>URP以后并不是所有Pass都会执行，因为它预制了两个Pass所以，优先执行”UniversalForward”在执行”SrpDefaultUnlit”的Pass</p><p>……</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/RendererFeature.png" alt="RendererFeature" style="zoom:33%;"></p><p>Link: <a href="https://www.xuanyusong.com/archives/4759">https://www.xuanyusong.com/archives/4759</a></p></blockquote><hr><h2 id="半透明渲染"><a href="#半透明渲染" class="headerlink" title="半透明渲染"></a>半透明渲染</h2><p>Pre-Z也是半透明物体渲染的解决方案；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/PreZ_Translution.png" alt="PreZ_Translution"></p><h2 id="Z-prepass的其他问题"><a href="#Z-prepass的其他问题" class="headerlink" title="Z-prepass的其他问题"></a>Z-prepass的其他问题</h2><h3 id="1-Z-prepass的性能消耗是否能被忽视"><a href="#1-Z-prepass的性能消耗是否能被忽视" class="headerlink" title="1.Z-prepass的性能消耗是否能被忽视"></a>1.Z-prepass的性能消耗是否能被忽视</h3><ul><li><p>国外论坛一位名为lipsryme的老哥做了一项实验：</p></li><li><ul><li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1626442429385-0bab8f18-7ba4-44cb-96b5-4f123055a263.png" alt="img"></li><li>可以看到，Z-prepass的消耗为2.0ms，而带来的优化只减少了0.3ms（2.7-2.4）</li><li>后续讨论中，发现Z-prepass是需要根据项目的实际情况来决定是否采用的。</li></ul></li><li><p><strong>总结有以下建议</strong></p></li><li><ul><li>当一个有非常多OverDraw的场景，且不能很好的将不透明物体从前往后进行排序时，可以考虑使用PreZ进行优化</li><li>注意，PreZ会增加DrawCall，如果用错了可能是负优化</li></ul></li></ul><h1 id="d-Early-Z-和-Z-Prepass的实例应用"><a href="#d-Early-Z-和-Z-Prepass的实例应用" class="headerlink" title="d). Early-Z 和 Z-Prepass的实例应用"></a>d). <strong>Early-Z</strong> <strong>和</strong> Z-Prepass的实例应用</h1><h2 id="d-1-面片叠加的头发渲染"><a href="#d-1-面片叠加的头发渲染" class="headerlink" title="d.1). 面片叠加的头发渲染"></a>d.1). 面片叠加的头发渲染</h2><ul><li><p>对于半透明的面片来说，需要从后往前进行排序渲染才能得到正确的透明度混合结果</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ00.png" alt="Hair_PreZ00"></p></li></ul><hr><ul><li><p><strong>排序后头发的渲染</strong></p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ01.png" alt="Hair_PreZ01"></p></li><li><p>分为3个pass</p><ul><li><p>pass1</p><ul><li>处理不透明部分，开启Alpha test透明度测试，仅通过不透明的像素，</li><li>关闭背面剔除</li><li>开启深度写入</li></ul></li><li><p>pass2</p><ul><li>剔除正面，渲染背面</li></ul></li><li>pass3<ul><li>剔除背面，渲染正面</li></ul></li></ul></li></ul><ul><li>问题：会带来非常多<strong>OverDraw</strong>的问题<ul><li>解决方法：Pre-Z</li></ul></li></ul><hr><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ02.png" alt="Hair_PreZ02"></p><ul><li>使用Early-Z剔除</li><li>透明度测试开启时Early-Z无法使用的解决方案：使用Z-Prepass  <ul><li>使用一个简单的shader进行Alpha Test生成Z-Buffer</li></ul></li></ul><hr><p><strong>改善后的渲染方案：</strong></p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ03.png" alt="Hair_PreZ03"></p><ul><li><strong>不透明物体</strong><ol><li><strong>Pass1 - PreZ</strong>：<ul><li>开启透明度测试</li><li>关闭背面剔除</li><li>开启深度写入，深度测试设置为Less</li><li>关闭颜色缓冲区写入</li><li>用于一个简单的片元着色器来返回透明度值</li></ul></li><li><strong>Pass2：</strong><ul><li>关闭背面剔除</li><li>关闭深度写入，深度测试设置为Equal</li></ul></li></ol></li><li><strong>半透明物体</strong><ol><li><strong>Pass3：</strong><ul><li>剔除正面</li><li>关闭深度写入，对背面进行深度测试，设置为Less</li></ul></li><li><strong>Pass4：</strong><ul><li>剔除背面</li><li>关闭深度写入，对正面进行深度测试，设置为Less</li></ul></li></ol></li></ul><hr><p><a href="https://www.cnblogs.com/ghl_carmack/p/10166291.html">https://www.cnblogs.com/ghl_carmack/p/10166291.html</a></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Homework.gif" alt="Homework"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-Review-Z-test&quot;&gt;&lt;a href=&quot;#a-Review-Z-test&quot; class=&quot;headerlink&quot; title=&quot;a). Review Z-test&quot;&gt;&lt;/a&gt;a). Review Z-test&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;先回顾下深度测试&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png&quot; alt=&quot;ZTest_Workflow&quot; style=&quot;zoom:50%;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;问题：&lt;/strong&gt; 被遮挡的物体也会进行shading，造成overdraw；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png&quot; alt=&quot;Overdraw&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;解决思路：&lt;/strong&gt; 在shading前提前剔除被遮挡的片元；&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;b-Early-Z&quot;&gt;&lt;a href=&quot;#b-Early-Z&quot; class=&quot;headerlink&quot; title=&quot;b). Early-Z&quot;&gt;&lt;/a&gt;b). Early-Z&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png&quot; alt=&quot;Early-Z&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。&lt;ul&gt;
-&lt;li&gt;提前的深度测试叫作&lt;strong&gt;Z-Cull&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;后续的深度测试为了确定正确的遮挡关系，叫作&lt;strong&gt;Z-Check&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;em&gt;Early-Z同样可以搭配使用模板测试&lt;/em&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;b-1-Early-Z失效情况&quot;&gt;&lt;a href=&quot;#b-1-Early-Z失效情况&quot; class=&quot;headerlink&quot; title=&quot;b.1). Early-Z失效情况&quot;&gt;&lt;/a&gt;b.1). Early-Z失效情况&lt;/h2&gt;&lt;ol&gt;
-&lt;li&gt;开启&lt;strong&gt;Alpha Test&lt;/strong&gt;或 clip/discard等手动丢弃片元操作&lt;ul&gt;
-&lt;li&gt;通常Early-Z不仅会进行深度测试，还要进行深度写入&lt;/li&gt;
-&lt;li&gt;那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;手动修改GPU插值得到的深度&lt;/li&gt;
-&lt;li&gt;开启&lt;strong&gt;Alpha Blend&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;关闭深度测试Depth Test&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;b-2-Early-Z排序&quot;&gt;&lt;a href=&quot;#b-2-Early-Z排序&quot; class=&quot;headerlink&quot; title=&quot;b.2). Early-Z排序&quot;&gt;&lt;/a&gt;b.2). Early-Z排序&lt;/h2&gt;&lt;h3 id=&quot;不透明物体由远往近渲染，early-z将没有任何优化效果&quot;&gt;&lt;a href=&quot;#不透明物体由远往近渲染，early-z将没有任何优化效果&quot; class=&quot;headerlink&quot; title=&quot;不透明物体由远往近渲染，early-z将没有任何优化效果&quot;&gt;&lt;/a&gt;不透明物体由远往近渲染，early-z将没有任何优化效果&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;在渲染前，将不透明物体&lt;strong&gt;从近往远渲染&lt;/strong&gt;的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;具体怎么排序？ &lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;问题：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;复杂的场景，CPU性能消耗很大&lt;/li&gt;
-&lt;li&gt;严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;解决方法：Pre-Z / Z Prepass&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="延迟渲染" scheme="https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/"/>
-    
-    <category term="渲染管线" scheme="https://whitetail-o.github.io/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
-    
-  </entry>
-  
-  <entry>
     <title>HPP_Graphics_3.4 前向渲染与延迟渲染</title>
     <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
     <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</id>
@@ -761,6 +688,79 @@
 &lt;h2 id=&quot;b-2-延迟渲染（Deferred-Rendering）&quot;&gt;&lt;a href=&quot;#b-2-延迟渲染（Deferred-Rendering）&quot; class=&quot;headerlink&quot; title=&quot;b.2). 延迟渲染（Deferred Rendering）&quot;&gt;&lt;/a&gt;b.2). 延迟渲染（Deferred Rendering）&lt;/h2&gt;&lt;h3 id=&quot;b-2-1-简介&quot;&gt;&lt;a href=&quot;#b-2-1-简介&quot; class=&quot;headerlink&quot; title=&quot;b.2.1). 简介&quot;&gt;&lt;/a&gt;b.2.1). 简介&lt;/h3&gt;&lt;p&gt;主要解决&lt;strong&gt;大量光照渲染&lt;/strong&gt;的方案。&lt;/p&gt;
 &lt;p&gt;可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即&lt;strong&gt;G-buffer&lt;/strong&gt;，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染&lt;strong&gt;基本思想&lt;/strong&gt;是，&lt;strong&gt;先执行深度测试（应该也包括其他测试），再进行着色计算&lt;/strong&gt;，将本来在物空间（三维空间）进行光照计算放到了&lt;strong&gt;像空间&lt;/strong&gt;（二维空间）进行处理。&lt;/p&gt;
 &lt;p&gt;对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="延迟渲染" scheme="https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/"/>
+    
+    <category term="渲染管线" scheme="https://whitetail-o.github.io/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/</id>
+    <published>2023-02-15T10:40:32.000Z</published>
+    <updated>2023-03-17T05:10:35.950Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul><li>先回顾下深度测试</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p><ul><li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p><ul><li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li></ul></li></ul><h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p><ul><li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul><li>提前的深度测试叫作<strong>Z-Cull</strong></li><li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li></ul></li><li><em>Early-Z同样可以搭配使用模板测试</em></li></ul><h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol><li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul><li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li><li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li></ul></li><li>手动修改GPU插值得到的深度</li><li>开启<strong>Alpha Blend</strong></li><li>关闭深度测试Depth Test</li></ol><h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul><li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li><li><p>具体怎么排序？ </p><ul><li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li></ul></li><li><p>问题：</p><ul><li>复杂的场景，CPU性能消耗很大</li><li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li></ul></li><li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p></li></ul><span id="more"></span><h1 id="c-Pre-Z"><a href="#c-Pre-Z" class="headerlink" title="c). Pre-Z"></a>c). Pre-Z</h1><ul><li>用于解决使用early-Z可能造成的Overdraw问题（用Drawcall或Set Pass Call的消耗换取减少Overdraw，因此使用时需要进行权衡）</li></ul><h2 id="Method1-双Pass"><a href="#Method1-双Pass" class="headerlink" title="Method1: 双Pass"></a>Method1: 双Pass</h2><p>使用两个Pass：</p><ul><li><p>第一个Pass（<strong>Z-Prepass</strong>）：仅写入深度；</p></li><li><p>第二个Pass：关闭深度写入，并将深度测试比较符改为等于；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/D-pass_shader.png" alt="D-pass_shader" style="zoom: 33%;"></p></li></ul><p>造成问题：</p><ol><li><p>在Unity中，无法动态批处理（多Pass的Shader无法进行动态批处理）</p></li><li><p>增多DrawCall；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Z_Pre_Drawcall.png" alt="Z_Pre_Drawcall" style="zoom: 33%;"></p></li></ol><p>因此，我们可以提前分离Prepass，以便其可以<a href="https://blog.csdn.net/lsjsoft/article/details/90734932">进行动态批处理，减少Set pass call</a></p><h2 id="Method2-提前分离的Prepass"><a href="#Method2-提前分离的Prepass" class="headerlink" title="Method2: 提前分离的Prepass"></a>Method2: 提前分离的Prepass</h2><ul><li>将Z-Prepass分离出一个shader，用这个shader将场景中不透明物体先渲染一遍；</li><li>而原先材质只剩下原先的第二个Pass，仍然关闭深度写入，并且将深度比较函数设置为相等。</li></ul><blockquote><p>URP以后并不是所有Pass都会执行，因为它预制了两个Pass所以，优先执行”UniversalForward”在执行”SrpDefaultUnlit”的Pass</p><p>……</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/RendererFeature.png" alt="RendererFeature" style="zoom:33%;"></p><p>Link: <a href="https://www.xuanyusong.com/archives/4759">https://www.xuanyusong.com/archives/4759</a></p></blockquote><hr><h2 id="半透明渲染"><a href="#半透明渲染" class="headerlink" title="半透明渲染"></a>半透明渲染</h2><p>Pre-Z也是半透明物体渲染的解决方案；</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/PreZ_Translution.png" alt="PreZ_Translution"></p><h2 id="Z-prepass的其他问题"><a href="#Z-prepass的其他问题" class="headerlink" title="Z-prepass的其他问题"></a>Z-prepass的其他问题</h2><h3 id="1-Z-prepass的性能消耗是否能被忽视"><a href="#1-Z-prepass的性能消耗是否能被忽视" class="headerlink" title="1.Z-prepass的性能消耗是否能被忽视"></a>1.Z-prepass的性能消耗是否能被忽视</h3><ul><li><p>国外论坛一位名为lipsryme的老哥做了一项实验：</p></li><li><ul><li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1626442429385-0bab8f18-7ba4-44cb-96b5-4f123055a263.png" alt="img"></li><li>可以看到，Z-prepass的消耗为2.0ms，而带来的优化只减少了0.3ms（2.7-2.4）</li><li>后续讨论中，发现Z-prepass是需要根据项目的实际情况来决定是否采用的。</li></ul></li><li><p><strong>总结有以下建议</strong></p></li><li><ul><li>当一个有非常多OverDraw的场景，且不能很好的将不透明物体从前往后进行排序时，可以考虑使用PreZ进行优化</li><li>注意，PreZ会增加DrawCall，如果用错了可能是负优化</li></ul></li></ul><h1 id="d-Early-Z-和-Z-Prepass的实例应用"><a href="#d-Early-Z-和-Z-Prepass的实例应用" class="headerlink" title="d). Early-Z 和 Z-Prepass的实例应用"></a>d). <strong>Early-Z</strong> <strong>和</strong> Z-Prepass的实例应用</h1><h2 id="d-1-面片叠加的头发渲染"><a href="#d-1-面片叠加的头发渲染" class="headerlink" title="d.1). 面片叠加的头发渲染"></a>d.1). 面片叠加的头发渲染</h2><ul><li><p>对于半透明的面片来说，需要从后往前进行排序渲染才能得到正确的透明度混合结果</p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ00.png" alt="Hair_PreZ00"></p></li></ul><hr><ul><li><p><strong>排序后头发的渲染</strong></p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ01.png" alt="Hair_PreZ01"></p></li><li><p>分为3个pass</p><ul><li><p>pass1</p><ul><li>处理不透明部分，开启Alpha test透明度测试，仅通过不透明的像素，</li><li>关闭背面剔除</li><li>开启深度写入</li></ul></li><li><p>pass2</p><ul><li>剔除正面，渲染背面</li></ul></li><li>pass3<ul><li>剔除背面，渲染正面</li></ul></li></ul></li></ul><ul><li>问题：会带来非常多<strong>OverDraw</strong>的问题<ul><li>解决方法：Pre-Z</li></ul></li></ul><hr><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ02.png" alt="Hair_PreZ02"></p><ul><li>使用Early-Z剔除</li><li>透明度测试开启时Early-Z无法使用的解决方案：使用Z-Prepass  <ul><li>使用一个简单的shader进行Alpha Test生成Z-Buffer</li></ul></li></ul><hr><p><strong>改善后的渲染方案：</strong></p><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ03.png" alt="Hair_PreZ03"></p><ul><li><strong>不透明物体</strong><ol><li><strong>Pass1 - PreZ</strong>：<ul><li>开启透明度测试</li><li>关闭背面剔除</li><li>开启深度写入，深度测试设置为Less</li><li>关闭颜色缓冲区写入</li><li>用于一个简单的片元着色器来返回透明度值</li></ul></li><li><strong>Pass2：</strong><ul><li>关闭背面剔除</li><li>关闭深度写入，深度测试设置为Equal</li></ul></li></ol></li><li><strong>半透明物体</strong><ol><li><strong>Pass3：</strong><ul><li>剔除正面</li><li>关闭深度写入，对背面进行深度测试，设置为Less</li></ul></li><li><strong>Pass4：</strong><ul><li>剔除背面</li><li>关闭深度写入，对正面进行深度测试，设置为Less</li></ul></li></ol></li></ul><hr><p><a href="https://www.cnblogs.com/ghl_carmack/p/10166291.html">https://www.cnblogs.com/ghl_carmack/p/10166291.html</a></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Homework.gif" alt="Homework"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-Review-Z-test&quot;&gt;&lt;a href=&quot;#a-Review-Z-test&quot; class=&quot;headerlink&quot; title=&quot;a). Review Z-test&quot;&gt;&lt;/a&gt;a). Review Z-test&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;先回顾下深度测试&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png&quot; alt=&quot;ZTest_Workflow&quot; style=&quot;zoom:50%;&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;问题：&lt;/strong&gt; 被遮挡的物体也会进行shading，造成overdraw；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png&quot; alt=&quot;Overdraw&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;解决思路：&lt;/strong&gt; 在shading前提前剔除被遮挡的片元；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;b-Early-Z&quot;&gt;&lt;a href=&quot;#b-Early-Z&quot; class=&quot;headerlink&quot; title=&quot;b). Early-Z&quot;&gt;&lt;/a&gt;b). Early-Z&lt;/h1&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png&quot; alt=&quot;Early-Z&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。&lt;ul&gt;
+&lt;li&gt;提前的深度测试叫作&lt;strong&gt;Z-Cull&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;后续的深度测试为了确定正确的遮挡关系，叫作&lt;strong&gt;Z-Check&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Early-Z同样可以搭配使用模板测试&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;b-1-Early-Z失效情况&quot;&gt;&lt;a href=&quot;#b-1-Early-Z失效情况&quot; class=&quot;headerlink&quot; title=&quot;b.1). Early-Z失效情况&quot;&gt;&lt;/a&gt;b.1). Early-Z失效情况&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;开启&lt;strong&gt;Alpha Test&lt;/strong&gt;或 clip/discard等手动丢弃片元操作&lt;ul&gt;
+&lt;li&gt;通常Early-Z不仅会进行深度测试，还要进行深度写入&lt;/li&gt;
+&lt;li&gt;那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;手动修改GPU插值得到的深度&lt;/li&gt;
+&lt;li&gt;开启&lt;strong&gt;Alpha Blend&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;关闭深度测试Depth Test&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;b-2-Early-Z排序&quot;&gt;&lt;a href=&quot;#b-2-Early-Z排序&quot; class=&quot;headerlink&quot; title=&quot;b.2). Early-Z排序&quot;&gt;&lt;/a&gt;b.2). Early-Z排序&lt;/h2&gt;&lt;h3 id=&quot;不透明物体由远往近渲染，early-z将没有任何优化效果&quot;&gt;&lt;a href=&quot;#不透明物体由远往近渲染，early-z将没有任何优化效果&quot; class=&quot;headerlink&quot; title=&quot;不透明物体由远往近渲染，early-z将没有任何优化效果&quot;&gt;&lt;/a&gt;不透明物体由远往近渲染，early-z将没有任何优化效果&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;在渲染前，将不透明物体&lt;strong&gt;从近往远渲染&lt;/strong&gt;的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;具体怎么排序？ &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;问题：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;复杂的场景，CPU性能消耗很大&lt;/li&gt;
+&lt;li&gt;严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;解决方法：Pre-Z / Z Prepass&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
     
     
     
