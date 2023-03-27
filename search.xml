@@ -840,8 +840,8 @@ D(h)=\frac{e^{-\frac{\tan ^{2} \theta_{h}}{\alpha^{2}}}}{\pi \alpha^{2} \cos ^{4
       </categories>
       <tags>
         <tag>图形学</tag>
-        <tag>Materials</tag>
         <tag>Games202</tag>
+        <tag>Materials</tag>
         <tag>PBR</tag>
       </tags>
   </entry>
@@ -992,109 +992,6 @@ D(h)=\frac{e^{-\frac{\tan ^{2} \theta_{h}}{\alpha^{2}}}}{\pi \alpha^{2} \cos ^{4
 </ul>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>百人计划</category>
-      </categories>
-      <tags>
-        <tag>图形学</tag>
-        <tag>百人计划</tag>
-        <tag>效果</tag>
-        <tag>算法</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HPP_Graphics_4.2 SSAO</title>
-    <url>/2023/02/15/HPP_Graphics_4.2_SSAO/</url>
-    <content><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p>
-<h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p>
-<h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p>
-<ol>
-<li><p>获取深度、法线（View Space）缓冲；</p>
-<ul>
-<li><p>Normal Buffer：</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p>
-</li>
-</ul>
-</li>
-<li><p>重构像素相机空间中的坐标；</p>
-<ul>
-<li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p>
-<ul>
-<li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p>
-<ul>
-<li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li>
-</ul>
-</li>
-</ol>
-<span id="more"></span>
-<h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p>
-<p>SSAO的shader中共有三个Pass：</p>
-<ol>
-<li>计算生成AO；</li>
-<li>模糊 / 滤波</li>
-<li>AO与Color buffer混合；</li>
-</ol>
-<h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p>
-<p>在采样块中循环生成采样点，判断是否被遮蔽</p>
-<p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p>
-<p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p>
-<ol>
-<li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p>
-</li>
-</ol>
-<ol>
-<li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p>
-</li>
-<li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p>
-</li>
-<li><p>将此前生成的随机向量转换到法线空间中。</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p>
-<p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p>
-<p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p>
-</li>
-</ol>
-<h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p>
-<h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p>
-<p>在c#脚本中需要加入渲染路径的判断</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p>
-<h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p>
-<h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p>
-<table frame="void">
-    <tr>
-    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>
-    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>
-    </tr>
-</table>
-
-<hr>
-<p>这场景好像不太明显，只有在大图里看的清楚，</p>
-<h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p>
-<table frame="void">
-    <tr>
-    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>
-    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>
-    </tr>
-</table>
-
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p>
-<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>
 ]]></content>
       <categories>
         <category>百人计划</category>
@@ -1366,6 +1263,109 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
         <tag>百人计划</tag>
         <tag>算法</tag>
         <tag>阴影</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HPP_Graphics_4.2 SSAO</title>
+    <url>/2023/02/15/HPP_Graphics_4.2_SSAO/</url>
+    <content><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p>
+<h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p>
+<h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p>
+<ol>
+<li><p>获取深度、法线（View Space）缓冲；</p>
+<ul>
+<li><p>Normal Buffer：</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p>
+</li>
+</ul>
+</li>
+<li><p>重构像素相机空间中的坐标；</p>
+<ul>
+<li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p>
+<ul>
+<li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p>
+<ul>
+<li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li>
+</ul>
+</li>
+</ol>
+<span id="more"></span>
+<h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p>
+<p>SSAO的shader中共有三个Pass：</p>
+<ol>
+<li>计算生成AO；</li>
+<li>模糊 / 滤波</li>
+<li>AO与Color buffer混合；</li>
+</ol>
+<h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p>
+<p>在采样块中循环生成采样点，判断是否被遮蔽</p>
+<p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p>
+<p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p>
+<ol>
+<li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p>
+</li>
+</ol>
+<ol>
+<li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p>
+</li>
+<li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p>
+</li>
+<li><p>将此前生成的随机向量转换到法线空间中。</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p>
+<p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p>
+<p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p>
+</li>
+</ol>
+<h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p>
+<h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p>
+<p>在c#脚本中需要加入渲染路径的判断</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p>
+<h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p>
+<h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p>
+<table frame="void">
+    <tr>
+    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>
+    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>
+    </tr>
+</table>
+
+<hr>
+<p>这场景好像不太明显，只有在大图里看的清楚，</p>
+<h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p>
+<table frame="void">
+    <tr>
+    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>
+    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>
+    </tr>
+</table>
+
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p>
+<p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>
+]]></content>
+      <categories>
+        <category>百人计划</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>百人计划</tag>
+        <tag>效果</tag>
+        <tag>算法</tag>
       </tags>
   </entry>
   <entry>
@@ -1767,6 +1767,201 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
       </tags>
   </entry>
   <entry>
+    <title>HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</title>
+    <url>/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/</url>
+    <content><![CDATA[<h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
+<li>先回顾下深度测试</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
+<ul>
+<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
+<ul>
+<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
+</ul>
+</li>
+</ul>
+<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
+<ul>
+<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
+<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
+<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
+</ul>
+</li>
+<li><em>Early-Z同样可以搭配使用模板测试</em></li>
+</ul>
+<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
+<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
+<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
+<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
+</ul>
+</li>
+<li>手动修改GPU插值得到的深度</li>
+<li>开启<strong>Alpha Blend</strong></li>
+<li>关闭深度测试Depth Test</li>
+</ol>
+<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
+<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
+<li><p>具体怎么排序？ </p>
+<ul>
+<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
+</ul>
+</li>
+<li><p>问题：</p>
+<ul>
+<li>复杂的场景，CPU性能消耗很大</li>
+<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
+</ul>
+</li>
+<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="c-Pre-Z"><a href="#c-Pre-Z" class="headerlink" title="c). Pre-Z"></a>c). Pre-Z</h1><ul>
+<li>用于解决使用early-Z可能造成的Overdraw问题（用Drawcall或Set Pass Call的消耗换取减少Overdraw，因此使用时需要进行权衡）</li>
+</ul>
+<h2 id="Method1-双Pass"><a href="#Method1-双Pass" class="headerlink" title="Method1: 双Pass"></a>Method1: 双Pass</h2><p>使用两个Pass：</p>
+<ul>
+<li><p>第一个Pass（<strong>Z-Prepass</strong>）：仅写入深度；</p>
+</li>
+<li><p>第二个Pass：关闭深度写入，并将深度测试比较符改为等于；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/D-pass_shader.png" alt="D-pass_shader" style="zoom: 33%;"></p>
+</li>
+</ul>
+<p>造成问题：</p>
+<ol>
+<li><p>在Unity中，无法动态批处理（多Pass的Shader无法进行动态批处理）</p>
+</li>
+<li><p>增多DrawCall；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Z_Pre_Drawcall.png" alt="Z_Pre_Drawcall" style="zoom: 33%;"></p>
+</li>
+</ol>
+<p>因此，我们可以提前分离Prepass，以便其可以<a href="https://blog.csdn.net/lsjsoft/article/details/90734932">进行动态批处理，减少Set pass call</a></p>
+<h2 id="Method2-提前分离的Prepass"><a href="#Method2-提前分离的Prepass" class="headerlink" title="Method2: 提前分离的Prepass"></a>Method2: 提前分离的Prepass</h2><ul>
+<li>将Z-Prepass分离出一个shader，用这个shader将场景中不透明物体先渲染一遍；</li>
+<li>而原先材质只剩下原先的第二个Pass，仍然关闭深度写入，并且将深度比较函数设置为相等。</li>
+</ul>
+<blockquote>
+<p>URP以后并不是所有Pass都会执行，因为它预制了两个Pass所以，优先执行”UniversalForward”在执行”SrpDefaultUnlit”的Pass</p>
+<p>……</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/RendererFeature.png" alt="RendererFeature" style="zoom:33%;"></p>
+<p>Link: <a href="https://www.xuanyusong.com/archives/4759">https://www.xuanyusong.com/archives/4759</a></p>
+</blockquote>
+<hr>
+<h2 id="半透明渲染"><a href="#半透明渲染" class="headerlink" title="半透明渲染"></a>半透明渲染</h2><p>Pre-Z也是半透明物体渲染的解决方案；</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/PreZ_Translution.png" alt="PreZ_Translution"></p>
+<h2 id="Z-prepass的其他问题"><a href="#Z-prepass的其他问题" class="headerlink" title="Z-prepass的其他问题"></a>Z-prepass的其他问题</h2><h3 id="1-Z-prepass的性能消耗是否能被忽视"><a href="#1-Z-prepass的性能消耗是否能被忽视" class="headerlink" title="1.Z-prepass的性能消耗是否能被忽视"></a>1.Z-prepass的性能消耗是否能被忽视</h3><ul>
+<li><p>国外论坛一位名为lipsryme的老哥做了一项实验：</p>
+</li>
+<li><ul>
+<li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1626442429385-0bab8f18-7ba4-44cb-96b5-4f123055a263.png" alt="img"></li>
+<li>可以看到，Z-prepass的消耗为2.0ms，而带来的优化只减少了0.3ms（2.7-2.4）</li>
+<li>后续讨论中，发现Z-prepass是需要根据项目的实际情况来决定是否采用的。</li>
+</ul>
+</li>
+<li><p><strong>总结有以下建议</strong></p>
+</li>
+<li><ul>
+<li>当一个有非常多OverDraw的场景，且不能很好的将不透明物体从前往后进行排序时，可以考虑使用PreZ进行优化</li>
+<li>注意，PreZ会增加DrawCall，如果用错了可能是负优化</li>
+</ul>
+</li>
+</ul>
+<h1 id="d-Early-Z-和-Z-Prepass的实例应用"><a href="#d-Early-Z-和-Z-Prepass的实例应用" class="headerlink" title="d). Early-Z 和 Z-Prepass的实例应用"></a>d). <strong>Early-Z</strong> <strong>和</strong> Z-Prepass的实例应用</h1><h2 id="d-1-面片叠加的头发渲染"><a href="#d-1-面片叠加的头发渲染" class="headerlink" title="d.1). 面片叠加的头发渲染"></a>d.1). 面片叠加的头发渲染</h2><ul>
+<li><p>对于半透明的面片来说，需要从后往前进行排序渲染才能得到正确的透明度混合结果</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ00.png" alt="Hair_PreZ00"></p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p><strong>排序后头发的渲染</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ01.png" alt="Hair_PreZ01"></p>
+</li>
+<li><p>分为3个pass</p>
+<ul>
+<li><p>pass1</p>
+<ul>
+<li>处理不透明部分，开启Alpha test透明度测试，仅通过不透明的像素，</li>
+<li>关闭背面剔除</li>
+<li>开启深度写入</li>
+</ul>
+</li>
+<li><p>pass2</p>
+<ul>
+<li>剔除正面，渲染背面</li>
+</ul>
+</li>
+<li>pass3<ul>
+<li>剔除背面，渲染正面</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>问题：会带来非常多<strong>OverDraw</strong>的问题<ul>
+<li>解决方法：Pre-Z</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ02.png" alt="Hair_PreZ02"></p>
+<ul>
+<li>使用Early-Z剔除</li>
+<li>透明度测试开启时Early-Z无法使用的解决方案：使用Z-Prepass  <ul>
+<li>使用一个简单的shader进行Alpha Test生成Z-Buffer</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><strong>改善后的渲染方案：</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ03.png" alt="Hair_PreZ03"></p>
+<ul>
+<li><strong>不透明物体</strong><ol>
+<li><strong>Pass1 - PreZ</strong>：<ul>
+<li>开启透明度测试</li>
+<li>关闭背面剔除</li>
+<li>开启深度写入，深度测试设置为Less</li>
+<li>关闭颜色缓冲区写入</li>
+<li>用于一个简单的片元着色器来返回透明度值</li>
+</ul>
+</li>
+<li><strong>Pass2：</strong><ul>
+<li>关闭背面剔除</li>
+<li>关闭深度写入，深度测试设置为Equal</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><strong>半透明物体</strong><ol>
+<li><strong>Pass3：</strong><ul>
+<li>剔除正面</li>
+<li>关闭深度写入，对背面进行深度测试，设置为Less</li>
+</ul>
+</li>
+<li><strong>Pass4：</strong><ul>
+<li>剔除背面</li>
+<li>关闭深度写入，对正面进行深度测试，设置为Less</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<p><a href="https://www.cnblogs.com/ghl_carmack/p/10166291.html">https://www.cnblogs.com/ghl_carmack/p/10166291.html</a></p>
+<h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Homework.gif" alt="Homework"></p>
+]]></content>
+      <categories>
+        <category>百人计划</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>百人计划</tag>
+        <tag>延迟渲染</tag>
+        <tag>渲染管线</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HPP_Graphics_3.4 前向渲染与延迟渲染</title>
     <url>/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</url>
     <content><![CDATA[<h1 id="a-渲染路径"><a href="#a-渲染路径" class="headerlink" title="a). 渲染路径"></a>a). 渲染路径</h1><ul>
@@ -1957,201 +2152,6 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
 <h2 id="资料补充："><a href="#资料补充：" class="headerlink" title="资料补充："></a>资料补充：</h2><p><a href="https://zhuanlan.zhihu.com/p/259760974">https://zhuanlan.zhihu.com/p/259760974</a></p>
 <p><a href="https://www.cnblogs.com/timlly/p/11471507.html">https://www.cnblogs.com/timlly/p/11471507.html</a></p>
 <p><a href="https://zhuanlan.zhihu.com/p/112120206">https://zhuanlan.zhihu.com/p/112120206</a></p>
-]]></content>
-      <categories>
-        <category>百人计划</category>
-      </categories>
-      <tags>
-        <tag>图形学</tag>
-        <tag>百人计划</tag>
-        <tag>延迟渲染</tag>
-        <tag>渲染管线</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</title>
-    <url>/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/</url>
-    <content><![CDATA[<h1 id="a-Review-Z-test"><a href="#a-Review-Z-test" class="headerlink" title="a). Review Z-test"></a>a). Review Z-test</h1><ul>
-<li>先回顾下深度测试</li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/ZTest_Workflow.png" alt="ZTest_Workflow" style="zoom:50%;"></p>
-<ul>
-<li><p><strong>问题：</strong> 被遮挡的物体也会进行shading，造成overdraw；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Overdraw.png" alt="Overdraw"></p>
-<ul>
-<li><strong>解决思路：</strong> 在shading前提前剔除被遮挡的片元；</li>
-</ul>
-</li>
-</ul>
-<h1 id="b-Early-Z"><a href="#b-Early-Z" class="headerlink" title="b). Early-Z"></a>b). Early-Z</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Early-Z.png" alt="Early-Z"></p>
-<ul>
-<li>是在传统管线中的光栅化阶段之后、片元着色器之前加的一步操作。<ul>
-<li>提前的深度测试叫作<strong>Z-Cull</strong></li>
-<li>后续的深度测试为了确定正确的遮挡关系，叫作<strong>Z-Check</strong></li>
-</ul>
-</li>
-<li><em>Early-Z同样可以搭配使用模板测试</em></li>
-</ul>
-<h2 id="b-1-Early-Z失效情况"><a href="#b-1-Early-Z失效情况" class="headerlink" title="b.1). Early-Z失效情况"></a>b.1). Early-Z失效情况</h2><ol>
-<li>开启<strong>Alpha Test</strong>或 clip/discard等手动丢弃片元操作<ul>
-<li>通常Early-Z不仅会进行深度测试，还要进行深度写入</li>
-<li>那在这种情况下，如果经过AlphaTest，前面渲染的片元被丢弃了（但写入了深度），那么后续的像素都将无法正常渲染。</li>
-</ul>
-</li>
-<li>手动修改GPU插值得到的深度</li>
-<li>开启<strong>Alpha Blend</strong></li>
-<li>关闭深度测试Depth Test</li>
-</ol>
-<h2 id="b-2-Early-Z排序"><a href="#b-2-Early-Z排序" class="headerlink" title="b.2). Early-Z排序"></a>b.2). Early-Z排序</h2><h3 id="不透明物体由远往近渲染，early-z将没有任何优化效果"><a href="#不透明物体由远往近渲染，early-z将没有任何优化效果" class="headerlink" title="不透明物体由远往近渲染，early-z将没有任何优化效果"></a>不透明物体由远往近渲染，early-z将没有任何优化效果</h3><ul>
-<li>在渲染前，将不透明物体<strong>从近往远渲染</strong>的话，Early-Z能发挥最大的性能优化（注意此处还是前向渲染的思路）</li>
-<li><p>具体怎么排序？ </p>
-<ul>
-<li>可以让CPU将物体按照由近到远的顺序排好，再交付给GPU进行渲染</li>
-</ul>
-</li>
-<li><p>问题：</p>
-<ul>
-<li>复杂的场景，CPU性能消耗很大</li>
-<li>严格按照由近到远的顺序渲染，将不能同时搭配批处理优化手段。</li>
-</ul>
-</li>
-<li><p><strong>解决方法：Pre-Z / Z Prepass</strong></p>
-</li>
-</ul>
-<span id="more"></span>
-<h1 id="c-Pre-Z"><a href="#c-Pre-Z" class="headerlink" title="c). Pre-Z"></a>c). Pre-Z</h1><ul>
-<li>用于解决使用early-Z可能造成的Overdraw问题（用Drawcall或Set Pass Call的消耗换取减少Overdraw，因此使用时需要进行权衡）</li>
-</ul>
-<h2 id="Method1-双Pass"><a href="#Method1-双Pass" class="headerlink" title="Method1: 双Pass"></a>Method1: 双Pass</h2><p>使用两个Pass：</p>
-<ul>
-<li><p>第一个Pass（<strong>Z-Prepass</strong>）：仅写入深度；</p>
-</li>
-<li><p>第二个Pass：关闭深度写入，并将深度测试比较符改为等于；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/D-pass_shader.png" alt="D-pass_shader" style="zoom: 33%;"></p>
-</li>
-</ul>
-<p>造成问题：</p>
-<ol>
-<li><p>在Unity中，无法动态批处理（多Pass的Shader无法进行动态批处理）</p>
-</li>
-<li><p>增多DrawCall；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Z_Pre_Drawcall.png" alt="Z_Pre_Drawcall" style="zoom: 33%;"></p>
-</li>
-</ol>
-<p>因此，我们可以提前分离Prepass，以便其可以<a href="https://blog.csdn.net/lsjsoft/article/details/90734932">进行动态批处理，减少Set pass call</a></p>
-<h2 id="Method2-提前分离的Prepass"><a href="#Method2-提前分离的Prepass" class="headerlink" title="Method2: 提前分离的Prepass"></a>Method2: 提前分离的Prepass</h2><ul>
-<li>将Z-Prepass分离出一个shader，用这个shader将场景中不透明物体先渲染一遍；</li>
-<li>而原先材质只剩下原先的第二个Pass，仍然关闭深度写入，并且将深度比较函数设置为相等。</li>
-</ul>
-<blockquote>
-<p>URP以后并不是所有Pass都会执行，因为它预制了两个Pass所以，优先执行”UniversalForward”在执行”SrpDefaultUnlit”的Pass</p>
-<p>……</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/RendererFeature.png" alt="RendererFeature" style="zoom:33%;"></p>
-<p>Link: <a href="https://www.xuanyusong.com/archives/4759">https://www.xuanyusong.com/archives/4759</a></p>
-</blockquote>
-<hr>
-<h2 id="半透明渲染"><a href="#半透明渲染" class="headerlink" title="半透明渲染"></a>半透明渲染</h2><p>Pre-Z也是半透明物体渲染的解决方案；</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/PreZ_Translution.png" alt="PreZ_Translution"></p>
-<h2 id="Z-prepass的其他问题"><a href="#Z-prepass的其他问题" class="headerlink" title="Z-prepass的其他问题"></a>Z-prepass的其他问题</h2><h3 id="1-Z-prepass的性能消耗是否能被忽视"><a href="#1-Z-prepass的性能消耗是否能被忽视" class="headerlink" title="1.Z-prepass的性能消耗是否能被忽视"></a>1.Z-prepass的性能消耗是否能被忽视</h3><ul>
-<li><p>国外论坛一位名为lipsryme的老哥做了一项实验：</p>
-</li>
-<li><ul>
-<li><img src="https://cdn.nlark.com/yuque/0/2021/png/12962324/1626442429385-0bab8f18-7ba4-44cb-96b5-4f123055a263.png" alt="img"></li>
-<li>可以看到，Z-prepass的消耗为2.0ms，而带来的优化只减少了0.3ms（2.7-2.4）</li>
-<li>后续讨论中，发现Z-prepass是需要根据项目的实际情况来决定是否采用的。</li>
-</ul>
-</li>
-<li><p><strong>总结有以下建议</strong></p>
-</li>
-<li><ul>
-<li>当一个有非常多OverDraw的场景，且不能很好的将不透明物体从前往后进行排序时，可以考虑使用PreZ进行优化</li>
-<li>注意，PreZ会增加DrawCall，如果用错了可能是负优化</li>
-</ul>
-</li>
-</ul>
-<h1 id="d-Early-Z-和-Z-Prepass的实例应用"><a href="#d-Early-Z-和-Z-Prepass的实例应用" class="headerlink" title="d). Early-Z 和 Z-Prepass的实例应用"></a>d). <strong>Early-Z</strong> <strong>和</strong> Z-Prepass的实例应用</h1><h2 id="d-1-面片叠加的头发渲染"><a href="#d-1-面片叠加的头发渲染" class="headerlink" title="d.1). 面片叠加的头发渲染"></a>d.1). 面片叠加的头发渲染</h2><ul>
-<li><p>对于半透明的面片来说，需要从后往前进行排序渲染才能得到正确的透明度混合结果</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ00.png" alt="Hair_PreZ00"></p>
-</li>
-</ul>
-<hr>
-<ul>
-<li><p><strong>排序后头发的渲染</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ01.png" alt="Hair_PreZ01"></p>
-</li>
-<li><p>分为3个pass</p>
-<ul>
-<li><p>pass1</p>
-<ul>
-<li>处理不透明部分，开启Alpha test透明度测试，仅通过不透明的像素，</li>
-<li>关闭背面剔除</li>
-<li>开启深度写入</li>
-</ul>
-</li>
-<li><p>pass2</p>
-<ul>
-<li>剔除正面，渲染背面</li>
-</ul>
-</li>
-<li>pass3<ul>
-<li>剔除背面，渲染正面</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li>问题：会带来非常多<strong>OverDraw</strong>的问题<ul>
-<li>解决方法：Pre-Z</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ02.png" alt="Hair_PreZ02"></p>
-<ul>
-<li>使用Early-Z剔除</li>
-<li>透明度测试开启时Early-Z无法使用的解决方案：使用Z-Prepass  <ul>
-<li>使用一个简单的shader进行Alpha Test生成Z-Buffer</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p><strong>改善后的渲染方案：</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Hair_PreZ03.png" alt="Hair_PreZ03"></p>
-<ul>
-<li><strong>不透明物体</strong><ol>
-<li><strong>Pass1 - PreZ</strong>：<ul>
-<li>开启透明度测试</li>
-<li>关闭背面剔除</li>
-<li>开启深度写入，深度测试设置为Less</li>
-<li>关闭颜色缓冲区写入</li>
-<li>用于一个简单的片元着色器来返回透明度值</li>
-</ul>
-</li>
-<li><strong>Pass2：</strong><ul>
-<li>关闭背面剔除</li>
-<li>关闭深度写入，深度测试设置为Equal</li>
-</ul>
-</li>
-</ol>
-</li>
-<li><strong>半透明物体</strong><ol>
-<li><strong>Pass3：</strong><ul>
-<li>剔除正面</li>
-<li>关闭深度写入，对背面进行深度测试，设置为Less</li>
-</ul>
-</li>
-<li><strong>Pass4：</strong><ul>
-<li>剔除背面</li>
-<li>关闭深度写入，对正面进行深度测试，设置为Less</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<hr>
-<p><a href="https://www.cnblogs.com/ghl_carmack/p/10166291.html">https://www.cnblogs.com/ghl_carmack/p/10166291.html</a></p>
-<h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><p><img src="/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/Homework.gif" alt="Homework"></p>
 ]]></content>
       <categories>
         <category>百人计划</category>
@@ -2832,8 +2832,8 @@ F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }
       <tags>
         <tag>图形学</tag>
         <tag>百人计划</tag>
-        <tag>材质</tag>
         <tag>模型</tag>
+        <tag>材质</tag>
       </tags>
   </entry>
   <entry>
@@ -2984,6 +2984,77 @@ F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }
       </tags>
   </entry>
   <entry>
+    <title>HPP_Graphics_1.2.3 MVP矩阵运算</title>
+    <url>/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/</url>
+    <content><![CDATA[<h2 id="a-简介"><a href="#a-简介" class="headerlink" title="a). 简介"></a>a). 简介</h2><p><strong>MVP矩阵</strong>分别是<strong>模型(Model)</strong>、<strong>观察(View)</strong>、<strong>投影(Projection)</strong>三个矩阵。我们的顶点坐标起始于<strong>局部空间(Local Space)</strong>,在这里它称为局部坐标(Local Coordinate),它在之后会变为世界坐标(World Coordinate),观察坐标(View Coordinate),<strong>裁剪坐标(Clip Coordinate)</strong>,并最后以屏幕坐标(Screen Coordinate)的形式结束。下面的这张图展示了整个流程以及各个变换过程做了什么：<img src="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/MVP.png" alt="MVP"></p>
+<h2 id="b-M-模型空间→世界空间"><a href="#b-M-模型空间→世界空间" class="headerlink" title="b). M: 模型空间→世界空间"></a>b). M: 模型空间→世界空间</h2><ul>
+<li><p>变换顺序</p>
+<ol>
+<li>缩放</li>
+<li>旋转</li>
+<li>平移</li>
+</ol>
+<script type="math/tex; mode=display">
+\mathbf{M_{model}}=\left[\begin{array}{llll}
+1 & 0 & 0 & t x \\
+0 & 1 & 0 & t y \\
+0 & 0 & 1 & t z \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+\cos \theta & 0 & \sin \theta & 0 \\
+0 & 1 & 0 & 0 \\
+-\sin \theta & 0 & \cos \theta & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+k x & 0 & 0 & 0 \\
+0 & k y & 0 & 0 \\
+0 & 0 & k z & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]</script></li>
+</ul>
+<h2 id="c-V-世界空间→观察空间"><a href="#c-V-世界空间→观察空间" class="headerlink" title="c). V: 世界空间→观察空间"></a>c). V: 世界空间→观察空间</h2><ul>
+<li>变换顺序：<ol>
+<li>平移</li>
+<li>旋转</li>
+<li>Z分量取反（观察空间采用的是右手坐标系，而Unity则是左手坐标系）</li>
+</ol>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+V=\left[\begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & \cos \theta & -\sin \theta & 0 \\
+0 & \sin \theta & \cos \theta & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+1 & 0 & 0 & t x \\
+0 & 1 & 0 & t y \\
+0 & 0 & 1 & t z \\
+0 & 0 & 0 & 1
+\end{array}\right]</script><h2 id="d-P-观察空间→裁剪空间"><a href="#d-P-观察空间→裁剪空间" class="headerlink" title="d). P: 观察空间→裁剪空间"></a>d). P: 观察空间→裁剪空间</h2><ul>
+<li>不是真正的投影，为投影做准备</li>
+<li><strong>目的：</strong>判断顶点是否在可见范围内</li>
+<li><strong>P矩阵：</strong>对x,y,z分量进行缩放，用w分量做范围值。如果x,y,z都在w范围内，那么该点在裁剪空间内。</li>
+</ul>
+<h3 id="d-1-正交矩阵"><a href="#d-1-正交矩阵" class="headerlink" title="d.1) 正交矩阵"></a>d.1) 正交矩阵</h3><h3 id="d-2-透视矩阵"><a href="#d-2-透视矩阵" class="headerlink" title="d.2) 透视矩阵"></a>d.2) 透视矩阵</h3><font color="red">TODO: 推导各项矩阵</font>
+
+
+
+<h2 id="e-光栅化补充"><a href="#e-光栅化补充" class="headerlink" title="e). 光栅化补充"></a>e). 光栅化补充</h2><ul>
+<li>三角形设置：得到图元的边界条件，并对边进行插值；</li>
+<li>三角形遍历：对单行进行插值</li>
+</ul>
+]]></content>
+      <categories>
+        <category>百人计划</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>百人计划</tag>
+        <tag>数学</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HPP_Art_3.1 动作理论基础</title>
     <url>/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<h1 id="a-动画基础知识"><a href="#a-动画基础知识" class="headerlink" title="a). 动画基础知识"></a>a). 动画基础知识</h1><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/动作01.png" alt="动作01"></p>
@@ -3083,77 +3154,6 @@ F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }
       </tags>
   </entry>
   <entry>
-    <title>HPP_Graphics_1.2.3 MVP矩阵运算</title>
-    <url>/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/</url>
-    <content><![CDATA[<h2 id="a-简介"><a href="#a-简介" class="headerlink" title="a). 简介"></a>a). 简介</h2><p><strong>MVP矩阵</strong>分别是<strong>模型(Model)</strong>、<strong>观察(View)</strong>、<strong>投影(Projection)</strong>三个矩阵。我们的顶点坐标起始于<strong>局部空间(Local Space)</strong>,在这里它称为局部坐标(Local Coordinate),它在之后会变为世界坐标(World Coordinate),观察坐标(View Coordinate),<strong>裁剪坐标(Clip Coordinate)</strong>,并最后以屏幕坐标(Screen Coordinate)的形式结束。下面的这张图展示了整个流程以及各个变换过程做了什么：<img src="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/MVP.png" alt="MVP"></p>
-<h2 id="b-M-模型空间→世界空间"><a href="#b-M-模型空间→世界空间" class="headerlink" title="b). M: 模型空间→世界空间"></a>b). M: 模型空间→世界空间</h2><ul>
-<li><p>变换顺序</p>
-<ol>
-<li>缩放</li>
-<li>旋转</li>
-<li>平移</li>
-</ol>
-<script type="math/tex; mode=display">
-\mathbf{M_{model}}=\left[\begin{array}{llll}
-1 & 0 & 0 & t x \\
-0 & 1 & 0 & t y \\
-0 & 0 & 1 & t z \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-\cos \theta & 0 & \sin \theta & 0 \\
-0 & 1 & 0 & 0 \\
--\sin \theta & 0 & \cos \theta & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-k x & 0 & 0 & 0 \\
-0 & k y & 0 & 0 \\
-0 & 0 & k z & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]</script></li>
-</ul>
-<h2 id="c-V-世界空间→观察空间"><a href="#c-V-世界空间→观察空间" class="headerlink" title="c). V: 世界空间→观察空间"></a>c). V: 世界空间→观察空间</h2><ul>
-<li>变换顺序：<ol>
-<li>平移</li>
-<li>旋转</li>
-<li>Z分量取反（观察空间采用的是右手坐标系，而Unity则是左手坐标系）</li>
-</ol>
-</li>
-</ul>
-<script type="math/tex; mode=display">
-V=\left[\begin{array}{cccc}
-1 & 0 & 0 & 0 \\
-0 & \cos \theta & -\sin \theta & 0 \\
-0 & \sin \theta & \cos \theta & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-1 & 0 & 0 & t x \\
-0 & 1 & 0 & t y \\
-0 & 0 & 1 & t z \\
-0 & 0 & 0 & 1
-\end{array}\right]</script><h2 id="d-P-观察空间→裁剪空间"><a href="#d-P-观察空间→裁剪空间" class="headerlink" title="d). P: 观察空间→裁剪空间"></a>d). P: 观察空间→裁剪空间</h2><ul>
-<li>不是真正的投影，为投影做准备</li>
-<li><strong>目的：</strong>判断顶点是否在可见范围内</li>
-<li><strong>P矩阵：</strong>对x,y,z分量进行缩放，用w分量做范围值。如果x,y,z都在w范围内，那么该点在裁剪空间内。</li>
-</ul>
-<h3 id="d-1-正交矩阵"><a href="#d-1-正交矩阵" class="headerlink" title="d.1) 正交矩阵"></a>d.1) 正交矩阵</h3><h3 id="d-2-透视矩阵"><a href="#d-2-透视矩阵" class="headerlink" title="d.2) 透视矩阵"></a>d.2) 透视矩阵</h3><font color="red">TODO: 推导各项矩阵</font>
-
-
-
-<h2 id="e-光栅化补充"><a href="#e-光栅化补充" class="headerlink" title="e). 光栅化补充"></a>e). 光栅化补充</h2><ul>
-<li>三角形设置：得到图元的边界条件，并对边进行插值；</li>
-<li>三角形遍历：对单行进行插值</li>
-</ul>
-]]></content>
-      <categories>
-        <category>百人计划</category>
-      </categories>
-      <tags>
-        <tag>图形学</tag>
-        <tag>百人计划</tag>
-        <tag>数学</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Games202-5 Non-Photorealistic Rendering (NPR)</title>
     <url>/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/</url>
     <content><![CDATA[<h1 id="a-Photorealistic-vs-Non-Photorealistic"><a href="#a-Photorealistic-vs-Non-Photorealistic" class="headerlink" title="a). Photorealistic vs. Non-Photorealistic"></a>a). Photorealistic vs. Non-Photorealistic</h1><p><strong>Photorealistic Rendering</strong></p>
@@ -3198,8 +3198,8 @@ V=\left[\begin{array}{cccc}
       </categories>
       <tags>
         <tag>图形学</tag>
-        <tag>Materials</tag>
         <tag>Games202</tag>
+        <tag>Materials</tag>
         <tag>NPR</tag>
       </tags>
   </entry>
@@ -5725,143 +5725,6 @@ V(x)=\sum_{q \in \mathcal{N}(p)} w(p, q) \cdot \chi^{+}\left[D_{\mathrm{SM}}(q)-
       </tags>
   </entry>
   <entry>
-    <title>Games101_21_22 Animation</title>
-    <url>/2022/10/03/Games101_21_22_Animation/</url>
-    <content><![CDATA[<h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
-<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
-<ul>
-<li><p><strong>Idealized spring</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
-<ul>
-<li>但永远不会停止，因此加入摩擦力</li>
-</ul>
-</li>
-</ul>
-<hr>
-<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
-<ul>
-<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
-<ul>
-<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
-</li>
-</ul>
-</li>
-<li><p>加入两条对角线，以及skip connection</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
-<ul>
-<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
-</ul>
-</li>
-<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
-</li>
-</ul>
-<hr>
-<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
-<ul>
-<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
-<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
-</ul>
-</li>
-</ul>
-<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
-<ul>
-<li><p>关节（Joint）分类：</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
-</li>
-</ul>
-<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
-<ul>
-<li>解决多个解的方法：梯度下降</li>
-</ul>
-<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
-<ul>
-<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
-</li>
-</ul>
-<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><span id="more"></span>
-<hr>
-<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
-<ul>
-<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
-</li>
-<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
-<ul>
-<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
-<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
-<ul>
-<li><p><strong>缺点：</strong></p>
-<ol>
-<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
-</li>
-<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
-</li>
-</ol>
-</li>
-</ul>
-<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
-<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
-<ul>
-<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
-<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
-<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
-<ul>
-<li>使用下一时刻的速度和加速度，并求解</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
-<ul>
-<li><p><strong>龙格库塔</strong></p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
-</li>
-</ul>
-<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
-<li>非基于物理<ul>
-<li>时间快</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
-<hr>
-<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
-<ul>
-<li>与单粒子类似</li>
-</ul>
-<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
-<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
-<ul>
-<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
-</li>
-<li><p>欧拉（网格法）：考虑不同位置的网格</p>
-</li>
-<li><p>Material Point Method (MPM ，混合上两种方法)</p>
-<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Games101</category>
-      </categories>
-      <tags>
-        <tag>图形学</tag>
-        <tag>Games101</tag>
-        <tag>Animation</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Games101_17_18 Materials</title>
     <url>/2022/10/03/Games101_17_18_Materials/</url>
     <content><![CDATA[<h1 id="Lecture-17-Materials-and-Appearances"><a href="#Lecture-17-Materials-and-Appearances" class="headerlink" title="Lecture 17 Materials and Appearances"></a>Lecture 17 Materials and Appearances</h1><p><strong>Material == BRDF</strong></p>
@@ -6120,6 +5983,143 @@ f_{r}\left(\omega_{i} \rightarrow \omega_{r}\right) \geq 0</script></li>
         <tag>图形学</tag>
         <tag>Games101</tag>
         <tag>Materials</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Games101_21_22 Animation</title>
+    <url>/2022/10/03/Games101_21_22_Animation/</url>
+    <content><![CDATA[<h1 id="Lecture-21-Animation"><a href="#Lecture-21-Animation" class="headerlink" title="Lecture 21 Animation"></a>Lecture 21 Animation</h1><h2 id="a-History"><a href="#a-History" class="headerlink" title="a). History"></a>a). History</h2><h2 id="b-Keyframe"><a href="#b-Keyframe" class="headerlink" title="b). Keyframe"></a>b). Keyframe</h2><h2 id="c-Physical-Simualtion"><a href="#c-Physical-Simualtion" class="headerlink" title="c). Physical Simualtion"></a>c). Physical Simualtion</h2><p><img src="/2022/10/03/Games101_21_22_Animation/PhysicalBasedAnimation.png" alt="PhysicalBasedAnimation"></p>
+<h3 id="c-1-Mass-Spring-System"><a href="#c-1-Mass-Spring-System" class="headerlink" title="c.1). Mass Spring System"></a>c.1). Mass Spring System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_eg00.png" alt="MassSpringSystem_eg00"></p>
+<ul>
+<li><p><strong>Idealized spring</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IdealizedSpring.png" alt="IdealizedSpring"></p>
+<ul>
+<li>但永远不会停止，因此加入摩擦力</li>
+</ul>
+</li>
+</ul>
+<hr>
+<p><img src="/2022/10/03/Games101_21_22_Animation/DampSpring.png" alt="DampSpring"></p>
+<ul>
+<li><p>中间项为<strong>相对速度在向量$ab$方向的投影</strong>，因为（处于原长状态时）如果a点不动，b点绕a点做圆周运动，那$f_b=0$；</p>
+<ul>
+<li><p>但是无法表现剪切力（如对角线拉布，布基本形状不变）、弯曲力（out-of-plane，抗拒被像纸一样完全折叠为两个三角形）等</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_01.png" alt="MassSpringSystem_01"></p>
+</li>
+</ul>
+</li>
+<li><p>加入两条对角线，以及skip connection</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MassSpringSystem_03.png" alt="MassSpringSystem_03"></p>
+<ul>
+<li>红色较弱，仅其辅助作用；蓝色较强，其主要作用；</li>
+</ul>
+</li>
+<li><p><strong>其他方式：</strong>FEM (Finite Element Method, 有限元) Instead of Springs，考虑力传导</p>
+</li>
+</ul>
+<hr>
+<h3 id="c-2-Particle-System"><a href="#c-2-Particle-System" class="headerlink" title="c.2). Particle System"></a>c.2). Particle System</h3><p><img src="/2022/10/03/Games101_21_22_Animation/ParticleSystemForces.png" alt="ParticleSystemForces"></p>
+<ul>
+<li>粒子系统不仅可描述微小粒子，还可以描述一些群落；<ul>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedFlocking.png" alt="SimulatedFlocking"></li>
+<li><img src="/2022/10/03/Games101_21_22_Animation/SimulatedCrowds.png" alt="SimulatedCrowds"></li>
+</ul>
+</li>
+</ul>
+<h2 id="d-Forward-Kinematics-FK"><a href="#d-Forward-Kinematics-FK" class="headerlink" title="d). Forward Kinematics(FK)"></a>d). Forward Kinematics(FK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/FK.png" alt="FK"></p>
+<ul>
+<li><p>关节（Joint）分类：</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/JointTypes.png" alt="JointTypes"></p>
+</li>
+</ul>
+<h2 id="e-Inverse-Kinematics-IK"><a href="#e-Inverse-Kinematics-IK" class="headerlink" title="e). Inverse Kinematics(IK)"></a>e). Inverse Kinematics(IK)</h2><p><img src="/2022/10/03/Games101_21_22_Animation/IK_eg.png" alt="IK_eg"></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/IK00.png" alt="IK00"></p>
+<ul>
+<li>解决多个解的方法：梯度下降</li>
+</ul>
+<h2 id="f-Rigging"><a href="#f-Rigging" class="headerlink" title="f). Rigging"></a>f). Rigging</h2><p><img src="/2022/10/03/Games101_21_22_Animation/Rigging.png" alt="Rigging"></p>
+<ul>
+<li><p><strong>Blend shapes:</strong> 混合控制点或骨骼位置</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Blend Shapes.png" alt="Blend Shapes"></p>
+</li>
+</ul>
+<h2 id="g-Motion-Capture-Facial-Motion-Capture"><a href="#g-Motion-Capture-Facial-Motion-Capture" class="headerlink" title="g). Motion Capture / Facial Motion Capture"></a>g). Motion Capture / Facial Motion Capture</h2><span id="more"></span>
+<hr>
+<h1 id="Lecture-22"><a href="#Lecture-22" class="headerlink" title="Lecture 22"></a>Lecture 22</h1><h2 id="a-Single-Particle-Simulation"><a href="#a-Single-Particle-Simulation" class="headerlink" title="a). Single Particle Simulation"></a>a). Single Particle Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/VelocityVectorField.png" alt="VelocityVectorField"></p>
+<ul>
+<li><p><strong>Velocity vector field:</strong> 给定位置，可以得出改点速度。和磁场、电场类似；</p>
+</li>
+<li><p><strong>Oridinary Differential Equation(ODE, 常微分方程)</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Oridinary Differential Equation.png" alt="Oridinary Differential Equation"></p>
+<ul>
+<li>已知解得 t 时刻，粒子的位置和速度，需求得下一时刻的粒子位置；<ul>
+<li>方法1：<strong>显式欧拉法（Explicit Euler method）</strong>，用差分代替微分，但会引起<strong>误差</strong>，且<strong>稳定性差</strong>；</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="a-1-Euler’s-Method"><a href="#a-1-Euler’s-Method" class="headerlink" title="a.1). Euler’s Method"></a>a.1). Euler’s Method</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method.png" alt="Euler’s Method"></p>
+<ul>
+<li><p><strong>缺点：</strong></p>
+<ol>
+<li><p>存在误差，可通过减小步长（$\Delta t$）来减少误差；</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors01.png" alt="Euler’s Method_Errors01"></p>
+</li>
+<li><p>稳定性差，如速度场为同心圆时，不管步长多小都会<strong>逐渐偏移（diverge）</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Euler’s Method_Errors02.png" alt="Euler’s Method_Errors02"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="a-2-Combating-Instability"><a href="#a-2-Combating-Instability" class="headerlink" title="a.2). Combating Instability"></a>a.2). Combating Instability</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Combating Instability.png" alt="Combating Instability"></p>
+<h4 id="a-2-1-Midpoint-Method"><a href="#a-2-1-Midpoint-Method" class="headerlink" title="a.2.1). Midpoint Method"></a>a.2.1). Midpoint Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method.png" alt="Midpoint Method"></p>
+<ul>
+<li>计算下一时刻位置后取中点，得到中点速度，在计算下一时刻位置时，使用中点速度</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Midpoint Method02.png" alt="Midpoint Method02"></p>
+<h4 id="a-2-2-Adaptive-Step-Size"><a href="#a-2-2-Adaptive-Step-Size" class="headerlink" title="a.2.2). Adaptive Step Size"></a>a.2.2). Adaptive Step Size</h4><p><img src="/2022/10/03/Games101_21_22_Animation/AdaptiveStepSize.png" alt="AdaptiveStepSize"></p>
+<h4 id="a-2-3-Implicit-Euler-Method"><a href="#a-2-3-Implicit-Euler-Method" class="headerlink" title="a.2.3). Implicit Euler Method"></a>a.2.3). Implicit Euler Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/Implicit Euler Method.png" alt="Implicit Euler Method"></p>
+<ul>
+<li>使用下一时刻的速度和加速度，并求解</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Quzntize_stability.png" alt="Quzntize_stability">、</p>
+<ul>
+<li><p><strong>龙格库塔</strong></p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/龙格库塔.png" alt="龙格库塔"></p>
+</li>
+</ul>
+<h4 id="a-2-4-Position-Based-Verlet-Integration"><a href="#a-2-4-Position-Based-Verlet-Integration" class="headerlink" title="a.2.4). Position-Based / Verlet Integration"></a>a.2.4). Position-Based / Verlet Integration</h4><ul>
+<li>非基于物理<ul>
+<li>时间快</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2022/10/03/Games101_21_22_Animation/Position-Based.png" alt="Position-Based"></p>
+<hr>
+<h2 id="b-Rigid-Body-Simulation"><a href="#b-Rigid-Body-Simulation" class="headerlink" title="b). Rigid Body Simulation"></a>b). Rigid Body Simulation</h2><p><img src="/2022/10/03/Games101_21_22_Animation/RigidBodySimulation.png" alt="RigidBodySimulation"></p>
+<ul>
+<li>与单粒子类似</li>
+</ul>
+<h2 id="c-Fluid-Simulation"><a href="#c-Fluid-Simulation" class="headerlink" title="c). Fluid Simulation"></a>c). Fluid Simulation</h2><h4 id="c-1-A-Simple-Position-Based-Method"><a href="#c-1-A-Simple-Position-Based-Method" class="headerlink" title="c.1). A Simple Position-Based Method"></a>c.1). A Simple Position-Based Method</h4><p><img src="/2022/10/03/Games101_21_22_Animation/FS_Position-Based.png" alt="FS_Position-Based"></p>
+<h3 id="c-2-Eulerian-vs-Lagrangian"><a href="#c-2-Eulerian-vs-Lagrangian" class="headerlink" title="c.2). Eulerian vs. Lagrangian"></a>c.2). Eulerian vs. Lagrangian</h3><p><img src="/2022/10/03/Games101_21_22_Animation/Eulerian vs. Lagrangian.png" alt="Eulerian vs. Lagrangian"></p>
+<ul>
+<li><p>拉格朗日（质点法）：考虑单个粒子的运动</p>
+</li>
+<li><p>欧拉（网格法）：考虑不同位置的网格</p>
+</li>
+<li><p>Material Point Method (MPM ，混合上两种方法)</p>
+<p><img src="/2022/10/03/Games101_21_22_Animation/MPM.png" alt="MPM"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Games101</category>
+      </categories>
+      <tags>
+        <tag>图形学</tag>
+        <tag>Games101</tag>
+        <tag>Animation</tag>
       </tags>
   </entry>
   <entry>
