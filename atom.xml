@@ -113,9 +113,9 @@
     <category term="Demo" scheme="https://whitetail-o.github.io/categories/Demo/"/>
     
     
-    <category term="Demo" scheme="https://whitetail-o.github.io/tags/Demo/"/>
-    
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="Demo" scheme="https://whitetail-o.github.io/tags/Demo/"/>
     
   </entry>
   
@@ -303,9 +303,9 @@
     
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
-    <category term="Games202" scheme="https://whitetail-o.github.io/tags/Games202/"/>
-    
     <category term="Materials" scheme="https://whitetail-o.github.io/tags/Materials/"/>
+    
+    <category term="Games202" scheme="https://whitetail-o.github.io/tags/Games202/"/>
     
     <category term="PBR" scheme="https://whitetail-o.github.io/tags/PBR/"/>
     
@@ -377,6 +377,61 @@
     <summary type="html">&lt;p&gt;这两篇已经写得挺好的了，后续再补充。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/weixin_45776473/article/details/126912037?ops_request_misc=%257B%2522request%255</summary>
       
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_4.2 SSAO</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:32.679Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p><h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p><h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p><ol><li><p>获取深度、法线（View Space）缓冲；</p><ul><li><p>Normal Buffer：</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p></li></ul></li><li><p>重构像素相机空间中的坐标；</p><ul><li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p><ul><li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li></ul></li></ul></li><li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p><ul><li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li></ul></li></ol><span id="more"></span><h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p><p>SSAO的shader中共有三个Pass：</p><ol><li>计算生成AO；</li><li>模糊 / 滤波</li><li>AO与Color buffer混合；</li></ol><h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p><p>在采样块中循环生成采样点，判断是否被遮蔽</p><p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p><p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p><ol><li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p></li></ol><ol><li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p></li><li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p></li><li><p>将此前生成的随机向量转换到法线空间中。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p><p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p><p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p></li></ol><h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p><h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p><p>在c#脚本中需要加入渲染路径的判断</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p><h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>    </tr></table><hr><p>这场景好像不太明显，只有在大图里看的清楚，</p><h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>    </tr></table><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-AO-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#a-AO-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;a). AO(Ambient Occlusion)&quot;&gt;&lt;/a&gt;a). AO(Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png&quot; alt=&quot;AO00&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-SSAO-Screen-Space-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#b-SSAO-Screen-Space-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;b). SSAO(Screen Space Ambient Occlusion)&quot;&gt;&lt;/a&gt;b). SSAO(Screen Space Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的&lt;strong&gt;深度缓冲&lt;/strong&gt;、&lt;strong&gt;法线缓冲&lt;/strong&gt;以及&lt;strong&gt;像素坐标&lt;/strong&gt;来计算实现，来近似的表现物体在间接光下产生的阴影。&lt;/p&gt;
+&lt;h2 id=&quot;b-1-SSAO原理&quot;&gt;&lt;a href=&quot;#b-1-SSAO原理&quot; class=&quot;headerlink&quot; title=&quot;b.1). SSAO原理&quot;&gt;&lt;/a&gt;b.1). SSAO原理&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png&quot; alt=&quot;SSAO原理&quot;&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;获取深度、法线（View Space）缓冲；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Normal Buffer：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png&quot; alt=&quot;NormalBuffer&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;重构像素相机空间中的坐标；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;通过深度缓冲的depth值重构（近似）该视角下的三维场景；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png&quot; alt=&quot;DepthBuffer&quot; style=&quot;zoom:25%;&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png&quot; alt=&quot;法向半球&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</summary>
     
     
     
@@ -476,61 +531,6 @@
     <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="阴影" scheme="https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.2 SSAO</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:32.679Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p><h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p><h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p><ol><li><p>获取深度、法线（View Space）缓冲；</p><ul><li><p>Normal Buffer：</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p></li></ul></li><li><p>重构像素相机空间中的坐标；</p><ul><li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p><ul><li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li></ul></li></ul></li><li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p><ul><li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li></ul></li></ol><span id="more"></span><h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p><p>SSAO的shader中共有三个Pass：</p><ol><li>计算生成AO；</li><li>模糊 / 滤波</li><li>AO与Color buffer混合；</li></ol><h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p><p>在采样块中循环生成采样点，判断是否被遮蔽</p><p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p><p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p><ol><li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p></li></ol><ol><li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p></li><li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p></li><li><p>将此前生成的随机向量转换到法线空间中。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p><p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p><p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p></li></ol><h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p><h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p><p>在c#脚本中需要加入渲染路径的判断</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p><h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>    </tr></table><hr><p>这场景好像不太明显，只有在大图里看的清楚，</p><h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>    </tr></table><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-AO-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#a-AO-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;a). AO(Ambient Occlusion)&quot;&gt;&lt;/a&gt;a). AO(Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png&quot; alt=&quot;AO00&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-SSAO-Screen-Space-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#b-SSAO-Screen-Space-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;b). SSAO(Screen Space Ambient Occlusion)&quot;&gt;&lt;/a&gt;b). SSAO(Screen Space Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的&lt;strong&gt;深度缓冲&lt;/strong&gt;、&lt;strong&gt;法线缓冲&lt;/strong&gt;以及&lt;strong&gt;像素坐标&lt;/strong&gt;来计算实现，来近似的表现物体在间接光下产生的阴影。&lt;/p&gt;
-&lt;h2 id=&quot;b-1-SSAO原理&quot;&gt;&lt;a href=&quot;#b-1-SSAO原理&quot; class=&quot;headerlink&quot; title=&quot;b.1). SSAO原理&quot;&gt;&lt;/a&gt;b.1). SSAO原理&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png&quot; alt=&quot;SSAO原理&quot;&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;获取深度、法线（View Space）缓冲；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Normal Buffer：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png&quot; alt=&quot;NormalBuffer&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;重构像素相机空间中的坐标；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;通过深度缓冲的depth值重构（近似）该视角下的三维场景；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png&quot; alt=&quot;DepthBuffer&quot; style=&quot;zoom:25%;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png&quot; alt=&quot;法向半球&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   

@@ -898,6 +898,133 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Art_3.1 动作理论基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:43:44" itemprop="dateModified" datetime="2023-03-17T12:43:44+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-动画基础知识"><a href="#a-动画基础知识" class="headerlink" title="a). 动画基础知识"></a>a). 动画基础知识</h1><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/动作01.png" alt="动作01"></p>
+<ul>
+<li><p><strong>蒙皮：</strong> 定义骨骼数据如何驱动顶点数据；</p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/Skinning.png" alt="Skinning"></p>
+<ul>
+<li>引擎内不支持双四元数蒙皮，那使用线性混合蒙皮如何改善关节形状：<ol>
+<li>JCM(Maya中叫PSD)：性能开销相对大；</li>
+<li>RBF：加几根辅助骨骼；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="b-动画类型"><a href="#b-动画类型" class="headerlink" title="b). 动画类型"></a>b). 动画类型</h1><ul>
+<li><p><strong>逐帧动画：</strong>sprite（精灵）动画</p>
+</li>
+<li><p><strong>骨骼动画：</strong>3D动画、spine动画（2D骨骼）</p>
+</li>
+<li><p><strong>顶点动画：</strong>物理模拟后的动画数据，不便于用骨骼驱动，如布料，流体、破碎等</p>
+<ul>
+<li><p><strong>VAT(Vertex Animation Texture)</strong></p>
+<blockquote>
+<p>VAT（Vertex Animation Texture）通常包括两张纹理：PositionTexture和RotationTexture。他们分别记录了一个Mesh在指定帧数下的位置、旋转变化。VAT的行坐标表示动画帧索引，列坐标表示对应顶点的位移数据。因此，VAT的高度一般对应整个动画的总帧数，而宽度对应着Mesh中根据Animation变化的顶点数。(<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/585471941">https://zhuanlan.zhihu.com/p/585471941</a>)</p>
+</blockquote>
+</li>
+<li><p>Shader顶点动画</p>
+</li>
+<li><p>离线顶点动画</p>
+</li>
+<li><p>…….</p>
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1017,133 +1144,6 @@ V=\left[\begin{array}{cccc}
 <li>三角形遍历：对单行进行插值</li>
 </ul>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Art_3.1 动作理论基础</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 12:43:44" itemprop="dateModified" datetime="2023-03-17T12:43:44+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-动画基础知识"><a href="#a-动画基础知识" class="headerlink" title="a). 动画基础知识"></a>a). 动画基础知识</h1><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/动作01.png" alt="动作01"></p>
-<ul>
-<li><p><strong>蒙皮：</strong> 定义骨骼数据如何驱动顶点数据；</p>
-<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/Skinning.png" alt="Skinning"></p>
-<ul>
-<li>引擎内不支持双四元数蒙皮，那使用线性混合蒙皮如何改善关节形状：<ol>
-<li>JCM(Maya中叫PSD)：性能开销相对大；</li>
-<li>RBF：加几根辅助骨骼；</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="b-动画类型"><a href="#b-动画类型" class="headerlink" title="b). 动画类型"></a>b). 动画类型</h1><ul>
-<li><p><strong>逐帧动画：</strong>sprite（精灵）动画</p>
-</li>
-<li><p><strong>骨骼动画：</strong>3D动画、spine动画（2D骨骼）</p>
-</li>
-<li><p><strong>顶点动画：</strong>物理模拟后的动画数据，不便于用骨骼驱动，如布料，流体、破碎等</p>
-<ul>
-<li><p><strong>VAT(Vertex Animation Texture)</strong></p>
-<blockquote>
-<p>VAT（Vertex Animation Texture）通常包括两张纹理：PositionTexture和RotationTexture。他们分别记录了一个Mesh在指定帧数下的位置、旋转变化。VAT的行坐标表示动画帧索引，列坐标表示对应顶点的位移数据。因此，VAT的高度一般对应整个动画的总帧数，而宽度对应着Mesh中根据Animation变化的顶点数。(<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/585471941">https://zhuanlan.zhihu.com/p/585471941</a>)</p>
-</blockquote>
-</li>
-<li><p>Shader顶点动画</p>
-</li>
-<li><p>离线顶点动画</p>
-</li>
-<li><p>…….</p>
-</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 
