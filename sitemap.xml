@@ -461,7 +461,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/repository/index.html</loc>
+    <loc>https://whitetail-o.github.io/links/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -470,7 +470,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/links/index.html</loc>
+    <loc>https://whitetail-o.github.io/repository/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -518,14 +518,14 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Ray-Tracing/</loc>
+    <loc>https://whitetail-o.github.io/tags/Materials/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Materials/</loc>
+    <loc>https://whitetail-o.github.io/tags/Ray-Tracing/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -553,13 +553,6 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/IBL/</loc>
-    <lastmod>2023-03-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://whitetail-o.github.io/tags/GI/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -567,7 +560,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Denoise/</loc>
+    <loc>https://whitetail-o.github.io/tags/IBL/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -582,6 +575,13 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/PBR/</loc>
+    <lastmod>2023-03-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/Denoise/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -616,14 +616,14 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/%E5%8A%A8%E7%94%BB/</loc>
+    <loc>https://whitetail-o.github.io/tags/%E6%95%B0%E5%AD%A6/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/%E6%95%B0%E5%AD%A6/</loc>
+    <loc>https://whitetail-o.github.io/tags/%E5%8A%A8%E7%94%BB/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -700,6 +700,20 @@
   </url>
   
   <url>
+    <loc>https://whitetail-o.github.io/tags/%E4%BC%98%E5%8C%96/</loc>
+    <lastmod>2023-03-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E7%BA%B9%E7%90%86/</loc>
+    <lastmod>2023-03-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
@@ -722,20 +736,6 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E6%9E%B6%E6%9E%84/</loc>
-    <lastmod>2023-03-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/%E4%BC%98%E5%8C%96/</loc>
-    <lastmod>2023-03-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/%E7%BA%B9%E7%90%86/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -835,14 +835,14 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/categories/%E7%9B%AE%E5%BD%95/</loc>
+    <loc>https://whitetail-o.github.io/categories/%E7%9B%B8%E6%9C%BA/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/categories/%E7%9B%B8%E6%9C%BA/</loc>
+    <loc>https://whitetail-o.github.io/categories/%E7%9B%AE%E5%BD%95/</loc>
     <lastmod>2023-03-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
