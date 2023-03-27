@@ -6,7 +6,7 @@
   <link href="https://whitetail-o.github.io/atom.xml" rel="self"/>
   
   <link href="https://whitetail-o.github.io/"/>
-  <updated>2023-03-19T02:56:32.776Z</updated>
+  <updated>2023-03-27T03:13:24.394Z</updated>
   <id>https://whitetail-o.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>目录</title>
+    <link href="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/"/>
+    <id>https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/</id>
+    <published>2023-03-26T17:17:18.635Z</published>
+    <updated>2023-03-27T03:13:24.394Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul><li>通过Maya实现将平滑法线写入顶点色；</li><li>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</li><li>战双帕弥什的角色渲染分析；</li></ul><h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul><li>DX12龙书学习笔记；</li><li>SRP整理；</li></ul>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;目前已有&quot;&gt;&lt;a href=&quot;#目前已有&quot; class=&quot;headerlink&quot; title=&quot;目前已有&quot;&gt;&lt;/a&gt;目前已有&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Demo/&quot;&gt;分类: D</summary>
+      
+    
+    
+    
+    <category term="目录" scheme="https://whitetail-o.github.io/categories/%E7%9B%AE%E5%BD%95/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>【转载】为不同的图形 API 编写着色器（Unity）</title>
@@ -57,9 +79,9 @@
     <link href="https://whitetail-o.github.io/2023/03/15/Demo/"/>
     <id>https://whitetail-o.github.io/2023/03/15/Demo/</id>
     <published>2023-03-15T08:15:10.000Z</published>
-    <updated>2023-03-26T17:45:46.513Z</updated>
+    <updated>2023-03-27T03:13:58.799Z</updated>
     
-    <content type="html"><![CDATA[<p>上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。</p><h1 id="屏幕空间阴影"><a href="#屏幕空间阴影" class="headerlink" title="屏幕空间阴影"></a>屏幕空间阴影</h1><ul><li><p>PCSS+SSAO</p><p><img src="/2023/03/15/Demo/Untitled_1.1.1.png" alt="Untitled_1.1.1"></p><p><img src="/2023/03/15/Demo/Untitled_1.5.1.png" alt="Untitled_1.5.1"></p></li><li><p>不同阴影方案的对比：</p><p><img src="/2023/03/15/Demo/Untitled_2.2.1.png" alt="Untitled_2.2.1"></p></li></ul><h1 id="PBR，屏幕空间反射，Bloom"><a href="#PBR，屏幕空间反射，Bloom" class="headerlink" title="PBR，屏幕空间反射，Bloom"></a>PBR，屏幕空间反射，Bloom</h1><ul><li><p>此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。</p><ul><li>间接光照漫反射采用SH球谐函数</li><li>间接光照高光则采用IBL的Split Sum</li></ul></li><li><p>SSR，屏幕空间反射。算法实现倒不难，烦的在Unity左右手坐标系的问题，以及各种DX12和OpenGL之间的差异。后续会整理一篇坐标变换中，DX12和OpenGL之间的差异。</p></li><li><p>Bloom泛光</p><p><img src="/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png" alt="Untitled_3.1.1"></p></li></ul><span id="more"></span><h1 id="皮肤渲染（预积分、屏幕空间次表面散射）"><a href="#皮肤渲染（预积分、屏幕空间次表面散射）" class="headerlink" title="皮肤渲染（预积分、屏幕空间次表面散射）"></a>皮肤渲染（预积分、屏幕空间次表面散射）</h1><ul><li><p>此处采用的是使用SSSS实现SSS的SSSSS（:D，好绕），后续会专门写一个这个的文章，写一下各种Diffusion Profile，顺便把Burley Normalized中的PDF、CDF给写一下。</p></li><li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p><p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p></li></ul><h1 id="NPR"><a href="#NPR" class="headerlink" title="NPR"></a>NPR</h1><p>主播女孩重度依赖——超天酱</p><p><img src="/2023/03/15/Demo/Test1.0826.jpeg" alt="Test1.0826"></p><p>战双帕弥什——露西亚（NPR结合PBR）</p><p><img src="/2023/03/15/Demo/image_005_0000.png" alt="image_005_0000"></p><h1 id="曲面细分，几何着色器-DOF景深"><a href="#曲面细分，几何着色器-DOF景深" class="headerlink" title="曲面细分，几何着色器 + DOF景深"></a>曲面细分，几何着色器 + DOF景深</h1><p><img src="/2023/03/15/Demo/Untitled_1.10.2.png" alt="Untitled_1.10.2"></p><h1 id="多层Pass短毛渲染"><a href="#多层Pass短毛渲染" class="headerlink" title="多层Pass短毛渲染"></a>多层Pass短毛渲染</h1><ul><li>这里采用了30层Pass</li></ul><p><img src="/2023/03/15/Demo/Untitled_1.11.1.png" alt="Untitled_1.11.1"></p><h1 id="基于UE5的动捕短片"><a href="#基于UE5的动捕短片" class="headerlink" title="基于UE5的动捕短片"></a>基于UE5的动捕短片</h1><ul><li>动捕设备：诺亦腾</li><li>后期动作修改：MotionBuilder、Maya</li></ul><p><img src="/2023/03/15/Demo/Untitled_1.15.1.png" alt="Untitled_1.15.1"></p><h1 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h1><ul><li><p>是用于建筑Mapping的短片，因此是竖屏的</p><p><img src="/2023/03/15/Demo/Untitled_1.5.1-16790397550912.png" alt="Untitled_1.5.1" style="zoom:50%;"></p><p><img src="/2023/03/15/Demo/Untitled_1.6.1.png" alt="Untitled_1.6.1" style="zoom:50%;"></p></li></ul><p>  <img src="/2023/03/15/Demo/Untitled_1.3.1.png" alt="Untitled_1.3.1" style="zoom:50%;"></p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>还在慢慢完善</p>]]></content>
+    <content type="html"><![CDATA[<p>上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。</p><h1 id="屏幕空间阴影"><a href="#屏幕空间阴影" class="headerlink" title="屏幕空间阴影"></a>屏幕空间阴影</h1><ul><li><p>PCSS+SSAO</p><p><img src="/2023/03/15/Demo/Untitled_1.1.1.png" alt="Untitled_1.1.1"></p><p><img src="/2023/03/15/Demo/Untitled_1.5.1.png" alt="Untitled_1.5.1"></p></li><li><p>不同阴影方案的对比：</p><p><img src="/2023/03/15/Demo/Untitled_2.2.1.png" alt="Untitled_2.2.1"></p></li></ul><h1 id="PBR，屏幕空间反射，Bloom"><a href="#PBR，屏幕空间反射，Bloom" class="headerlink" title="PBR，屏幕空间反射，Bloom"></a>PBR，屏幕空间反射，Bloom</h1><ul><li><p>此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。</p><ul><li>间接光照漫反射采用SH球谐函数</li><li>间接光照高光则采用IBL的Split Sum</li></ul></li><li><p>SSR，屏幕空间反射。算法实现倒不难，烦的在Unity左右手坐标系的问题，以及各种DX12和OpenGL之间的差异。后续会整理一篇坐标变换中，DX12和OpenGL之间的差异。</p></li><li><p>Bloom泛光</p><p><img src="/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png" alt="Untitled_3.1.1"></p></li></ul><span id="more"></span><h1 id="皮肤渲染（预积分、屏幕空间次表面散射）"><a href="#皮肤渲染（预积分、屏幕空间次表面散射）" class="headerlink" title="皮肤渲染（预积分、屏幕空间次表面散射）"></a>皮肤渲染（预积分、屏幕空间次表面散射）</h1><ul><li><p>此处采用的是使用SSSS实现SSS的SSSSS（:D，好绕），后续会专门写一个这个的文章，写一下各种Diffusion Profile，顺便把Burley Normalized中的PDF、CDF给写一下。</p></li><li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p><p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p></li></ul><h1 id="NPR"><a href="#NPR" class="headerlink" title="NPR"></a>NPR</h1><p>主播女孩重度依赖——超天酱</p><p><img src="/2023/03/15/Demo/ChaoTian.jpeg" alt="ChaoTian"></p><p>战双帕弥什——露西亚（NPR结合PBR）</p><p><img src="/2023/03/15/Demo/Luxiya.png" alt="Luxiya"></p><h1 id="曲面细分，几何着色器-DOF景深"><a href="#曲面细分，几何着色器-DOF景深" class="headerlink" title="曲面细分，几何着色器 + DOF景深"></a>曲面细分，几何着色器 + DOF景深</h1><p><img src="/2023/03/15/Demo/Untitled_1.10.2.png" alt="Untitled_1.10.2"></p><h1 id="多层Pass短毛渲染"><a href="#多层Pass短毛渲染" class="headerlink" title="多层Pass短毛渲染"></a>多层Pass短毛渲染</h1><ul><li>这里采用了30层Pass</li></ul><p><img src="/2023/03/15/Demo/Untitled_1.11.1.png" alt="Untitled_1.11.1"></p><h1 id="基于UE5的动捕短片"><a href="#基于UE5的动捕短片" class="headerlink" title="基于UE5的动捕短片"></a>基于UE5的动捕短片</h1><ul><li>动捕设备：诺亦腾</li><li>后期动作修改：MotionBuilder、Maya</li></ul><p><img src="/2023/03/15/Demo/Untitled_1.15.1.png" alt="Untitled_1.15.1"></p><h1 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h1><ul><li><p>是用于建筑Mapping的短片，因此是竖屏的</p><p><img src="/2023/03/15/Demo/Untitled_1.5.1-16790397550912.png" alt="Untitled_1.5.1" style="zoom:50%;"></p><p><img src="/2023/03/15/Demo/Untitled_1.6.1.png" alt="Untitled_1.6.1" style="zoom:50%;"></p></li></ul><p>  <img src="/2023/03/15/Demo/Untitled_1.3.1.png" alt="Untitled_1.3.1" style="zoom:50%;"></p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>还在慢慢完善</p>]]></content>
     
     
     <summary type="html">&lt;p&gt;上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。&lt;/p&gt;
@@ -91,31 +113,9 @@
     <category term="Demo" scheme="https://whitetail-o.github.io/categories/Demo/"/>
     
     
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
     <category term="Demo" scheme="https://whitetail-o.github.io/tags/Demo/"/>
     
-  </entry>
-  
-  <entry>
-    <title>目录</title>
-    <link href="https://whitetail-o.github.io/2023/03/15/%E7%9B%AE%E5%BD%95/"/>
-    <id>https://whitetail-o.github.io/2023/03/15/%E7%9B%AE%E5%BD%95/</id>
-    <published>2023-03-15T08:15:10.000Z</published>
-    <updated>2023-03-26T17:25:49.162Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul><li>通过Maya实现将平滑法线写入顶点色；</li><li>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</li><li>战双帕弥什的角色渲染分析；</li></ul><h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul><li>DX12龙书学习笔记；</li><li>SRP整理；</li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1 id=&quot;目前已有&quot;&gt;&lt;a href=&quot;#目前已有&quot; class=&quot;headerlink&quot; title=&quot;目前已有&quot;&gt;&lt;/a&gt;目前已有&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Demo/&quot;&gt;分类: D</summary>
-      
-    
-    
-    
-    <category term="目录" scheme="https://whitetail-o.github.io/categories/%E7%9B%AE%E5%BD%95/"/>
-    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
   </entry>
   
@@ -394,6 +394,38 @@
   </entry>
   
   <entry>
+    <title>HPP_Graphics_4.1 Bloom算法</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:01.920Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
+&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
+&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
+&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>HPP_Graphics_4.2 SSAO</title>
     <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
     <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
@@ -499,38 +531,6 @@
     <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="阴影" scheme="https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.1 Bloom算法</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:01.920Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
-&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
-&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
-&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
