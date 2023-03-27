@@ -228,7 +228,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-03-27 01:17:18 / 修改时间：11:13:24" itemprop="dateCreated datePublished" datetime="2023-03-27T01:17:18+08:00">2023-03-27</time>
+      <time title="创建时间：2023-03-27 01:17:18 / 修改时间：14:40:42" itemprop="dateCreated datePublished" datetime="2023-03-27T01:17:18+08:00">2023-03-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -256,9 +256,31 @@
 <p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul>
-<li>通过Maya实现将平滑法线写入顶点色；</li>
-<li>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</li>
-<li>战双帕弥什的角色渲染分析；</li>
+<li><p>通过Maya实现将平滑法线写入顶点色；</p>
+<ul>
+<li><p>这里远比我原先想的要复杂，有几个点：</p>
+<ul>
+<li><p>光滑组作用是改变顶点法线的算法，而不是将平滑法线写入顶点；</p>
+</li>
+<li><p>对于硬边（不同光滑组），通过顶点色去应该不可能完美解决外描边的接缝问题（？），因为对于硬边：</p>
+<ul>
+<li><p>切线和副切线方向不一定和UV方向相同，很多时候切线和副切线甚至不在三角面片上；</p>
+</li>
+<li><p>对于未人为修改过的顶点法线，其方向等于面法线。而对于修改过后的法线（Maya中会显示黄色），其方向不再遵守面法线，而是固定为使用Macro Normal计算出的切线空间中的一个方向。</p>
+<p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/顶点法线.png" alt="顶点法线"></p>
+</li>
+<li><p>而切线和副切线是根据法线、UV进而计算出的正交化的向量。对于重合顶点，形变动画使得他们之间法线发生相对位移，造成的结果就是其切线空间很可能发生相对变换，使得原先还原到模型空间指向同一个方向的矢量变得不为一个方向；</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</p>
+</li>
+<li><p>战双帕弥什的角色渲染分析；</p>
+</li>
 </ul>
 <h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul>
 <li>DX12龙书学习笔记；</li>
@@ -1017,7 +1039,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:34:06" itemprop="dateModified" datetime="2023-03-17T13:34:06+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-27 12:20:57" itemprop="dateModified" datetime="2023-03-27T12:20:57+08:00">2023-03-27</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
