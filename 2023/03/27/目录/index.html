@@ -26,10 +26,13 @@
 <meta property="og:site_name" content="WhiteTail&#39;s Blog">
 <meta property="og:description" content="目前已有分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io) 分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io) 分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io) 分类: 百人计划 | WhiteTail’s Blog (w">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-47.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-13.png">
 <meta property="article:published_time" content="2023-03-26T17:17:18.635Z">
-<meta property="article:modified_time" content="2023-03-27T12:52:55.546Z">
+<meta property="article:modified_time" content="2023-03-28T03:20:04.005Z">
 <meta property="article:author" content="WhiteTail">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-47.png">
 
 
 <link rel="canonical" href="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/">
@@ -230,9 +233,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-03-27 01:17:18 / 修改时间：20:52:55" itemprop="dateCreated datePublished" datetime="2023-03-27T01:17:18+08:00">2023-03-27</time>
+      <time title="创建时间：2023-03-27 01:17:18" itemprop="dateCreated datePublished" datetime="2023-03-27T01:17:18+08:00">2023-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-28 11:20:04" itemprop="dateModified" datetime="2023-03-28T11:20:04+08:00">2023-03-28</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -266,12 +275,24 @@
 <p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<span id="more"></span>
 <h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul>
 <li><p>通过Maya实现将平滑法线写入顶点色；</p>
 <ul>
-<li>这里远比我原先想的要复杂，需要补充一些微分几何里参数化模型的知识，可参考此回答<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/139593847">切线空间（Tangent Space）完全解析 - 谜之裙摆的文章 - 知乎</a> 及其评论区</li>
+<li><p>事实上此方案只能完全解决不带顶点形变的物体描边，对于<strong>带形变动画</strong>的物体<strong>硬表面</strong>的描边只能<strong>改善</strong>。原因：</p>
+<ul>
+<li><p>切线空间是根据UV求出T、B向量，再根据顶点法线的方向对T，B向量做正交化，进而得到真正的切线、副切线（副法线）。（是的，切线和副切线方向不一定和uv方向相同）</p>
+</li>
+<li><p>对于不经法线修改的硬表面，其顶点法线方向方向等于面法线（值得一提的是，光滑组改变的是顶点法线的计算方式，而不是直接改变顶点法线）。那经过动画形变，重合顶点各自的切线空间的相对位置很可能发生偏移，进而改变TBN矩阵，造成法线断裂。解决方法想到了几个，但是都太耗了，得不偿失，等补充了参数化方面的知识再看看能不能完善此方案。</p>
+<p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-47.png" alt="Snipaste_2023-03-28_11-09-47" style="zoom: 33%;"></p>
+<p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-13.png" alt="Snipaste_2023-03-28_11-09-13" style="zoom: 25%;"></p>
+</li>
 </ul>
 </li>
+</ul>
+</li>
+</ul>
+<ul>
 <li><p>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</p>
 </li>
 <li><p>战双帕弥什的角色渲染分析；</p>

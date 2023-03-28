@@ -6,7 +6,7 @@
   <link href="https://whitetail-o.github.io/atom.xml" rel="self"/>
   
   <link href="https://whitetail-o.github.io/"/>
-  <updated>2023-03-27T12:52:55.546Z</updated>
+  <updated>2023-03-28T03:20:04.005Z</updated>
   <id>https://whitetail-o.github.io/</id>
   
   <author>
@@ -21,15 +21,16 @@
     <link href="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/"/>
     <id>https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/</id>
     <published>2023-03-26T17:17:18.635Z</published>
-    <updated>2023-03-27T12:52:55.546Z</updated>
+    <updated>2023-03-28T03:20:04.005Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul><li><p>通过Maya实现将平滑法线写入顶点色；</p><ul><li>这里远比我原先想的要复杂，需要补充一些微分几何里参数化模型的知识，可参考此回答<a href="https://zhuanlan.zhihu.com/p/139593847">切线空间（Tangent Space）完全解析 - 谜之裙摆的文章 - 知乎</a> 及其评论区</li></ul></li><li><p>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</p></li><li><p>战双帕弥什的角色渲染分析；</p></li></ul><h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul><li>DX12龙书学习笔记；</li><li>SRP整理；</li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><span id="more"></span><h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul><li><p>通过Maya实现将平滑法线写入顶点色；</p><ul><li><p>事实上此方案只能完全解决不带顶点形变的物体描边，对于<strong>带形变动画</strong>的物体<strong>硬表面</strong>的描边只能<strong>改善</strong>。原因：</p><ul><li><p>切线空间是根据UV求出T、B向量，再根据顶点法线的方向对T，B向量做正交化，进而得到真正的切线、副切线（副法线）。（是的，切线和副切线方向不一定和uv方向相同）</p></li><li><p>对于不经法线修改的硬表面，其顶点法线方向方向等于面法线（值得一提的是，光滑组改变的是顶点法线的计算方式，而不是直接改变顶点法线）。那经过动画形变，重合顶点各自的切线空间的相对位置很可能发生偏移，进而改变TBN矩阵，造成法线断裂。解决方法想到了几个，但是都太耗了，得不偿失，等补充了参数化方面的知识再看看能不能完善此方案。</p><p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-47.png" alt="Snipaste_2023-03-28_11-09-47" style="zoom: 33%;"></p><p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-13.png" alt="Snipaste_2023-03-28_11-09-13" style="zoom: 25%;"></p></li></ul></li></ul></li></ul><ul><li><p>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</p></li><li><p>战双帕弥什的角色渲染分析；</p></li></ul><h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul><li>DX12龙书学习笔记；</li><li>SRP整理；</li></ul>]]></content>
     
     
-      
-      
-    <summary type="html">&lt;h1 id=&quot;目前已有&quot;&gt;&lt;a href=&quot;#目前已有&quot; class=&quot;headerlink&quot; title=&quot;目前已有&quot;&gt;&lt;/a&gt;目前已有&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Demo/&quot;&gt;分类: D</summary>
-      
+    <summary type="html">&lt;h1 id=&quot;目前已有&quot;&gt;&lt;a href=&quot;#目前已有&quot; class=&quot;headerlink&quot; title=&quot;目前已有&quot;&gt;&lt;/a&gt;目前已有&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Demo/&quot;&gt;分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Games101/&quot;&gt;分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Games202/&quot;&gt;分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/百人计划/&quot;&gt;分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/相机/&quot;&gt;分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;</summary>
     
     
     
@@ -356,9 +357,9 @@
     
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
-    <category term="PBR" scheme="https://whitetail-o.github.io/tags/PBR/"/>
-    
     <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="PBR" scheme="https://whitetail-o.github.io/tags/PBR/"/>
     
   </entry>
   
@@ -778,50 +779,6 @@
   </entry>
   
   <entry>
-    <title>HPP_Graphics_2.7 模板测试和深度测试</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/</id>
-    <published>2023-02-15T09:40:32.000Z</published>
-    <updated>2023-03-17T05:16:04.931Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul><li>处于<strong>逐片元操作</strong>中</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p><h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul><li><p>语法表示</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p></li></ul><ul><li><p>可作为遮罩等操作</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p></li></ul><span id="more"></span><h3 id="a-2-作业：Unity中实现的效果"><a href="#a-2-作业：Unity中实现的效果" class="headerlink" title="a.2). 作业：Unity中实现的效果"></a>a.2). 作业：Unity中实现的效果</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilTest_Unity.png" alt="StencilTest_Unity"></p><hr><p><strong>【链接补充】</strong></p><p>[1]. <a href="https://blog.csdn.net/u011047171/article/details/46928463">https://blog.csdn.net/u011047171/article/details/46928463</a></p><p>[2]. <a href="https://blog.csdn.net/liu_if_else/article/details/86316361">https://blog.csdn.net/liu_if_else/article/details/86316361</a></p><p>[3]. <a href="https://gameinstitute.qq.com/community/detail/127404">https://gameinstitute.qq.com/community/detail/127404</a></p><p>[4]. <a href="https://learnopengl-cn.readthedocs.io/zh/latest/04 Advanced OpenGL/02 Stencil testing/">https://learnopenglcn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/02%20Stencil%20testing/</a></p><p>[5]. <a href="https://www.patreon.com/posts/14832618">https://www.patreon.com/posts/14832618</a></p><p>[6]. <a href="https://www.udemy.com/course/unity-shaders/">https://www.udemy.com/course/unity-shaders/</a></p><h2 id="b-深度测试"><a href="#b-深度测试" class="headerlink" title="b). 深度测试"></a>b). 深度测试</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/ZTest.png" alt="ZTest"></p><ul><li>模板测试后，透明度混合前</li></ul><h3 id="Z-Buffer"><a href="#Z-Buffer" class="headerlink" title="Z-Buffer"></a>Z-Buffer</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Buffer.png" alt="Z_Buffer"></p><h3 id="Z-Write"><a href="#Z-Write" class="headerlink" title="Z Write"></a>Z Write</h3><p>深度写入包括<strong>两种状态：ZWrite On 与 ZWrite Off</strong></p><p>当我们<strong>开启深度写入</strong>的时候，物体被渲染时针对物体在屏幕（更准确地说是frame buffer）上<strong>每个像素的深度都写入到深度缓冲区</strong>；反之，如果是<strong>ZWrite Off,</strong>那么物体的深度就<strong>不会写入深度缓冲区</strong>。但是，物体是否会写入深度，除了ZWrite这个状态之外，<strong>更重要的是需要深度测试通过</strong>，也就是ZTest通过，如果ZTest都没通过，那么也就不会写入深度了。</p><p>ZTest分为通过和不通过两种情况，ZWrite分为开启和关闭两种情况的四种情况：</p><ul><li>深度测试通过，深度写入开启：写入深度缓冲区，写入颜色缓冲区。</li><li>深度测试通过，深度写入关闭：不写深度缓冲区，写入颜色缓冲区。</li><li>深度测试失败，深度写入开启：不写深度缓冲区，不写颜色缓冲区。</li><li>深度测试失败，深度写入关闭：不写深度缓冲区，不屑颜色缓冲区。</li></ul><h3 id="Z-Test比较操作"><a href="#Z-Test比较操作" class="headerlink" title="Z Test比较操作"></a>Z Test比较操作</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Comp.png" alt="Z_Comp"></p><h3 id="渲染队列"><a href="#渲染队列" class="headerlink" title="渲染队列"></a>渲染队列</h3><p>Unity中内置的几种渲染队列，按照渲染顺序，从先到后进行排序，<strong>队列数越小，越先渲染，队列数越大，越后渲染。</strong></p><ul><li><strong>Background(1000) ：</strong>最早被渲染的物体的队列。</li><li><strong>Geometry(2000) ：</strong>不透明物体的渲染队列。大多数物体都应该使用该队列进行渲染，也是Unity Shader中默认的渲染队列。</li><li><strong>AlphaTest(2450) ：</strong>有透明通道，需要进行Alpha Test的物体的队列，比在Geometry中更有效。</li><li><strong>Transparent(3000) ：</strong> 半透物体的渲染队列。一般是不写深度的物体，Alpha Blend等的在该队列渲染。</li><li><strong>Overlay(4000) ：</strong>最后被渲染的物体的队列，一般是覆盖效果，比如镜头光晕，屏幕贴片之类的。</li></ul><h3 id="Unity中设置渲染队列"><a href="#Unity中设置渲染队列" class="headerlink" title="Unity中设置渲染队列"></a>Unity中设置渲染队列</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认是Geometry</span></span><br><span class="line">Tags&#123;</span><br><span class="line"><span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li><strong>不透明物体的渲染顺序：从前往后。</strong></li><li><strong>透明物体的渲染顺序：从后往前。（OverDraw）</strong></li><li>对于使用了多个Pass的物体，其渲染队列会设置为Pass中的最小值（如两个Pass中一个是Geometry(2000)，另一个是Transparent(3000)，那该物体会按Geometry的队列渲染，然后按Shader中从上到下执行Pass）。</li></ul><h3 id="Early-Z"><a href="#Early-Z" class="headerlink" title="Early-Z"></a>Early-Z</h3><p>传统的渲染管线中，ZTest其实是在Blending阶段，这时候进行深度测试，所有对象的像素着色器都会计算一遍，没有什么性能提升，仅仅是为了得出正确的遮挡结果，会造成大量的无用计算，因为每个像素点上肯定重叠了很多计算。<strong>因此现代GPU中运用了Early-Z的技术，在Vertex阶段和Fragment阶段之间（光栅化之后，fragment之前）进行一次深度测试，如果深度测试失败，就不必进行fragment阶段的计算了，因此在性能上会有很大的提升。但是最终的ZTest仍然需要进行，以保证最终的遮挡关系结果正确。</strong>前面的一次主要是<strong><em>Z-Cull</em></strong>为了裁剪以达到优化的目的，后一次主要是<strong><em>Z-Check</em></strong>，为了检查，如下图：</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/EarlyZ.png" alt="EarlyZ"></p><h2 id="c-深度值"><a href="#c-深度值" class="headerlink" title="c). 深度值"></a>c). 深度值</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Deepth.png" alt="Deepth"></p><h3 id="为什么深度缓冲区存储非线性深度呢？"><a href="#为什么深度缓冲区存储非线性深度呢？" class="headerlink" title="为什么深度缓冲区存储非线性深度呢？"></a>为什么深度缓冲区存储非线性深度呢？</h3><p><strong>正确的投影特性的非线性深度方程是和1/z成正比的，</strong>这样基本上做的是在<strong>Z很近的时候是高精度和Z很远的时候是底精度</strong>。这样就是模拟了人眼观察，<strong>近处的物体很清晰，而远处的物体很模糊。</strong>（和现在还用伽马校正的原因类似）</p><script type="math/tex; mode=display">F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }}</script><h3 id="Z-fighting"><a href="#Z-fighting" class="headerlink" title="Z-fighting"></a>Z-fighting</h3><p>两个平面或三角形很<strong>紧密相互平行，深度缓冲区不具有足够的精度</strong>以至于无法得到哪一个靠前。导致了着两个形状<strong>不断切换顺序出现怪异问题</strong>。这被称为<strong>深度冲突（Z-fighting）</strong>，因为它看上去像形状争夺顶靠前的位置。（UE中重叠闪来闪去的那个）</p><ul><li><p>解决方法</p><ul><li><p>让物体之间不要离得太近。</p></li><li><p>尽可能把<strong>近平面</strong>设置得远一些。</p></li><li><p>放弃一部分性能来获得更高精度的深度值。</p></li><li>Z-Offset</li></ul></li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_F.png" alt="Z_F"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;a-模板测试&quot;&gt;&lt;a href=&quot;#a-模板测试&quot; class=&quot;headerlink&quot; title=&quot;a). 模板测试&quot;&gt;&lt;/a&gt;a). 模板测试&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;处于&lt;strong&gt;逐片元操作&lt;/strong&gt;中&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png&quot; alt=&quot;模板测试00&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png&quot; alt=&quot;模板测试01&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png&quot; alt=&quot;模板测试02&quot;&gt;&lt;/p&gt;
-&lt;h3 id=&quot;a-1-Unity-中的模板测试&quot;&gt;&lt;a href=&quot;#a-1-Unity-中的模板测试&quot; class=&quot;headerlink&quot; title=&quot;a.1). Unity 中的模板测试&quot;&gt;&lt;/a&gt;a.1). Unity 中的模板测试&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;语法表示&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png&quot; alt=&quot;Unity_stencil&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png&quot; alt=&quot;Unity_stencil_Comparison&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png&quot; alt=&quot;Unity_stencil_Update&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;可作为遮罩等操作&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png&quot; alt=&quot;StencilBufferValue&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="模板测试" scheme="https://whitetail-o.github.io/tags/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/"/>
-    
-    <category term="深度测试" scheme="https://whitetail-o.github.io/tags/%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
-    
-  </entry>
-  
-  <entry>
     <title>HPP_Graphics_3.3 曲面细分和几何着色器</title>
     <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/"/>
     <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/</id>
@@ -870,6 +827,50 @@
     <category term="曲面细分着色器" scheme="https://whitetail-o.github.io/tags/%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8/"/>
     
     <category term="几何着色器" scheme="https://whitetail-o.github.io/tags/%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_2.7 模板测试和深度测试</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/</id>
+    <published>2023-02-15T09:40:32.000Z</published>
+    <updated>2023-03-17T05:16:04.931Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul><li>处于<strong>逐片元操作</strong>中</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p><h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul><li><p>语法表示</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p></li></ul><ul><li><p>可作为遮罩等操作</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p></li></ul><span id="more"></span><h3 id="a-2-作业：Unity中实现的效果"><a href="#a-2-作业：Unity中实现的效果" class="headerlink" title="a.2). 作业：Unity中实现的效果"></a>a.2). 作业：Unity中实现的效果</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilTest_Unity.png" alt="StencilTest_Unity"></p><hr><p><strong>【链接补充】</strong></p><p>[1]. <a href="https://blog.csdn.net/u011047171/article/details/46928463">https://blog.csdn.net/u011047171/article/details/46928463</a></p><p>[2]. <a href="https://blog.csdn.net/liu_if_else/article/details/86316361">https://blog.csdn.net/liu_if_else/article/details/86316361</a></p><p>[3]. <a href="https://gameinstitute.qq.com/community/detail/127404">https://gameinstitute.qq.com/community/detail/127404</a></p><p>[4]. <a href="https://learnopengl-cn.readthedocs.io/zh/latest/04 Advanced OpenGL/02 Stencil testing/">https://learnopenglcn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/02%20Stencil%20testing/</a></p><p>[5]. <a href="https://www.patreon.com/posts/14832618">https://www.patreon.com/posts/14832618</a></p><p>[6]. <a href="https://www.udemy.com/course/unity-shaders/">https://www.udemy.com/course/unity-shaders/</a></p><h2 id="b-深度测试"><a href="#b-深度测试" class="headerlink" title="b). 深度测试"></a>b). 深度测试</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/ZTest.png" alt="ZTest"></p><ul><li>模板测试后，透明度混合前</li></ul><h3 id="Z-Buffer"><a href="#Z-Buffer" class="headerlink" title="Z-Buffer"></a>Z-Buffer</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Buffer.png" alt="Z_Buffer"></p><h3 id="Z-Write"><a href="#Z-Write" class="headerlink" title="Z Write"></a>Z Write</h3><p>深度写入包括<strong>两种状态：ZWrite On 与 ZWrite Off</strong></p><p>当我们<strong>开启深度写入</strong>的时候，物体被渲染时针对物体在屏幕（更准确地说是frame buffer）上<strong>每个像素的深度都写入到深度缓冲区</strong>；反之，如果是<strong>ZWrite Off,</strong>那么物体的深度就<strong>不会写入深度缓冲区</strong>。但是，物体是否会写入深度，除了ZWrite这个状态之外，<strong>更重要的是需要深度测试通过</strong>，也就是ZTest通过，如果ZTest都没通过，那么也就不会写入深度了。</p><p>ZTest分为通过和不通过两种情况，ZWrite分为开启和关闭两种情况的四种情况：</p><ul><li>深度测试通过，深度写入开启：写入深度缓冲区，写入颜色缓冲区。</li><li>深度测试通过，深度写入关闭：不写深度缓冲区，写入颜色缓冲区。</li><li>深度测试失败，深度写入开启：不写深度缓冲区，不写颜色缓冲区。</li><li>深度测试失败，深度写入关闭：不写深度缓冲区，不屑颜色缓冲区。</li></ul><h3 id="Z-Test比较操作"><a href="#Z-Test比较操作" class="headerlink" title="Z Test比较操作"></a>Z Test比较操作</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Comp.png" alt="Z_Comp"></p><h3 id="渲染队列"><a href="#渲染队列" class="headerlink" title="渲染队列"></a>渲染队列</h3><p>Unity中内置的几种渲染队列，按照渲染顺序，从先到后进行排序，<strong>队列数越小，越先渲染，队列数越大，越后渲染。</strong></p><ul><li><strong>Background(1000) ：</strong>最早被渲染的物体的队列。</li><li><strong>Geometry(2000) ：</strong>不透明物体的渲染队列。大多数物体都应该使用该队列进行渲染，也是Unity Shader中默认的渲染队列。</li><li><strong>AlphaTest(2450) ：</strong>有透明通道，需要进行Alpha Test的物体的队列，比在Geometry中更有效。</li><li><strong>Transparent(3000) ：</strong> 半透物体的渲染队列。一般是不写深度的物体，Alpha Blend等的在该队列渲染。</li><li><strong>Overlay(4000) ：</strong>最后被渲染的物体的队列，一般是覆盖效果，比如镜头光晕，屏幕贴片之类的。</li></ul><h3 id="Unity中设置渲染队列"><a href="#Unity中设置渲染队列" class="headerlink" title="Unity中设置渲染队列"></a>Unity中设置渲染队列</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认是Geometry</span></span><br><span class="line">Tags&#123;</span><br><span class="line"><span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li><strong>不透明物体的渲染顺序：从前往后。</strong></li><li><strong>透明物体的渲染顺序：从后往前。（OverDraw）</strong></li><li>对于使用了多个Pass的物体，其渲染队列会设置为Pass中的最小值（如两个Pass中一个是Geometry(2000)，另一个是Transparent(3000)，那该物体会按Geometry的队列渲染，然后按Shader中从上到下执行Pass）。</li></ul><h3 id="Early-Z"><a href="#Early-Z" class="headerlink" title="Early-Z"></a>Early-Z</h3><p>传统的渲染管线中，ZTest其实是在Blending阶段，这时候进行深度测试，所有对象的像素着色器都会计算一遍，没有什么性能提升，仅仅是为了得出正确的遮挡结果，会造成大量的无用计算，因为每个像素点上肯定重叠了很多计算。<strong>因此现代GPU中运用了Early-Z的技术，在Vertex阶段和Fragment阶段之间（光栅化之后，fragment之前）进行一次深度测试，如果深度测试失败，就不必进行fragment阶段的计算了，因此在性能上会有很大的提升。但是最终的ZTest仍然需要进行，以保证最终的遮挡关系结果正确。</strong>前面的一次主要是<strong><em>Z-Cull</em></strong>为了裁剪以达到优化的目的，后一次主要是<strong><em>Z-Check</em></strong>，为了检查，如下图：</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/EarlyZ.png" alt="EarlyZ"></p><h2 id="c-深度值"><a href="#c-深度值" class="headerlink" title="c). 深度值"></a>c). 深度值</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Deepth.png" alt="Deepth"></p><h3 id="为什么深度缓冲区存储非线性深度呢？"><a href="#为什么深度缓冲区存储非线性深度呢？" class="headerlink" title="为什么深度缓冲区存储非线性深度呢？"></a>为什么深度缓冲区存储非线性深度呢？</h3><p><strong>正确的投影特性的非线性深度方程是和1/z成正比的，</strong>这样基本上做的是在<strong>Z很近的时候是高精度和Z很远的时候是底精度</strong>。这样就是模拟了人眼观察，<strong>近处的物体很清晰，而远处的物体很模糊。</strong>（和现在还用伽马校正的原因类似）</p><script type="math/tex; mode=display">F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }}</script><h3 id="Z-fighting"><a href="#Z-fighting" class="headerlink" title="Z-fighting"></a>Z-fighting</h3><p>两个平面或三角形很<strong>紧密相互平行，深度缓冲区不具有足够的精度</strong>以至于无法得到哪一个靠前。导致了着两个形状<strong>不断切换顺序出现怪异问题</strong>。这被称为<strong>深度冲突（Z-fighting）</strong>，因为它看上去像形状争夺顶靠前的位置。（UE中重叠闪来闪去的那个）</p><ul><li><p>解决方法</p><ul><li><p>让物体之间不要离得太近。</p></li><li><p>尽可能把<strong>近平面</strong>设置得远一些。</p></li><li><p>放弃一部分性能来获得更高精度的深度值。</p></li><li>Z-Offset</li></ul></li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_F.png" alt="Z_F"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;a-模板测试&quot;&gt;&lt;a href=&quot;#a-模板测试&quot; class=&quot;headerlink&quot; title=&quot;a). 模板测试&quot;&gt;&lt;/a&gt;a). 模板测试&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;处于&lt;strong&gt;逐片元操作&lt;/strong&gt;中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png&quot; alt=&quot;模板测试00&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png&quot; alt=&quot;模板测试01&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png&quot; alt=&quot;模板测试02&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;a-1-Unity-中的模板测试&quot;&gt;&lt;a href=&quot;#a-1-Unity-中的模板测试&quot; class=&quot;headerlink&quot; title=&quot;a.1). Unity 中的模板测试&quot;&gt;&lt;/a&gt;a.1). Unity 中的模板测试&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;语法表示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png&quot; alt=&quot;Unity_stencil&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png&quot; alt=&quot;Unity_stencil_Comparison&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png&quot; alt=&quot;Unity_stencil_Update&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;可作为遮罩等操作&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png&quot; alt=&quot;StencilBufferValue&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="模板测试" scheme="https://whitetail-o.github.io/tags/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="深度测试" scheme="https://whitetail-o.github.io/tags/%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   
