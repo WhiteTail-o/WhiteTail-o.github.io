@@ -6,7 +6,7 @@
     <content><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/Games104/">分类: Games104 | WhiteTail’s Blog (whitetail-o.github.io)(占位，待全部完成后上传)</a></p>
-<p><a href="https://whitetail-o.github.io/categories/SRP/">分类: SRP | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
+<p><a href="[WhiteTail-o/SRP_Demo (github.com">分类: SRP | WhiteTail’s Blog (whitetail-o.github.io)</a>](<a href="https://github.com/WhiteTail-o/SRP_Demo/tree/master">https://github.com/WhiteTail-o/SRP_Demo/tree/master</a>))</p>
 <p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
 <p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p>
@@ -41,71 +41,6 @@
       <categories>
         <category>目录</category>
       </categories>
-  </entry>
-  <entry>
-    <title>Demo</title>
-    <url>/2023/03/15/Demo/</url>
-    <content><![CDATA[<p>上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。</p>
-<h1 id="屏幕空间阴影"><a href="#屏幕空间阴影" class="headerlink" title="屏幕空间阴影"></a>屏幕空间阴影</h1><ul>
-<li><p>PCSS+SSAO</p>
-<p><img src="/2023/03/15/Demo/Untitled_1.1.1.png" alt="Untitled_1.1.1"></p>
-<p><img src="/2023/03/15/Demo/Untitled_1.5.1.png" alt="Untitled_1.5.1"></p>
-</li>
-<li><p>不同阴影方案的对比：</p>
-<p><img src="/2023/03/15/Demo/Untitled_2.2.1.png" alt="Untitled_2.2.1"></p>
-</li>
-</ul>
-<h1 id="PBR，屏幕空间反射，Bloom"><a href="#PBR，屏幕空间反射，Bloom" class="headerlink" title="PBR，屏幕空间反射，Bloom"></a>PBR，屏幕空间反射，Bloom</h1><ul>
-<li><p>此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。</p>
-<ul>
-<li>间接光照漫反射采用SH球谐函数</li>
-<li>间接光照高光则采用IBL的Split Sum</li>
-</ul>
-</li>
-<li><p>SSR，屏幕空间反射。算法实现倒不难，烦的在Unity左右手坐标系的问题，以及各种DX12和OpenGL之间的差异。后续会整理一篇坐标变换中，DX12和OpenGL之间的差异。</p>
-</li>
-<li><p>Bloom泛光</p>
-<p><img src="/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png" alt="Untitled_3.1.1"></p>
-</li>
-</ul>
-<span id="more"></span>
-<h1 id="皮肤渲染（预积分、屏幕空间次表面散射）"><a href="#皮肤渲染（预积分、屏幕空间次表面散射）" class="headerlink" title="皮肤渲染（预积分、屏幕空间次表面散射）"></a>皮肤渲染（预积分、屏幕空间次表面散射）</h1><ul>
-<li><p>此处采用的是使用SSSS实现SSS的SSSSS（:D，好绕），后续会专门写一个这个的文章，写一下各种Diffusion Profile，顺便把Burley Normalized中的PDF、CDF给写一下。</p>
-</li>
-<li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p>
-<p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p>
-</li>
-</ul>
-<h1 id="NPR"><a href="#NPR" class="headerlink" title="NPR"></a>NPR</h1><p>主播女孩重度依赖——超天酱</p>
-<p><img src="/2023/03/15/Demo/ChaoTian.jpeg" alt="ChaoTian"></p>
-<p>战双帕弥什——露西亚（NPR结合PBR）</p>
-<p><img src="/2023/03/15/Demo/Luxiya.png" alt="Luxiya"></p>
-<h1 id="曲面细分，几何着色器-DOF景深"><a href="#曲面细分，几何着色器-DOF景深" class="headerlink" title="曲面细分，几何着色器 + DOF景深"></a>曲面细分，几何着色器 + DOF景深</h1><p><img src="/2023/03/15/Demo/Untitled_1.10.2.png" alt="Untitled_1.10.2"></p>
-<h1 id="多层Pass短毛渲染"><a href="#多层Pass短毛渲染" class="headerlink" title="多层Pass短毛渲染"></a>多层Pass短毛渲染</h1><ul>
-<li>这里采用了30层Pass</li>
-</ul>
-<p><img src="/2023/03/15/Demo/Untitled_1.11.1.png" alt="Untitled_1.11.1"></p>
-<h1 id="基于UE5的动捕短片"><a href="#基于UE5的动捕短片" class="headerlink" title="基于UE5的动捕短片"></a>基于UE5的动捕短片</h1><ul>
-<li>动捕设备：诺亦腾</li>
-<li>后期动作修改：MotionBuilder、Maya</li>
-</ul>
-<p><img src="/2023/03/15/Demo/Untitled_1.15.1.png" alt="Untitled_1.15.1"></p>
-<h1 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h1><ul>
-<li><p>是用于建筑Mapping的短片，因此是竖屏的</p>
-<p><img src="/2023/03/15/Demo/Untitled_1.5.1-16790397550912.png" alt="Untitled_1.5.1" style="zoom:50%;"></p>
-<p><img src="/2023/03/15/Demo/Untitled_1.6.1.png" alt="Untitled_1.6.1" style="zoom:50%;"></p>
-</li>
-</ul>
-<p>  <img src="/2023/03/15/Demo/Untitled_1.3.1.png" alt="Untitled_1.3.1" style="zoom:50%;"></p>
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>还在慢慢完善</p>
-]]></content>
-      <categories>
-        <category>Demo</category>
-      </categories>
-      <tags>
-        <tag>Demo</tag>
-        <tag>图形学</tag>
-      </tags>
   </entry>
   <entry>
     <title>Games104_02_引擎分层架构</title>
@@ -300,6 +235,71 @@
         <tag>图形 API</tag>
         <tag>Unity</tag>
         <tag>转载</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Demo</title>
+    <url>/2023/03/15/Demo/</url>
+    <content><![CDATA[<p>上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。</p>
+<h1 id="屏幕空间阴影"><a href="#屏幕空间阴影" class="headerlink" title="屏幕空间阴影"></a>屏幕空间阴影</h1><ul>
+<li><p>PCSS+SSAO</p>
+<p><img src="/2023/03/15/Demo/Untitled_1.1.1.png" alt="Untitled_1.1.1"></p>
+<p><img src="/2023/03/15/Demo/Untitled_1.5.1.png" alt="Untitled_1.5.1"></p>
+</li>
+<li><p>不同阴影方案的对比：</p>
+<p><img src="/2023/03/15/Demo/Untitled_2.2.1.png" alt="Untitled_2.2.1"></p>
+</li>
+</ul>
+<h1 id="PBR，屏幕空间反射，Bloom"><a href="#PBR，屏幕空间反射，Bloom" class="headerlink" title="PBR，屏幕空间反射，Bloom"></a>PBR，屏幕空间反射，Bloom</h1><ul>
+<li><p>此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。</p>
+<ul>
+<li>间接光照漫反射采用SH球谐函数</li>
+<li>间接光照高光则采用IBL的Split Sum</li>
+</ul>
+</li>
+<li><p>SSR，屏幕空间反射。算法实现倒不难，烦的在Unity左右手坐标系的问题，以及各种DX12和OpenGL之间的差异。后续会整理一篇坐标变换中，DX12和OpenGL之间的差异。</p>
+</li>
+<li><p>Bloom泛光</p>
+<p><img src="/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png" alt="Untitled_3.1.1"></p>
+</li>
+</ul>
+<span id="more"></span>
+<h1 id="皮肤渲染（预积分、屏幕空间次表面散射）"><a href="#皮肤渲染（预积分、屏幕空间次表面散射）" class="headerlink" title="皮肤渲染（预积分、屏幕空间次表面散射）"></a>皮肤渲染（预积分、屏幕空间次表面散射）</h1><ul>
+<li><p>此处采用的是使用SSSS实现SSS的SSSSS（:D，好绕），后续会专门写一个这个的文章，写一下各种Diffusion Profile，顺便把Burley Normalized中的PDF、CDF给写一下。</p>
+</li>
+<li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p>
+<p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p>
+</li>
+</ul>
+<h1 id="NPR"><a href="#NPR" class="headerlink" title="NPR"></a>NPR</h1><p>主播女孩重度依赖——超天酱</p>
+<p><img src="/2023/03/15/Demo/ChaoTian.jpeg" alt="ChaoTian"></p>
+<p>战双帕弥什——露西亚（NPR结合PBR）</p>
+<p><img src="/2023/03/15/Demo/Luxiya.png" alt="Luxiya"></p>
+<h1 id="曲面细分，几何着色器-DOF景深"><a href="#曲面细分，几何着色器-DOF景深" class="headerlink" title="曲面细分，几何着色器 + DOF景深"></a>曲面细分，几何着色器 + DOF景深</h1><p><img src="/2023/03/15/Demo/Untitled_1.10.2.png" alt="Untitled_1.10.2"></p>
+<h1 id="多层Pass短毛渲染"><a href="#多层Pass短毛渲染" class="headerlink" title="多层Pass短毛渲染"></a>多层Pass短毛渲染</h1><ul>
+<li>这里采用了30层Pass</li>
+</ul>
+<p><img src="/2023/03/15/Demo/Untitled_1.11.1.png" alt="Untitled_1.11.1"></p>
+<h1 id="基于UE5的动捕短片"><a href="#基于UE5的动捕短片" class="headerlink" title="基于UE5的动捕短片"></a>基于UE5的动捕短片</h1><ul>
+<li>动捕设备：诺亦腾</li>
+<li>后期动作修改：MotionBuilder、Maya</li>
+</ul>
+<p><img src="/2023/03/15/Demo/Untitled_1.15.1.png" alt="Untitled_1.15.1"></p>
+<h1 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h1><ul>
+<li><p>是用于建筑Mapping的短片，因此是竖屏的</p>
+<p><img src="/2023/03/15/Demo/Untitled_1.5.1-16790397550912.png" alt="Untitled_1.5.1" style="zoom:50%;"></p>
+<p><img src="/2023/03/15/Demo/Untitled_1.6.1.png" alt="Untitled_1.6.1" style="zoom:50%;"></p>
+</li>
+</ul>
+<p>  <img src="/2023/03/15/Demo/Untitled_1.3.1.png" alt="Untitled_1.3.1" style="zoom:50%;"></p>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>还在慢慢完善</p>
+]]></content>
+      <categories>
+        <category>Demo</category>
+      </categories>
+      <tags>
+        <tag>Demo</tag>
+        <tag>图形学</tag>
       </tags>
   </entry>
   <entry>
