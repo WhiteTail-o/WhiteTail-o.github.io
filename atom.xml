@@ -6,7 +6,7 @@
   <link href="https://whitetail-o.github.io/atom.xml" rel="self"/>
   
   <link href="https://whitetail-o.github.io/"/>
-  <updated>2023-03-28T03:20:04.005Z</updated>
+  <updated>2023-07-08T14:03:24.450Z</updated>
   <id>https://whitetail-o.github.io/</id>
   
   <author>
@@ -17,17 +17,66 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Games104_02_引擎分层架构</title>
+    <link href="https://whitetail-o.github.io/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/"/>
+    <id>https://whitetail-o.github.io/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/</id>
+    <published>2023-07-01T10:20:10.000Z</published>
+    <updated>2023-07-08T14:03:24.450Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-引擎架构分层简介"><a href="#a-引擎架构分层简介" class="headerlink" title="a). 引擎架构分层简介"></a>a). 引擎架构分层简介</h1><ul><li>Tool Layer<ul><li>打开一个游戏引擎会直接看到各种类型的编辑器。这个直接和开发者进行交互的层称为<strong>工具层(tool layer)</strong>；</li></ul></li><li>Function Layer<ul><li>在工具层下面包含<strong>功能层(function layer)</strong>，用来实现游戏的渲染、动画、交互等不同类型的功能；</li></ul></li><li>Resource Layer<ul><li>在此基础上还需要<strong>资源层(resource layer)</strong>来管理各种各样的场景美术资源；</li></ul></li><li>Core Layer<ul><li>再下一层是<strong>核心层(core layer)</strong>，它包括支持游戏渲染、动画、物理系统、内存管理等不同系统的核心代码；</li></ul></li><li>Platform Layer<ul><li>最底层是<strong>平台层(platform layer)</strong>，一般包括各种图形API、输入设备支持以及不同游戏平台的底层代码；</li></ul></li></ul><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/Total_Layer.png" alt="Total_Layer"></p><span id="more"></span><h1 id="b-Resource-Layer"><a href="#b-Resource-Layer" class="headerlink" title="b). Resource Layer"></a>b). Resource Layer</h1><h2 id="b-1-Asset-and-importing"><a href="#b-1-Asset-and-importing" class="headerlink" title="b.1). Asset and importing"></a>b.1). Asset and importing</h2><p>导入素材，转换为引擎便于使用的高效类型（如PNG、JPG转换为DDS）。素材转换为<strong>Asset</strong>，如几何模型、纹理、声音、动画等。同时，也会有相应的<strong>Composite Asset</strong>定义资产间的引用关系（类似Unity的Prefab）。资产会有相应的<strong>GUID(全局唯一标识符，Globally Unique Identifier)</strong>进行识别和管理。</p><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/RL_Import.png" alt="RL_Import"></p><h2 id="b-2-Runtime-Asset-Manager"><a href="#b-2-Runtime-Asset-Manager" class="headerlink" title="b.2). Runtime Asset Manager"></a>b.2). Runtime Asset Manager</h2><ul><li>资源层需要对各类资产进行<strong>动态实时的管理</strong>，该功能通过<strong>handle</strong>（Link to ？）系统实现。<img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/RL_RAS.png" alt="RL_RAS"></li></ul><ul><li><p><strong>资源层核心：</strong>管理资产<strong>生命周期（Life Cycle）</strong>。</p></li><li><p><strong>策略：</strong></p><ol><li><strong>GC(Garbage Collection)</strong>；</li><li>动态/延迟加载；</li></ol><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/RL_RAS2.png" alt="RL_RAS2"></p></li></ul><h1 id="c-Function-Layer"><a href="#c-Function-Layer" class="headerlink" title="c). Function Layer"></a>c). Function Layer</h1><p><strong>功能层用来实现游戏的核心玩法。</strong>某种意义上讲功能层的作用类似于一个<strong>时钟(tick)</strong>用来控制整个游戏世界的运行，在每个时钟周期内功能层需要完成整个游戏系统的全部运算。</p><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/FL01.png" alt="FL01"></p><p>Tick会依次调用两个函数：<code>tickLogic()</code>以及<code>tickRender()</code>来分别<strong>更新系统的状态</strong>和并把<strong>图像绘制</strong>到屏幕上。这里需要注意逻辑的计算是严格早于渲染的，编程时也要注意不要把它们混到一起。<img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/FL_Tick01.png" alt="FL_Tick01"></p><p>为了提升游戏引擎的计算效率现代游戏引擎往往会通过多核的方式来充分利用CPU计算的资源。未来的游戏引擎架构一定会向多核并行的方向上发展，因此在设计引擎时最好从多核的角度进行思考。当然如何管理计算任务之间的依赖仍然是一个难点。</p><h1 id="d-Core-Layer"><a href="#d-Core-Layer" class="headerlink" title="d). Core Layer"></a>d). Core Layer</h1><p>核心库：包括高效的数学库、数据结构、<strong>内存管理(Memory Management)</strong>等。</p><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/CL03.png" alt="CL03"></p><p>核心层的数学库和通用数学库的一大区别在于游戏引擎对于计算的<strong>实时性要求更高</strong>，有时我们甚至可以牺牲一些计算精度来换取计算效率的提升。同时核心层数学库还大量使用了CPU的<strong>SIMD</strong>指令，这样可以极大地加速矩阵和向量的计算速度。<img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/CL01.png" alt="CL01"></p><p>数学库之外核心层还需要包含各种常用数据结构的实现。</p><p>核心层最重要的功能是实现<strong>内存管理(memory management)</strong>，使得运行时<strong>内存碎片尽量少，访问效率尽量高</strong>，从这个角度看游戏引擎的功能非常类似于操作系统。在游戏运行时往往会直接申请一大片内存空间然后通过引擎而不是操作系统进行管理，这样可以提升系统的运行效率。</p><ul><li>数据尽可能存放在一起（Memory Pool）</li><li>数据尽可能顺序排布，顺序读取（Reduce cache miss）</li><li>数据的读写尽量批量进行（如通过Memory alignment）</li></ul><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/CL02.png" alt="CL02"></p><h1 id="e-Platform-Layer"><a href="#e-Platform-Layer" class="headerlink" title="e). Platform Layer"></a>e). Platform Layer</h1><p>为了克服不同平台对于代码的限制，我们需要平台层来提供对不同操作系统和硬件平台的支持。这样我们就只需要一套代码就可以在不同的平台上运行程序。</p><p>不同的平台往往使用了不同的图形接口，为了统一代码游戏引擎的平台层提供了<strong>RHI(render hardware interface, 如SRP)</strong>作为通用的图形编程API。</p><ul><li><p>RHI包含了统一套程序在不同图形API（Vulkan、DX11、DX12等）上的实现，这样上层的图形应用中就可以使用统一的一套API进行编程。</p><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/PL01.png" alt="PL01"></p></li></ul><h1 id="f-Tool-Layer"><a href="#f-Tool-Layer" class="headerlink" title="f). Tool Layer"></a>f). Tool Layer</h1><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/TL01.png" alt="TL01"></p><p>除了游戏引擎自己的开发工具外一般还需要导入其它软件和开发工具的资产，这就需要<strong>Asset conditioning pipeline(起到如导入导出的作用)</strong>来提供不同资源导入游戏引擎的统一管线。可以说编辑器和asset conditioning pipeline共同构成了游戏引擎的工具层。</p><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/TL02.png" alt="TL02"></p><h1 id="g-Why-Layered-Architecture"><a href="#g-Why-Layered-Architecture" class="headerlink" title="g). Why Layered Architecture?"></a>g). Why Layered Architecture?</h1><p><img src="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/LA01.png" alt="LA01"></p><ul><li>上层可调动下层，下层无法调动上层；</li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-引擎架构分层简介&quot;&gt;&lt;a href=&quot;#a-引擎架构分层简介&quot; class=&quot;headerlink&quot; title=&quot;a). 引擎架构分层简介&quot;&gt;&lt;/a&gt;a). 引擎架构分层简介&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;Tool Layer&lt;ul&gt;
+&lt;li&gt;打开一个游戏引擎会直接看到各种类型的编辑器。这个直接和开发者进行交互的层称为&lt;strong&gt;工具层(tool layer)&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Function Layer&lt;ul&gt;
+&lt;li&gt;在工具层下面包含&lt;strong&gt;功能层(function layer)&lt;/strong&gt;，用来实现游戏的渲染、动画、交互等不同类型的功能；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Resource Layer&lt;ul&gt;
+&lt;li&gt;在此基础上还需要&lt;strong&gt;资源层(resource layer)&lt;/strong&gt;来管理各种各样的场景美术资源；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Core Layer&lt;ul&gt;
+&lt;li&gt;再下一层是&lt;strong&gt;核心层(core layer)&lt;/strong&gt;，它包括支持游戏渲染、动画、物理系统、内存管理等不同系统的核心代码；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Platform Layer&lt;ul&gt;
+&lt;li&gt;最底层是&lt;strong&gt;平台层(platform layer)&lt;/strong&gt;，一般包括各种图形API、输入设备支持以及不同游戏平台的底层代码；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/Total_Layer.png&quot; alt=&quot;Total_Layer&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Games104" scheme="https://whitetail-o.github.io/categories/Games104/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="Games104" scheme="https://whitetail-o.github.io/tags/Games104/"/>
+    
+    <category term="Engine architecture" scheme="https://whitetail-o.github.io/tags/Engine-architecture/"/>
+    
+  </entry>
+  
+  <entry>
     <title>目录</title>
     <link href="https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/"/>
     <id>https://whitetail-o.github.io/2023/03/27/%E7%9B%AE%E5%BD%95/</id>
     <published>2023-03-26T17:17:18.635Z</published>
-    <updated>2023-03-28T03:20:04.005Z</updated>
+    <updated>2023-07-08T14:05:17.669Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><span id="more"></span><h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul><li><p>通过Maya实现将平滑法线写入顶点色；</p><ul><li><p>事实上此方案只能完全解决不带顶点形变的物体描边，对于<strong>带形变动画</strong>的物体<strong>硬表面</strong>的描边只能<strong>改善</strong>。原因：</p><ul><li><p>切线空间是根据UV求出T、B向量，再根据顶点法线的方向对T，B向量做正交化，进而得到真正的切线、副切线（副法线）。（是的，切线和副切线方向不一定和uv方向相同）</p></li><li><p>对于不经法线修改的硬表面，其顶点法线方向方向等于面法线（值得一提的是，光滑组改变的是顶点法线的计算方式，而不是直接改变顶点法线）。那经过动画形变，重合顶点各自的切线空间的相对位置很可能发生偏移，进而改变TBN矩阵，造成法线断裂。解决方法想到了几个，但是都太耗了，得不偿失，等补充了参数化方面的知识再看看能不能完善此方案。</p><p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-47.png" alt="Snipaste_2023-03-28_11-09-47" style="zoom: 33%;"></p><p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-13.png" alt="Snipaste_2023-03-28_11-09-13" style="zoom: 25%;"></p></li></ul></li></ul></li></ul><ul><li><p>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</p></li><li><p>战双帕弥什的角色渲染分析；</p></li></ul><h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul><li>DX12龙书学习笔记；</li><li>SRP整理；</li></ul>]]></content>
+    <content type="html"><![CDATA[<h1 id="目前已有"><a href="#目前已有" class="headerlink" title="目前已有"></a>目前已有</h1><p><a href="https://whitetail-o.github.io/categories/Demo/">分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games101/">分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games104/">分类: Games104 | WhiteTail’s Blog (whitetail-o.github.io)(占位，待全部完成后上传)</a></p><p><a href="https://whitetail-o.github.io/categories/SRP/">分类: SRP | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/Games202/">分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/百人计划/">分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><p><a href="https://whitetail-o.github.io/categories/相机/">分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)</a></p><span id="more"></span><h1 id="已完成未上传"><a href="#已完成未上传" class="headerlink" title="已完成未上传"></a>已完成未上传</h1><ul><li><p>通过Maya实现将平滑法线写入顶点色；</p><ul><li><p>事实上此方案只能完全解决不带顶点形变的物体描边，对于<strong>带形变动画</strong>的物体<strong>硬表面</strong>的描边只能<strong>改善</strong>。原因：</p><ul><li><p>切线空间是根据UV求出T、B向量，再根据顶点法线的方向对T，B向量做正交化，进而得到真正的切线、副切线（副法线）。（是的，切线和副切线方向不一定和uv方向相同）</p></li><li><p>对于不经法线修改的硬表面，其顶点法线方向方向等于面法线（值得一提的是，光滑组改变的是顶点法线的计算方式，而不是直接改变顶点法线）。那经过动画形变，重合顶点各自的切线空间的相对位置很可能发生偏移，进而改变TBN矩阵，造成法线断裂。解决方法想到了几个，但是都太耗了，得不偿失，等补充了参数化方面的知识再看看能不能完善此方案。</p><p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-47.png" alt="Snipaste_2023-03-28_11-09-47" style="zoom: 33%;"></p><p><img src="/2023/03/27/%E7%9B%AE%E5%BD%95/Snipaste_2023-03-28_11-09-13.png" alt="Snipaste_2023-03-28_11-09-13" style="zoom: 25%;"></p></li></ul></li></ul></li></ul><ul><li><p>使用SSSS(Separable SSS)实现SSS的SSSSS(Screen Space SSS)            :D</p></li><li><p>战双帕弥什的角色渲染分析；</p></li></ul><h1 id="待完成"><a href="#待完成" class="headerlink" title="待完成"></a>待完成</h1><ul><li>DX12龙书学习笔记；</li><li>SRP整理；</li></ul>]]></content>
     
     
     <summary type="html">&lt;h1 id=&quot;目前已有&quot;&gt;&lt;a href=&quot;#目前已有&quot; class=&quot;headerlink&quot; title=&quot;目前已有&quot;&gt;&lt;/a&gt;目前已有&lt;/h1&gt;&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Demo/&quot;&gt;分类: Demo概述 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Games101/&quot;&gt;分类: Games101 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Games104/&quot;&gt;分类: Games104 | WhiteTail’s Blog (whitetail-o.github.io)(占位，待全部完成后上传)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/SRP/&quot;&gt;分类: SRP | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/Games202/&quot;&gt;分类: Games202 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/百人计划/&quot;&gt;分类: 百人计划 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://whitetail-o.github.io/categories/相机/&quot;&gt;分类: 相机概述 | WhiteTail’s Blog (whitetail-o.github.io)&lt;/a&gt;&lt;/p&gt;</summary>
@@ -904,75 +953,6 @@
     <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
     
     <category term="硬件" scheme="https://whitetail-o.github.io/tags/%E7%A1%AC%E4%BB%B6/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_2.7 HDR和LDR</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/</id>
-    <published>2023-02-15T09:35:32.000Z</published>
-    <updated>2023-03-17T05:01:21.251Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="a-基本概念"><a href="#a-基本概念" class="headerlink" title="a). 基本概念"></a>a). 基本概念</h2><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDRandLDR.png" alt="HDRandLDR"></p><ul><li><p>因为HDR可超过1，又被叫做<strong>浮点图像</strong><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/SP_HDR.png" alt="SP_HDR"></p><ul><li><p>也因为HDR可超过1，<strong>bloom</strong>会有较好的表现；</p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDR_Bloom.png" alt="HDR_Bloom"></p></li></ul></li></ul><h2 id="b-Unity中的HDR"><a href="#b-Unity中的HDR" class="headerlink" title="b). Unity中的HDR"></a>b). Unity中的HDR</h2><ul><li><p><strong>Camera</strong></p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Cam_HDR.png" alt="Cam_HDR"></p></li><li><p><strong>Lightmap</strong></p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Lightmap_HDR.png" alt="Lightmap_HDR"></p></li><li><p><strong>拾色器</strong></p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/拾色器_HDR.png" alt="拾色器_HDR"></p></li></ul><ul><li><p><strong>Unity中HDR的优缺点：</strong></p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/优缺点_HDR.png" alt="优缺点_HDR"></p></li></ul><h2 id="c-Bloom"><a href="#c-Bloom" class="headerlink" title="c). Bloom"></a>c). Bloom</h2><ul><li><p><strong>基础做法：</strong> 后处理中，选取高于一定亮度的像素区域，进行Blur（高斯模糊之类的），最后进行叠加；</p></li><li><p><strong>Unity中的做法：</strong></p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Unity_Bloom.png" alt="Unity_Bloom"></p></li></ul><h2 id="d-Toon-Mapping"><a href="#d-Toon-Mapping" class="headerlink" title="d). Toon Mapping"></a>d). Toon Mapping</h2><ul><li><p><strong>原因：</strong> 照相机和摄像机可以捕捉到HDR的影响，渲染过程中可以产生HDR的画面。这些内容如果需要显示到LDR的设备上，就需要一个称为tone mapping的过程，把HDR变成LDR。</p></li><li><p><strong>ACES曲线：</strong></p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/ACES_ToonMapping.png" alt="ACES_ToonMapping"></p></li><li><p>ToonMapping算法：<a href="https://zhuanlan.zhihu.com/p/21983679">https://zhuanlan.zhihu.com/p/21983679</a></p></li></ul><ul><li><strong>Lut：</strong> 略</li></ul><span id="more"></span><hr><p><strong>【参考资料】</strong></p><ul><li>《Unity Shader入门精要》</li><li><a href="https://zhuanlan.zhihu.com/p/57897827">https://docs.unity.cn/cn/current/Manual/HDR.html</a></li><li><a href="https://zhuanlan.zhihu.com/p/57897827">https://zhuanlan.zhihu.com/p/91390940</a></li><li><a href="https://zhuanlan.zhihu.com/p/57897827">https://zhuanlan.zhihu.com/p/80253409</a></li><li><a href="https://zhuanlan.zhihu.com/p/57897827">https://zhuanlan.zhihu.com/p/21983679</a></li><li><a href="https://zhuanlan.zhihu.com/p/57897827">http://www.openexr.org/</a></li><li><a href="https://zhuanlan.zhihu.com/p/57897827">http://www.hdrlabs.com/sibl/archive.html</a></li></ul><h2 id="作业：试试IBL在HDR和LDR的区别"><a href="#作业：试试IBL在HDR和LDR的区别" class="headerlink" title="作业：试试IBL在HDR和LDR的区别"></a>作业：试试IBL在HDR和LDR的区别</h2><p><a href="https://blog.csdn.net/qq_43210334/article/details/117415250">https://blog.csdn.net/qq_43210334/article/details/117415250</a></p><ul><li><p>以下是在Unity中的对比，分别是使用ACES曲线的LDR和HDR的对比，同时加入了轻微的Bloom；</p><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/ACES_vs_HDR_Bloom.png" alt="ACES_vs_HDR_Bloom"></p></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;a-基本概念&quot;&gt;&lt;a href=&quot;#a-基本概念&quot; class=&quot;headerlink&quot; title=&quot;a). 基本概念&quot;&gt;&lt;/a&gt;a). 基本概念&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDRandLDR.png&quot; alt=&quot;HDRandLDR&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;因为HDR可超过1，又被叫做&lt;strong&gt;浮点图像&lt;/strong&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/SP_HDR.png&quot; alt=&quot;SP_HDR&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;也因为HDR可超过1，&lt;strong&gt;bloom&lt;/strong&gt;会有较好的表现；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDR_Bloom.png&quot; alt=&quot;HDR_Bloom&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;b-Unity中的HDR&quot;&gt;&lt;a href=&quot;#b-Unity中的HDR&quot; class=&quot;headerlink&quot; title=&quot;b). Unity中的HDR&quot;&gt;&lt;/a&gt;b). Unity中的HDR&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Camera&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Cam_HDR.png&quot; alt=&quot;Cam_HDR&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Lightmap&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Lightmap_HDR.png&quot; alt=&quot;Lightmap_HDR&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;拾色器&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/拾色器_HDR.png&quot; alt=&quot;拾色器_HDR&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Unity中HDR的优缺点：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/优缺点_HDR.png&quot; alt=&quot;优缺点_HDR&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;c-Bloom&quot;&gt;&lt;a href=&quot;#c-Bloom&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom&quot;&gt;&lt;/a&gt;c). Bloom&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;基础做法：&lt;/strong&gt; 后处理中，选取高于一定亮度的像素区域，进行Blur（高斯模糊之类的），最后进行叠加；&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;Unity中的做法：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Unity_Bloom.png&quot; alt=&quot;Unity_Bloom&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;d-Toon-Mapping&quot;&gt;&lt;a href=&quot;#d-Toon-Mapping&quot; class=&quot;headerlink&quot; title=&quot;d). Toon Mapping&quot;&gt;&lt;/a&gt;d). Toon Mapping&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;原因：&lt;/strong&gt; 照相机和摄像机可以捕捉到HDR的影响，渲染过程中可以产生HDR的画面。这些内容如果需要显示到LDR的设备上，就需要一个称为tone mapping的过程，把HDR变成LDR。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;ACES曲线：&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/ACES_ToonMapping.png&quot; alt=&quot;ACES_ToonMapping&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;ToonMapping算法：&lt;a href=&quot;https://zhuanlan.zhihu.com/p/21983679&quot;&gt;https://zhuanlan.zhihu.com/p/21983679&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Lut：&lt;/strong&gt; 略&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="色彩管理" scheme="https://whitetail-o.github.io/tags/%E8%89%B2%E5%BD%A9%E7%AE%A1%E7%90%86/"/>
     
   </entry>
   

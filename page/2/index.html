@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,105 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">HPP_Graphics_4.1 Bloom算法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 19:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T19:24:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:18:01" itemprop="dateModified" datetime="2023-03-17T13:18:01+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p>
+<h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p>
+<h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p>
+<p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p>
+<h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1256,144 +1355,6 @@
 </ol>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/anesu/p/15807749.html#/c/subject/p/15807749.html">https://www.cnblogs.com/anesu/p/15807749.html#/c/subject/p/15807749.html</a></p>
 
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/" class="post-title-link" itemprop="url">HPP_Graphics_2.7 HDR和LDR</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 17:35:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:35:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:01:21" itemprop="dateModified" datetime="2023-03-17T13:01:21+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="a-基本概念"><a href="#a-基本概念" class="headerlink" title="a). 基本概念"></a>a). 基本概念</h2><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDRandLDR.png" alt="HDRandLDR"></p>
-<ul>
-<li><p>因为HDR可超过1，又被叫做<strong>浮点图像</strong><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/SP_HDR.png" alt="SP_HDR"></p>
-<ul>
-<li><p>也因为HDR可超过1，<strong>bloom</strong>会有较好的表现；</p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDR_Bloom.png" alt="HDR_Bloom"></p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="b-Unity中的HDR"><a href="#b-Unity中的HDR" class="headerlink" title="b). Unity中的HDR"></a>b). Unity中的HDR</h2><ul>
-<li><p><strong>Camera</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Cam_HDR.png" alt="Cam_HDR"></p>
-</li>
-<li><p><strong>Lightmap</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Lightmap_HDR.png" alt="Lightmap_HDR"></p>
-</li>
-<li><p><strong>拾色器</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/拾色器_HDR.png" alt="拾色器_HDR"></p>
-</li>
-</ul>
-<ul>
-<li><p><strong>Unity中HDR的优缺点：</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/优缺点_HDR.png" alt="优缺点_HDR"></p>
-</li>
-</ul>
-<h2 id="c-Bloom"><a href="#c-Bloom" class="headerlink" title="c). Bloom"></a>c). Bloom</h2><ul>
-<li><p><strong>基础做法：</strong> 后处理中，选取高于一定亮度的像素区域，进行Blur（高斯模糊之类的），最后进行叠加；</p>
-</li>
-<li><p><strong>Unity中的做法：</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Unity_Bloom.png" alt="Unity_Bloom"></p>
-</li>
-</ul>
-<h2 id="d-Toon-Mapping"><a href="#d-Toon-Mapping" class="headerlink" title="d). Toon Mapping"></a>d). Toon Mapping</h2><ul>
-<li><p><strong>原因：</strong> 照相机和摄像机可以捕捉到HDR的影响，渲染过程中可以产生HDR的画面。这些内容如果需要显示到LDR的设备上，就需要一个称为tone mapping的过程，把HDR变成LDR。</p>
-</li>
-<li><p><strong>ACES曲线：</strong></p>
-<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/ACES_ToonMapping.png" alt="ACES_ToonMapping"></p>
-</li>
-<li><p>ToonMapping算法：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/21983679">https://zhuanlan.zhihu.com/p/21983679</a></p>
-</li>
-</ul>
-<ul>
-<li><strong>Lut：</strong> 略</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
       
     </div>
 

@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,144 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/" class="post-title-link" itemprop="url">HPP_Graphics_2.7 HDR和LDR</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:35:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:35:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:01:21" itemprop="dateModified" datetime="2023-03-17T13:01:21+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="a-基本概念"><a href="#a-基本概念" class="headerlink" title="a). 基本概念"></a>a). 基本概念</h2><p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDRandLDR.png" alt="HDRandLDR"></p>
+<ul>
+<li><p>因为HDR可超过1，又被叫做<strong>浮点图像</strong><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/SP_HDR.png" alt="SP_HDR"></p>
+<ul>
+<li><p>也因为HDR可超过1，<strong>bloom</strong>会有较好的表现；</p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/HDR_Bloom.png" alt="HDR_Bloom"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-Unity中的HDR"><a href="#b-Unity中的HDR" class="headerlink" title="b). Unity中的HDR"></a>b). Unity中的HDR</h2><ul>
+<li><p><strong>Camera</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Cam_HDR.png" alt="Cam_HDR"></p>
+</li>
+<li><p><strong>Lightmap</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Lightmap_HDR.png" alt="Lightmap_HDR"></p>
+</li>
+<li><p><strong>拾色器</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/拾色器_HDR.png" alt="拾色器_HDR"></p>
+</li>
+</ul>
+<ul>
+<li><p><strong>Unity中HDR的优缺点：</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/优缺点_HDR.png" alt="优缺点_HDR"></p>
+</li>
+</ul>
+<h2 id="c-Bloom"><a href="#c-Bloom" class="headerlink" title="c). Bloom"></a>c). Bloom</h2><ul>
+<li><p><strong>基础做法：</strong> 后处理中，选取高于一定亮度的像素区域，进行Blur（高斯模糊之类的），最后进行叠加；</p>
+</li>
+<li><p><strong>Unity中的做法：</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/Unity_Bloom.png" alt="Unity_Bloom"></p>
+</li>
+</ul>
+<h2 id="d-Toon-Mapping"><a href="#d-Toon-Mapping" class="headerlink" title="d). Toon Mapping"></a>d). Toon Mapping</h2><ul>
+<li><p><strong>原因：</strong> 照相机和摄像机可以捕捉到HDR的影响，渲染过程中可以产生HDR的画面。这些内容如果需要显示到LDR的设备上，就需要一个称为tone mapping的过程，把HDR变成LDR。</p>
+</li>
+<li><p><strong>ACES曲线：</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/ACES_ToonMapping.png" alt="ACES_ToonMapping"></p>
+</li>
+<li><p>ToonMapping算法：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/21983679">https://zhuanlan.zhihu.com/p/21983679</a></p>
+</li>
+</ul>
+<ul>
+<li><strong>Lut：</strong> 略</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_2.7_HDR%E5%92%8CLDR/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1248,154 +1386,6 @@ V=\left[\begin{array}{cccc}
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/" class="post-title-link" itemprop="url">Games202-4 Real-time Global Illumination(Screen Space)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-10 16:52:10" itemprop="dateCreated datePublished" datetime="2023-02-10T16:52:10+08:00">2023-02-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:16:48" itemprop="dateModified" datetime="2023-02-12T21:16:48+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Screen-Space-Ambient-Occlusion-SSAO"><a href="#a-Screen-Space-Ambient-Occlusion-SSAO" class="headerlink" title="a). Screen Space Ambient Occlusion(SSAO)"></a>a). Screen Space Ambient Occlusion(SSAO)</h1><h2 id="a-1-Introduction"><a href="#a-1-Introduction" class="headerlink" title="a.1). Introduction"></a>a.1). Introduction</h2><ul>
-<li><strong>SSAO:</strong> 在<strong>屏幕空间</strong>中，对全局光照的近似；</li>
-</ul>
-<ul>
-<li><p><strong>Key idea:</strong></p>
-<ol>
-<li><p>假设各方向间接光照的强度相同（类似于Phong模型中的Ambition light）</p>
-</li>
-<li><p>考虑不同着色点，有<strong>不同的Visibility</strong></p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro01.png" alt="SSAO_Intro01" style="zoom:50%;"></p>
-</li>
-<li><p>假设材质为<strong>diffuse</strong></p>
-</li>
-<li><p>假设间接光照来自于比较远的地方。因此，橙色的光线，即一定范围内不被遮挡的光线会贡献间接光。（如假设间接光来自比较近的地方，则是红色射线方向贡献间接光）</p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro02.png" alt="SSAO_Intro02" style="zoom:50%;"></p>
-</li>
-</ol>
-</li>
-</ul>
-<h2 id="a-2-Theory"><a href="#a-2-Theory" class="headerlink" title="a.2). Theory"></a>a.2). Theory</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory01.png" alt="SSAO_Theory01" style="zoom:50%;"></p>
-<ul>
-<li><p>通过不等式，拆分渲染方程为：</p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory02.png" alt="SSAO_Theory02" style="zoom:50%;"></p>
-<ul>
-<li>$k_A$ 项代表<strong>不同方向Visibility的（加权）平均</strong></li>
-<li><p>黄色框可用一个Constant color表示</p>
-<ul>
-<li>假设了间接光 $L_i^{indir}$ 各方向强度相同，因此为常数；</li>
-<li>假设了材质为Diffuse，因此BRDF为常数；</li>
-<li>$cos\theta$ 半球积分为$\pi$</li>
-</ul>
-</li>
-<li><p>同样，因为黄色框，即$g(x)$为常数，其Support极小。因此，应用该不等式是<strong>精确</strong>的</p>
-</li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><strong>A deeper understanding 1:</strong><ul>
-<li><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory03.png" alt="SSAO_Theory03" style="zoom:50%;"></li>
-</ul>
-</li>
-</ul>
-<ul>
-<li><p><strong>A deeper understanding 2:（为什么Visibility项会有$cos\theta$）</strong></p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory04.png" alt="SSAO_Theory04" style="zoom:50%;"></p>
-<ul>
-<li><p>加上 $cos\theta$ 的含义是<strong>把积分域从单位半球投影到单位圆上</strong>(Projected solid angle)；</p>
-<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory05.png" alt="SSAO_Theory05" style="zoom:50%;"></p>
-</li>
-<li><p><strong><font color="red">为什么要这么做呢？</font></strong></p>
-</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

@@ -151,18 +151,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-count">48</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-count">8</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">43</span>
+        <span class="site-state-item-count">45</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,154 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/" class="post-title-link" itemprop="url">Games202-4 Real-time Global Illumination(Screen Space)</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-10 16:52:10" itemprop="dateCreated datePublished" datetime="2023-02-10T16:52:10+08:00">2023-02-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-02-12 21:16:48" itemprop="dateModified" datetime="2023-02-12T21:16:48+08:00">2023-02-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-Screen-Space-Ambient-Occlusion-SSAO"><a href="#a-Screen-Space-Ambient-Occlusion-SSAO" class="headerlink" title="a). Screen Space Ambient Occlusion(SSAO)"></a>a). Screen Space Ambient Occlusion(SSAO)</h1><h2 id="a-1-Introduction"><a href="#a-1-Introduction" class="headerlink" title="a.1). Introduction"></a>a.1). Introduction</h2><ul>
+<li><strong>SSAO:</strong> 在<strong>屏幕空间</strong>中，对全局光照的近似；</li>
+</ul>
+<ul>
+<li><p><strong>Key idea:</strong></p>
+<ol>
+<li><p>假设各方向间接光照的强度相同（类似于Phong模型中的Ambition light）</p>
+</li>
+<li><p>考虑不同着色点，有<strong>不同的Visibility</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro01.png" alt="SSAO_Intro01" style="zoom:50%;"></p>
+</li>
+<li><p>假设材质为<strong>diffuse</strong></p>
+</li>
+<li><p>假设间接光照来自于比较远的地方。因此，橙色的光线，即一定范围内不被遮挡的光线会贡献间接光。（如假设间接光来自比较近的地方，则是红色射线方向贡献间接光）</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Intro02.png" alt="SSAO_Intro02" style="zoom:50%;"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="a-2-Theory"><a href="#a-2-Theory" class="headerlink" title="a.2). Theory"></a>a.2). Theory</h2><p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory01.png" alt="SSAO_Theory01" style="zoom:50%;"></p>
+<ul>
+<li><p>通过不等式，拆分渲染方程为：</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory02.png" alt="SSAO_Theory02" style="zoom:50%;"></p>
+<ul>
+<li>$k_A$ 项代表<strong>不同方向Visibility的（加权）平均</strong></li>
+<li><p>黄色框可用一个Constant color表示</p>
+<ul>
+<li>假设了间接光 $L_i^{indir}$ 各方向强度相同，因此为常数；</li>
+<li>假设了材质为Diffuse，因此BRDF为常数；</li>
+<li>$cos\theta$ 半球积分为$\pi$</li>
+</ul>
+</li>
+<li><p>同样，因为黄色框，即$g(x)$为常数，其Support极小。因此，应用该不等式是<strong>精确</strong>的</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>A deeper understanding 1:</strong><ul>
+<li><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory03.png" alt="SSAO_Theory03" style="zoom:50%;"></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p><strong>A deeper understanding 2:（为什么Visibility项会有$cos\theta$）</strong></p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory04.png" alt="SSAO_Theory04" style="zoom:50%;"></p>
+<ul>
+<li><p>加上 $cos\theta$ 的含义是<strong>把积分域从单位半球投影到单位圆上</strong>(Projected solid angle)；</p>
+<p><img src="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/SSAO_Theory05.png" alt="SSAO_Theory05" style="zoom:50%;"></p>
+</li>
+<li><p><strong><font color="red">为什么要这么做呢？</font></strong></p>
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/10/Games202_04_Real-time%20Global%20Illumination(Screen%20Space)/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1319,148 +1467,6 @@ E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{m
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/02/01/Games202_01_Recap%20of%20CG%20Basics/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划等笔记，后续准备上传DX12、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/" class="post-title-link" itemprop="url">Games101_19_20 Cameras Lenses and Light Fileds</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2022-10-03 18:25:10" itemprop="dateCreated datePublished" datetime="2022-10-03T18:25:10+08:00">2022-10-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-04 14:31:58" itemprop="dateModified" datetime="2023-02-04T14:31:58+08:00">2023-02-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games101/" itemprop="url" rel="index"><span itemprop="name">Games101</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="Lecture19"><a href="#Lecture19" class="headerlink" title="Lecture19"></a>Lecture19</h1><ul>
-<li><p>讲相机的，老本行笔记直接看别人的吧；</p>
-<p><a target="_blank" rel="noopener" href="http://t.csdn.cn/4gODC">http://t.csdn.cn/4gODC</a></p>
-</li>
-</ul>
-<h2 id="b-Light-Field-Lumingraph-光场"><a href="#b-Light-Field-Lumingraph-光场" class="headerlink" title="b). Light Field / Lumingraph(光场)"></a>b). Light Field / Lumingraph(光场)</h2><table frame="void">
-    <tr>
-    <td><center><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_000.png" alt="LF_000" height="250"></center></td>
-    <td><center><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_001.png" alt="LF_001" height="250"></center></td>
-    </tr>
-</table>
-
-<ul>
-<li>两者看到的光线信息完全相同，那人眼中的世界就完全相同；</li>
-</ul>
-<h3 id="b-1-The-Plenoptic-Function-全光函数"><a href="#b-1-The-Plenoptic-Function-全光函数" class="headerlink" title="b.1). The Plenoptic Function(全光函数)"></a>b.1). The Plenoptic Function(全光函数)</h3><p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PlenopticFunc.png" alt="PlenopticFunc"></p>
-<ul>
-<li>现实世界可以用一个七维的全光函数进行描述，记录了任意时间，不同位置的不同方向接收光的波长</li>
-<li>参数：<ul>
-<li>$\theta$ ：方位角</li>
-<li>$\phi$：俯仰角</li>
-<li>$\lambda$：波长</li>
-<li>$t$：时间</li>
-<li>$V_X，V_Y,V_Z$：位置</li>
-</ul>
-</li>
-</ul>
-<h3 id="b-2-Light-Field"><a href="#b-2-Light-Field" class="headerlink" title="b.2). Light Field"></a>b.2). Light Field</h3><p><strong>光场</strong>则可以认为是记录了任何一个点所接收的任何一个方向的irradiance。</p>
-<ul>
-<li>可用四维函数表示，二维描述位置，二维描述方向</li>
-<li>光线可由两个点定义，因此这四维可改写成s,t,u,v。即两个平面上的位置； </li>
-</ul>
-<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/LF_2Plane.png" alt="LF_2Plane"></p>
-<ul>
-<li><p>由此得出，描述一个物体的光场，只需要记录其包围盒上四维的全光函数即可</p>
-<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/PF_Thing.png" alt="PF_Thing"></p>
-</li>
-<li><p>从uv平面看向st平面，得到的是这个物体从各个方向看的相应的图像；</p>
-</li>
-<li><p>而从st看向uv，则得到的是这个物体在这个方向的irradiance的集合（不是合起来，而是类似二维数组的集合）即<strong>radiance</strong></p>
-<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/uvst.png" alt="uvst"></p>
-</li>
-<li><p><strong>st到uv</strong></p>
-<p><img src="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/st2uv.png" alt="st2uv"></p>
-<ul>
-<li>记录不同方向的光线radiance（注意和拜耳阵列的区分，这里三色只是代表不同方向）</li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2022/10/03/Games101_19_20_Cameras_Lenses_LightFileds/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
