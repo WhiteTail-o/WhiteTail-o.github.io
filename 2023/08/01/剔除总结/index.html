@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="0). 前言最近实际做项目的时候发现对自身知识体系做整理的重要性，因此之后会慢慢做一些总结和思维导图，比如剔除、GI（GI方案、反射、AO等）、阴影等。本篇就以剔除开始； a). 粗粒度剔除（CPU为主）包括视锥剔除和遮挡剔除，为物体层面。  发生阶段：CPU应用阶段；  a.1). 视锥剔除CPU阶段，物体的AABB包围盒与视锥体6个面分别作判断，剔除包围盒完全处于视锥体外的物体； a.2).">
+<meta property="og:type" content="article">
+<meta property="og:title" content="剔除总结">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="0). 前言最近实际做项目的时候发现对自身知识体系做整理的重要性，因此之后会慢慢做一些总结和思维导图，比如剔除、GI（GI方案、反射、AO等）、阴影等。本篇就以剔除开始； a). 粗粒度剔除（CPU为主）包括视锥剔除和遮挡剔除，为物体层面。  发生阶段：CPU应用阶段；  a.1). 视锥剔除CPU阶段，物体的AABB包围盒与视锥体6个面分别作判断，剔除包围盒完全处于视锥体外的物体； a.2).">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814111511843.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814104133507.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814104234702.png">
+<meta property="article:published_time" content="2023-08-01T11:24:32.000Z">
+<meta property="article:modified_time" content="2023-08-15T12:21:50.672Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="剔除">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814111511843.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/","path":"2023/08/01/剔除总结/","title":"剔除总结"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>剔除总结 | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#0-%E5%89%8D%E8%A8%80"><span class="nav-text">0). 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#a-%E7%B2%97%E7%B2%92%E5%BA%A6%E5%89%94%E9%99%A4%EF%BC%88CPU%E4%B8%BA%E4%B8%BB%EF%BC%89"><span class="nav-text">a). 粗粒度剔除（CPU为主）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-1-%E8%A7%86%E9%94%A5%E5%89%94%E9%99%A4"><span class="nav-text">a.1). 视锥剔除</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-2-%E9%81%AE%E6%8C%A1%E5%89%94%E9%99%A4"><span class="nav-text">a.2). 遮挡剔除</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-1-%E5%9F%BA%E4%BA%8EOcclusion-Query"><span class="nav-text">a.2.1). 基于Occlusion Query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#a-2-2-%E5%9F%BA%E4%BA%8ESoftware-Rasterization%EF%BC%88%E8%BD%AF%E4%BB%B6%E5%89%94%E9%99%A4%EF%BC%89"><span class="nav-text">a.2.2). 基于Software Rasterization（软件剔除）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-3-PVS-Potentially-Visible-Set"><span class="nav-text">a.3). PVS(Potentially Visible Set)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-4-Portal"><span class="nav-text">a.4). Portal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-5-%E5%B1%82%E7%BA%A7%E5%89%94%E9%99%A4%EF%BC%88Layer-Culling-Mask%EF%BC%89"><span class="nav-text">a.5). 层级剔除（Layer Culling Mask）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#a-6-%E8%B7%9D%E7%A6%BB%E5%89%94%E9%99%A4%EF%BC%88LOD%E5%90%8C%E7%90%86%EF%BC%89"><span class="nav-text">a.6). 距离剔除（LOD同理）</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#b-%E7%A1%AC%E4%BB%B6%E5%89%94%E9%99%A4%EF%BC%88GPU%E4%B8%BA%E4%B8%BB%EF%BC%89"><span class="nav-text">b). 硬件剔除（GPU为主）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#b-1-Hiz-Culling"><span class="nav-text">b.1). Hiz Culling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-2-Clipping-amp-Backface-Culling"><span class="nav-text">b.2). Clipping &amp; Backface Culling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-3-Early-Z"><span class="nav-text">b.3). Early-Z</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-4-Z-Cull"><span class="nav-text">b.4). Z-Cull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-5-Depth-Test"><span class="nav-text">b.5). Depth Test</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-6-HSR-Forward-Pixel-Kill"><span class="nav-text">b.6). HSR&#x2F;Forward Pixel Kill</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#c-%E5%85%B6%E4%BB%96%E5%89%94%E9%99%A4"><span class="nav-text">c). 其他剔除</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="剔除总结 | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          剔除总结
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-01 19:24:32" itemprop="dateCreated datePublished" datetime="2023-08-01T19:24:32+08:00">2023-08-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-08-15 20:21:50" itemprop="dateModified" datetime="2023-08-15T20:21:50+08:00">2023-08-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E6%95%B4%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">整理</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0). 前言"></a>0). 前言</h1><p>最近实际做项目的时候发现对自身知识体系做整理的重要性，因此之后会慢慢做一些总结和思维导图，比如剔除、GI（GI方案、反射、AO等）、阴影等。本篇就以剔除开始；</p>
+<h1 id="a-粗粒度剔除（CPU为主）"><a href="#a-粗粒度剔除（CPU为主）" class="headerlink" title="a). 粗粒度剔除（CPU为主）"></a>a). 粗粒度剔除（CPU为主）</h1><p>包括视锥剔除和遮挡剔除，为物体层面。</p>
+<ul>
+<li><strong>发生阶段：CPU应用阶段</strong>；</li>
+</ul>
+<h2 id="a-1-视锥剔除"><a href="#a-1-视锥剔除" class="headerlink" title="a.1). 视锥剔除"></a>a.1). 视锥剔除</h2><p>CPU阶段，物体的AABB包围盒与视锥体6个面分别作判断，剔除包围盒完全处于视锥体外的物体；</p>
+<h2 id="a-2-遮挡剔除"><a href="#a-2-遮挡剔除" class="headerlink" title="a.2). 遮挡剔除"></a>a.2). 遮挡剔除</h2><h3 id="a-2-1-基于Occlusion-Query"><a href="#a-2-1-基于Occlusion-Query" class="headerlink" title="a.2.1). 基于Occlusion Query"></a>a.2.1). 基于Occlusion Query</h3><p>在深度测试时得到待剔除物体相关数据，在应用程序阶段执行。</p>
+<ul>
+<li><strong>Occlusion Query:</strong> 在绘制命令执行前向GPU插入一条查询，在绘制结束后的某个时刻，从GPU将查询结果回读到内存中，得到<strong>某次DrawCall中通过Depth Test的Sample数量</strong>。</li>
+</ul>
+<ul>
+<li><strong>基础做法：</strong> <ol>
+<li>用<strong>Depth-Only</strong>的Pass将场景整体绘制一遍，将物体（的包围盒）深度写入Z-Buffer中；</li>
+<li>使用<strong>物体的包围盒</strong>传入GPU进行<strong>Occlusion Query</strong>。如query得到的sample数大于0，则表示该物体（部分）可见，<strong>剔除掉Sample等于0的物体</strong>；</li>
+<li>执行正常的渲染流程；</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><strong>缺点：</strong><ol>
+<li>对于复杂场景，Depth-Only也有较大的开销；</li>
+<li>需要将查询结果读回内存（VRAM -&gt; System RAM），需要走PCI-E（IMR架构）；<ul>
+<li>常见的解决方法：回读上一帧Occlusion Query的结果，但可能导致一定的错误（但之后深度测试也可保证画面正确，因此此处出错只是增加了一部分渲染开销）；</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="a-2-2-基于Software-Rasterization（软件剔除）"><a href="#a-2-2-基于Software-Rasterization（软件剔除）" class="headerlink" title="a.2.2). 基于Software Rasterization（软件剔除）"></a>a.2.2). 基于Software Rasterization（软件剔除）</h3><p>最早由Frostbite提出，用于战地3的剔除方案。</p>
+<ul>
+<li>CPU构造一个低分辨率的Z-Buffer，在其中绘制一些场景中较大的遮挡物（美术设定的一些大物体+地形）；</li>
+<li>在构造好的Z-Buffer上，绘制小物体的包围盒，执行类似Occlusion Query的操作进行剔除；</li>
+</ul>
+<p><img src="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814111511843.png" alt="image-20230814111511843"></p>
+<span id="more"></span>
+<ul>
+<li><strong>相比于基于Occlusion Query的方案：</strong><ul>
+<li><strong>优点：</strong> 纯CPU，集成方便，避免GPU Stall；</li>
+<li><strong>缺点：</strong> 需要美术设定大物体的遮挡，对CPU性能有一定消耗，对于CPU负载大的场景可能造成负优化；</li>
+</ul>
+</li>
+</ul>
+<h2 id="a-3-PVS-Potentially-Visible-Set"><a href="#a-3-PVS-Potentially-Visible-Set" class="headerlink" title="a.3). PVS(Potentially Visible Set)"></a>a.3). PVS(Potentially Visible Set)</h2><p>潜在可见集。PVS的基本思想为：<strong>离线</strong>的把场景划分成许多个块，这些分块的划分可能是均匀的3D网格，也能是自适应大小的3D网格。完成网格划分之后会<strong>计算网格之间的可见性或场景中每个物体对当前网格的可见集用</strong>于之后剔除。</p>
+<p><img src="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814104133507.png" alt="image-20230814104133507"></p>
+<h2 id="a-4-Portal"><a href="#a-4-Portal" class="headerlink" title="a.4). Portal"></a>a.4). Portal</h2><p><img src="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814104234702.png" alt="image-20230814104234702"></p>
+<p>这种方式也是将场景划分成Cell，不同的是，烘焙时保存的是每<strong>两个相邻Cell之间的连通性</strong>。</p>
+<p>这样，在运行时，根据摄影机所在的位置的Cell和观察方向，就可以根据Cell间的连通性信息，快速计算出目标物体是否处于可见范围内。Unity自带的遮挡剔除就是使用改方法（<strong>Umbra</strong>）</p>
+<p><strong>优点</strong>（相较于PVS）：可以剔除动态物体，同时提供了些许的静态遮挡物体变化的灵活性（如有扇可以开关的门，当门被打开后，就可以将门两侧的Cell的连通打开）；</p>
+<p><strong>缺点：</strong> 相较于视锥剔除的通用性来说其应用场景更受限制，且需要手工标定；</p>
+<h2 id="a-5-层级剔除（Layer-Culling-Mask）"><a href="#a-5-层级剔除（Layer-Culling-Mask）" class="headerlink" title="a.5). 层级剔除（Layer Culling Mask）"></a>a.5). 层级剔除（Layer Culling Mask）</h2><p>对特定Layer的物体进行选择性剔除</p>
+<h2 id="a-6-距离剔除（LOD同理）"><a href="#a-6-距离剔除（LOD同理）" class="headerlink" title="a.6). 距离剔除（LOD同理）"></a>a.6). 距离剔除（LOD同理）</h2><h1 id="b-硬件剔除（GPU为主）"><a href="#b-硬件剔除（GPU为主）" class="headerlink" title="b). 硬件剔除（GPU为主）"></a>b). 硬件剔除（GPU为主）</h1><h2 id="b-1-Hiz-Culling"><a href="#b-1-Hiz-Culling" class="headerlink" title="b.1). Hiz Culling"></a>b.1). Hiz Culling</h2><ul>
+<li><strong>发生阶段：</strong> 在Geometry Shader得到待剔除物体，在下一Pass的Vertex Shader渲染。剔除可通过Compute Shader实现；</li>
+</ul>
+<ul>
+<li><strong>具体实现：</strong><ol>
+<li>拿到上一帧深度buffer，利用深度buffer构造深度的mipmap，每一层mip中像素的值是上一级mip中对应位置的深度最大值（最远处）；</li>
+<li>将场景物体分为：上一帧已有物体（集合1）、当前帧新增物体（集合2）；</li>
+<li>对于集合1，根据其包围盒在屏幕上的大小取对应级别的Hi-z map图，通过深度比较进行剔除；</li>
+<li>根据3剔除结果绘制集合1，更新z buffer；</li>
+<li>利用新的z buffer建立mipmap深度图，对集合2进行剔除；</li>
+<li>绘制集合2的物体，更新z buffer；</li>
+</ol>
+</li>
+</ul>
+<h2 id="b-2-Clipping-amp-Backface-Culling"><a href="#b-2-Clipping-amp-Backface-Culling" class="headerlink" title="b.2). Clipping &amp; Backface Culling"></a>b.2). Clipping &amp; Backface Culling</h2><p>Clipping处于顶点被转换到NDC后，Backface Culling处于图元装配后根据顶点绕序进行剔除；</p>
+<h2 id="b-3-Early-Z"><a href="#b-3-Early-Z" class="headerlink" title="b.3). Early-Z"></a>b.3). Early-Z</h2><p><strong>发生阶段：</strong> 光栅化后，FS前（Z-Cull后）；</p>
+<p><strong>对象：</strong> 2x2 Pixel Quad；</p>
+<ul>
+<li>Tips：<ol>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/timlly/p/11471507.html">深入GPU硬件架构及运行机制 - 0向往0 - 博客园 (cnblogs.com)</a><ul>
+<li>解释了Early-Z为何需要有Late-Z，除了失效情况，还可解决深度数据冲突（depth data harzard）</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="b-4-Z-Cull"><a href="#b-4-Z-Cull" class="headerlink" title="b.4). Z-Cull"></a>b.4). Z-Cull</h2><p><strong>发生阶段：</strong> 光栅化后，FS前（Early-Z前）；</p>
+<p><strong>对象：</strong>较为粗粒度，为Pixel Tile（如8*8的像素块）</p>
+<h2 id="b-5-Depth-Test"><a href="#b-5-Depth-Test" class="headerlink" title="b.5). Depth Test"></a>b.5). Depth Test</h2><p><strong>发生阶段：</strong> 逐片元操作（输出合并）；</p>
+<p><strong>对象：</strong> fragment；</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/timlly/p/11471507.html">深入GPU硬件架构及运行机制 - 0向往0 - 博客园 (cnblogs.com)</a></p>
+<ul>
+<li>解释了Early-Z为何需要有Late-Z，除了失效情况，还可解决深度数据冲突（depth data harzard）</li>
+</ul>
+<h2 id="b-6-HSR-Forward-Pixel-Kill"><a href="#b-6-HSR-Forward-Pixel-Kill" class="headerlink" title="b.6). HSR/Forward Pixel Kill"></a>b.6). HSR/Forward Pixel Kill</h2><p>TBDR架构中，光栅化后，light pass前。</p>
+<ul>
+<li><strong>对比于Early-Z：</strong> early-z需要物体排序，对于不透明物体如果从后往前排序，那early-z无法解决overdraw。而HSR/FPK，可以起到完全解决overdraw（在全部fragment生成后，进入到FS前筛选出最前面的fragment）；</li>
+</ul>
+<h1 id="c-其他剔除"><a href="#c-其他剔除" class="headerlink" title="c). 其他剔除"></a>c). 其他剔除</h1><ul>
+<li><p>Forward+ 的 Light culling</p>
+</li>
+<li><p>……</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E5%89%94%E9%99%A4/" rel="tag"># 剔除</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/07/01/Games104_02_%E5%BC%95%E6%93%8E%E5%88%86%E5%B1%82%E6%9E%B6%E6%9E%84/" rel="prev" title="Games104_02_引擎分层架构">
+                  <i class="fa fa-chevron-left"></i> Games104_02_引擎分层架构
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>

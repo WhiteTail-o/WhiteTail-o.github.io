@@ -6,7 +6,7 @@
   <link href="https://whitetail-o.github.io/atom.xml" rel="self"/>
   
   <link href="https://whitetail-o.github.io/"/>
-  <updated>2023-07-08T14:03:24.450Z</updated>
+  <updated>2023-08-15T12:21:50.672Z</updated>
   <id>https://whitetail-o.github.io/</id>
   
   <author>
@@ -15,6 +15,66 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>剔除总结</title>
+    <link href="https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/"/>
+    <id>https://whitetail-o.github.io/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/</id>
+    <published>2023-08-01T11:24:32.000Z</published>
+    <updated>2023-08-15T12:21:50.672Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="0-前言"><a href="#0-前言" class="headerlink" title="0). 前言"></a>0). 前言</h1><p>最近实际做项目的时候发现对自身知识体系做整理的重要性，因此之后会慢慢做一些总结和思维导图，比如剔除、GI（GI方案、反射、AO等）、阴影等。本篇就以剔除开始；</p><h1 id="a-粗粒度剔除（CPU为主）"><a href="#a-粗粒度剔除（CPU为主）" class="headerlink" title="a). 粗粒度剔除（CPU为主）"></a>a). 粗粒度剔除（CPU为主）</h1><p>包括视锥剔除和遮挡剔除，为物体层面。</p><ul><li><strong>发生阶段：CPU应用阶段</strong>；</li></ul><h2 id="a-1-视锥剔除"><a href="#a-1-视锥剔除" class="headerlink" title="a.1). 视锥剔除"></a>a.1). 视锥剔除</h2><p>CPU阶段，物体的AABB包围盒与视锥体6个面分别作判断，剔除包围盒完全处于视锥体外的物体；</p><h2 id="a-2-遮挡剔除"><a href="#a-2-遮挡剔除" class="headerlink" title="a.2). 遮挡剔除"></a>a.2). 遮挡剔除</h2><h3 id="a-2-1-基于Occlusion-Query"><a href="#a-2-1-基于Occlusion-Query" class="headerlink" title="a.2.1). 基于Occlusion Query"></a>a.2.1). 基于Occlusion Query</h3><p>在深度测试时得到待剔除物体相关数据，在应用程序阶段执行。</p><ul><li><strong>Occlusion Query:</strong> 在绘制命令执行前向GPU插入一条查询，在绘制结束后的某个时刻，从GPU将查询结果回读到内存中，得到<strong>某次DrawCall中通过Depth Test的Sample数量</strong>。</li></ul><ul><li><strong>基础做法：</strong> <ol><li>用<strong>Depth-Only</strong>的Pass将场景整体绘制一遍，将物体（的包围盒）深度写入Z-Buffer中；</li><li>使用<strong>物体的包围盒</strong>传入GPU进行<strong>Occlusion Query</strong>。如query得到的sample数大于0，则表示该物体（部分）可见，<strong>剔除掉Sample等于0的物体</strong>；</li><li>执行正常的渲染流程；</li></ol></li></ul><ul><li><strong>缺点：</strong><ol><li>对于复杂场景，Depth-Only也有较大的开销；</li><li>需要将查询结果读回内存（VRAM -&gt; System RAM），需要走PCI-E（IMR架构）；<ul><li>常见的解决方法：回读上一帧Occlusion Query的结果，但可能导致一定的错误（但之后深度测试也可保证画面正确，因此此处出错只是增加了一部分渲染开销）；</li></ul></li></ol></li></ul><h3 id="a-2-2-基于Software-Rasterization（软件剔除）"><a href="#a-2-2-基于Software-Rasterization（软件剔除）" class="headerlink" title="a.2.2). 基于Software Rasterization（软件剔除）"></a>a.2.2). 基于Software Rasterization（软件剔除）</h3><p>最早由Frostbite提出，用于战地3的剔除方案。</p><ul><li>CPU构造一个低分辨率的Z-Buffer，在其中绘制一些场景中较大的遮挡物（美术设定的一些大物体+地形）；</li><li>在构造好的Z-Buffer上，绘制小物体的包围盒，执行类似Occlusion Query的操作进行剔除；</li></ul><p><img src="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814111511843.png" alt="image-20230814111511843"></p><span id="more"></span><ul><li><strong>相比于基于Occlusion Query的方案：</strong><ul><li><strong>优点：</strong> 纯CPU，集成方便，避免GPU Stall；</li><li><strong>缺点：</strong> 需要美术设定大物体的遮挡，对CPU性能有一定消耗，对于CPU负载大的场景可能造成负优化；</li></ul></li></ul><h2 id="a-3-PVS-Potentially-Visible-Set"><a href="#a-3-PVS-Potentially-Visible-Set" class="headerlink" title="a.3). PVS(Potentially Visible Set)"></a>a.3). PVS(Potentially Visible Set)</h2><p>潜在可见集。PVS的基本思想为：<strong>离线</strong>的把场景划分成许多个块，这些分块的划分可能是均匀的3D网格，也能是自适应大小的3D网格。完成网格划分之后会<strong>计算网格之间的可见性或场景中每个物体对当前网格的可见集用</strong>于之后剔除。</p><p><img src="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814104133507.png" alt="image-20230814104133507"></p><h2 id="a-4-Portal"><a href="#a-4-Portal" class="headerlink" title="a.4). Portal"></a>a.4). Portal</h2><p><img src="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814104234702.png" alt="image-20230814104234702"></p><p>这种方式也是将场景划分成Cell，不同的是，烘焙时保存的是每<strong>两个相邻Cell之间的连通性</strong>。</p><p>这样，在运行时，根据摄影机所在的位置的Cell和观察方向，就可以根据Cell间的连通性信息，快速计算出目标物体是否处于可见范围内。Unity自带的遮挡剔除就是使用改方法（<strong>Umbra</strong>）</p><p><strong>优点</strong>（相较于PVS）：可以剔除动态物体，同时提供了些许的静态遮挡物体变化的灵活性（如有扇可以开关的门，当门被打开后，就可以将门两侧的Cell的连通打开）；</p><p><strong>缺点：</strong> 相较于视锥剔除的通用性来说其应用场景更受限制，且需要手工标定；</p><h2 id="a-5-层级剔除（Layer-Culling-Mask）"><a href="#a-5-层级剔除（Layer-Culling-Mask）" class="headerlink" title="a.5). 层级剔除（Layer Culling Mask）"></a>a.5). 层级剔除（Layer Culling Mask）</h2><p>对特定Layer的物体进行选择性剔除</p><h2 id="a-6-距离剔除（LOD同理）"><a href="#a-6-距离剔除（LOD同理）" class="headerlink" title="a.6). 距离剔除（LOD同理）"></a>a.6). 距离剔除（LOD同理）</h2><h1 id="b-硬件剔除（GPU为主）"><a href="#b-硬件剔除（GPU为主）" class="headerlink" title="b). 硬件剔除（GPU为主）"></a>b). 硬件剔除（GPU为主）</h1><h2 id="b-1-Hiz-Culling"><a href="#b-1-Hiz-Culling" class="headerlink" title="b.1). Hiz Culling"></a>b.1). Hiz Culling</h2><ul><li><strong>发生阶段：</strong> 在Geometry Shader得到待剔除物体，在下一Pass的Vertex Shader渲染。剔除可通过Compute Shader实现；</li></ul><ul><li><strong>具体实现：</strong><ol><li>拿到上一帧深度buffer，利用深度buffer构造深度的mipmap，每一层mip中像素的值是上一级mip中对应位置的深度最大值（最远处）；</li><li>将场景物体分为：上一帧已有物体（集合1）、当前帧新增物体（集合2）；</li><li>对于集合1，根据其包围盒在屏幕上的大小取对应级别的Hi-z map图，通过深度比较进行剔除；</li><li>根据3剔除结果绘制集合1，更新z buffer；</li><li>利用新的z buffer建立mipmap深度图，对集合2进行剔除；</li><li>绘制集合2的物体，更新z buffer；</li></ol></li></ul><h2 id="b-2-Clipping-amp-Backface-Culling"><a href="#b-2-Clipping-amp-Backface-Culling" class="headerlink" title="b.2). Clipping &amp; Backface Culling"></a>b.2). Clipping &amp; Backface Culling</h2><p>Clipping处于顶点被转换到NDC后，Backface Culling处于图元装配后根据顶点绕序进行剔除；</p><h2 id="b-3-Early-Z"><a href="#b-3-Early-Z" class="headerlink" title="b.3). Early-Z"></a>b.3). Early-Z</h2><p><strong>发生阶段：</strong> 光栅化后，FS前（Z-Cull后）；</p><p><strong>对象：</strong> 2x2 Pixel Quad；</p><ul><li>Tips：<ol><li><a href="https://www.cnblogs.com/timlly/p/11471507.html">深入GPU硬件架构及运行机制 - 0向往0 - 博客园 (cnblogs.com)</a><ul><li>解释了Early-Z为何需要有Late-Z，除了失效情况，还可解决深度数据冲突（depth data harzard）</li></ul></li></ol></li></ul><h2 id="b-4-Z-Cull"><a href="#b-4-Z-Cull" class="headerlink" title="b.4). Z-Cull"></a>b.4). Z-Cull</h2><p><strong>发生阶段：</strong> 光栅化后，FS前（Early-Z前）；</p><p><strong>对象：</strong>较为粗粒度，为Pixel Tile（如8*8的像素块）</p><h2 id="b-5-Depth-Test"><a href="#b-5-Depth-Test" class="headerlink" title="b.5). Depth Test"></a>b.5). Depth Test</h2><p><strong>发生阶段：</strong> 逐片元操作（输出合并）；</p><p><strong>对象：</strong> fragment；</p><p><a href="https://www.cnblogs.com/timlly/p/11471507.html">深入GPU硬件架构及运行机制 - 0向往0 - 博客园 (cnblogs.com)</a></p><ul><li>解释了Early-Z为何需要有Late-Z，除了失效情况，还可解决深度数据冲突（depth data harzard）</li></ul><h2 id="b-6-HSR-Forward-Pixel-Kill"><a href="#b-6-HSR-Forward-Pixel-Kill" class="headerlink" title="b.6). HSR/Forward Pixel Kill"></a>b.6). HSR/Forward Pixel Kill</h2><p>TBDR架构中，光栅化后，light pass前。</p><ul><li><strong>对比于Early-Z：</strong> early-z需要物体排序，对于不透明物体如果从后往前排序，那early-z无法解决overdraw。而HSR/FPK，可以起到完全解决overdraw（在全部fragment生成后，进入到FS前筛选出最前面的fragment）；</li></ul><h1 id="c-其他剔除"><a href="#c-其他剔除" class="headerlink" title="c). 其他剔除"></a>c). 其他剔除</h1><ul><li><p>Forward+ 的 Light culling</p></li><li><p>……</p></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;0-前言&quot;&gt;&lt;a href=&quot;#0-前言&quot; class=&quot;headerlink&quot; title=&quot;0). 前言&quot;&gt;&lt;/a&gt;0). 前言&lt;/h1&gt;&lt;p&gt;最近实际做项目的时候发现对自身知识体系做整理的重要性，因此之后会慢慢做一些总结和思维导图，比如剔除、GI（GI方案、反射、AO等）、阴影等。本篇就以剔除开始；&lt;/p&gt;
+&lt;h1 id=&quot;a-粗粒度剔除（CPU为主）&quot;&gt;&lt;a href=&quot;#a-粗粒度剔除（CPU为主）&quot; class=&quot;headerlink&quot; title=&quot;a). 粗粒度剔除（CPU为主）&quot;&gt;&lt;/a&gt;a). 粗粒度剔除（CPU为主）&lt;/h1&gt;&lt;p&gt;包括视锥剔除和遮挡剔除，为物体层面。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;发生阶段：CPU应用阶段&lt;/strong&gt;；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;a-1-视锥剔除&quot;&gt;&lt;a href=&quot;#a-1-视锥剔除&quot; class=&quot;headerlink&quot; title=&quot;a.1). 视锥剔除&quot;&gt;&lt;/a&gt;a.1). 视锥剔除&lt;/h2&gt;&lt;p&gt;CPU阶段，物体的AABB包围盒与视锥体6个面分别作判断，剔除包围盒完全处于视锥体外的物体；&lt;/p&gt;
+&lt;h2 id=&quot;a-2-遮挡剔除&quot;&gt;&lt;a href=&quot;#a-2-遮挡剔除&quot; class=&quot;headerlink&quot; title=&quot;a.2). 遮挡剔除&quot;&gt;&lt;/a&gt;a.2). 遮挡剔除&lt;/h2&gt;&lt;h3 id=&quot;a-2-1-基于Occlusion-Query&quot;&gt;&lt;a href=&quot;#a-2-1-基于Occlusion-Query&quot; class=&quot;headerlink&quot; title=&quot;a.2.1). 基于Occlusion Query&quot;&gt;&lt;/a&gt;a.2.1). 基于Occlusion Query&lt;/h3&gt;&lt;p&gt;在深度测试时得到待剔除物体相关数据，在应用程序阶段执行。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Occlusion Query:&lt;/strong&gt; 在绘制命令执行前向GPU插入一条查询，在绘制结束后的某个时刻，从GPU将查询结果回读到内存中，得到&lt;strong&gt;某次DrawCall中通过Depth Test的Sample数量&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;基础做法：&lt;/strong&gt; &lt;ol&gt;
+&lt;li&gt;用&lt;strong&gt;Depth-Only&lt;/strong&gt;的Pass将场景整体绘制一遍，将物体（的包围盒）深度写入Z-Buffer中；&lt;/li&gt;
+&lt;li&gt;使用&lt;strong&gt;物体的包围盒&lt;/strong&gt;传入GPU进行&lt;strong&gt;Occlusion Query&lt;/strong&gt;。如query得到的sample数大于0，则表示该物体（部分）可见，&lt;strong&gt;剔除掉Sample等于0的物体&lt;/strong&gt;；&lt;/li&gt;
+&lt;li&gt;执行正常的渲染流程；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;缺点：&lt;/strong&gt;&lt;ol&gt;
+&lt;li&gt;对于复杂场景，Depth-Only也有较大的开销；&lt;/li&gt;
+&lt;li&gt;需要将查询结果读回内存（VRAM -&amp;gt; System RAM），需要走PCI-E（IMR架构）；&lt;ul&gt;
+&lt;li&gt;常见的解决方法：回读上一帧Occlusion Query的结果，但可能导致一定的错误（但之后深度测试也可保证画面正确，因此此处出错只是增加了一部分渲染开销）；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;a-2-2-基于Software-Rasterization（软件剔除）&quot;&gt;&lt;a href=&quot;#a-2-2-基于Software-Rasterization（软件剔除）&quot; class=&quot;headerlink&quot; title=&quot;a.2.2). 基于Software Rasterization（软件剔除）&quot;&gt;&lt;/a&gt;a.2.2). 基于Software Rasterization（软件剔除）&lt;/h3&gt;&lt;p&gt;最早由Frostbite提出，用于战地3的剔除方案。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU构造一个低分辨率的Z-Buffer，在其中绘制一些场景中较大的遮挡物（美术设定的一些大物体+地形）；&lt;/li&gt;
+&lt;li&gt;在构造好的Z-Buffer上，绘制小物体的包围盒，执行类似Occlusion Query的操作进行剔除；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/image-20230814111511843.png&quot; alt=&quot;image-20230814111511843&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="整理" scheme="https://whitetail-o.github.io/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E6%95%B4%E7%90%86/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="剔除" scheme="https://whitetail-o.github.io/tags/%E5%89%94%E9%99%A4/"/>
+    
+  </entry>
   
   <entry>
     <title>Games104_02_引擎分层架构</title>
@@ -121,51 +181,6 @@
     <category term="Unity" scheme="https://whitetail-o.github.io/tags/Unity/"/>
     
     <category term="转载" scheme="https://whitetail-o.github.io/tags/%E8%BD%AC%E8%BD%BD/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Demo</title>
-    <link href="https://whitetail-o.github.io/2023/03/15/Demo/"/>
-    <id>https://whitetail-o.github.io/2023/03/15/Demo/</id>
-    <published>2023-03-15T08:15:10.000Z</published>
-    <updated>2023-07-08T14:09:04.286Z</updated>
-    
-    <content type="html"><![CDATA[<p>上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。</p><h1 id="屏幕空间阴影"><a href="#屏幕空间阴影" class="headerlink" title="屏幕空间阴影"></a>屏幕空间阴影</h1><ul><li><p>PCSS+SSAO</p><p><img src="/2023/03/15/Demo/Untitled_1.1.1.png" alt="Untitled_1.1.1"></p><p><img src="/2023/03/15/Demo/Untitled_1.5.1.png" alt="Untitled_1.5.1"></p></li><li><p>不同阴影方案的对比：</p><p><img src="/2023/03/15/Demo/Untitled_2.2.1.png" alt="Untitled_2.2.1"></p></li></ul><h1 id="PBR，屏幕空间反射，Bloom"><a href="#PBR，屏幕空间反射，Bloom" class="headerlink" title="PBR，屏幕空间反射，Bloom"></a>PBR，屏幕空间反射，Bloom</h1><ul><li><p>此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。</p><ul><li>间接光照漫反射采用SH球谐函数</li><li>间接光照高光则采用IBL的Split Sum</li></ul></li><li><p>SSR，屏幕空间反射。算法实现倒不难，烦的在Unity左右手坐标系的问题，以及各种DX12和OpenGL之间的差异。后续会整理一篇坐标变换中，DX12和OpenGL之间的差异。</p></li><li><p>Bloom泛光</p><p><img src="/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png" alt="Untitled_3.1.1"></p></li></ul><span id="more"></span><h1 id="皮肤渲染（预积分、屏幕空间次表面散射）"><a href="#皮肤渲染（预积分、屏幕空间次表面散射）" class="headerlink" title="皮肤渲染（预积分、屏幕空间次表面散射）"></a>皮肤渲染（预积分、屏幕空间次表面散射）</h1><ul><li><p>此处采用的是使用SSSS实现SSS的SSSSS（:D，好绕），后续会专门写一个这个的文章，写一下各种Diffusion Profile，顺便把Burley Normalized中的PDF、CDF给写一下。</p></li><li><p>通过模板测试制作出皮肤的Mask，再通过MRT，使用两张RT存储高光和漫反射的Irradiance。对漫反射的Irradiance使用Diffusion Profile（此处使用的Diffusion Profile是Separable Sum-of-Gaussians）做卷积去近似次表面散射。最后叠上高光就好啦，下面是效果图：</p><p><img src="/2023/03/15/Demo/Untitled_1.21.1.png" alt="Untitled_1.21.1"></p></li></ul><h1 id="NPR"><a href="#NPR" class="headerlink" title="NPR"></a>NPR</h1><p>主播女孩重度依赖——超天酱</p><p><img src="/2023/03/15/Demo/ChaoTian.jpeg" alt="ChaoTian"></p><p>战双帕弥什——露西亚（NPR结合PBR）</p><p><img src="/2023/03/15/Demo/Luxiya.png" alt="Luxiya"></p><h1 id="曲面细分，几何着色器-DOF景深"><a href="#曲面细分，几何着色器-DOF景深" class="headerlink" title="曲面细分，几何着色器 + DOF景深"></a>曲面细分，几何着色器 + DOF景深</h1><p><img src="/2023/03/15/Demo/Untitled_1.10.2.png" alt="Untitled_1.10.2"></p><h1 id="多层Pass短毛渲染"><a href="#多层Pass短毛渲染" class="headerlink" title="多层Pass短毛渲染"></a>多层Pass短毛渲染</h1><ul><li>这里采用了30层Pass</li></ul><p><img src="/2023/03/15/Demo/Untitled_1.11.1.png" alt="Untitled_1.11.1"></p><h1 id="基于UE5的动捕短片"><a href="#基于UE5的动捕短片" class="headerlink" title="基于UE5的动捕短片"></a>基于UE5的动捕短片</h1><ul><li>动捕设备：诺亦腾</li><li>后期动作修改：MotionBuilder、Maya</li></ul><p><img src="/2023/03/15/Demo/Untitled_1.15.1.png" alt="Untitled_1.15.1"></p><h1 id="Mapping"><a href="#Mapping" class="headerlink" title="Mapping"></a>Mapping</h1><ul><li><p>是用于建筑Mapping的短片，因此是竖屏的</p><p><img src="/2023/03/15/Demo/Untitled_1.5.1-16790397550912.png" alt="Untitled_1.5.1" style="zoom:50%;"></p><p><img src="/2023/03/15/Demo/Untitled_1.6.1.png" alt="Untitled_1.6.1" style="zoom:50%;"></p></li></ul><p>  <img src="/2023/03/15/Demo/Untitled_1.3.1.png" alt="Untitled_1.3.1" style="zoom:50%;"></p><h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><p>还在慢慢完善</p>]]></content>
-    
-    
-    <summary type="html">&lt;p&gt;上传一些小Demo，基本都是实时渲染的内容，主要通过Unity和UE实现。&lt;/p&gt;
-&lt;h1 id=&quot;屏幕空间阴影&quot;&gt;&lt;a href=&quot;#屏幕空间阴影&quot; class=&quot;headerlink&quot; title=&quot;屏幕空间阴影&quot;&gt;&lt;/a&gt;屏幕空间阴影&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;PCSS+SSAO&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/03/15/Demo/Untitled_1.1.1.png&quot; alt=&quot;Untitled_1.1.1&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/03/15/Demo/Untitled_1.5.1.png&quot; alt=&quot;Untitled_1.5.1&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;不同阴影方案的对比：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/03/15/Demo/Untitled_2.2.1.png&quot; alt=&quot;Untitled_2.2.1&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;PBR，屏幕空间反射，Bloom&quot;&gt;&lt;a href=&quot;#PBR，屏幕空间反射，Bloom&quot; class=&quot;headerlink&quot; title=&quot;PBR，屏幕空间反射，Bloom&quot;&gt;&lt;/a&gt;PBR，屏幕空间反射，Bloom&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;此处实现的PBR是基于实时渲染中使用较多的Cook-Torrance模型，采用Disney‘s Principled BRDF，其中法线分布项（Specular D）采用了指数更高的GTR以获得更长的高光。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;间接光照漫反射采用SH球谐函数&lt;/li&gt;
-&lt;li&gt;间接光照高光则采用IBL的Split Sum&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;SSR，屏幕空间反射。算法实现倒不难，烦的在Unity左右手坐标系的问题，以及各种DX12和OpenGL之间的差异。后续会整理一篇坐标变换中，DX12和OpenGL之间的差异。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Bloom泛光&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/03/15/Demo/Untitled_3.1.1-16790393917991.png&quot; alt=&quot;Untitled_3.1.1&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="Demo" scheme="https://whitetail-o.github.io/categories/Demo/"/>
-    
-    
-    <category term="Demo" scheme="https://whitetail-o.github.io/tags/Demo/"/>
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
   </entry>
   
@@ -311,9 +326,9 @@
     
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
-    <category term="Ray-Tracing" scheme="https://whitetail-o.github.io/tags/Ray-Tracing/"/>
-    
     <category term="Games202" scheme="https://whitetail-o.github.io/tags/Games202/"/>
+    
+    <category term="Ray-Tracing" scheme="https://whitetail-o.github.io/tags/Ray-Tracing/"/>
     
     <category term="Denoise" scheme="https://whitetail-o.github.io/tags/Denoise/"/>
     
@@ -406,9 +421,9 @@
     
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
     <category term="PBR" scheme="https://whitetail-o.github.io/tags/PBR/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
     
   </entry>
   
@@ -437,96 +452,9 @@
     
     <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
     
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
     <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.1 Bloom算法</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:01.920Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
-&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
-&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
-&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
     <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.2 SSAO</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:32.679Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p><h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p><h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p><ol><li><p>获取深度、法线（View Space）缓冲；</p><ul><li><p>Normal Buffer：</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p></li></ul></li><li><p>重构像素相机空间中的坐标；</p><ul><li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p><ul><li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li></ul></li></ul></li><li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p><ul><li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li></ul></li></ol><span id="more"></span><h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p><p>SSAO的shader中共有三个Pass：</p><ol><li>计算生成AO；</li><li>模糊 / 滤波</li><li>AO与Color buffer混合；</li></ol><h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p><p>在采样块中循环生成采样点，判断是否被遮蔽</p><p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p><p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p><ol><li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p></li></ol><ol><li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p></li><li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p></li><li><p>将此前生成的随机向量转换到法线空间中。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p><p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p><p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p></li></ol><h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p><h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p><p>在c#脚本中需要加入渲染路径的判断</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p><h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>    </tr></table><hr><p>这场景好像不太明显，只有在大图里看的清楚，</p><h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>    </tr></table><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-AO-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#a-AO-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;a). AO(Ambient Occlusion)&quot;&gt;&lt;/a&gt;a). AO(Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png&quot; alt=&quot;AO00&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-SSAO-Screen-Space-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#b-SSAO-Screen-Space-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;b). SSAO(Screen Space Ambient Occlusion)&quot;&gt;&lt;/a&gt;b). SSAO(Screen Space Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的&lt;strong&gt;深度缓冲&lt;/strong&gt;、&lt;strong&gt;法线缓冲&lt;/strong&gt;以及&lt;strong&gt;像素坐标&lt;/strong&gt;来计算实现，来近似的表现物体在间接光下产生的阴影。&lt;/p&gt;
-&lt;h2 id=&quot;b-1-SSAO原理&quot;&gt;&lt;a href=&quot;#b-1-SSAO原理&quot; class=&quot;headerlink&quot; title=&quot;b.1). SSAO原理&quot;&gt;&lt;/a&gt;b.1). SSAO原理&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png&quot; alt=&quot;SSAO原理&quot;&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;获取深度、法线（View Space）缓冲；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Normal Buffer：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png&quot; alt=&quot;NormalBuffer&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;重构像素相机空间中的坐标；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;通过深度缓冲的depth值重构（近似）该视角下的三维场景；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png&quot; alt=&quot;DepthBuffer&quot; style=&quot;zoom:25%;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png&quot; alt=&quot;法向半球&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
@@ -581,6 +509,93 @@
     <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="阴影" scheme="https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_4.2 SSAO</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:32.679Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p><h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p><h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p><ol><li><p>获取深度、法线（View Space）缓冲；</p><ul><li><p>Normal Buffer：</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p></li></ul></li><li><p>重构像素相机空间中的坐标；</p><ul><li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p><ul><li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li></ul></li></ul></li><li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p><ul><li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li></ul></li></ol><span id="more"></span><h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p><p>SSAO的shader中共有三个Pass：</p><ol><li>计算生成AO；</li><li>模糊 / 滤波</li><li>AO与Color buffer混合；</li></ol><h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p><p>在采样块中循环生成采样点，判断是否被遮蔽</p><p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p><p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p><ol><li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p></li></ol><ol><li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p></li><li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p></li><li><p>将此前生成的随机向量转换到法线空间中。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p><p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p><p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p></li></ol><h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p><h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p><p>在c#脚本中需要加入渲染路径的判断</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p><h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>    </tr></table><hr><p>这场景好像不太明显，只有在大图里看的清楚，</p><h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>    </tr></table><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-AO-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#a-AO-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;a). AO(Ambient Occlusion)&quot;&gt;&lt;/a&gt;a). AO(Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png&quot; alt=&quot;AO00&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-SSAO-Screen-Space-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#b-SSAO-Screen-Space-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;b). SSAO(Screen Space Ambient Occlusion)&quot;&gt;&lt;/a&gt;b). SSAO(Screen Space Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的&lt;strong&gt;深度缓冲&lt;/strong&gt;、&lt;strong&gt;法线缓冲&lt;/strong&gt;以及&lt;strong&gt;像素坐标&lt;/strong&gt;来计算实现，来近似的表现物体在间接光下产生的阴影。&lt;/p&gt;
+&lt;h2 id=&quot;b-1-SSAO原理&quot;&gt;&lt;a href=&quot;#b-1-SSAO原理&quot; class=&quot;headerlink&quot; title=&quot;b.1). SSAO原理&quot;&gt;&lt;/a&gt;b.1). SSAO原理&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png&quot; alt=&quot;SSAO原理&quot;&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;获取深度、法线（View Space）缓冲；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Normal Buffer：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png&quot; alt=&quot;NormalBuffer&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;重构像素相机空间中的坐标；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;通过深度缓冲的depth值重构（近似）该视角下的三维场景；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png&quot; alt=&quot;DepthBuffer&quot; style=&quot;zoom:25%;&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png&quot; alt=&quot;法向半球&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_4.1 Bloom算法</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:01.920Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
+&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
+&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
+&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
     
   </entry>
   
