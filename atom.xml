@@ -326,9 +326,9 @@
     
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
-    <category term="Games202" scheme="https://whitetail-o.github.io/tags/Games202/"/>
-    
     <category term="Ray-Tracing" scheme="https://whitetail-o.github.io/tags/Ray-Tracing/"/>
+    
+    <category term="Games202" scheme="https://whitetail-o.github.io/tags/Games202/"/>
     
     <category term="Denoise" scheme="https://whitetail-o.github.io/tags/Denoise/"/>
     
@@ -421,9 +421,9 @@
     
     <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
     
-    <category term="PBR" scheme="https://whitetail-o.github.io/tags/PBR/"/>
-    
     <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="PBR" scheme="https://whitetail-o.github.io/tags/PBR/"/>
     
   </entry>
   
@@ -452,9 +452,96 @@
     
     <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
     
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
     <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_4.1 Bloom算法</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:01.920Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
+&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
+&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
+&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
     <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_4.2 SSAO</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
+    <published>2023-02-15T11:24:32.000Z</published>
+    <updated>2023-03-17T05:18:32.679Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p><h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p><h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p><ol><li><p>获取深度、法线（View Space）缓冲；</p><ul><li><p>Normal Buffer：</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p></li></ul></li><li><p>重构像素相机空间中的坐标；</p><ul><li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p><ul><li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li></ul></li></ul></li><li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p><ul><li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li></ul></li></ol><span id="more"></span><h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p><p>SSAO的shader中共有三个Pass：</p><ol><li>计算生成AO；</li><li>模糊 / 滤波</li><li>AO与Color buffer混合；</li></ol><h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p><p>在采样块中循环生成采样点，判断是否被遮蔽</p><p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p><p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p><ol><li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p></li></ol><ol><li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p></li><li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p></li><li><p>将此前生成的随机向量转换到法线空间中。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p><p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p><p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p></li></ol><h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p><h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p><p>在c#脚本中需要加入渲染路径的判断</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p><h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>    </tr></table><hr><p>这场景好像不太明显，只有在大图里看的清楚，</p><h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>    </tr></table><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-AO-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#a-AO-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;a). AO(Ambient Occlusion)&quot;&gt;&lt;/a&gt;a). AO(Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png&quot; alt=&quot;AO00&quot;&gt;&lt;/p&gt;
+&lt;h1 id=&quot;b-SSAO-Screen-Space-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#b-SSAO-Screen-Space-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;b). SSAO(Screen Space Ambient Occlusion)&quot;&gt;&lt;/a&gt;b). SSAO(Screen Space Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的&lt;strong&gt;深度缓冲&lt;/strong&gt;、&lt;strong&gt;法线缓冲&lt;/strong&gt;以及&lt;strong&gt;像素坐标&lt;/strong&gt;来计算实现，来近似的表现物体在间接光下产生的阴影。&lt;/p&gt;
+&lt;h2 id=&quot;b-1-SSAO原理&quot;&gt;&lt;a href=&quot;#b-1-SSAO原理&quot; class=&quot;headerlink&quot; title=&quot;b.1). SSAO原理&quot;&gt;&lt;/a&gt;b.1). SSAO原理&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png&quot; alt=&quot;SSAO原理&quot;&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;获取深度、法线（View Space）缓冲；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Normal Buffer：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png&quot; alt=&quot;NormalBuffer&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;重构像素相机空间中的坐标；&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;通过深度缓冲的depth值重构（近似）该视角下的三维场景；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png&quot; alt=&quot;DepthBuffer&quot; style=&quot;zoom:25%;&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png&quot; alt=&quot;法向半球&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
+    
+    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
@@ -509,93 +596,6 @@
     <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
     
     <category term="阴影" scheme="https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.2 SSAO</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:32.679Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-AO-Ambient-Occlusion"><a href="#a-AO-Ambient-Occlusion" class="headerlink" title="a). AO(Ambient Occlusion)"></a>a). AO(Ambient Occlusion)</h1><p>环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png" alt="AO00"></p><h1 id="b-SSAO-Screen-Space-Ambient-Occlusion"><a href="#b-SSAO-Screen-Space-Ambient-Occlusion" class="headerlink" title="b). SSAO(Screen Space Ambient Occlusion)"></a>b). SSAO(Screen Space Ambient Occlusion)</h1><p>屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的<strong>深度缓冲</strong>、<strong>法线缓冲</strong>以及<strong>像素坐标</strong>来计算实现，来近似的表现物体在间接光下产生的阴影。</p><h2 id="b-1-SSAO原理"><a href="#b-1-SSAO原理" class="headerlink" title="b.1). SSAO原理"></a>b.1). SSAO原理</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png" alt="SSAO原理"></p><ol><li><p>获取深度、法线（View Space）缓冲；</p><ul><li><p>Normal Buffer：</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png" alt="NormalBuffer"></p></li></ul></li><li><p>重构像素相机空间中的坐标；</p><ul><li><p>通过深度缓冲的depth值重构（近似）该视角下的三维场景；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png" alt="DepthBuffer" style="zoom:25%;"></p><ul><li>为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。</li></ul></li></ul></li><li><p>法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png" alt="法向半球"></p><ul><li>每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。</li></ul></li></ol><span id="more"></span><h2 id="b-2-Unity实现部分"><a href="#b-2-Unity实现部分" class="headerlink" title="b.2). Unity实现部分"></a>b.2). Unity实现部分</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/AO_Flow.png" alt="AO_Flow"></p><p>SSAO的shader中共有三个Pass：</p><ol><li>计算生成AO；</li><li>模糊 / 滤波</li><li>AO与Color buffer混合；</li></ol><h3 id="b-2-1-计算AO"><a href="#b-2-1-计算AO" class="headerlink" title="b.2.1). 计算AO"></a>b.2.1). 计算AO</h3><p>在基于法线方向，建立法线空间中法向半球的采样块。</p><p>在采样块中循环生成采样点，判断是否被遮蔽</p><p>因为实时渲染的性能问题，所以采样点数量不会很多，导致出现“油漆”般的画面</p><p>引入噪声, 将每个采样点以原点法线方向为旋转轴旋转随机的角度。这样的新采样点会变得极其不规则, 更加离散化。将低频的条纹转化成高频的噪声；</p><ol><li><p>计算相机到像素点的坐标（<a href="https://zhuanlan.zhihu.com/p/145400372">Unity Shader中的ComputeScreenPos函数</a>）对应的远平面的向量（屏幕空间转换到裁剪空间后乘以远平面距离，再转换到观察空间）；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/vertAO.png" alt="vertAO"></p></li></ol><ol><li><p>获得着色点的01线性深度值、观察空间下的法线向量；</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/GetDepthAndNormal.png" alt="GetDepthAndNormal"></p></li><li><p>然后在法向半球采样块中随机随机采样一个向量，得到<strong>法向半球向量</strong>。并由此构建经过旋转的法线空间的正交基。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise01a.png" alt="Noise01a"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/TBN.png" alt="TBN"></p></li><li><p>将此前生成的随机向量转换到法线空间中。</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Noise02a.png" alt="Noise02a"></p><p>循环操作，将每一个向量转换为采样点，坐标基于切线空间，再计算随机法向半球后的向量，然后进行空间转换，切线空间到裁剪空间到屏幕空间。（裁剪空间到屏幕空间进行01映射）</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/scrRandomVec.png" alt="scrRandomVec"></p><p>获得<strong>采样点</strong>的法线深度信息，计算遮蔽，最后得到AO图通过rscreenPos来采样_CameraDepthNormalsTexture，转化成屏幕空间对应的深度值，然后对比linear01Depth（着色点深度，更准确的情况下应该使用viewRandomPos对应的01线性深度），只要大于linear01Depth，则在加权计算AO</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/For02a.png" alt="For02a"></p></li></ol><h4 id="AO核心代码"><a href="#AO核心代码" class="headerlink" title="AO核心代码"></a>AO核心代码</h4><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/fragAO.png" alt="fragAO"></p><h4 id="延迟渲染-ssao"><a href="#延迟渲染-ssao" class="headerlink" title="延迟渲染+ssao"></a>延迟渲染+ssao</h4><p>因为在前向渲染的ssao实现过程中，需要获取到相机的法线深度图进行采样得到相应的信息，进行后续的操作。而因为延迟渲染正好需要先生成一个GBuffer，即已包含了ssao执行所需要的法线深度等信息。所以在shader代码编写中有所不同</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer01.png" alt="Defer01"></p><p>在c#脚本中需要加入渲染路径的判断</p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Defer02.png" alt="Defer02"></p><h3 id="b-2-2-基于法线的双边滤波（Bilateral-Filter）"><a href="#b-2-2-基于法线的双边滤波（Bilateral-Filter）" class="headerlink" title="b.2.2). 基于法线的双边滤波（Bilateral Filter）"></a>b.2.2). 基于法线的双边滤波（Bilateral Filter）</h3><p><a href="https://blog.csdn.net/puppet_master/article/details/83066572">https://blog.csdn.net/puppet_master/article/details/83066572</a></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Blur.png" alt="Blur"></p><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="场景1"><a href="#场景1" class="headerlink" title="场景1"></a>场景1</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO.png" alt="HomeworkAO"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01.png" alt="Homework01" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02.png" alt="Homework02" width="600"></center></td>    </tr></table><hr><p>这场景好像不太明显，只有在大图里看的清楚，</p><h2 id="场景2"><a href="#场景2" class="headerlink" title="场景2"></a>场景2</h2><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/HomeworkAO_b.png" alt="HomeworkAO_b"></p><table frame="void">    <tr>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b" width="600"></center></td>    <td><center><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b" width="600"></center></td>    </tr></table><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework02b.png" alt="Homework02b"></p><p><img src="/2023/02/15/HPP_Graphics_4.2_SSAO/Homework01b.png" alt="Homework01b"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-AO-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#a-AO-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;a). AO(Ambient Occlusion)&quot;&gt;&lt;/a&gt;a). AO(Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;环境光遮蔽，全称Ambient Occlusion，是计算机图形学中的一种着色和渲染技术,模拟光线达到物体的能力的粗略的全局方法，描述光线到达物体表面的能力。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/AO00.png&quot; alt=&quot;AO00&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-SSAO-Screen-Space-Ambient-Occlusion&quot;&gt;&lt;a href=&quot;#b-SSAO-Screen-Space-Ambient-Occlusion&quot; class=&quot;headerlink&quot; title=&quot;b). SSAO(Screen Space Ambient Occlusion)&quot;&gt;&lt;/a&gt;b). SSAO(Screen Space Ambient Occlusion)&lt;/h1&gt;&lt;p&gt;屏幕空间环境光遮蔽，全称Screen Space Ambient Occlusion，一种用于计算机图形中实时实现近似环境光遮蔽效果的渲染技术。通过获取像素的&lt;strong&gt;深度缓冲&lt;/strong&gt;、&lt;strong&gt;法线缓冲&lt;/strong&gt;以及&lt;strong&gt;像素坐标&lt;/strong&gt;来计算实现，来近似的表现物体在间接光下产生的阴影。&lt;/p&gt;
-&lt;h2 id=&quot;b-1-SSAO原理&quot;&gt;&lt;a href=&quot;#b-1-SSAO原理&quot; class=&quot;headerlink&quot; title=&quot;b.1). SSAO原理&quot;&gt;&lt;/a&gt;b.1). SSAO原理&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/SSAO原理.png&quot; alt=&quot;SSAO原理&quot;&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;获取深度、法线（View Space）缓冲；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Normal Buffer：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/NormalBuffer.png&quot; alt=&quot;NormalBuffer&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;重构像素相机空间中的坐标；&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;通过深度缓冲的depth值重构（近似）该视角下的三维场景；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/DepthBuffer.png&quot; alt=&quot;DepthBuffer&quot; style=&quot;zoom:25%;&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;为什么是近似：Depth Buffer中深度值为0~1，并不能反应无穷远（天空等）。常用的办法是把1映射到View Space的远平面。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;法向半球随机采样，计算掩蔽因子，进而得到AO强度（For循环）；&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.2_SSAO/法向半球.png&quot; alt=&quot;法向半球&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;每一次for循环都会在法线半球中获取一个随机向量，根据这个向量我们会求出它对应的深度值，然后跟深度缓冲中对应采样像素位置的深度值做比较，如果大于（灰色点），则认为有遮蔽，算进加权中，最后我们合成AO，然后再加上一些后期处理优化效果。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_4.1 Bloom算法</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/</id>
-    <published>2023-02-15T11:24:32.000Z</published>
-    <updated>2023-03-17T05:18:01.920Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p><h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p><h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p><p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p><h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p><span id="more"></span><h1 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h1><h2 id="带Mask的Bloom效果"><a href="#带Mask的Bloom效果" class="headerlink" title="带Mask的Bloom效果"></a>带Mask的Bloom效果</h2><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/noBloom_HW.png" alt="noBloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_HW.png" alt="Bloom_HW" style="zoom: 33%;"></p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom_Mask.png" alt="Bloom_Mask" style="zoom:25%;"></p><ul><li><p><strong>实现思路：</strong></p><ul><li><p>修改对应物体fragment返回的Alpha值作为Bloom遮罩</p><p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Debug.png" alt="Debug" style="zoom: 33%;"></p></li><li><p>黑为Bloom效果最强，白为无Bloom（因为点光源会使得后处理中Alpha通道比FS返回的大，因此采用黑色Bloom效果最强，<em>待验证</em>）</p></li><li></li></ul></li></ul>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-Bloom算法介绍&quot;&gt;&lt;a href=&quot;#a-Bloom算法介绍&quot; class=&quot;headerlink&quot; title=&quot;a). Bloom算法介绍&quot;&gt;&lt;/a&gt;a). Bloom算法介绍&lt;/h1&gt;&lt;p&gt;模拟光辉效果的算法&lt;br&gt;简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出&lt;br&gt;HDR：使用HDR可以使提取到亮度大于1的区域&lt;br&gt;高斯模糊：使用高斯函数得到的高斯核去卷积图像&lt;br&gt;二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png&quot; alt=&quot;Bloom思路&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;b-Bloom算法实现（Unity）&quot;&gt;&lt;a href=&quot;#b-Bloom算法实现（Unity）&quot; class=&quot;headerlink&quot; title=&quot;b). Bloom算法实现（Unity）&quot;&gt;&lt;/a&gt;b). Bloom算法实现（Unity）&lt;/h1&gt;&lt;h2 id=&quot;C-部分&quot;&gt;&lt;a href=&quot;#C-部分&quot; class=&quot;headerlink&quot; title=&quot;C#部分&quot;&gt;&lt;/a&gt;C#部分&lt;/h2&gt;&lt;p&gt;调用OnRenderImage函数获取纹理和传输参数给Shader：&lt;/p&gt;
-&lt;h2 id=&quot;Shader部分&quot;&gt;&lt;a href=&quot;#Shader部分&quot; class=&quot;headerlink&quot; title=&quot;Shader部分&quot;&gt;&lt;/a&gt;Shader部分&lt;/h2&gt;&lt;p&gt;使用4个Pass计算Bloom效果：&lt;/p&gt;
-&lt;p&gt;第一个Pass提取较亮区域&lt;br&gt;第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊&lt;br&gt;最后一个Pass将计算的结果与原图像进行混合&lt;/p&gt;
-&lt;h1 id=&quot;c-Bloom算法应用&quot;&gt;&lt;a href=&quot;#c-Bloom算法应用&quot; class=&quot;headerlink&quot; title=&quot;c). Bloom算法应用&quot;&gt;&lt;/a&gt;c). Bloom算法应用&lt;/h1&gt;&lt;p&gt;配合自发光贴图使用&lt;br&gt;配合特效（如烟花）&lt;br&gt;GodRay（基于径向的后处理）&lt;br&gt;使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="算法" scheme="https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/"/>
-    
-    <category term="效果" scheme="https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/"/>
     
   </entry>
   
@@ -697,79 +697,6 @@
   </entry>
   
   <entry>
-    <title>HPP_Graphics_3.4 前向渲染与延迟渲染</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</id>
-    <published>2023-02-15T10:40:32.000Z</published>
-    <updated>2023-03-17T05:09:23.488Z</updated>
-    
-    <content type="html"><![CDATA[<h1 id="a-渲染路径"><a href="#a-渲染路径" class="headerlink" title="a). 渲染路径"></a>a). 渲染路径</h1><ul><li>决定光照的实现方式。简言之，就是当前渲染目标使用<strong><font color="red">光照的流程</font></strong>。</li></ul><h1 id="b-渲染方式"><a href="#b-渲染方式" class="headerlink" title="b). 渲染方式"></a>b). 渲染方式</h1><ul><li><strong>延迟渲染</strong></li><li><strong>前向渲染</strong></li></ul><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Difference.png" alt="Difference"></p><p>可以看到前向渲染中，中间蓝色的灯并没被渲染。（场景8盏灯，Project Setting中Pixel Light Count设为7）</p><h2 id="b-1-前向-正向渲染-Forward-Rendering"><a href="#b-1-前向-正向渲染-Forward-Rendering" class="headerlink" title="b.1). 前向/正向渲染-Forward Rendering"></a>b.1). 前向/正向渲染-Forward Rendering</h2><ul><li>简介：每个Object对每个光照都计算；</li></ul><h3 id="b-1-1-流程"><a href="#b-1-1-流程" class="headerlink" title="b.1.1). 流程"></a>b.1.1). 流程</h3><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Forward_Workflow.png" alt="Forward_Workflow"></p><ul><li>简单来说就是不管光源的影响大不大，计算的时候都会把所有光源计算进去，这样就会造成一个很大的浪费</li></ul><h3 id="b-1-2-规则和注意事项"><a href="#b-1-2-规则和注意事项" class="headerlink" title="b.1.2). 规则和注意事项"></a>b.1.2). 规则和注意事项</h3><ul><li><p><strong>发生在顶点处理阶段，会计算所有顶点的光照</strong>。全平台支持</p></li><li><ul><li>规则1：最亮的几个光源会被实现为像素光照</li><li>规则2：然后就是，最多四个光源会被实现为顶点光照</li><li>规则3：剩下的光源会实现为效率较高的球面调谐光照（Spherical Hamanic），这是一种模拟光照</li></ul></li><li><p><strong>补充说明</strong></p></li><li><ul><li>最亮的那盏光一定是像素光照</li><li>Light的Render Mode是important的光一定是像素光照</li><li>如果前面的两条加起来的像素光照小于Quality Setting里的Pixel Light Count（最大像素光照数量），那么从剩下的光源中找出最亮的那几盏光源，实现为像素光照。</li><li>最后剩下的光源，按照规则2或3。</li><li>在base pass里执行一盏像素光、所有的顶点光和球面调谐光照，并且进行阴影计算。</li><li>其余的像素光每盏一个Additional Pass，并且这些pass里没有阴影计算。</li><li>场景中看到的阴影，全是base pass里计算出最亮那盏像素光的阴影，其他像素光是不计算阴影的。</li></ul></li><li><p><strong>最多的光源数是可以更改的</strong></p><ul><li>以Unity中的为例，在project setting中</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/UnityForwardSetting.png" alt="UnityForwardSetting"></p></li></ul><h2 id="b-2-延迟渲染（Deferred-Rendering）"><a href="#b-2-延迟渲染（Deferred-Rendering）" class="headerlink" title="b.2). 延迟渲染（Deferred Rendering）"></a>b.2). 延迟渲染（Deferred Rendering）</h2><h3 id="b-2-1-简介"><a href="#b-2-1-简介" class="headerlink" title="b.2.1). 简介"></a>b.2.1). 简介</h3><p>主要解决<strong>大量光照渲染</strong>的方案。</p><p>可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即<strong>G-buffer</strong>，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染<strong>基本思想</strong>是，<strong>先执行深度测试（应该也包括其他测试），再进行着色计算</strong>，将本来在物空间（三维空间）进行光照计算放到了<strong>像空间</strong>（二维空间）进行处理。</p><p>对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。</p><span id="more"></span><h3 id="b-2-2-流程"><a href="#b-2-2-流程" class="headerlink" title="b.2.2). 流程"></a>b.2.2). 流程</h3><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Workflow.png" alt="Deffer_Workflow" style="zoom:33%;"></p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Workflow2.jpg" alt="Deffer_Workflow2"></p><p>可以将延迟渲染理解为两个Pass的过程：</p><ol><li><p><strong>几何处理阶段(Geometry Pass)。</strong>这个阶段中，我们获取对象的各种<strong>几何信息</strong>（Position、Normal、Albedo、Specular等），并将第二步所需的各种数据储存（也就是渲染）到多个<strong>G-buffer</strong>中；</p><ul><li>由于有深度测试，所以最终写入G-buffer中的，都是离摄像机最近的片元的集合属性，这就意味着，在G-buffer中的片元必定要进行光照计算。</li></ul></li><li><p><strong>光照处理阶段(Lighting Pass)。</strong>在这个pass中，我们只需渲染出一个屏幕大小的二维矩形，使用第一步在G-buffer中存储的数据对此矩阵的每一个片段<strong>计算场景的光照</strong>；光照计算的过程还是和正向渲染以前一样，只是现在<strong>我们需要从对应的G-buffer而不是顶点着色器(和一些uniform变量)那里获取输入变量了</strong>。</p></li></ol><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Workflow3.jpg" alt="Deffer_Workflow3"></p><h3 id="b-2-3-G-Buffer"><a href="#b-2-3-G-Buffer" class="headerlink" title="b.2.3). G-Buffer"></a>b.2.3). G-Buffer</h3><p><strong>G-Buffer</strong>，全称Geometric Buffer ，译作几何缓冲区，它主要用于存储每个像素对应的位置（Position），法线（Normal），漫反射颜色（Diffuse Color）以及其他有用材质参数。根据这些信息，就可以在像空间（二维空间）中对每个像素进行光照处理。</p><ul><li><p>如图为一个典型的G-buffer<img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/G-Buffer.jpg" alt="G-Buffer"></p></li><li><p>下图是一帧中G-buffer中存储的内容：</p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/G-Buffer2.jpg" alt="G-Buffer2"></p></li><li><p>UE5中的G-Buffer</p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/G-Buffer_Constant.png" alt="G-Buffer_Constant"></p></li></ul><p>在几何处理阶段中填充G-buffer非常高效，因为我们直接储存位置，颜色，法线等对象信息到帧缓冲中，这个过程几乎不消耗处理时间。</p><p>而在此基础上使用<strong>多渲染目标(Multiple Render Targets, MRT)技术</strong>，我们可以在一个Pass之内完成所有渲染工作。</p><ul><li><p>P-Code</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">For each object:</span><br><span class="line">    Render to multiple targets </span><br><span class="line">For each light:</span><br><span class="line">    Apply light as a 2D postprocess</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Two-pass deferred shading algorithm</span><br><span class="line">Pass 1: geometry pass</span><br><span class="line">- Write visible geometry information to G-buffer</span><br><span class="line">Pass 2: shading pass</span><br><span class="line">For each G-buffer sample, compute shading</span><br><span class="line">- Read G-buffer data for current sample</span><br><span class="line">- Accumulate contribution of all lights</span><br><span class="line">- Output final surface color</span><br></pre></td></tr></table></figure></li></ul><h3 id="b-2-4-延迟渲染的优缺点"><a href="#b-2-4-延迟渲染的优缺点" class="headerlink" title="b.2.4). 延迟渲染的优缺点"></a>b.2.4). 延迟渲染的优缺点</h3><ul><li><p><strong>优点：</strong></p><ol><li>复杂度仅O(n+m)</li><li>只渲染可见的像素，节省计算量</li><li>用更少的shader</li><li>对后处理支持良好（例如深度信息：直接拿G-buffer中的就行。而前向渲染需要单独Pass再渲染一张深度图）</li><li>在大量光源的场景优势尤其明显；</li></ol></li><li><p><strong>缺点：</strong></p><ol><li>内存开销较大，且占用了大量的显存带宽；<ul><li>需要传递G-Buffer；</li><li>有时需要用到G-Buffer的信息，如深度图做后处理，那将不会进行Clear；</li></ul></li><li>只能用同一套Lighting Pass；</li><li>对透明物体的渲染存在问题。在这点上需要结合正向渲染进行渲染；</li><li>对多重采样抗锯齿（MultiSampling Anti-Aliasing, MSAA）等硬件抗锯齿的支持不友好，主要因为需开启MRT；<ul><li>MSAA是依赖于子像素，而Deffered shading<strong>处在光栅化之后（单个像素内值相等）</strong>，传输数据是通过G-Buffer；</li><li>但可使用TAA</li></ul></li></ol><p><a href="https://www.zhihu.com/question/20236638/answer/44821615">问FXAA、FSAA与MSAA有什么区别？效果和性能上哪个好？ - 文刀秋二的回答 - 知乎</a></p><p><a href="https://catlikecoding.com/unity/tutorials/rendering/part-13/">https://catlikecoding.com/unity/tutorials/rendering/part-13/</a></p></li></ul><h2 id="b-3-Unity中渲染路径设置"><a href="#b-3-Unity中渲染路径设置" class="headerlink" title="b.3). Unity中渲染路径设置"></a>b.3). Unity中渲染路径设置</h2><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/RenderPathSetting.png" alt="RenderPathSetting"></p><h2 id="b-4-其他渲染路径"><a href="#b-4-其他渲染路径" class="headerlink" title="b.4). 其他渲染路径"></a>b.4). 其他渲染路径</h2><p>针对延迟渲染上述提到的缺点，下面简单列举一些降低 Deferred Rendering 存取带宽的改进方案。最简单也是最容易想到的就是将存取的 G-Buffer 数据结构最小化，这也就衍生出了 Light Pre-Pass（即Deferred Lighting） 方法。另一种方式是将多个光照组成一组，然后一起处理，这种方法衍生了 Tile-Based Deferred Rendering。</p><p>也就是说，常见的两种Deferred Rendering的改进是：</p><ul><li>延迟光照 Light Pre-Pass（即Deferred Lighting）</li><li>分块延迟渲染 Tile-BasedDeferred Rendering</li></ul><h3 id="b-4-1-延迟光照（LightPre-Pass-Deferred-Lighting）"><a href="#b-4-1-延迟光照（LightPre-Pass-Deferred-Lighting）" class="headerlink" title="b.4.1). 延迟光照（LightPre-Pass / Deferred Lighting）"></a>b.4.1). 延迟光照（LightPre-Pass / Deferred Lighting）</h3><ul><li>减少G-buffer占用的过多开销，支持多种光照模型</li></ul><ul><li>过程：</li></ul><ol><li><p>渲染场景中不透明（opaque ）的几何体。将法线向量n和镜面扩展因子（specular spread factor）m 写入缓冲区。这个n/m-buffer 缓冲区是一个类似 G-Buffer的缓冲区，但包含的信息更少，更轻量，适合于单个输出颜色缓冲区，因此不需要MRT支持。</p></li><li><p>渲染光照。计算漫反射和镜面着色方程，并将结果写入不同的漫反射和镜面反射累积缓冲区。这个过程可以在一个单独的pass中完成（使用MRT），或者用两个单独的pass。环境光照明可以在这个阶段使用一个 full-screen pass进行计算。</p></li><li><p>对场景中的不透明几何体进行第二次渲染。从纹理中读取漫反射和镜面反射值，对前面步骤中漫反射和镜面反射累积缓冲区的值进行调制，并将最终结果写入最终的颜色缓冲区。若在上一阶段没有处理环境光照明，则在此阶段应用环境光照明。</p></li><li><p>使用非延迟着色方法渲染半透明几何体。</p></li></ol><ul><li>用更少的buffe信息，着色计算的时候用的是forward，所以第三步开始都是前向渲染（在3D，而不是2D的像空间中渲染）</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Light.jpg" alt="Deffer_Light"></p><h3 id="b-4-2-Forward-（即Tiled-Forward-Rendering，分块正向渲染）"><a href="#b-4-2-Forward-（即Tiled-Forward-Rendering，分块正向渲染）" class="headerlink" title="b.4.2). Forward+（即Tiled Forward Rendering，分块正向渲染）"></a>b.4.2). Forward+（<strong>即Tiled Forward Rendering，分块正向渲染</strong>）</h3><ul><li><p>减少带宽，支持多光源，强制需要一个preZ</p></li><li><ul><li>通过分块索引的方式，以及深度和法线信息来到需要进行光照计算的片元进行光照计算。</li><li>需要法线和深度的后处理需要单独渲染一个rt出来</li><li>强制使用了一个preZ（如果没涉及过这个概念的话，可以理解为进行了一个深度预计算</li></ul></li></ul><p><a href="https://zhuanlan.zhihu.com/p/28489928">https://zhuanlan.zhihu.com/p/28489928</a></p><h3 id="b-4-3-群组渲染（Clustered-Rendering）"><a href="#b-4-3-群组渲染（Clustered-Rendering）" class="headerlink" title="b.4.3). 群组渲染（Clustered Rendering）"></a>b.4.3). 群组渲染（Clustered Rendering）</h3><ul><li>带宽相对减少，多光源下效率提升</li><li>分为forward和deferred两种</li><li>详细补充拓展：<a href="https://zhuanlan.zhihu.com/p/54694743">https://zhuanlan.zhihu.com/p/54694743</a></li></ul><h2 id="c-渲染管线的优化（移动端）"><a href="#c-渲染管线的优化（移动端）" class="headerlink" title="c). 渲染管线的优化（移动端）"></a>c). 渲染管线的优化（移动端）</h2><p>IMR框架渲染对于移动端有一个很大的问题：<strong>带宽占用过高</strong>。</p><ul><li>因此在移动端，我们不采用<strong>PC端构架IMR（Immediate Mode Rendering）</strong>，而采用<strong>移动端构架TBR（Tile-Based Rendering）或TBDR（PowerVR使用）</strong></li></ul><p>简而言之，为了节省成本，移动端TBR的GPU中不使用显存（GPU Memory），而使用<strong>On_Chip Memory也就是SRAM，或者L1 L2 cache</strong><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/GPU架构.jpg" alt="GPU架构"></p><p>对于TBR来讲，整个光栅化和像素处理会被分为一个个Tile进行处理，通常为16×16大小的Tile。TBR的结构通过On-Chip Buffers来储存Tiling后的Depth Buffer和Color buffer。</p><p>也就是原先IMR架构中对主存中Color/Depth Buffer进行的读写操作变成直接在GPU中的高速内存操作，减少了最影响性能的系统内存传输的开销。通过下面这张图能够更好的来理解，下图的DRAM在手机上就是物理内存那一块。</p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/On-chip.jpg" alt="On-chip"></p><p>​    </p><h2 id="d-移动设备渲染通用优化建议"><a href="#d-移动设备渲染通用优化建议" class="headerlink" title="d). 移动设备渲染通用优化建议"></a>d). 移动设备渲染通用优化建议</h2><ul><li><strong>贴图格式能压缩就压缩</strong>。贴图内存越小，片上命中率就越高，总的传输量也少</li><li><strong>能开mipmap就开mipmap</strong>（前提是能用到，UI贴图就不用开了）。减轻带宽压力，与减小实际使用的贴图内存是一个道理，但是会增加总贴图的内存占用大小，需要在内存开销和带宽开销上做一个平衡。</li><li><strong>随机纹理寻址相对于相邻纹理寻址有显著开销</strong>。提高片上命中率。</li><li><strong>3DTexture Sampling有显著的开销</strong>。3DTexture整体内存占用大，垂直方向相邻像素内存不相邻很容易cache miss，这是我个人推测。</li><li><strong>Trilinear/Anisotropic相对于Bilinear有显著的开销</strong>。Trilinear其实就相当于tex3D了(此结论不负责任)，Bilinear相对于Point几乎没有额外开销（此结论负责任，texture fetch都是一次拿相邻的四个出来），所以Bilinear能忍就尽量凑合用着吧。</li><li><strong>使用LUT（look up texture）很可能是负优化</strong>。需要对比权衡带宽占用+texture fetch操作增加与ALU占用增加降低并行效率，另外还很可能涉及到美术工作流和最终效果，所以是个不是很好进行操作的优化。之前看过腾讯的技术分享将引擎中Tonemapping那步的3DLUT（UE4和Unity都是这样的）替换为函数拟合的优化，理论上应该是会提升不少性能，但是要想真正应用到生产环境，保证效果，还要做好拟合工具链，是得费不少力气的</li><li><strong>通道图能合并就合并，减少Shader中贴图采样次数</strong>。这个不多说了</li><li><strong>控制Framebuffer大小</strong>。这个也不多说了</li><li><strong>总顶点数量也是带宽开销的影响因素</strong>。虽然以现在GPU的计算能力来说，顶点数增多产生的VS计算开销增加通常是忽略不计的。但是仍不能忽略总顶点数量对于VertexBuffer所消耗带宽的影响，对于总顶点数的限制应该更多的从带宽消耗上去进行测试和分析。</li></ul><h3 id="d-1-AlphaTest性能消耗"><a href="#d-1-AlphaTest性能消耗" class="headerlink" title="d.1). AlphaTest性能消耗"></a>d.1). AlphaTest性能消耗</h3><ul><li>只要Shader中包含discard指令的都会被GPU认为是AlphaTest图元（GPU对于AlphaTest绘制流程的判定是基于图元而不是像素）</li><li><strong>无论是PowerVR还是Mali/Adreno芯片，AlphaTest图元的绘制都会影响整体渲染性能。</strong></li><li><strong>随着芯片的发展AlphaTest图元对于渲染性能的影响主要在于Overdraw增加而非降低硬件设计流程效率，其优化思路与AlphaBlend一样，就是少画！</strong></li><li>严格按照Opaque - AlphaTest - AlphaBlend的顺序进行渲染可以最大化减小AlphaTest对于渲染性能的影响。</li><li><strong>将Opaque, AlphaTest与AlphaBlend打乱顺序渲染会极大的降低渲染性能，任何情况下都不应该这么做。</strong></li><li>不要尝试使用AlphaTest替代AlphaBlend，这并不会产生太多优化。</li><li>不要尝试使用AlphaTest替代Opaque，这会产生负优化</li><li><strong>不要尝试使用AlphaBlend替代AlphaTest</strong>，这会造成错误的渲染结果。</li><li>在保证正确渲染顺序情况下，AlphaTest与AlphaBlend开销相似，不存在任何替代优化关系</li><li>增加少量顶点以减少AlphaTest图元的绘制面积是可以提升一些渲染性能的。</li><li>首先统一绘制AlphaTest图元的DepthPrepass，再以ZTest Equal和不含discard指令的Shader统一绘制AlphaTest图元，大多数情况下是可以显著提升总体渲染性能的（需要实际测试）</li></ul><h2 id="资料补充："><a href="#资料补充：" class="headerlink" title="资料补充："></a>资料补充：</h2><p><a href="https://zhuanlan.zhihu.com/p/259760974">https://zhuanlan.zhihu.com/p/259760974</a></p><p><a href="https://www.cnblogs.com/timlly/p/11471507.html">https://www.cnblogs.com/timlly/p/11471507.html</a></p><p><a href="https://zhuanlan.zhihu.com/p/112120206">https://zhuanlan.zhihu.com/p/112120206</a></p>]]></content>
-    
-    
-    <summary type="html">&lt;h1 id=&quot;a-渲染路径&quot;&gt;&lt;a href=&quot;#a-渲染路径&quot; class=&quot;headerlink&quot; title=&quot;a). 渲染路径&quot;&gt;&lt;/a&gt;a). 渲染路径&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;决定光照的实现方式。简言之，就是当前渲染目标使用&lt;strong&gt;&lt;font color=&quot;red&quot;&gt;光照的流程&lt;/font&gt;&lt;/strong&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&quot;b-渲染方式&quot;&gt;&lt;a href=&quot;#b-渲染方式&quot; class=&quot;headerlink&quot; title=&quot;b). 渲染方式&quot;&gt;&lt;/a&gt;b). 渲染方式&lt;/h1&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;延迟渲染&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;前向渲染&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Difference.png&quot; alt=&quot;Difference&quot;&gt;&lt;/p&gt;
-&lt;p&gt;可以看到前向渲染中，中间蓝色的灯并没被渲染。（场景8盏灯，Project Setting中Pixel Light Count设为7）&lt;/p&gt;
-&lt;h2 id=&quot;b-1-前向-正向渲染-Forward-Rendering&quot;&gt;&lt;a href=&quot;#b-1-前向-正向渲染-Forward-Rendering&quot; class=&quot;headerlink&quot; title=&quot;b.1). 前向/正向渲染-Forward Rendering&quot;&gt;&lt;/a&gt;b.1). 前向/正向渲染-Forward Rendering&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;简介：每个Object对每个光照都计算；&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;b-1-1-流程&quot;&gt;&lt;a href=&quot;#b-1-1-流程&quot; class=&quot;headerlink&quot; title=&quot;b.1.1). 流程&quot;&gt;&lt;/a&gt;b.1.1). 流程&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Forward_Workflow.png&quot; alt=&quot;Forward_Workflow&quot;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;简单来说就是不管光源的影响大不大，计算的时候都会把所有光源计算进去，这样就会造成一个很大的浪费&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;b-1-2-规则和注意事项&quot;&gt;&lt;a href=&quot;#b-1-2-规则和注意事项&quot; class=&quot;headerlink&quot; title=&quot;b.1.2). 规则和注意事项&quot;&gt;&lt;/a&gt;b.1.2). 规则和注意事项&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;发生在顶点处理阶段，会计算所有顶点的光照&lt;/strong&gt;。全平台支持&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;ul&gt;
-&lt;li&gt;规则1：最亮的几个光源会被实现为像素光照&lt;/li&gt;
-&lt;li&gt;规则2：然后就是，最多四个光源会被实现为顶点光照&lt;/li&gt;
-&lt;li&gt;规则3：剩下的光源会实现为效率较高的球面调谐光照（Spherical Hamanic），这是一种模拟光照&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;补充说明&lt;/strong&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;ul&gt;
-&lt;li&gt;最亮的那盏光一定是像素光照&lt;/li&gt;
-&lt;li&gt;Light的Render Mode是important的光一定是像素光照&lt;/li&gt;
-&lt;li&gt;如果前面的两条加起来的像素光照小于Quality Setting里的Pixel Light Count（最大像素光照数量），那么从剩下的光源中找出最亮的那几盏光源，实现为像素光照。&lt;/li&gt;
-&lt;li&gt;最后剩下的光源，按照规则2或3。&lt;/li&gt;
-&lt;li&gt;在base pass里执行一盏像素光、所有的顶点光和球面调谐光照，并且进行阴影计算。&lt;/li&gt;
-&lt;li&gt;其余的像素光每盏一个Additional Pass，并且这些pass里没有阴影计算。&lt;/li&gt;
-&lt;li&gt;场景中看到的阴影，全是base pass里计算出最亮那盏像素光的阴影，其他像素光是不计算阴影的。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;strong&gt;最多的光源数是可以更改的&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;以Unity中的为例，在project setting中&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/UnityForwardSetting.png&quot; alt=&quot;UnityForwardSetting&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;b-2-延迟渲染（Deferred-Rendering）&quot;&gt;&lt;a href=&quot;#b-2-延迟渲染（Deferred-Rendering）&quot; class=&quot;headerlink&quot; title=&quot;b.2). 延迟渲染（Deferred Rendering）&quot;&gt;&lt;/a&gt;b.2). 延迟渲染（Deferred Rendering）&lt;/h2&gt;&lt;h3 id=&quot;b-2-1-简介&quot;&gt;&lt;a href=&quot;#b-2-1-简介&quot; class=&quot;headerlink&quot; title=&quot;b.2.1). 简介&quot;&gt;&lt;/a&gt;b.2.1). 简介&lt;/h3&gt;&lt;p&gt;主要解决&lt;strong&gt;大量光照渲染&lt;/strong&gt;的方案。&lt;/p&gt;
-&lt;p&gt;可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即&lt;strong&gt;G-buffer&lt;/strong&gt;，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染&lt;strong&gt;基本思想&lt;/strong&gt;是，&lt;strong&gt;先执行深度测试（应该也包括其他测试），再进行着色计算&lt;/strong&gt;，将本来在物空间（三维空间）进行光照计算放到了&lt;strong&gt;像空间&lt;/strong&gt;（二维空间）进行处理。&lt;/p&gt;
-&lt;p&gt;对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。&lt;/p&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="延迟渲染" scheme="https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/"/>
-    
-    <category term="渲染管线" scheme="https://whitetail-o.github.io/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
-    
-  </entry>
-  
-  <entry>
     <title>HPP_Graphics_3.5 Early-Z和Z Prepass（Pre-Z）</title>
     <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/"/>
     <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/</id>
@@ -843,6 +770,123 @@
   </entry>
   
   <entry>
+    <title>HPP_Graphics_3.4 前向渲染与延迟渲染</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</id>
+    <published>2023-02-15T10:40:32.000Z</published>
+    <updated>2023-03-17T05:09:23.488Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="a-渲染路径"><a href="#a-渲染路径" class="headerlink" title="a). 渲染路径"></a>a). 渲染路径</h1><ul><li>决定光照的实现方式。简言之，就是当前渲染目标使用<strong><font color="red">光照的流程</font></strong>。</li></ul><h1 id="b-渲染方式"><a href="#b-渲染方式" class="headerlink" title="b). 渲染方式"></a>b). 渲染方式</h1><ul><li><strong>延迟渲染</strong></li><li><strong>前向渲染</strong></li></ul><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Difference.png" alt="Difference"></p><p>可以看到前向渲染中，中间蓝色的灯并没被渲染。（场景8盏灯，Project Setting中Pixel Light Count设为7）</p><h2 id="b-1-前向-正向渲染-Forward-Rendering"><a href="#b-1-前向-正向渲染-Forward-Rendering" class="headerlink" title="b.1). 前向/正向渲染-Forward Rendering"></a>b.1). 前向/正向渲染-Forward Rendering</h2><ul><li>简介：每个Object对每个光照都计算；</li></ul><h3 id="b-1-1-流程"><a href="#b-1-1-流程" class="headerlink" title="b.1.1). 流程"></a>b.1.1). 流程</h3><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Forward_Workflow.png" alt="Forward_Workflow"></p><ul><li>简单来说就是不管光源的影响大不大，计算的时候都会把所有光源计算进去，这样就会造成一个很大的浪费</li></ul><h3 id="b-1-2-规则和注意事项"><a href="#b-1-2-规则和注意事项" class="headerlink" title="b.1.2). 规则和注意事项"></a>b.1.2). 规则和注意事项</h3><ul><li><p><strong>发生在顶点处理阶段，会计算所有顶点的光照</strong>。全平台支持</p></li><li><ul><li>规则1：最亮的几个光源会被实现为像素光照</li><li>规则2：然后就是，最多四个光源会被实现为顶点光照</li><li>规则3：剩下的光源会实现为效率较高的球面调谐光照（Spherical Hamanic），这是一种模拟光照</li></ul></li><li><p><strong>补充说明</strong></p></li><li><ul><li>最亮的那盏光一定是像素光照</li><li>Light的Render Mode是important的光一定是像素光照</li><li>如果前面的两条加起来的像素光照小于Quality Setting里的Pixel Light Count（最大像素光照数量），那么从剩下的光源中找出最亮的那几盏光源，实现为像素光照。</li><li>最后剩下的光源，按照规则2或3。</li><li>在base pass里执行一盏像素光、所有的顶点光和球面调谐光照，并且进行阴影计算。</li><li>其余的像素光每盏一个Additional Pass，并且这些pass里没有阴影计算。</li><li>场景中看到的阴影，全是base pass里计算出最亮那盏像素光的阴影，其他像素光是不计算阴影的。</li></ul></li><li><p><strong>最多的光源数是可以更改的</strong></p><ul><li>以Unity中的为例，在project setting中</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/UnityForwardSetting.png" alt="UnityForwardSetting"></p></li></ul><h2 id="b-2-延迟渲染（Deferred-Rendering）"><a href="#b-2-延迟渲染（Deferred-Rendering）" class="headerlink" title="b.2). 延迟渲染（Deferred Rendering）"></a>b.2). 延迟渲染（Deferred Rendering）</h2><h3 id="b-2-1-简介"><a href="#b-2-1-简介" class="headerlink" title="b.2.1). 简介"></a>b.2.1). 简介</h3><p>主要解决<strong>大量光照渲染</strong>的方案。</p><p>可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即<strong>G-buffer</strong>，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染<strong>基本思想</strong>是，<strong>先执行深度测试（应该也包括其他测试），再进行着色计算</strong>，将本来在物空间（三维空间）进行光照计算放到了<strong>像空间</strong>（二维空间）进行处理。</p><p>对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。</p><span id="more"></span><h3 id="b-2-2-流程"><a href="#b-2-2-流程" class="headerlink" title="b.2.2). 流程"></a>b.2.2). 流程</h3><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Workflow.png" alt="Deffer_Workflow" style="zoom:33%;"></p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Workflow2.jpg" alt="Deffer_Workflow2"></p><p>可以将延迟渲染理解为两个Pass的过程：</p><ol><li><p><strong>几何处理阶段(Geometry Pass)。</strong>这个阶段中，我们获取对象的各种<strong>几何信息</strong>（Position、Normal、Albedo、Specular等），并将第二步所需的各种数据储存（也就是渲染）到多个<strong>G-buffer</strong>中；</p><ul><li>由于有深度测试，所以最终写入G-buffer中的，都是离摄像机最近的片元的集合属性，这就意味着，在G-buffer中的片元必定要进行光照计算。</li></ul></li><li><p><strong>光照处理阶段(Lighting Pass)。</strong>在这个pass中，我们只需渲染出一个屏幕大小的二维矩形，使用第一步在G-buffer中存储的数据对此矩阵的每一个片段<strong>计算场景的光照</strong>；光照计算的过程还是和正向渲染以前一样，只是现在<strong>我们需要从对应的G-buffer而不是顶点着色器(和一些uniform变量)那里获取输入变量了</strong>。</p></li></ol><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Workflow3.jpg" alt="Deffer_Workflow3"></p><h3 id="b-2-3-G-Buffer"><a href="#b-2-3-G-Buffer" class="headerlink" title="b.2.3). G-Buffer"></a>b.2.3). G-Buffer</h3><p><strong>G-Buffer</strong>，全称Geometric Buffer ，译作几何缓冲区，它主要用于存储每个像素对应的位置（Position），法线（Normal），漫反射颜色（Diffuse Color）以及其他有用材质参数。根据这些信息，就可以在像空间（二维空间）中对每个像素进行光照处理。</p><ul><li><p>如图为一个典型的G-buffer<img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/G-Buffer.jpg" alt="G-Buffer"></p></li><li><p>下图是一帧中G-buffer中存储的内容：</p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/G-Buffer2.jpg" alt="G-Buffer2"></p></li><li><p>UE5中的G-Buffer</p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/G-Buffer_Constant.png" alt="G-Buffer_Constant"></p></li></ul><p>在几何处理阶段中填充G-buffer非常高效，因为我们直接储存位置，颜色，法线等对象信息到帧缓冲中，这个过程几乎不消耗处理时间。</p><p>而在此基础上使用<strong>多渲染目标(Multiple Render Targets, MRT)技术</strong>，我们可以在一个Pass之内完成所有渲染工作。</p><ul><li><p>P-Code</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">For each object:</span><br><span class="line">    Render to multiple targets </span><br><span class="line">For each light:</span><br><span class="line">    Apply light as a 2D postprocess</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Two-pass deferred shading algorithm</span><br><span class="line">Pass 1: geometry pass</span><br><span class="line">- Write visible geometry information to G-buffer</span><br><span class="line">Pass 2: shading pass</span><br><span class="line">For each G-buffer sample, compute shading</span><br><span class="line">- Read G-buffer data for current sample</span><br><span class="line">- Accumulate contribution of all lights</span><br><span class="line">- Output final surface color</span><br></pre></td></tr></table></figure></li></ul><h3 id="b-2-4-延迟渲染的优缺点"><a href="#b-2-4-延迟渲染的优缺点" class="headerlink" title="b.2.4). 延迟渲染的优缺点"></a>b.2.4). 延迟渲染的优缺点</h3><ul><li><p><strong>优点：</strong></p><ol><li>复杂度仅O(n+m)</li><li>只渲染可见的像素，节省计算量</li><li>用更少的shader</li><li>对后处理支持良好（例如深度信息：直接拿G-buffer中的就行。而前向渲染需要单独Pass再渲染一张深度图）</li><li>在大量光源的场景优势尤其明显；</li></ol></li><li><p><strong>缺点：</strong></p><ol><li>内存开销较大，且占用了大量的显存带宽；<ul><li>需要传递G-Buffer；</li><li>有时需要用到G-Buffer的信息，如深度图做后处理，那将不会进行Clear；</li></ul></li><li>只能用同一套Lighting Pass；</li><li>对透明物体的渲染存在问题。在这点上需要结合正向渲染进行渲染；</li><li>对多重采样抗锯齿（MultiSampling Anti-Aliasing, MSAA）等硬件抗锯齿的支持不友好，主要因为需开启MRT；<ul><li>MSAA是依赖于子像素，而Deffered shading<strong>处在光栅化之后（单个像素内值相等）</strong>，传输数据是通过G-Buffer；</li><li>但可使用TAA</li></ul></li></ol><p><a href="https://www.zhihu.com/question/20236638/answer/44821615">问FXAA、FSAA与MSAA有什么区别？效果和性能上哪个好？ - 文刀秋二的回答 - 知乎</a></p><p><a href="https://catlikecoding.com/unity/tutorials/rendering/part-13/">https://catlikecoding.com/unity/tutorials/rendering/part-13/</a></p></li></ul><h2 id="b-3-Unity中渲染路径设置"><a href="#b-3-Unity中渲染路径设置" class="headerlink" title="b.3). Unity中渲染路径设置"></a>b.3). Unity中渲染路径设置</h2><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/RenderPathSetting.png" alt="RenderPathSetting"></p><h2 id="b-4-其他渲染路径"><a href="#b-4-其他渲染路径" class="headerlink" title="b.4). 其他渲染路径"></a>b.4). 其他渲染路径</h2><p>针对延迟渲染上述提到的缺点，下面简单列举一些降低 Deferred Rendering 存取带宽的改进方案。最简单也是最容易想到的就是将存取的 G-Buffer 数据结构最小化，这也就衍生出了 Light Pre-Pass（即Deferred Lighting） 方法。另一种方式是将多个光照组成一组，然后一起处理，这种方法衍生了 Tile-Based Deferred Rendering。</p><p>也就是说，常见的两种Deferred Rendering的改进是：</p><ul><li>延迟光照 Light Pre-Pass（即Deferred Lighting）</li><li>分块延迟渲染 Tile-BasedDeferred Rendering</li></ul><h3 id="b-4-1-延迟光照（LightPre-Pass-Deferred-Lighting）"><a href="#b-4-1-延迟光照（LightPre-Pass-Deferred-Lighting）" class="headerlink" title="b.4.1). 延迟光照（LightPre-Pass / Deferred Lighting）"></a>b.4.1). 延迟光照（LightPre-Pass / Deferred Lighting）</h3><ul><li>减少G-buffer占用的过多开销，支持多种光照模型</li></ul><ul><li>过程：</li></ul><ol><li><p>渲染场景中不透明（opaque ）的几何体。将法线向量n和镜面扩展因子（specular spread factor）m 写入缓冲区。这个n/m-buffer 缓冲区是一个类似 G-Buffer的缓冲区，但包含的信息更少，更轻量，适合于单个输出颜色缓冲区，因此不需要MRT支持。</p></li><li><p>渲染光照。计算漫反射和镜面着色方程，并将结果写入不同的漫反射和镜面反射累积缓冲区。这个过程可以在一个单独的pass中完成（使用MRT），或者用两个单独的pass。环境光照明可以在这个阶段使用一个 full-screen pass进行计算。</p></li><li><p>对场景中的不透明几何体进行第二次渲染。从纹理中读取漫反射和镜面反射值，对前面步骤中漫反射和镜面反射累积缓冲区的值进行调制，并将最终结果写入最终的颜色缓冲区。若在上一阶段没有处理环境光照明，则在此阶段应用环境光照明。</p></li><li><p>使用非延迟着色方法渲染半透明几何体。</p></li></ol><ul><li>用更少的buffe信息，着色计算的时候用的是forward，所以第三步开始都是前向渲染（在3D，而不是2D的像空间中渲染）</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Deffer_Light.jpg" alt="Deffer_Light"></p><h3 id="b-4-2-Forward-（即Tiled-Forward-Rendering，分块正向渲染）"><a href="#b-4-2-Forward-（即Tiled-Forward-Rendering，分块正向渲染）" class="headerlink" title="b.4.2). Forward+（即Tiled Forward Rendering，分块正向渲染）"></a>b.4.2). Forward+（<strong>即Tiled Forward Rendering，分块正向渲染</strong>）</h3><ul><li><p>减少带宽，支持多光源，强制需要一个preZ</p></li><li><ul><li>通过分块索引的方式，以及深度和法线信息来到需要进行光照计算的片元进行光照计算。</li><li>需要法线和深度的后处理需要单独渲染一个rt出来</li><li>强制使用了一个preZ（如果没涉及过这个概念的话，可以理解为进行了一个深度预计算</li></ul></li></ul><p><a href="https://zhuanlan.zhihu.com/p/28489928">https://zhuanlan.zhihu.com/p/28489928</a></p><h3 id="b-4-3-群组渲染（Clustered-Rendering）"><a href="#b-4-3-群组渲染（Clustered-Rendering）" class="headerlink" title="b.4.3). 群组渲染（Clustered Rendering）"></a>b.4.3). 群组渲染（Clustered Rendering）</h3><ul><li>带宽相对减少，多光源下效率提升</li><li>分为forward和deferred两种</li><li>详细补充拓展：<a href="https://zhuanlan.zhihu.com/p/54694743">https://zhuanlan.zhihu.com/p/54694743</a></li></ul><h2 id="c-渲染管线的优化（移动端）"><a href="#c-渲染管线的优化（移动端）" class="headerlink" title="c). 渲染管线的优化（移动端）"></a>c). 渲染管线的优化（移动端）</h2><p>IMR框架渲染对于移动端有一个很大的问题：<strong>带宽占用过高</strong>。</p><ul><li>因此在移动端，我们不采用<strong>PC端构架IMR（Immediate Mode Rendering）</strong>，而采用<strong>移动端构架TBR（Tile-Based Rendering）或TBDR（PowerVR使用）</strong></li></ul><p>简而言之，为了节省成本，移动端TBR的GPU中不使用显存（GPU Memory），而使用<strong>On_Chip Memory也就是SRAM，或者L1 L2 cache</strong><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/GPU架构.jpg" alt="GPU架构"></p><p>对于TBR来讲，整个光栅化和像素处理会被分为一个个Tile进行处理，通常为16×16大小的Tile。TBR的结构通过On-Chip Buffers来储存Tiling后的Depth Buffer和Color buffer。</p><p>也就是原先IMR架构中对主存中Color/Depth Buffer进行的读写操作变成直接在GPU中的高速内存操作，减少了最影响性能的系统内存传输的开销。通过下面这张图能够更好的来理解，下图的DRAM在手机上就是物理内存那一块。</p><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/On-chip.jpg" alt="On-chip"></p><p>​    </p><h2 id="d-移动设备渲染通用优化建议"><a href="#d-移动设备渲染通用优化建议" class="headerlink" title="d). 移动设备渲染通用优化建议"></a>d). 移动设备渲染通用优化建议</h2><ul><li><strong>贴图格式能压缩就压缩</strong>。贴图内存越小，片上命中率就越高，总的传输量也少</li><li><strong>能开mipmap就开mipmap</strong>（前提是能用到，UI贴图就不用开了）。减轻带宽压力，与减小实际使用的贴图内存是一个道理，但是会增加总贴图的内存占用大小，需要在内存开销和带宽开销上做一个平衡。</li><li><strong>随机纹理寻址相对于相邻纹理寻址有显著开销</strong>。提高片上命中率。</li><li><strong>3DTexture Sampling有显著的开销</strong>。3DTexture整体内存占用大，垂直方向相邻像素内存不相邻很容易cache miss，这是我个人推测。</li><li><strong>Trilinear/Anisotropic相对于Bilinear有显著的开销</strong>。Trilinear其实就相当于tex3D了(此结论不负责任)，Bilinear相对于Point几乎没有额外开销（此结论负责任，texture fetch都是一次拿相邻的四个出来），所以Bilinear能忍就尽量凑合用着吧。</li><li><strong>使用LUT（look up texture）很可能是负优化</strong>。需要对比权衡带宽占用+texture fetch操作增加与ALU占用增加降低并行效率，另外还很可能涉及到美术工作流和最终效果，所以是个不是很好进行操作的优化。之前看过腾讯的技术分享将引擎中Tonemapping那步的3DLUT（UE4和Unity都是这样的）替换为函数拟合的优化，理论上应该是会提升不少性能，但是要想真正应用到生产环境，保证效果，还要做好拟合工具链，是得费不少力气的</li><li><strong>通道图能合并就合并，减少Shader中贴图采样次数</strong>。这个不多说了</li><li><strong>控制Framebuffer大小</strong>。这个也不多说了</li><li><strong>总顶点数量也是带宽开销的影响因素</strong>。虽然以现在GPU的计算能力来说，顶点数增多产生的VS计算开销增加通常是忽略不计的。但是仍不能忽略总顶点数量对于VertexBuffer所消耗带宽的影响，对于总顶点数的限制应该更多的从带宽消耗上去进行测试和分析。</li></ul><h3 id="d-1-AlphaTest性能消耗"><a href="#d-1-AlphaTest性能消耗" class="headerlink" title="d.1). AlphaTest性能消耗"></a>d.1). AlphaTest性能消耗</h3><ul><li>只要Shader中包含discard指令的都会被GPU认为是AlphaTest图元（GPU对于AlphaTest绘制流程的判定是基于图元而不是像素）</li><li><strong>无论是PowerVR还是Mali/Adreno芯片，AlphaTest图元的绘制都会影响整体渲染性能。</strong></li><li><strong>随着芯片的发展AlphaTest图元对于渲染性能的影响主要在于Overdraw增加而非降低硬件设计流程效率，其优化思路与AlphaBlend一样，就是少画！</strong></li><li>严格按照Opaque - AlphaTest - AlphaBlend的顺序进行渲染可以最大化减小AlphaTest对于渲染性能的影响。</li><li><strong>将Opaque, AlphaTest与AlphaBlend打乱顺序渲染会极大的降低渲染性能，任何情况下都不应该这么做。</strong></li><li>不要尝试使用AlphaTest替代AlphaBlend，这并不会产生太多优化。</li><li>不要尝试使用AlphaTest替代Opaque，这会产生负优化</li><li><strong>不要尝试使用AlphaBlend替代AlphaTest</strong>，这会造成错误的渲染结果。</li><li>在保证正确渲染顺序情况下，AlphaTest与AlphaBlend开销相似，不存在任何替代优化关系</li><li>增加少量顶点以减少AlphaTest图元的绘制面积是可以提升一些渲染性能的。</li><li>首先统一绘制AlphaTest图元的DepthPrepass，再以ZTest Equal和不含discard指令的Shader统一绘制AlphaTest图元，大多数情况下是可以显著提升总体渲染性能的（需要实际测试）</li></ul><h2 id="资料补充："><a href="#资料补充：" class="headerlink" title="资料补充："></a>资料补充：</h2><p><a href="https://zhuanlan.zhihu.com/p/259760974">https://zhuanlan.zhihu.com/p/259760974</a></p><p><a href="https://www.cnblogs.com/timlly/p/11471507.html">https://www.cnblogs.com/timlly/p/11471507.html</a></p><p><a href="https://zhuanlan.zhihu.com/p/112120206">https://zhuanlan.zhihu.com/p/112120206</a></p>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;a-渲染路径&quot;&gt;&lt;a href=&quot;#a-渲染路径&quot; class=&quot;headerlink&quot; title=&quot;a). 渲染路径&quot;&gt;&lt;/a&gt;a). 渲染路径&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;决定光照的实现方式。简言之，就是当前渲染目标使用&lt;strong&gt;&lt;font color=&quot;red&quot;&gt;光照的流程&lt;/font&gt;&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&quot;b-渲染方式&quot;&gt;&lt;a href=&quot;#b-渲染方式&quot; class=&quot;headerlink&quot; title=&quot;b). 渲染方式&quot;&gt;&lt;/a&gt;b). 渲染方式&lt;/h1&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;延迟渲染&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;前向渲染&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Difference.png&quot; alt=&quot;Difference&quot;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到前向渲染中，中间蓝色的灯并没被渲染。（场景8盏灯，Project Setting中Pixel Light Count设为7）&lt;/p&gt;
+&lt;h2 id=&quot;b-1-前向-正向渲染-Forward-Rendering&quot;&gt;&lt;a href=&quot;#b-1-前向-正向渲染-Forward-Rendering&quot; class=&quot;headerlink&quot; title=&quot;b.1). 前向/正向渲染-Forward Rendering&quot;&gt;&lt;/a&gt;b.1). 前向/正向渲染-Forward Rendering&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;简介：每个Object对每个光照都计算；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;b-1-1-流程&quot;&gt;&lt;a href=&quot;#b-1-1-流程&quot; class=&quot;headerlink&quot; title=&quot;b.1.1). 流程&quot;&gt;&lt;/a&gt;b.1.1). 流程&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Forward_Workflow.png&quot; alt=&quot;Forward_Workflow&quot;&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;简单来说就是不管光源的影响大不大，计算的时候都会把所有光源计算进去，这样就会造成一个很大的浪费&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;b-1-2-规则和注意事项&quot;&gt;&lt;a href=&quot;#b-1-2-规则和注意事项&quot; class=&quot;headerlink&quot; title=&quot;b.1.2). 规则和注意事项&quot;&gt;&lt;/a&gt;b.1.2). 规则和注意事项&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;发生在顶点处理阶段，会计算所有顶点的光照&lt;/strong&gt;。全平台支持&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ul&gt;
+&lt;li&gt;规则1：最亮的几个光源会被实现为像素光照&lt;/li&gt;
+&lt;li&gt;规则2：然后就是，最多四个光源会被实现为顶点光照&lt;/li&gt;
+&lt;li&gt;规则3：剩下的光源会实现为效率较高的球面调谐光照（Spherical Hamanic），这是一种模拟光照&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;补充说明&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;ul&gt;
+&lt;li&gt;最亮的那盏光一定是像素光照&lt;/li&gt;
+&lt;li&gt;Light的Render Mode是important的光一定是像素光照&lt;/li&gt;
+&lt;li&gt;如果前面的两条加起来的像素光照小于Quality Setting里的Pixel Light Count（最大像素光照数量），那么从剩下的光源中找出最亮的那几盏光源，实现为像素光照。&lt;/li&gt;
+&lt;li&gt;最后剩下的光源，按照规则2或3。&lt;/li&gt;
+&lt;li&gt;在base pass里执行一盏像素光、所有的顶点光和球面调谐光照，并且进行阴影计算。&lt;/li&gt;
+&lt;li&gt;其余的像素光每盏一个Additional Pass，并且这些pass里没有阴影计算。&lt;/li&gt;
+&lt;li&gt;场景中看到的阴影，全是base pass里计算出最亮那盏像素光的阴影，其他像素光是不计算阴影的。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;最多的光源数是可以更改的&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;以Unity中的为例，在project setting中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/UnityForwardSetting.png&quot; alt=&quot;UnityForwardSetting&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;b-2-延迟渲染（Deferred-Rendering）&quot;&gt;&lt;a href=&quot;#b-2-延迟渲染（Deferred-Rendering）&quot; class=&quot;headerlink&quot; title=&quot;b.2). 延迟渲染（Deferred Rendering）&quot;&gt;&lt;/a&gt;b.2). 延迟渲染（Deferred Rendering）&lt;/h2&gt;&lt;h3 id=&quot;b-2-1-简介&quot;&gt;&lt;a href=&quot;#b-2-1-简介&quot; class=&quot;headerlink&quot; title=&quot;b.2.1). 简介&quot;&gt;&lt;/a&gt;b.2.1). 简介&lt;/h3&gt;&lt;p&gt;主要解决&lt;strong&gt;大量光照渲染&lt;/strong&gt;的方案。&lt;/p&gt;
+&lt;p&gt;可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即&lt;strong&gt;G-buffer&lt;/strong&gt;，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染&lt;strong&gt;基本思想&lt;/strong&gt;是，&lt;strong&gt;先执行深度测试（应该也包括其他测试），再进行着色计算&lt;/strong&gt;，将本来在物空间（三维空间）进行光照计算放到了&lt;strong&gt;像空间&lt;/strong&gt;（二维空间）进行处理。&lt;/p&gt;
+&lt;p&gt;对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="延迟渲染" scheme="https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/"/>
+    
+    <category term="渲染管线" scheme="https://whitetail-o.github.io/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPP_Graphics_2.7 模板测试和深度测试</title>
+    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
+    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/</id>
+    <published>2023-02-15T09:40:32.000Z</published>
+    <updated>2023-03-17T05:16:04.931Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul><li>处于<strong>逐片元操作</strong>中</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p><h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul><li><p>语法表示</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p></li></ul><ul><li><p>可作为遮罩等操作</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p></li></ul><span id="more"></span><h3 id="a-2-作业：Unity中实现的效果"><a href="#a-2-作业：Unity中实现的效果" class="headerlink" title="a.2). 作业：Unity中实现的效果"></a>a.2). 作业：Unity中实现的效果</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilTest_Unity.png" alt="StencilTest_Unity"></p><hr><p><strong>【链接补充】</strong></p><p>[1]. <a href="https://blog.csdn.net/u011047171/article/details/46928463">https://blog.csdn.net/u011047171/article/details/46928463</a></p><p>[2]. <a href="https://blog.csdn.net/liu_if_else/article/details/86316361">https://blog.csdn.net/liu_if_else/article/details/86316361</a></p><p>[3]. <a href="https://gameinstitute.qq.com/community/detail/127404">https://gameinstitute.qq.com/community/detail/127404</a></p><p>[4]. <a href="https://learnopengl-cn.readthedocs.io/zh/latest/04 Advanced OpenGL/02 Stencil testing/">https://learnopenglcn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/02%20Stencil%20testing/</a></p><p>[5]. <a href="https://www.patreon.com/posts/14832618">https://www.patreon.com/posts/14832618</a></p><p>[6]. <a href="https://www.udemy.com/course/unity-shaders/">https://www.udemy.com/course/unity-shaders/</a></p><h2 id="b-深度测试"><a href="#b-深度测试" class="headerlink" title="b). 深度测试"></a>b). 深度测试</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/ZTest.png" alt="ZTest"></p><ul><li>模板测试后，透明度混合前</li></ul><h3 id="Z-Buffer"><a href="#Z-Buffer" class="headerlink" title="Z-Buffer"></a>Z-Buffer</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Buffer.png" alt="Z_Buffer"></p><h3 id="Z-Write"><a href="#Z-Write" class="headerlink" title="Z Write"></a>Z Write</h3><p>深度写入包括<strong>两种状态：ZWrite On 与 ZWrite Off</strong></p><p>当我们<strong>开启深度写入</strong>的时候，物体被渲染时针对物体在屏幕（更准确地说是frame buffer）上<strong>每个像素的深度都写入到深度缓冲区</strong>；反之，如果是<strong>ZWrite Off,</strong>那么物体的深度就<strong>不会写入深度缓冲区</strong>。但是，物体是否会写入深度，除了ZWrite这个状态之外，<strong>更重要的是需要深度测试通过</strong>，也就是ZTest通过，如果ZTest都没通过，那么也就不会写入深度了。</p><p>ZTest分为通过和不通过两种情况，ZWrite分为开启和关闭两种情况的四种情况：</p><ul><li>深度测试通过，深度写入开启：写入深度缓冲区，写入颜色缓冲区。</li><li>深度测试通过，深度写入关闭：不写深度缓冲区，写入颜色缓冲区。</li><li>深度测试失败，深度写入开启：不写深度缓冲区，不写颜色缓冲区。</li><li>深度测试失败，深度写入关闭：不写深度缓冲区，不屑颜色缓冲区。</li></ul><h3 id="Z-Test比较操作"><a href="#Z-Test比较操作" class="headerlink" title="Z Test比较操作"></a>Z Test比较操作</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Comp.png" alt="Z_Comp"></p><h3 id="渲染队列"><a href="#渲染队列" class="headerlink" title="渲染队列"></a>渲染队列</h3><p>Unity中内置的几种渲染队列，按照渲染顺序，从先到后进行排序，<strong>队列数越小，越先渲染，队列数越大，越后渲染。</strong></p><ul><li><strong>Background(1000) ：</strong>最早被渲染的物体的队列。</li><li><strong>Geometry(2000) ：</strong>不透明物体的渲染队列。大多数物体都应该使用该队列进行渲染，也是Unity Shader中默认的渲染队列。</li><li><strong>AlphaTest(2450) ：</strong>有透明通道，需要进行Alpha Test的物体的队列，比在Geometry中更有效。</li><li><strong>Transparent(3000) ：</strong> 半透物体的渲染队列。一般是不写深度的物体，Alpha Blend等的在该队列渲染。</li><li><strong>Overlay(4000) ：</strong>最后被渲染的物体的队列，一般是覆盖效果，比如镜头光晕，屏幕贴片之类的。</li></ul><h3 id="Unity中设置渲染队列"><a href="#Unity中设置渲染队列" class="headerlink" title="Unity中设置渲染队列"></a>Unity中设置渲染队列</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认是Geometry</span></span><br><span class="line">Tags&#123;</span><br><span class="line"><span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li><strong>不透明物体的渲染顺序：从前往后。</strong></li><li><strong>透明物体的渲染顺序：从后往前。（OverDraw）</strong></li><li>对于使用了多个Pass的物体，其渲染队列会设置为Pass中的最小值（如两个Pass中一个是Geometry(2000)，另一个是Transparent(3000)，那该物体会按Geometry的队列渲染，然后按Shader中从上到下执行Pass）。</li></ul><h3 id="Early-Z"><a href="#Early-Z" class="headerlink" title="Early-Z"></a>Early-Z</h3><p>传统的渲染管线中，ZTest其实是在Blending阶段，这时候进行深度测试，所有对象的像素着色器都会计算一遍，没有什么性能提升，仅仅是为了得出正确的遮挡结果，会造成大量的无用计算，因为每个像素点上肯定重叠了很多计算。<strong>因此现代GPU中运用了Early-Z的技术，在Vertex阶段和Fragment阶段之间（光栅化之后，fragment之前）进行一次深度测试，如果深度测试失败，就不必进行fragment阶段的计算了，因此在性能上会有很大的提升。但是最终的ZTest仍然需要进行，以保证最终的遮挡关系结果正确。</strong>前面的一次主要是<strong><em>Z-Cull</em></strong>为了裁剪以达到优化的目的，后一次主要是<strong><em>Z-Check</em></strong>，为了检查，如下图：</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/EarlyZ.png" alt="EarlyZ"></p><h2 id="c-深度值"><a href="#c-深度值" class="headerlink" title="c). 深度值"></a>c). 深度值</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Deepth.png" alt="Deepth"></p><h3 id="为什么深度缓冲区存储非线性深度呢？"><a href="#为什么深度缓冲区存储非线性深度呢？" class="headerlink" title="为什么深度缓冲区存储非线性深度呢？"></a>为什么深度缓冲区存储非线性深度呢？</h3><p><strong>正确的投影特性的非线性深度方程是和1/z成正比的，</strong>这样基本上做的是在<strong>Z很近的时候是高精度和Z很远的时候是底精度</strong>。这样就是模拟了人眼观察，<strong>近处的物体很清晰，而远处的物体很模糊。</strong>（和现在还用伽马校正的原因类似）</p><script type="math/tex; mode=display">F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }}</script><h3 id="Z-fighting"><a href="#Z-fighting" class="headerlink" title="Z-fighting"></a>Z-fighting</h3><p>两个平面或三角形很<strong>紧密相互平行，深度缓冲区不具有足够的精度</strong>以至于无法得到哪一个靠前。导致了着两个形状<strong>不断切换顺序出现怪异问题</strong>。这被称为<strong>深度冲突（Z-fighting）</strong>，因为它看上去像形状争夺顶靠前的位置。（UE中重叠闪来闪去的那个）</p><ul><li><p>解决方法</p><ul><li><p>让物体之间不要离得太近。</p></li><li><p>尽可能把<strong>近平面</strong>设置得远一些。</p></li><li><p>放弃一部分性能来获得更高精度的深度值。</p></li><li>Z-Offset</li></ul></li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_F.png" alt="Z_F"></p>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;a-模板测试&quot;&gt;&lt;a href=&quot;#a-模板测试&quot; class=&quot;headerlink&quot; title=&quot;a). 模板测试&quot;&gt;&lt;/a&gt;a). 模板测试&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;处于&lt;strong&gt;逐片元操作&lt;/strong&gt;中&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png&quot; alt=&quot;模板测试00&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png&quot; alt=&quot;模板测试01&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png&quot; alt=&quot;模板测试02&quot;&gt;&lt;/p&gt;
+&lt;h3 id=&quot;a-1-Unity-中的模板测试&quot;&gt;&lt;a href=&quot;#a-1-Unity-中的模板测试&quot; class=&quot;headerlink&quot; title=&quot;a.1). Unity 中的模板测试&quot;&gt;&lt;/a&gt;a.1). Unity 中的模板测试&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;语法表示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png&quot; alt=&quot;Unity_stencil&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png&quot; alt=&quot;Unity_stencil_Comparison&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png&quot; alt=&quot;Unity_stencil_Update&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;可作为遮罩等操作&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png&quot; alt=&quot;StencilBufferValue&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    
+    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
+    
+    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
+    
+    <category term="模板测试" scheme="https://whitetail-o.github.io/tags/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/"/>
+    
+    <category term="深度测试" scheme="https://whitetail-o.github.io/tags/%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
+    
+  </entry>
+  
+  <entry>
     <title>HPP_Graphics_3.3 曲面细分和几何着色器</title>
     <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/"/>
     <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/</id>
@@ -891,50 +935,6 @@
     <category term="曲面细分着色器" scheme="https://whitetail-o.github.io/tags/%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8/"/>
     
     <category term="几何着色器" scheme="https://whitetail-o.github.io/tags/%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>HPP_Graphics_2.7 模板测试和深度测试</title>
-    <link href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
-    <id>https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/</id>
-    <published>2023-02-15T09:40:32.000Z</published>
-    <updated>2023-03-17T05:16:04.931Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul><li>处于<strong>逐片元操作</strong>中</li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p><h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul><li><p>语法表示</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p></li></ul><ul><li><p>可作为遮罩等操作</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p></li></ul><span id="more"></span><h3 id="a-2-作业：Unity中实现的效果"><a href="#a-2-作业：Unity中实现的效果" class="headerlink" title="a.2). 作业：Unity中实现的效果"></a>a.2). 作业：Unity中实现的效果</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilTest_Unity.png" alt="StencilTest_Unity"></p><hr><p><strong>【链接补充】</strong></p><p>[1]. <a href="https://blog.csdn.net/u011047171/article/details/46928463">https://blog.csdn.net/u011047171/article/details/46928463</a></p><p>[2]. <a href="https://blog.csdn.net/liu_if_else/article/details/86316361">https://blog.csdn.net/liu_if_else/article/details/86316361</a></p><p>[3]. <a href="https://gameinstitute.qq.com/community/detail/127404">https://gameinstitute.qq.com/community/detail/127404</a></p><p>[4]. <a href="https://learnopengl-cn.readthedocs.io/zh/latest/04 Advanced OpenGL/02 Stencil testing/">https://learnopenglcn.readthedocs.io/zh/latest/04%20Advanced%20OpenGL/02%20Stencil%20testing/</a></p><p>[5]. <a href="https://www.patreon.com/posts/14832618">https://www.patreon.com/posts/14832618</a></p><p>[6]. <a href="https://www.udemy.com/course/unity-shaders/">https://www.udemy.com/course/unity-shaders/</a></p><h2 id="b-深度测试"><a href="#b-深度测试" class="headerlink" title="b). 深度测试"></a>b). 深度测试</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/ZTest.png" alt="ZTest"></p><ul><li>模板测试后，透明度混合前</li></ul><h3 id="Z-Buffer"><a href="#Z-Buffer" class="headerlink" title="Z-Buffer"></a>Z-Buffer</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Buffer.png" alt="Z_Buffer"></p><h3 id="Z-Write"><a href="#Z-Write" class="headerlink" title="Z Write"></a>Z Write</h3><p>深度写入包括<strong>两种状态：ZWrite On 与 ZWrite Off</strong></p><p>当我们<strong>开启深度写入</strong>的时候，物体被渲染时针对物体在屏幕（更准确地说是frame buffer）上<strong>每个像素的深度都写入到深度缓冲区</strong>；反之，如果是<strong>ZWrite Off,</strong>那么物体的深度就<strong>不会写入深度缓冲区</strong>。但是，物体是否会写入深度，除了ZWrite这个状态之外，<strong>更重要的是需要深度测试通过</strong>，也就是ZTest通过，如果ZTest都没通过，那么也就不会写入深度了。</p><p>ZTest分为通过和不通过两种情况，ZWrite分为开启和关闭两种情况的四种情况：</p><ul><li>深度测试通过，深度写入开启：写入深度缓冲区，写入颜色缓冲区。</li><li>深度测试通过，深度写入关闭：不写深度缓冲区，写入颜色缓冲区。</li><li>深度测试失败，深度写入开启：不写深度缓冲区，不写颜色缓冲区。</li><li>深度测试失败，深度写入关闭：不写深度缓冲区，不屑颜色缓冲区。</li></ul><h3 id="Z-Test比较操作"><a href="#Z-Test比较操作" class="headerlink" title="Z Test比较操作"></a>Z Test比较操作</h3><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_Comp.png" alt="Z_Comp"></p><h3 id="渲染队列"><a href="#渲染队列" class="headerlink" title="渲染队列"></a>渲染队列</h3><p>Unity中内置的几种渲染队列，按照渲染顺序，从先到后进行排序，<strong>队列数越小，越先渲染，队列数越大，越后渲染。</strong></p><ul><li><strong>Background(1000) ：</strong>最早被渲染的物体的队列。</li><li><strong>Geometry(2000) ：</strong>不透明物体的渲染队列。大多数物体都应该使用该队列进行渲染，也是Unity Shader中默认的渲染队列。</li><li><strong>AlphaTest(2450) ：</strong>有透明通道，需要进行Alpha Test的物体的队列，比在Geometry中更有效。</li><li><strong>Transparent(3000) ：</strong> 半透物体的渲染队列。一般是不写深度的物体，Alpha Blend等的在该队列渲染。</li><li><strong>Overlay(4000) ：</strong>最后被渲染的物体的队列，一般是覆盖效果，比如镜头光晕，屏幕贴片之类的。</li></ul><h3 id="Unity中设置渲染队列"><a href="#Unity中设置渲染队列" class="headerlink" title="Unity中设置渲染队列"></a>Unity中设置渲染队列</h3><figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//默认是Geometry</span></span><br><span class="line">Tags&#123;</span><br><span class="line"><span class="string">&quot;Queue&quot;</span> = <span class="string">&quot;Transparent&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><ul><li><strong>不透明物体的渲染顺序：从前往后。</strong></li><li><strong>透明物体的渲染顺序：从后往前。（OverDraw）</strong></li><li>对于使用了多个Pass的物体，其渲染队列会设置为Pass中的最小值（如两个Pass中一个是Geometry(2000)，另一个是Transparent(3000)，那该物体会按Geometry的队列渲染，然后按Shader中从上到下执行Pass）。</li></ul><h3 id="Early-Z"><a href="#Early-Z" class="headerlink" title="Early-Z"></a>Early-Z</h3><p>传统的渲染管线中，ZTest其实是在Blending阶段，这时候进行深度测试，所有对象的像素着色器都会计算一遍，没有什么性能提升，仅仅是为了得出正确的遮挡结果，会造成大量的无用计算，因为每个像素点上肯定重叠了很多计算。<strong>因此现代GPU中运用了Early-Z的技术，在Vertex阶段和Fragment阶段之间（光栅化之后，fragment之前）进行一次深度测试，如果深度测试失败，就不必进行fragment阶段的计算了，因此在性能上会有很大的提升。但是最终的ZTest仍然需要进行，以保证最终的遮挡关系结果正确。</strong>前面的一次主要是<strong><em>Z-Cull</em></strong>为了裁剪以达到优化的目的，后一次主要是<strong><em>Z-Check</em></strong>，为了检查，如下图：</p><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/EarlyZ.png" alt="EarlyZ"></p><h2 id="c-深度值"><a href="#c-深度值" class="headerlink" title="c). 深度值"></a>c). 深度值</h2><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Deepth.png" alt="Deepth"></p><h3 id="为什么深度缓冲区存储非线性深度呢？"><a href="#为什么深度缓冲区存储非线性深度呢？" class="headerlink" title="为什么深度缓冲区存储非线性深度呢？"></a>为什么深度缓冲区存储非线性深度呢？</h3><p><strong>正确的投影特性的非线性深度方程是和1/z成正比的，</strong>这样基本上做的是在<strong>Z很近的时候是高精度和Z很远的时候是底精度</strong>。这样就是模拟了人眼观察，<strong>近处的物体很清晰，而远处的物体很模糊。</strong>（和现在还用伽马校正的原因类似）</p><script type="math/tex; mode=display">F d e p t h=\frac{1 / z-1 / \text { near }}{1 / \text { far }-1 / \text { near }}</script><h3 id="Z-fighting"><a href="#Z-fighting" class="headerlink" title="Z-fighting"></a>Z-fighting</h3><p>两个平面或三角形很<strong>紧密相互平行，深度缓冲区不具有足够的精度</strong>以至于无法得到哪一个靠前。导致了着两个形状<strong>不断切换顺序出现怪异问题</strong>。这被称为<strong>深度冲突（Z-fighting）</strong>，因为它看上去像形状争夺顶靠前的位置。（UE中重叠闪来闪去的那个）</p><ul><li><p>解决方法</p><ul><li><p>让物体之间不要离得太近。</p></li><li><p>尽可能把<strong>近平面</strong>设置得远一些。</p></li><li><p>放弃一部分性能来获得更高精度的深度值。</p></li><li>Z-Offset</li></ul></li></ul><p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Z_F.png" alt="Z_F"></p>]]></content>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;a-模板测试&quot;&gt;&lt;a href=&quot;#a-模板测试&quot; class=&quot;headerlink&quot; title=&quot;a). 模板测试&quot;&gt;&lt;/a&gt;a). 模板测试&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;处于&lt;strong&gt;逐片元操作&lt;/strong&gt;中&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png&quot; alt=&quot;模板测试00&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png&quot; alt=&quot;模板测试01&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png&quot; alt=&quot;模板测试02&quot;&gt;&lt;/p&gt;
-&lt;h3 id=&quot;a-1-Unity-中的模板测试&quot;&gt;&lt;a href=&quot;#a-1-Unity-中的模板测试&quot; class=&quot;headerlink&quot; title=&quot;a.1). Unity 中的模板测试&quot;&gt;&lt;/a&gt;a.1). Unity 中的模板测试&lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;语法表示&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png&quot; alt=&quot;Unity_stencil&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png&quot; alt=&quot;Unity_stencil_Comparison&quot;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png&quot; alt=&quot;Unity_stencil_Update&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;可作为遮罩等操作&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png&quot; alt=&quot;StencilBufferValue&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</summary>
-    
-    
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    
-    <category term="图形学" scheme="https://whitetail-o.github.io/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/"/>
-    
-    <category term="百人计划" scheme="https://whitetail-o.github.io/tags/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/"/>
-    
-    <category term="模板测试" scheme="https://whitetail-o.github.io/tags/%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95/"/>
-    
-    <category term="深度测试" scheme="https://whitetail-o.github.io/tags/%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/"/>
     
   </entry>
   

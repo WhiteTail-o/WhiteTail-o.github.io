@@ -143,7 +143,7 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="WhiteTail"
-      src="/images/avatar.jpg">
+      src="/images/avatar2.jpg">
   <p class="site-author-name" itemprop="name">WhiteTail</p>
   <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划、Unity的SRP等笔记。</div>
 </div>
@@ -192,10 +192,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">HPP_Graphics_4.3 实时阴影介绍</a>
+          <a href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">HPP_Graphics_4.1 Bloom算法</a>
         </h2>
 
         <div class="post-meta-container">
@@ -230,7 +230,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:20:53" itemprop="dateModified" datetime="2023-03-17T13:20:53+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-17 13:18:01" itemprop="dateModified" datetime="2023-03-17T13:18:01+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -252,37 +252,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="图形-4-3-实时阴影介绍"><a href="#图形-4-3-实时阴影介绍" class="headerlink" title="图形 4.3 实时阴影介绍"></a>图形 4.3 实时阴影介绍</h1><p>更深的可看笔记Games202 Real-time Shadow</p>
-<h1 id="a-基于图片实时阴影技术"><a href="#a-基于图片实时阴影技术" class="headerlink" title="a). 基于图片实时阴影技术"></a>a). 基于图片实时阴影技术</h1><h2 id="a-1-Shadow-Map"><a href="#a-1-Shadow-Map" class="headerlink" title="a.1). Shadow Map"></a>a.1). Shadow Map</h2><ul>
-<li><p><strong>关键思想：</strong>一个点在相机视角中可见，但在光源视角中不可见，那该点就处于阴影中。</p>
-</li>
-<li><p><strong>做法：</strong> 在光源视角下渲染深度图。对于着色点$A$，将其转换到光源视角（其他空间也行，只要两者在同一坐标空间）后，与Shadow Map中对应点进行深度比较，判断一点是否在阴影中；</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/深度比较.png" alt="深度比较" style="zoom:50%;"></p>
-</li>
-</ul>
-<blockquote>
-<p>A <strong>2-Pass</strong> Algorithm</p>
-<ol>
-<li>Light pass: Generate the SM(Shadow Map)</li>
-<li>Camera pass: uses the SM</li>
-</ol>
-</blockquote>
-<h3 id="Pass-1-Render-from-Light"><a href="#Pass-1-Render-from-Light" class="headerlink" title="Pass 1: Render from Light"></a>Pass 1: Render from Light</h3><ul>
-<li>输出一张<strong>光源视角</strong>的<strong>深度图（Depth Buffer）</strong></li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass01.png" alt="SM_Pass01"></p>
-<h3 id="Pass-2-Render-from-Eye-Camera"><a href="#Pass-2-Render-from-Eye-Camera" class="headerlink" title="Pass 2: Render from Eye(Camera)"></a>Pass 2: Render from Eye(Camera)</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass02.png" alt="SM_Pass02"></p>
-<ul>
-<li><p>将光源视角对应的深度转换到View Space, 与Camera视角的深度进行深度比较；</p>
-<ul>
-<li>如$Depth_{cam} &gt; Depth_{light}$ ，那说明该点<strong>在阴影中</strong>（相机可见，光源不可见）</li>
-<li>如$Depth_{cam} &lt; Depth_{light}$ ，那说明该点在<strong>不在阴影中</strong>（相机可见，光源可见）</li>
-</ul>
-</li>
-</ul>
+          <h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p>
+<h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p>
+<h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p>
+<p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p>
+<h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/#more" rel="contents">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -316,7 +294,7 @@
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.2_SSAO/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -435,10 +413,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -453,7 +431,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/" class="post-title-link" itemprop="url">HPP_Graphics_4.1 Bloom算法</a>
+          <a href="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/" class="post-title-link" itemprop="url">HPP_Graphics_4.3 实时阴影介绍</a>
         </h2>
 
         <div class="post-meta-container">
@@ -473,7 +451,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:18:01" itemprop="dateModified" datetime="2023-03-17T13:18:01+08:00">2023-03-17</time>
+      <time title="修改时间：2023-03-17 13:20:53" itemprop="dateModified" datetime="2023-03-17T13:20:53+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -495,15 +473,37 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Bloom算法介绍"><a href="#a-Bloom算法介绍" class="headerlink" title="a). Bloom算法介绍"></a>a). Bloom算法介绍</h1><p>模拟光辉效果的算法<br>简单思路：提取较亮的部分进行模糊，然后与原图叠加后输出<br>HDR：使用HDR可以使提取到亮度大于1的区域<br>高斯模糊：使用高斯函数得到的高斯核去卷积图像<br>二维高斯核：将运算的复杂度从 N x N x W x H 减少到了 2 x N x W x H (对称性使N可减少到N/2+1)</p>
-<p><img src="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/Bloom思路.png" alt="Bloom思路"></p>
-<h1 id="b-Bloom算法实现（Unity）"><a href="#b-Bloom算法实现（Unity）" class="headerlink" title="b). Bloom算法实现（Unity）"></a>b). Bloom算法实现（Unity）</h1><h2 id="C-部分"><a href="#C-部分" class="headerlink" title="C#部分"></a>C#部分</h2><p>调用OnRenderImage函数获取纹理和传输参数给Shader：</p>
-<h2 id="Shader部分"><a href="#Shader部分" class="headerlink" title="Shader部分"></a>Shader部分</h2><p>使用4个Pass计算Bloom效果：</p>
-<p>第一个Pass提取较亮区域<br>第二个、第三个Pass分别在竖直和水平方向上计算高斯模糊<br>最后一个Pass将计算的结果与原图像进行混合</p>
-<h1 id="c-Bloom算法应用"><a href="#c-Bloom算法应用" class="headerlink" title="c). Bloom算法应用"></a>c). Bloom算法应用</h1><p>配合自发光贴图使用<br>配合特效（如烟花）<br>GodRay（基于径向的后处理）<br>使用HDR时，配合Tonemapping（配合色调映射的bloom效果更加柔和）</p>
+          <h1 id="图形-4-3-实时阴影介绍"><a href="#图形-4-3-实时阴影介绍" class="headerlink" title="图形 4.3 实时阴影介绍"></a>图形 4.3 实时阴影介绍</h1><p>更深的可看笔记Games202 Real-time Shadow</p>
+<h1 id="a-基于图片实时阴影技术"><a href="#a-基于图片实时阴影技术" class="headerlink" title="a). 基于图片实时阴影技术"></a>a). 基于图片实时阴影技术</h1><h2 id="a-1-Shadow-Map"><a href="#a-1-Shadow-Map" class="headerlink" title="a.1). Shadow Map"></a>a.1). Shadow Map</h2><ul>
+<li><p><strong>关键思想：</strong>一个点在相机视角中可见，但在光源视角中不可见，那该点就处于阴影中。</p>
+</li>
+<li><p><strong>做法：</strong> 在光源视角下渲染深度图。对于着色点$A$，将其转换到光源视角（其他空间也行，只要两者在同一坐标空间）后，与Shadow Map中对应点进行深度比较，判断一点是否在阴影中；</p>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/深度比较.png" alt="深度比较" style="zoom:50%;"></p>
+</li>
+</ul>
+<blockquote>
+<p>A <strong>2-Pass</strong> Algorithm</p>
+<ol>
+<li>Light pass: Generate the SM(Shadow Map)</li>
+<li>Camera pass: uses the SM</li>
+</ol>
+</blockquote>
+<h3 id="Pass-1-Render-from-Light"><a href="#Pass-1-Render-from-Light" class="headerlink" title="Pass 1: Render from Light"></a>Pass 1: Render from Light</h3><ul>
+<li>输出一张<strong>光源视角</strong>的<strong>深度图（Depth Buffer）</strong></li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass01.png" alt="SM_Pass01"></p>
+<h3 id="Pass-2-Render-from-Eye-Camera"><a href="#Pass-2-Render-from-Eye-Camera" class="headerlink" title="Pass 2: Render from Eye(Camera)"></a>Pass 2: Render from Eye(Camera)</h3><p><img src="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/SM_Pass02.png" alt="SM_Pass02"></p>
+<ul>
+<li><p>将光源视角对应的深度转换到View Space, 与Camera视角的深度进行深度比较；</p>
+<ul>
+<li>如$Depth_{cam} &gt; Depth_{light}$ ，那说明该点<strong>在阴影中</strong>（相机可见，光源不可见）</li>
+<li>如$Depth_{cam} &lt; Depth_{light}$ ，那说明该点在<strong>不在阴影中</strong>（相机可见，光源可见）</li>
+</ul>
+</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_4.1_Bloom%E7%AE%97%E6%B3%95/#more" rel="contents">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_4.3_%E5%AE%9E%E6%97%B6%E9%98%B4%E5%BD%B1%E4%BB%8B%E7%BB%8D/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -537,7 +537,7 @@
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.7_%E7%A7%BB%E5%8A%A8%E7%AB%AFTB(D)R%E6%9E%B6%E6%9E%84%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -659,7 +659,7 @@
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.6_%E7%BA%B9%E7%90%86%E5%8E%8B%E7%BC%A9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -763,150 +763,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" class="post-title-link" itemprop="url">HPP_Graphics_3.4 前向渲染与延迟渲染</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:09:23" itemprop="dateModified" datetime="2023-03-17T13:09:23+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-渲染路径"><a href="#a-渲染路径" class="headerlink" title="a). 渲染路径"></a>a). 渲染路径</h1><ul>
-<li>决定光照的实现方式。简言之，就是当前渲染目标使用<strong><font color="red">光照的流程</font></strong>。</li>
-</ul>
-<h1 id="b-渲染方式"><a href="#b-渲染方式" class="headerlink" title="b). 渲染方式"></a>b). 渲染方式</h1><ul>
-<li><strong>延迟渲染</strong></li>
-<li><strong>前向渲染</strong></li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Difference.png" alt="Difference"></p>
-<p>可以看到前向渲染中，中间蓝色的灯并没被渲染。（场景8盏灯，Project Setting中Pixel Light Count设为7）</p>
-<h2 id="b-1-前向-正向渲染-Forward-Rendering"><a href="#b-1-前向-正向渲染-Forward-Rendering" class="headerlink" title="b.1). 前向/正向渲染-Forward Rendering"></a>b.1). 前向/正向渲染-Forward Rendering</h2><ul>
-<li>简介：每个Object对每个光照都计算；</li>
-</ul>
-<h3 id="b-1-1-流程"><a href="#b-1-1-流程" class="headerlink" title="b.1.1). 流程"></a>b.1.1). 流程</h3><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Forward_Workflow.png" alt="Forward_Workflow"></p>
-<ul>
-<li>简单来说就是不管光源的影响大不大，计算的时候都会把所有光源计算进去，这样就会造成一个很大的浪费</li>
-</ul>
-<h3 id="b-1-2-规则和注意事项"><a href="#b-1-2-规则和注意事项" class="headerlink" title="b.1.2). 规则和注意事项"></a>b.1.2). 规则和注意事项</h3><ul>
-<li><p><strong>发生在顶点处理阶段，会计算所有顶点的光照</strong>。全平台支持</p>
-</li>
-<li><ul>
-<li>规则1：最亮的几个光源会被实现为像素光照</li>
-<li>规则2：然后就是，最多四个光源会被实现为顶点光照</li>
-<li>规则3：剩下的光源会实现为效率较高的球面调谐光照（Spherical Hamanic），这是一种模拟光照</li>
-</ul>
-</li>
-<li><p><strong>补充说明</strong></p>
-</li>
-<li><ul>
-<li>最亮的那盏光一定是像素光照</li>
-<li>Light的Render Mode是important的光一定是像素光照</li>
-<li>如果前面的两条加起来的像素光照小于Quality Setting里的Pixel Light Count（最大像素光照数量），那么从剩下的光源中找出最亮的那几盏光源，实现为像素光照。</li>
-<li>最后剩下的光源，按照规则2或3。</li>
-<li>在base pass里执行一盏像素光、所有的顶点光和球面调谐光照，并且进行阴影计算。</li>
-<li>其余的像素光每盏一个Additional Pass，并且这些pass里没有阴影计算。</li>
-<li>场景中看到的阴影，全是base pass里计算出最亮那盏像素光的阴影，其他像素光是不计算阴影的。</li>
-</ul>
-</li>
-<li><p><strong>最多的光源数是可以更改的</strong></p>
-<ul>
-<li>以Unity中的为例，在project setting中</li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/UnityForwardSetting.png" alt="UnityForwardSetting"></p>
-</li>
-</ul>
-<h2 id="b-2-延迟渲染（Deferred-Rendering）"><a href="#b-2-延迟渲染（Deferred-Rendering）" class="headerlink" title="b.2). 延迟渲染（Deferred Rendering）"></a>b.2). 延迟渲染（Deferred Rendering）</h2><h3 id="b-2-1-简介"><a href="#b-2-1-简介" class="headerlink" title="b.2.1). 简介"></a>b.2.1). 简介</h3><p>主要解决<strong>大量光照渲染</strong>的方案。</p>
-<p>可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即<strong>G-buffer</strong>，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染<strong>基本思想</strong>是，<strong>先执行深度测试（应该也包括其他测试），再进行着色计算</strong>，将本来在物空间（三维空间）进行光照计算放到了<strong>像空间</strong>（二维空间）进行处理。</p>
-<p>对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.5_Early-z%E5%92%8CZ-prepass/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -1043,10 +903,261 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/" class="post-title-link" itemprop="url">HPP_Graphics_3.4 前向渲染与延迟渲染</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 18:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T18:40:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:09:23" itemprop="dateModified" datetime="2023-03-17T13:09:23+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-渲染路径"><a href="#a-渲染路径" class="headerlink" title="a). 渲染路径"></a>a). 渲染路径</h1><ul>
+<li>决定光照的实现方式。简言之，就是当前渲染目标使用<strong><font color="red">光照的流程</font></strong>。</li>
+</ul>
+<h1 id="b-渲染方式"><a href="#b-渲染方式" class="headerlink" title="b). 渲染方式"></a>b). 渲染方式</h1><ul>
+<li><strong>延迟渲染</strong></li>
+<li><strong>前向渲染</strong></li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Difference.png" alt="Difference"></p>
+<p>可以看到前向渲染中，中间蓝色的灯并没被渲染。（场景8盏灯，Project Setting中Pixel Light Count设为7）</p>
+<h2 id="b-1-前向-正向渲染-Forward-Rendering"><a href="#b-1-前向-正向渲染-Forward-Rendering" class="headerlink" title="b.1). 前向/正向渲染-Forward Rendering"></a>b.1). 前向/正向渲染-Forward Rendering</h2><ul>
+<li>简介：每个Object对每个光照都计算；</li>
+</ul>
+<h3 id="b-1-1-流程"><a href="#b-1-1-流程" class="headerlink" title="b.1.1). 流程"></a>b.1.1). 流程</h3><p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/Forward_Workflow.png" alt="Forward_Workflow"></p>
+<ul>
+<li>简单来说就是不管光源的影响大不大，计算的时候都会把所有光源计算进去，这样就会造成一个很大的浪费</li>
+</ul>
+<h3 id="b-1-2-规则和注意事项"><a href="#b-1-2-规则和注意事项" class="headerlink" title="b.1.2). 规则和注意事项"></a>b.1.2). 规则和注意事项</h3><ul>
+<li><p><strong>发生在顶点处理阶段，会计算所有顶点的光照</strong>。全平台支持</p>
+</li>
+<li><ul>
+<li>规则1：最亮的几个光源会被实现为像素光照</li>
+<li>规则2：然后就是，最多四个光源会被实现为顶点光照</li>
+<li>规则3：剩下的光源会实现为效率较高的球面调谐光照（Spherical Hamanic），这是一种模拟光照</li>
+</ul>
+</li>
+<li><p><strong>补充说明</strong></p>
+</li>
+<li><ul>
+<li>最亮的那盏光一定是像素光照</li>
+<li>Light的Render Mode是important的光一定是像素光照</li>
+<li>如果前面的两条加起来的像素光照小于Quality Setting里的Pixel Light Count（最大像素光照数量），那么从剩下的光源中找出最亮的那几盏光源，实现为像素光照。</li>
+<li>最后剩下的光源，按照规则2或3。</li>
+<li>在base pass里执行一盏像素光、所有的顶点光和球面调谐光照，并且进行阴影计算。</li>
+<li>其余的像素光每盏一个Additional Pass，并且这些pass里没有阴影计算。</li>
+<li>场景中看到的阴影，全是base pass里计算出最亮那盏像素光的阴影，其他像素光是不计算阴影的。</li>
+</ul>
+</li>
+<li><p><strong>最多的光源数是可以更改的</strong></p>
+<ul>
+<li>以Unity中的为例，在project setting中</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/UnityForwardSetting.png" alt="UnityForwardSetting"></p>
+</li>
+</ul>
+<h2 id="b-2-延迟渲染（Deferred-Rendering）"><a href="#b-2-延迟渲染（Deferred-Rendering）" class="headerlink" title="b.2). 延迟渲染（Deferred Rendering）"></a>b.2). 延迟渲染（Deferred Rendering）</h2><h3 id="b-2-1-简介"><a href="#b-2-1-简介" class="headerlink" title="b.2.1). 简介"></a>b.2.1). 简介</h3><p>主要解决<strong>大量光照渲染</strong>的方案。</p>
+<p>可以将延迟渲染(Deferred Rendering)理解为先将所有物体都先绘制到屏幕空间的缓冲（即<strong>G-buffer</strong>，Geometric Buffer，几何缓冲区）中，再逐光源对该缓冲进行着色的过程，从而避免了因计算被深度测试丢弃的片元的着色而产生的不必要的开销。也就是说延迟渲染<strong>基本思想</strong>是，<strong>先执行深度测试（应该也包括其他测试），再进行着色计算</strong>，将本来在物空间（三维空间）进行光照计算放到了<strong>像空间</strong>（二维空间）进行处理。</p>
+<p>对应于正向渲染O(m*n)的 复杂度，经典的延迟渲染复杂度为O(n+m)。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.4_%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">HPP_Graphics_2.7 模板测试和深度测试</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:16:04" itemprop="dateModified" datetime="2023-03-17T13:16:04+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul>
+<li>处于<strong>逐片元操作</strong>中</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p>
+<h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul>
+<li><p>语法表示</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p>
+</li>
+</ul>
+<ul>
+<li><p>可作为遮罩等操作</p>
+<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.3_TessAndGs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
@@ -1162,121 +1273,10 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/" class="post-title-link" itemprop="url">HPP_Graphics_2.7 模板测试和深度测试</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 17:40:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:40:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:16:04" itemprop="dateModified" datetime="2023-03-17T13:16:04+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="a-模板测试"><a href="#a-模板测试" class="headerlink" title="a). 模板测试"></a>a). 模板测试</h2><ul>
-<li>处于<strong>逐片元操作</strong>中</li>
-</ul>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试00.png" alt="模板测试00"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试01.png" alt="模板测试01"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/模板测试02.png" alt="模板测试02"></p>
-<h3 id="a-1-Unity-中的模板测试"><a href="#a-1-Unity-中的模板测试" class="headerlink" title="a.1). Unity 中的模板测试"></a>a.1). Unity 中的模板测试</h3><ul>
-<li><p>语法表示</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil.png" alt="Unity_stencil"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Comparison.png" alt="Unity_stencil_Comparison"></p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/Unity_stencil_Update.png" alt="Unity_stencil_Update"></p>
-</li>
-</ul>
-<ul>
-<li><p>可作为遮罩等操作</p>
-<p><img src="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/StencilBufferValue.png" alt="StencilBufferValue"></p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/15/HPP_Graphics_3.1_%E6%A8%A1%E6%9D%BF%E6%B5%8B%E8%AF%95%E5%92%8C%E6%B7%B1%E5%BA%A6%E6%B5%8B%E8%AF%95/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7.2_GPU%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="image" content="/images/avatar2.jpg">
       <meta itemprop="name" content="WhiteTail">
     </span>
 
