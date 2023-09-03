@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,7 +162,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -266,6 +266,131 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2023/03/27/%E7%9B%AE%E5%BD%95/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/" class="post-title-link" itemprop="url">半透明排序总结</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-08-05 19:24:32" itemprop="dateCreated datePublished" datetime="2023-08-05T19:24:32+08:00">2023-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-03 16:15:24" itemprop="dateModified" datetime="2023-09-03T16:15:24+08:00">2023-09-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E6%95%B4%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">整理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="OIT-Order-Independent-Transparency"><a href="#OIT-Order-Independent-Transparency" class="headerlink" title="OIT(Order Independent Transparency)"></a>OIT(Order Independent Transparency)</h1><h2 id="a-Depth-Peeling-深度剥离"><a href="#a-Depth-Peeling-深度剥离" class="headerlink" title="a). Depth Peeling(深度剥离)"></a>a). Depth Peeling(深度剥离)</h2><p><img src="/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/image-20230817143032060.png" alt="image-20230817143032060"></p>
+<ul>
+<li><strong>优点：</strong><ul>
+<li>遍历都是无序的，也就是说不依赖对物体的排序，所以也就不会出现半透明排序的问题；</li>
+<li>基本无硬件要求</li>
+</ul>
+</li>
+<li><strong>缺点：</strong><ul>
+<li>需要重复多次Pass进行深度剥离，性能开销大；</li>
+</ul>
+</li>
+</ul>
+<h2 id="b-Per-Pixel-Linked-Lists-L-L"><a href="#b-Per-Pixel-Linked-Lists-L-L" class="headerlink" title="b). Per-Pixel Linked Lists(L.L)"></a>b). Per-Pixel Linked Lists(L.L)</h2><p><img src="/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/v2-90dde925b1db37ccedb64859560a1ea1_b.jpg" alt="v2-90dde925b1db37ccedb64859560a1ea1_b"></p>
+<p>在 Pixel Shader 中使用两个可写的纹理（DX11，SM 5.0，UAV），一个屏幕大小的链表头纹理（Start Offset buffer），一个屏幕大小 N 倍的链表节点纹理（ Fragment &amp; Link buffer）。链表头纹理的每个像素存储每个像素链表在节点纹理中的偏移量。</p>
+<p><img src="/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/v2-fd030b2ba60255a3d750c02fc4c272cb_b.jpg" alt="v2-fd030b2ba60255a3d750c02fc4c272cb_b"></p>
+<ul>
+<li><strong>优点：</strong><ul>
+<li>比 Depth Peeling 快了很多。性能开销也比 Depth Peeling 更加节省</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>缺点：</strong><ul>
+<li>节点纹理具体需要多大无法事先做准确的预估，因此显存的具体消耗不可控（因此多用于离线渲染）</li>
+<li>仅支持DX11、SM5.0以上；</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1207,100 +1332,6 @@
             </div>
           <!--/noindex-->
         
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar2.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Graphics_4.5 DOF景深基础</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 19:26:32" itemprop="dateCreated datePublished" datetime="2023-02-15T19:26:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:20:51" itemprop="dateModified" datetime="2023-03-17T13:20:51+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>这两篇已经写得挺好的了，后续再补充。</p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45776473/article/details/126912037?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167646563416800182743755%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;request_id=167646563416800182743755&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-126912037-null-null.142">用Unity实现景深效果</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qjh5606/article/details/118960868?ops_request_misc=&amp;request_id=&amp;biz_id=102&amp;utm_term=%E6%95%A3%E6%99%AF%E6%99%AF%E6%B7%B1&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-118960868.142">图形学基础|景深效果（Depth of Field/DOF）</a></p>
-<h1 id="HW"><a href="#HW" class="headerlink" title="HW"></a>HW</h1><p><img src="/2023/02/15/HPP_Graphics_4.5_DOF%E6%99%AF%E6%B7%B1%E5%9F%BA%E7%A1%80/HW_DOF.gif" alt="HW_DOF"></p>
-<p>Step1: 计算CoC(弥散圆)</p>
-<p>Step2: Bokeh Filter</p>
-<p>Step3: Tent Filter</p>
-<p>Step4: Composition</p>
-
       
     </div>
 

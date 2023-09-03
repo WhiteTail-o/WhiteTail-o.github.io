@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">48</span>
+          <span class="site-state-item-count">49</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,7 +162,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,113 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_2.7.2_GPU%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_2.7.2_GPU%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">HPP_Graphics_2.7.2 GPU硬件架构概述</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:38:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:38:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 13:02:00" itemprop="dateModified" datetime="2023-03-17T13:02:00+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <ul>
+<li>GPU逻辑管线</li>
+</ul>
+<ol>
+<li>程序通过图形API(DX、GL、WEBGL)发出drawcall指令，指令会被推送到驱动程序，驱动会检查指令的合法性，然后会把指令放到GPU可以读取的Pushbuffer中。</li>
+<li>经过一段时间或者显式调用flush指令后，驱动程序把Pushbuffer的内容发送给GPU，GPU通过主机接口（Host Interface）接受这些命令，并通过前端（Front End）处理这些命令。</li>
+<li>在图元分配器(Primitive Distributor)中开始工作分配，处理indexbuffer中的顶点产生三角形分成批次(batches)，然后发送给多个GPCs。这一步的理解就是提交上来n个三角形，分配给这几个GPC同时处理。</li>
+<li>在GPC中，每个SM中的Poly Morph Engine负责通过三角形索引(triangle indices)取出三角形的数据(vertex data)，即图中的Vertex Fetch模块。</li>
+<li>在获取数据之后，在SM中以32个线程为一组的线程束(Warp)来调度，来开始处理顶点数据。</li>
+<li>SM的warp调度器会按照顺序分发指令给整个warp，单个warp中的线程会锁步(lock-step)执行各自的指令，如果线程碰到不激活执行的情况也会被遮掩(be masked out)</li>
+<li>warp中的指令可以被一次完成，也可能经过多次调度，例如通常SM中的LD/ST(加载存取)单元数量明显少于基础数学操作单元。</li>
+<li>由于某些指令比其他指令需要更长的时间才能完成，特别是内存加载，warp调度器可能会简单地切换到另一个没有内存等待的warp，这是GPU如何克服内存读取延迟的关键，只是简单地切换活动线程组。</li>
+<li>一旦warp完成了vertex-shader的所有指令，运算结果会被Viewport Transform模块处理，三角形会被裁剪然后准备栅格化，GPU会使用L1和L2缓存来进行vertex-shader和pixel-shader的数据通信。</li>
+<li>接下来这些三角形将被分割，再分配给多个GPC，三角形的范围决定着它将被分配到哪个光栅引擎(raster engines)，每个raster engines覆盖了多个屏幕上的tile，这等于把三角形的渲染分配到多个tile上面。也就是像素阶段就把按三角形划分变成了按显示的像素划分了。</li>
+<li>SM上的Attribute Setup保证了从vertex-shader来的数据经过插值后是pixel-shade是可读的。</li>
+<li>GPC上的光栅引擎(raster engines)在它接收到的三角形上工作，来负责这些这些三角形的像素信息的生成（同时会处理背面剔除和Early-Z剔除）。</li>
+<li>32个像素线程将被分成一组，或者说8个2x2的像素块，这是在像素着色器上面的最小工作单元，在这个像素线程内，如果没有被三角形覆盖就会被遮掩，SM中的warp调度器会管理像素着色器的任务。</li>
+<li>接下来的阶段就和vertex-shader中的逻辑步骤完全一样，但是变成了在像素着色器线程中执行。 由于不耗费任何性能可以获取一个像素内的值，导致锁步执行非常便利，所有的线程可以保证所有的指令可以在同一点。</li>
+<li>最后一步，现在像素着色器已经完成了颜色的计算还有深度值的计算，在这个点上，我们必须考虑三角形的原始api顺序，然后才将数据移交给ROP(render output unit，渲染输入单元)，一个ROP内部有很多ROP单元，在ROP单元中处理深度测试，和framebuffer的混合，深度和颜色的设置必须是原子操作，否则两个不同的三角形在同一个像素点就会有冲突和错误。</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/anesu/p/15807749.html#/c/subject/p/15807749.html">https://www.cnblogs.com/anesu/p/15807749.html#/c/subject/p/15807749.html</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1036,150 +1143,6 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar2.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" class="post-title-link" itemprop="url">HPP_Graphics_1.2.3 MVP矩阵运算</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 12:46:56" itemprop="dateModified" datetime="2023-03-17T12:46:56+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="a-简介"><a href="#a-简介" class="headerlink" title="a). 简介"></a>a). 简介</h2><p><strong>MVP矩阵</strong>分别是<strong>模型(Model)</strong>、<strong>观察(View)</strong>、<strong>投影(Projection)</strong>三个矩阵。我们的顶点坐标起始于<strong>局部空间(Local Space)</strong>,在这里它称为局部坐标(Local Coordinate),它在之后会变为世界坐标(World Coordinate),观察坐标(View Coordinate),<strong>裁剪坐标(Clip Coordinate)</strong>,并最后以屏幕坐标(Screen Coordinate)的形式结束。下面的这张图展示了整个流程以及各个变换过程做了什么：<img src="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/MVP.png" alt="MVP"></p>
-<h2 id="b-M-模型空间→世界空间"><a href="#b-M-模型空间→世界空间" class="headerlink" title="b). M: 模型空间→世界空间"></a>b). M: 模型空间→世界空间</h2><ul>
-<li><p>变换顺序</p>
-<ol>
-<li>缩放</li>
-<li>旋转</li>
-<li>平移</li>
-</ol>
-<script type="math/tex; mode=display">
-\mathbf{M_{model}}=\left[\begin{array}{llll}
-1 & 0 & 0 & t x \\
-0 & 1 & 0 & t y \\
-0 & 0 & 1 & t z \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-\cos \theta & 0 & \sin \theta & 0 \\
-0 & 1 & 0 & 0 \\
--\sin \theta & 0 & \cos \theta & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-k x & 0 & 0 & 0 \\
-0 & k y & 0 & 0 \\
-0 & 0 & k z & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]</script></li>
-</ul>
-<h2 id="c-V-世界空间→观察空间"><a href="#c-V-世界空间→观察空间" class="headerlink" title="c). V: 世界空间→观察空间"></a>c). V: 世界空间→观察空间</h2><ul>
-<li>变换顺序：<ol>
-<li>平移</li>
-<li>旋转</li>
-<li>Z分量取反（观察空间采用的是右手坐标系，而Unity则是左手坐标系）</li>
-</ol>
-</li>
-</ul>
-<script type="math/tex; mode=display">
-V=\left[\begin{array}{cccc}
-1 & 0 & 0 & 0 \\
-0 & \cos \theta & -\sin \theta & 0 \\
-0 & \sin \theta & \cos \theta & 0 \\
-0 & 0 & 0 & 1
-\end{array}\right]\left[\begin{array}{cccc}
-1 & 0 & 0 & t x \\
-0 & 1 & 0 & t y \\
-0 & 0 & 1 & t z \\
-0 & 0 & 0 & 1
-\end{array}\right]</script><h2 id="d-P-观察空间→裁剪空间"><a href="#d-P-观察空间→裁剪空间" class="headerlink" title="d). P: 观察空间→裁剪空间"></a>d). P: 观察空间→裁剪空间</h2><ul>
-<li>不是真正的投影，为投影做准备</li>
-<li><strong>目的：</strong>判断顶点是否在可见范围内</li>
-<li><strong>P矩阵：</strong>对x,y,z分量进行缩放，用w分量做范围值。如果x,y,z都在w范围内，那么该点在裁剪空间内。</li>
-</ul>
-<h3 id="d-1-正交矩阵"><a href="#d-1-正交矩阵" class="headerlink" title="d.1) 正交矩阵"></a>d.1) 正交矩阵</h3><h3 id="d-2-透视矩阵"><a href="#d-2-透视矩阵" class="headerlink" title="d.2) 透视矩阵"></a>d.2) 透视矩阵</h3><font color="red">TODO: 推导各项矩阵</font>
-
-
-
-<h2 id="e-光栅化补充"><a href="#e-光栅化补充" class="headerlink" title="e). 光栅化补充"></a>e). 光栅化补充</h2><ul>
-<li>三角形设置：得到图元的边界条件，并对边进行插值；</li>
-<li>三角形遍历：对单行进行插值</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1307,7 +1270,7 @@ V=\left[\begin{array}{cccc}
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar2.jpg">
@@ -1325,7 +1288,7 @@ V=\left[\begin{array}{cccc}
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/" class="post-title-link" itemprop="url">Games202-5 Non-Photorealistic Rendering (NPR)</a>
+          <a href="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" class="post-title-link" itemprop="url">HPP_Graphics_1.2.3 MVP矩阵运算</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1338,14 +1301,14 @@ V=\left[\begin{array}{cccc}
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-02-10 17:42:10" itemprop="dateCreated datePublished" datetime="2023-02-10T17:42:10+08:00">2023-02-10</time>
+      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:17:53" itemprop="dateModified" datetime="2023-02-12T21:17:53+08:00">2023-02-12</time>
+      <time title="修改时间：2023-03-17 12:46:56" itemprop="dateModified" datetime="2023-03-17T12:46:56+08:00">2023-03-17</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1353,7 +1316,7 @@ V=\left[\begin{array}{cccc}
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
         </span>
     </span>
 
@@ -1367,30 +1330,65 @@ V=\left[\begin{array}{cccc}
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Photorealistic-vs-Non-Photorealistic"><a href="#a-Photorealistic-vs-Non-Photorealistic" class="headerlink" title="a). Photorealistic vs. Non-Photorealistic"></a>a). Photorealistic vs. Non-Photorealistic</h1><p><strong>Photorealistic Rendering</strong></p>
-<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/PhotorealisticRendering01.png" alt="PhotorealisticRendering01"></p>
-<p><strong>Non-Photorealistic Rendering</strong></p>
-<p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/NPR01.png" alt="NPR01"></p>
-<ul>
-<li>描边</li>
-<li>色块（量化Quantization 颜色）</li>
-<li>风格化阴影</li>
+          <h2 id="a-简介"><a href="#a-简介" class="headerlink" title="a). 简介"></a>a). 简介</h2><p><strong>MVP矩阵</strong>分别是<strong>模型(Model)</strong>、<strong>观察(View)</strong>、<strong>投影(Projection)</strong>三个矩阵。我们的顶点坐标起始于<strong>局部空间(Local Space)</strong>,在这里它称为局部坐标(Local Coordinate),它在之后会变为世界坐标(World Coordinate),观察坐标(View Coordinate),<strong>裁剪坐标(Clip Coordinate)</strong>,并最后以屏幕坐标(Screen Coordinate)的形式结束。下面的这张图展示了整个流程以及各个变换过程做了什么：<img src="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/MVP.png" alt="MVP"></p>
+<h2 id="b-M-模型空间→世界空间"><a href="#b-M-模型空间→世界空间" class="headerlink" title="b). M: 模型空间→世界空间"></a>b). M: 模型空间→世界空间</h2><ul>
+<li><p>变换顺序</p>
+<ol>
+<li>缩放</li>
+<li>旋转</li>
+<li>平移</li>
+</ol>
+<script type="math/tex; mode=display">
+\mathbf{M_{model}}=\left[\begin{array}{llll}
+1 & 0 & 0 & t x \\
+0 & 1 & 0 & t y \\
+0 & 0 & 1 & t z \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+\cos \theta & 0 & \sin \theta & 0 \\
+0 & 1 & 0 & 0 \\
+-\sin \theta & 0 & \cos \theta & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+k x & 0 & 0 & 0 \\
+0 & k y & 0 & 0 \\
+0 & 0 & k z & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]</script></li>
 </ul>
-<h1 id="b-Outline-Rendering"><a href="#b-Outline-Rendering" class="headerlink" title="b). Outline Rendering"></a>b). Outline Rendering</h1><p><img src="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/Outline01.png" alt="Outline01"></p>
-<ul>
-<li>边界（B, 属于剪影的线，但只属于一个面）</li>
-<li>折痕（C）</li>
-<li>材质的边界（M）</li>
-<li>轮廓（CS, 属于剪影的线，且有多个面共享）</li>
+<h2 id="c-V-世界空间→观察空间"><a href="#c-V-世界空间→观察空间" class="headerlink" title="c). V: 世界空间→观察空间"></a>c). V: 世界空间→观察空间</h2><ul>
+<li>变换顺序：<ol>
+<li>平移</li>
+<li>旋转</li>
+<li>Z分量取反（观察空间采用的是右手坐标系，而Unity则是左手坐标系）</li>
+</ol>
+</li>
 </ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/10/Games202_05_Non-Photorealistic%20Rendering%20(NPR)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<script type="math/tex; mode=display">
+V=\left[\begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & \cos \theta & -\sin \theta & 0 \\
+0 & \sin \theta & \cos \theta & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+1 & 0 & 0 & t x \\
+0 & 1 & 0 & t y \\
+0 & 0 & 1 & t z \\
+0 & 0 & 0 & 1
+\end{array}\right]</script><h2 id="d-P-观察空间→裁剪空间"><a href="#d-P-观察空间→裁剪空间" class="headerlink" title="d). P: 观察空间→裁剪空间"></a>d). P: 观察空间→裁剪空间</h2><ul>
+<li>不是真正的投影，为投影做准备</li>
+<li><strong>目的：</strong>判断顶点是否在可见范围内</li>
+<li><strong>P矩阵：</strong>对x,y,z分量进行缩放，用w分量做范围值。如果x,y,z都在w范围内，那么该点在裁剪空间内。</li>
+</ul>
+<h3 id="d-1-正交矩阵"><a href="#d-1-正交矩阵" class="headerlink" title="d.1) 正交矩阵"></a>d.1) 正交矩阵</h3><h3 id="d-2-透视矩阵"><a href="#d-2-透视矩阵" class="headerlink" title="d.2) 透视矩阵"></a>d.2) 透视矩阵</h3><font color="red">TODO: 推导各项矩阵</font>
+
+
+
+<h2 id="e-光栅化补充"><a href="#e-光栅化补充" class="headerlink" title="e). 光栅化补充"></a>e). 光栅化补充</h2><ul>
+<li>三角形设置：得到图元的边界条件，并对边进行插值；</li>
+<li>三角形遍历：对单行进行插值</li>
+</ul>
+
       
     </div>
 
