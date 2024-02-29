@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">50</span>
+          <span class="site-state-item-count">52</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -183,6 +183,282 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/" class="post-title-link" itemprop="url">HPP_Graphics_1.3 纹理的秘密</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:24:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:24:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-27 12:29:04" itemprop="dateModified" datetime="2023-03-27T12:29:04+08:00">2023-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="a-什么是纹理"><a href="#a-什么是纹理" class="headerlink" title="a). 什么是纹理"></a>a). 什么是纹理</h2><p>一种可供着色器读写的结构化存储形式（采样器变量的形式，sampler）</p>
+<h2 id="b-纹理管线"><a href="#b-纹理管线" class="headerlink" title="b). 纹理管线"></a>b). 纹理管线</h2><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/纹理管线.png" alt="纹理管线"></p>
+<p><strong>模型空间位置</strong>→<strong>投影函数</strong>（不同与摄像机投影矩阵，是展UV其中一步）→<strong>纹理映射</strong>→<strong>纹理坐标</strong>→<strong>通讯函数</strong>→<strong>新纹理坐标</strong>→<strong>纹理采样</strong>（避免<strong>依赖纹理读取</strong>，如果片元着色器中不是使用顶点着色器中传递的数值，而是经过计算，那么就会产生依赖纹理读取，影响性能。<strong>因此，uv的偏移通常在顶点着色器中完成</strong>）→<strong>纹理值</strong></p>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/纹理管线eg.png" alt="纹理管线eg"></p>
+<h2 id="c-Wrap-Mode"><a href="#c-Wrap-Mode" class="headerlink" title="c). Wrap Mode"></a>c). Wrap Mode</h2><ul>
+<li><strong>简介：</strong><ul>
+<li>决定uv[0, 1]以外的表现</li>
+<li>OpenGL —— 包装模式（Wrapping Mode）</li>
+<li>DirectX —— 纹理寻址模式（Texture Addressing Mode）</li>
+</ul>
+</li>
+<li><strong>类型：</strong><ul>
+<li>Repeat</li>
+<li>Mirror</li>
+<li>Clamp</li>
+<li>Border</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/Warp Mode.png" alt="Warp Mode"></p>
+<h2 id="d-Filter-Mode"><a href="#d-Filter-Mode" class="headerlink" title="d). Filter Mode"></a>d). Filter Mode</h2><ul>
+<li>在不同形状、大小、缩放比时，纹理过滤模式，可由专用硬件实现，也可由软件中实现，也可软硬件搭配完成</li>
+</ul>
+<h3 id="d-1-放大（Magnification）"><a href="#d-1-放大（Magnification）" class="headerlink" title="d.1) 放大（Magnification）"></a>d.1) 放大（Magnification）</h3><ul>
+<li><strong>最近邻</strong>（性能消耗小，放大时每个像素读取最邻近的纹素，可能出现马赛克像素风格）</li>
+<li><strong>双线性插值</strong>——对于每一个像素点都寻找邻近的四个像素点（实际），在二维空间进行的线性插值得到的最终混合值<ul>
+<li>双线型内插值算法就是一种比较好的图像缩放算法，它充分的利用了<strong>源图</strong>中<strong>虚拟点</strong>四周的<strong>四个真实存在的像素值</strong>来共同决定目标图中的一个像素值，因此缩放效果比简单的最邻近插值要好很多</li>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/双线性插值.png" alt="双线性插值"></li>
+<li>$P(u,v)$是屏幕空间的坐标，屏幕空间左下角为$(0, 0)$，而左下角第一个像素的像素中心坐标为$(0.5, 0.5)$</li>
+<li><a target="_blank" rel="noopener" href="http://www.realtimerendering.com/blog/the-center-of-the-pixel-is-0-50-5/">The Center of the Pixel is (0.5,0.5)</a></li>
+</ul>
+</li>
+<li><strong>立方卷积插值</strong><ul>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/立方卷积插值.png" alt="立方卷积插值"></li>
+</ul>
+</li>
+<li><strong>兰索斯插值</strong>（不常见，性能开销大）</li>
+<li><strong>Quilez 的光滑曲线插值</strong> —— 在立方卷积插值与双线性插值的一个折中效果，画面表现效果要比双线性插值好，比立方卷积插值差<ul>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/光滑曲线插值.png" alt="光滑曲线插值"></li>
+<li><strong>在纹理坐标带入到双线性插值过程之前再额外进行了一步处理</strong></li>
+<li><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/光滑曲线插值eg.png" alt="光滑曲线插值eg"></li>
+</ul>
+</li>
+<li><strong>效果对比：</strong><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/效果对比.png" alt="效果对比"></li>
+</ul>
+<h3 id="d-2-缩小"><a href="#d-2-缩小" class="headerlink" title="d.2) 缩小"></a>d.2) 缩小</h3><p><img src="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/FilterMode缩小.png" alt="FilterMode缩小"></p>
+<ul>
+<li><p><strong>可能出现的问题：</strong>出现颜色丢失与闪烁（奈奎斯特定律）</p>
+</li>
+<li><p><strong>解决方式：</strong></p>
+<ol>
+<li>最邻近、双线性插值（有限地增加采样频率）</li>
+<li>Mipmap（减小纹理频率）</li>
+</ol>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Graphics_1.3%20%E7%BA%B9%E7%90%86%E7%9A%84%E7%A7%98%E5%AF%86/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">HPP_Art_3.1 动作理论基础</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:43:44" itemprop="dateModified" datetime="2023-03-17T12:43:44+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="a-动画基础知识"><a href="#a-动画基础知识" class="headerlink" title="a). 动画基础知识"></a>a). 动画基础知识</h1><p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/动作01.png" alt="动作01"></p>
+<ul>
+<li><p><strong>蒙皮：</strong> 定义骨骼数据如何驱动顶点数据；</p>
+<p><img src="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/Skinning.png" alt="Skinning"></p>
+<ul>
+<li>引擎内不支持双四元数蒙皮，那使用线性混合蒙皮如何改善关节形状：<ol>
+<li>JCM(Maya中叫PSD)：性能开销相对大；</li>
+<li>RBF：加几根辅助骨骼；</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="b-动画类型"><a href="#b-动画类型" class="headerlink" title="b). 动画类型"></a>b). 动画类型</h1><ul>
+<li><p><strong>逐帧动画：</strong>sprite（精灵）动画</p>
+</li>
+<li><p><strong>骨骼动画：</strong>3D动画、spine动画（2D骨骼）</p>
+</li>
+<li><p><strong>顶点动画：</strong>物理模拟后的动画数据，不便于用骨骼驱动，如布料，流体、破碎等</p>
+<ul>
+<li><p><strong>VAT(Vertex Animation Texture)</strong></p>
+<blockquote>
+<p>VAT（Vertex Animation Texture）通常包括两张纹理：PositionTexture和RotationTexture。他们分别记录了一个Mesh在指定帧数下的位置、旋转变化。VAT的行坐标表示动画帧索引，列坐标表示对应顶点的位移数据。因此，VAT的高度一般对应整个动画的总帧数，而宽度对应着Mesh中根据Animation变化的顶点数。(<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/585471941">https://zhuanlan.zhihu.com/p/585471941</a>)</p>
+</blockquote>
+</li>
+<li><p>Shader顶点动画</p>
+</li>
+<li><p>离线顶点动画</p>
+</li>
+<li><p>…….</p>
+</li>
+</ul>
+</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/02/15/HPP_Art_03.1%20%E5%8A%A8%E4%BD%9C%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1239,237 +1515,8 @@ E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{m
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar2.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">相机概述</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-01 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-01T17:23:32+08:00">2023-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-03-17 13:33:23" itemprop="dateModified" datetime="2023-03-17T13:33:23+08:00">2023-03-17</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E7%9B%B8%E6%9C%BA/" itemprop="url" rel="index"><span itemprop="name">相机</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>最近在搭建完整的PBR环境时，用到了挺多相机的知识。借此机会重新温习了下大一写摄影技术的词条，同时为了适应博客删掉了很多不必要的内容。</p>
-<p>不过既然是大一写的，想必难免会有一些疏漏，而且当初的目标形式是词条，相应知识也不会过于深入，但大体上还是没问题的。</p>
-<h1 id="a-摄影机成像原理"><a href="#a-摄影机成像原理" class="headerlink" title="a). 摄影机成像原理"></a>a). 摄影机成像原理</h1><h2 id="一、小孔成像"><a href="#一、小孔成像" class="headerlink" title="一、小孔成像"></a>一、小孔成像</h2><p>​        光线沿直线传播。用一个带小孔的板遮挡在物体与成像面间，物体反射的光线经过小孔，在成像面上形成倒立的像。在一定范围内，小孔越小，成像越清晰，但小孔过小会导致发生衍射，使成像模糊。</p>
-<p><img src="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/摄影技术_摄影机成像原理_小孔成像原理-16767225475721.png" alt="摄影技术_摄影机成像原理_小孔成像原理" style="zoom: 50%;"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/01/%E7%9B%B8%E6%9C%BA%E6%A6%82%E8%BF%B0/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar2.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/" class="post-title-link" itemprop="url">Games202-3 Real-time Environment Mapping</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-01 16:42:10" itemprop="dateCreated datePublished" datetime="2023-02-01T16:42:10+08:00">2023-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:17:10" itemprop="dateModified" datetime="2023-02-12T21:17:10+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><a target="_blank" rel="noopener" href="https:/docs.unrealengine.com/en-US/BuildingWorlds/LightingAndShadows/MeshDistanceFields/index.html">Mesh Distance Fields</a>，<a target="_blank" rel="noopener" href="https:/cdn2.unrealengine.com/Resources/files/2013SiggraphPresentationsNotes-26915738.pdf">Real Shading in Unreal Engine 4</a></p>
-<h1 id="a-Shading-from-Environment-Lighting-IBL"><a href="#a-Shading-from-Environment-Lighting-IBL" class="headerlink" title="a). Shading from Environment Lighting(IBL)"></a>a). Shading from Environment Lighting(IBL)</h1><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01a.png" alt="EnvironmentLight01a"></p>
-<ul>
-<li>通过环境贴图着色的方式，又被命名为 <strong>Image-Based Lighting (IBL)</strong></li>
-</ul>
-<h2 id="a-1-How"><a href="#a-1-How" class="headerlink" title="a.1). How"></a>a.1). How</h2><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/EnvironmentLight01b.png" alt="EnvironmentLight01b"></p>
-<ul>
-<li>对于IBL，可以看做是上半球（可以联想下UE中的HDRI）的光照和BRDF的积分；</li>
-</ul>
-<ul>
-<li><p><strong>Observation：</strong></p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF.png" alt="IBL_BRDF"></p>
-<ul>
-<li><p>对于Glossy，其BRDF支持集很小（Lobe范围小）；</p>
-</li>
-<li><p>对于Diffuse，其BRDF非常平滑；</p>
-</li>
-<li><p>联想到上节课渲染方程不等式成立的条件（拆出乘积积分的那个）</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02.png" alt="IBL_BRDF02"></p>
-<ul>
-<li><p>这里$\Omega_{G}$ 指积分域上，$g(x)$有值的区域。</p>
-<ul>
-<li><p>如$g(x)$ 为BRDF，$\Omega_{G}$ 即为原点向Lobe各点出发，与积分半球相交的区域集合</p>
-<p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF02b.png" alt="IBL_BRDF02b"></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="We-can-safely-take-the-lighting-term-out"><a href="#We-can-safely-take-the-lighting-term-out" class="headerlink" title="We can safely take the lighting term out!"></a>We can safely take the lighting term out!</h3><p><img src="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/IBL_BRDF03.png" alt="IBL_BRDF03"></p>
-<p>我们把渲染方程分为了两部分积分，分别是：</p>
-<ul>
-<li>在$\Omega_{fr}$(即Lobe对应的半球区域)，对<strong>光照Radiance积分</strong></li>
-<li>在半球内对BRDF积分；</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/01/Games202_03_Real-time%20Environment%20Mapping/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

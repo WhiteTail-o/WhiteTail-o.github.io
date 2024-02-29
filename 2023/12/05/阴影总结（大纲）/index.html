@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"whitetail-o.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"right","display":"always","padding":18,"offset":12},"copycode":{"enable":true,"style":"mac"},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="补充：a). VSM在PCSS第三步中，想要阴影越软，查询区域就越大，频繁的贴图采样可能造成IO瓶颈。因此，通过切比雪夫不等式求得PCSS第三步PCF中当前着色点深度在周围区域中的位置（深度小于当前着色点的比例）。  b). VSSM在求Average Block时，也应用切比雪夫不等式； c). 切比雪夫不等式准确的条件 filter的平均深度大于着色点的深度（但大部分情况下不用管这个）； 深">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阴影总结（大纲）">
+<meta property="og:url" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/index.html">
+<meta property="og:site_name" content="WhiteTail&#39;s Blog">
+<meta property="og:description" content="补充：a). VSM在PCSS第三步中，想要阴影越软，查询区域就越大，频繁的贴图采样可能造成IO瓶颈。因此，通过切比雪夫不等式求得PCSS第三步PCF中当前着色点深度在周围区域中的位置（深度小于当前着色点的比例）。  b). VSSM在求Average Block时，也应用切比雪夫不等式； c). 切比雪夫不等式准确的条件 filter的平均深度大于着色点的深度（但大部分情况下不用管这个）； 深">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20230819184600738.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008151324301.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008105537858.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008105621660.png">
+<meta property="og:image" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008105552336.png">
+<meta property="article:published_time" content="2023-12-05T11:24:32.000Z">
+<meta property="article:modified_time" content="2024-02-29T14:31:08.845Z">
+<meta property="article:author" content="WhiteTail">
+<meta property="article:tag" content="图形学">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="反射">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20230819184600738.png">
+
+
+<link rel="canonical" href="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/","path":"2023/12/05/阴影总结（大纲）/","title":"阴影总结（大纲）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>阴影总结（大纲） | WhiteTail's Blog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="WhiteTail's Blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WhiteTail's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A1%A5%E5%85%85%EF%BC%9A"><span class="nav-text">补充：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#a-VSM"><span class="nav-text">a). VSM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#b-VSSM"><span class="nav-text">b). VSSM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#c-%E5%88%87%E6%AF%94%E9%9B%AA%E5%A4%AB%E4%B8%8D%E7%AD%89%E5%BC%8F%E5%87%86%E7%A1%AE%E7%9A%84%E6%9D%A1%E4%BB%B6"><span class="nav-text">c). 切比雪夫不等式准确的条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#d-ESM"><span class="nav-text">d). ESM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#e-EVSM"><span class="nav-text">e). EVSM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#f-LVSM"><span class="nav-text">f). LVSM</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#g-Virtual-Shadow-Map"><span class="nav-text">g). Virtual Shadow Map</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WhiteTail"
+      src="/images/avatar2.jpg">
+  <p class="site-author-name" itemprop="name">WhiteTail</p>
+  <div class="site-description" itemprop="description">现已有Games101、Games202、百人计划、Unity的SRP等笔记。</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">52</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">47</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+        <div class="sidebar-inner sidebar-post-related">
+          <div class="animated">
+              <div class="links-of-blogroll-title"><i class="fa fa-signs-post fa-fw"></i>
+    相关文章
+  </div>
+  <ul class="popular-posts">
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/08/01/%E5%89%94%E9%99%A4%E6%80%BB%E7%BB%93/" rel="bookmark">
+        <time class="popular-posts-time">2023-08-01</time>
+        <br>
+      剔除总结
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2024/02/01/8%E7%BA%A7%E9%A3%8E%E6%A0%BC%E5%8C%96%E7%BA%A7%E8%81%94%E9%98%B4%E5%BD%B1/" rel="bookmark">
+        <time class="popular-posts-time">2024-02-01</time>
+        <br>
+      8级风格化级联阴影
+      </a>
+    </li>
+    <li class="popular-posts-item">
+      <a class="popular-posts-link" href="/2023/08/05/%E5%8D%8A%E9%80%8F%E6%98%8E%E6%8E%92%E5%BA%8F/" rel="bookmark">
+        <time class="popular-posts-time">2023-08-05</time>
+        <br>
+      半透明排序总结
+      </a>
+    </li>
+  </ul>
+
+          </div>
+        </div>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="阴影总结（大纲） | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          阴影总结（大纲）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-12-05 19:24:32" itemprop="dateCreated datePublished" datetime="2023-12-05T19:24:32+08:00">2023-12-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-02-29 22:31:08" itemprop="dateModified" datetime="2024-02-29T22:31:08+08:00">2024-02-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">图形学</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E6%95%B4%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">整理</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20230819184600738.png" alt="image-20230819184600738"></p>
+<h1 id="补充："><a href="#补充：" class="headerlink" title="补充："></a>补充：</h1><h2 id="a-VSM"><a href="#a-VSM" class="headerlink" title="a). VSM"></a>a). VSM</h2><p>在PCSS第三步中，想要阴影越软，查询区域就越大，频繁的贴图采样可能造成IO瓶颈。因此，通过切比雪夫不等式求得PCSS第三步PCF中<strong>当前着色点深度在周围区域中的位置（深度小于当前着色点的比例）</strong>。</p>
+<p><img src="/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008151324301.png" alt="image-20231008151324301"></p>
+<h2 id="b-VSSM"><a href="#b-VSSM" class="headerlink" title="b). VSSM"></a>b). VSSM</h2><p>在求Average Block时，也应用切比雪夫不等式；</p>
+<h2 id="c-切比雪夫不等式准确的条件"><a href="#c-切比雪夫不等式准确的条件" class="headerlink" title="c). 切比雪夫不等式准确的条件"></a>c). 切比雪夫不等式准确的条件</h2><ul>
+<li>filter的平均深度大于着色点的深度（但大部分情况下不用管这个）；</li>
+<li>深度大致符合正态分布，不会有过于高频的变化（如多隔断的窗户就很可能造成阴影的不准确）；</li>
+</ul>
+<span id="more"></span>
+<h2 id="d-ESM"><a href="#d-ESM" class="headerlink" title="d). ESM"></a>d). ESM</h2><p><img src="/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008105537858.png" alt="image-20231008105537858"></p>
+<p><img src="/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008105621660.png" alt="image-20231008105621660"></p>
+<hr>
+<p><img src="/2023/12/05/%E9%98%B4%E5%BD%B1%E6%80%BB%E7%BB%93%EF%BC%88%E5%A4%A7%E7%BA%B2%EF%BC%89/image-20231008105552336.png" alt="image-20231008105552336"></p>
+<ul>
+<li><p><strong>具体做法：</strong></p>
+<ol>
+<li>对Shadow Map应用指数形式进行预滤波（$e^{-cz}$ 处于0-1间）；</li>
+<li>计算着色点的在Shadow map space 的深度，应用指数形式，得到 $e^{cd}$；</li>
+<li>$f(t,d)=saturate(e^{c*(d-z)})$；</li>
+</ol>
+</li>
+</ul>
+<ul>
+<li><strong>缺点：</strong><ol>
+<li>c越大，越准确，但随之也需要更高的精度去存储指数形式的深度值，<strong>一般需要32-bit的深度纹理</strong>。</li>
+<li>c小的时候有<strong>渗光</strong>的现象；</li>
+</ol>
+</li>
+<li><strong>优点：</strong> <ol>
+<li>漏光少，最终渲染时性能开销小（为k。PCF：计算阴影的时间复杂度是k*n，其中k是采样次数，n是片段数量），特别是在Overdraw严重的时候（对比非屏幕空间的PCF）；</li>
+<li>ESM对半透明、云影等表现好；</li>
+</ol>
+</li>
+</ul>
+<h2 id="e-EVSM"><a href="#e-EVSM" class="headerlink" title="e). EVSM"></a>e). EVSM</h2><p>VSM 中计算阴影值，考虑的是深度值的方差和均值，主要还是考虑深度的分布离散情况，如果将深度进行合理偏移，其仍符合切比雪夫不等式。</p>
+<p>EVSM 里面采用了 $exp⁡(cz)$ 和 $−exp⁡(−cz)$ 两个函数进行偏移，然后取两个切比雪夫概率的较小值作为阴影值。（）</p>
+<p>四张16bit纹理；</p>
+<h2 id="f-LVSM"><a href="#f-LVSM" class="headerlink" title="f). LVSM"></a>f). LVSM</h2><p>分层；</p>
+<h2 id="g-Virtual-Shadow-Map"><a href="#g-Virtual-Shadow-Map" class="headerlink" title="g). Virtual Shadow Map"></a>g). Virtual Shadow Map</h2><p>这个迟些写个专门讲解的文章，讲讲VSM、VT、RVT之类的（咕咕咕</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9B%BE%E5%BD%A2%E5%AD%A6/" rel="tag"># 图形学</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E5%8F%8D%E5%B0%84/" rel="tag"># 反射</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/01/%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%B0%84%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/" rel="prev" title="常见反射方案总结">
+                  <i class="fa fa-chevron-left"></i> 常见反射方案总结
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/02/01/8%E7%BA%A7%E9%A3%8E%E6%A0%BC%E5%8C%96%E7%BA%A7%E8%81%94%E9%98%B4%E5%BD%B1/" rel="next" title="8级风格化级联阴影">
+                  8级风格化级联阴影 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WhiteTail</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+
+</body>
+</html>
