@@ -6,7 +6,7 @@
   <link href="https://whitetail-o.github.io/atom.xml" rel="self"/>
   
   <link href="https://whitetail-o.github.io/"/>
-  <updated>2024-02-29T14:24:43.402Z</updated>
+  <updated>2024-02-29T14:27:10.824Z</updated>
   <id>https://whitetail-o.github.io/</id>
   
   <author>
@@ -21,16 +21,35 @@
     <link href="https://whitetail-o.github.io/2023/11/01/%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%B0%84%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/"/>
     <id>https://whitetail-o.github.io/2023/11/01/%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%B0%84%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/</id>
     <published>2023-11-01T11:24:32.000Z</published>
-    <updated>2024-02-29T14:24:43.402Z</updated>
+    <updated>2024-02-29T14:27:10.824Z</updated>
     
-    <content type="html"><![CDATA[<p><a href="https://zhuanlan.zhihu.com/p/313845354">游戏中的全局光照(五) Reflection Probe、SSR和PPR - 张亚坤的文章 - 知乎</a></p><p><a href="https://zhuanlan.zhihu.com/p/38303394">Unity StochasticSSR-01 - CGBull的文章 - 知乎</a></p><p><a href="https://zhuanlan.zhihu.com/p/605734440">Stochastic Screen Space Reflections论文阅读 - Reuben的文章 - 知乎</a></p><h1 id="a-SSR"><a href="#a-SSR" class="headerlink" title="a). SSR"></a>a). SSR</h1><p><strong>优点：</strong> 实现简单，效果较好；</p><p><strong>缺点：</strong></p><ol><li>只能反射屏幕内的物体（屏幕空间算法的通病）；<ul><li><strong>解决方式：</strong>SSR作为主方案，Reflection Probe作为备选项，在SSR失效的地方（如屏幕边缘）对两者做平滑过渡；</li></ul></li><li>需要Ray Marching、频繁读取纹理，可能造成IO瓶颈；</li><li>被反射物只有漫反射的时候才是完全物理正确的；</li><li>Ray Marching次数限制，容易出现物体断裂；<ul><li><strong>解决方法：</strong> 一般会引入<strong>Thickness</strong>来防止物体出现断裂，即ray marching的点除了深度需要大于深度图的深度值，还需要步进的步数小于Thickness；</li></ul></li></ol><p><strong>优化：</strong></p><ol><li>Hierarchical Z；<ul><li>Mip生成高效算法可参考AMD 的 Single Pass Downsampler、Unity中贴图Mip生成（Unity参考的是Nv的<a href="https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/MiniEngine/Core/Shaders/GenerateMipsCS.hlsli">DirectX-Graphics-Samples/MiniEngine/Core/Shaders/GenerateMipsCS.hlsli at master · microsoft/DirectX-Graphics-Samples (github.com)</a>）。</li></ul></li><li>Dither；</li><li>下采样；</li></ol><h1 id="b-Stochastic-SSR"><a href="#b-Stochastic-SSR" class="headerlink" title="b). Stochastic SSR"></a>b). Stochastic SSR</h1><p><strong>针对情况：</strong> Gloosy物体（对于普通SSR来说，只可通过roughness对反射图进行blur）</p><p>整体思路为</p><ol><li><p>将屏幕划分为Tile，进行一次低分辨率的光线步进，评估Tile的重要性，需要多少射线</p></li><li><p>根据<strong>材质粗糙度</strong>判断使用何种的RayMarching</p></li><li><ul><li><strong>昂贵的射线（用于smooth表面）</strong>：借助<strong>Hi-Z</strong>的精确tracing，能得到准确的命中点</li></ul></li><li><ul><li><strong>便宜的射线（用于粗糙表面）</strong>：简单的线性步进，反正之后会粗滤波</li></ul></li><li><p>使用<strong>重要性采样</strong>求RayMarching结果</p></li><li><p>时域空域光线<strong>复用</strong>（本质是计算 brdf/p(x) 的加权和），进行插值滤波</p></li></ol><h2 id="Tile评估"><a href="#Tile评估" class="headerlink" title="Tile评估"></a>Tile评估</h2><ol><li><p>将屏幕划分为多个Tile，对于每一个Tile以1/8分辨率发射射线</p></li><li><p>判断射线（的反射光线）是否击中</p></li><li><ol><li>若所有光线都没命中，则跳过这个Tile的步进</li><li>根据命中的比例和命中信息的差异，判断这个Tile中的像素需要多少个光线</li><li>根据着色点的粗糙度，决定使用何种RayMarching</li></ol></li></ol><h1 id="c-平面反射"><a href="#c-平面反射" class="headerlink" title="c). 平面反射"></a>c). 平面反射</h1><p><strong>缺点：</strong> 可能增加一倍的Draw Call；</p><p><strong>优化手段：</strong> </p><ol><li>剔除影响不明显的小物件；</li><li>如反射物为镜子之类的，可以<strong>结合Portal或者手动计算</strong>去剔除镜子外的物件；</li></ol><h1 id="d-IBL-Relection-Probe"><a href="#d-IBL-Relection-Probe" class="headerlink" title="d). IBL+Relection Probe"></a>d). IBL+Relection Probe</h1><p>略过</p><h1 id="e-Pixel-Projected-Reflection-PPR、SSPR"><a href="#e-Pixel-Projected-Reflection-PPR、SSPR" class="headerlink" title="e). Pixel Projected Reflection(PPR、SSPR)"></a>e). Pixel Projected Reflection(PPR、SSPR)</h1><p>PPR 将整个图像，按照平面的位置进行翻转，在屏幕中进行投影，即可直接得到反射的位置，写入数据并得到一张反射的贴图。</p><p><img src="/2023/11/01/%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%B0%84%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/v2-2eaa5f56c2c7d7ba4db44ca06ad73a42_r.png" alt="v2-2eaa5f56c2c7d7ba4db44ca06ad73a42_r"></p><p>因为场景中的像素，并不能完全保证覆盖整个反射平面，因此往往会产生一些缝隙。UE4中采用一种简单的修复缝隙的方式，是在写入偏移时，将目标像素周围2x2像素直接全部写入偏移值。</p><ol><li>根据深度图，还原场景深度，算出对应点世界坐标，将其投影到平面上，然后将其在屏幕中的偏移量，将偏移量进行编码，写入到 Intermediate Buffer当中；</li><li>从Intermediate Buffer中还原出屏幕空间的偏移，采样屏幕中相应坐标的像素点，将结果写入到反射图中；</li><li>使用反射图，绘制出反射面的效果。</li></ol>]]></content>
+    <content type="html"><![CDATA[<h1 id="a-SSR"><a href="#a-SSR" class="headerlink" title="a). SSR"></a>a). SSR</h1><p><strong>优点：</strong> 实现简单，效果较好；</p><p><strong>缺点：</strong></p><ol><li>只能反射屏幕内的物体（屏幕空间算法的通病）；<ul><li><strong>解决方式：</strong>SSR作为主方案，Reflection Probe作为备选项，在SSR失效的地方（如屏幕边缘）对两者做平滑过渡；</li></ul></li><li>需要Ray Marching、频繁读取纹理，可能造成IO瓶颈；</li><li>被反射物只有漫反射的时候才是完全物理正确的；</li><li>Ray Marching次数限制，容易出现物体断裂；<ul><li><strong>解决方法：</strong> 一般会引入<strong>Thickness</strong>来防止物体出现断裂，即ray marching的点除了深度需要大于深度图的深度值，还需要步进的步数小于Thickness；</li></ul></li></ol><p><strong>优化：</strong></p><ol><li>Hierarchical Z；<ul><li>Mip生成高效算法可参考AMD 的 Single Pass Downsampler、Unity中贴图Mip生成（Unity参考的是Nv的<a href="https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/MiniEngine/Core/Shaders/GenerateMipsCS.hlsli">DirectX-Graphics-Samples/MiniEngine/Core/Shaders/GenerateMipsCS.hlsli at master · microsoft/DirectX-Graphics-Samples (github.com)</a>）。</li></ul></li><li>Dither；</li><li>下采样；</li></ol><h1 id="b-Stochastic-SSR"><a href="#b-Stochastic-SSR" class="headerlink" title="b). Stochastic SSR"></a>b). Stochastic SSR</h1><p><strong>针对情况：</strong> Gloosy物体（对于普通SSR来说，只可通过roughness对反射图进行blur）</p><span id="more"></span><p>整体思路为</p><ol><li><p>将屏幕划分为Tile，进行一次低分辨率的光线步进，评估Tile的重要性，需要多少射线</p></li><li><p>根据<strong>材质粗糙度</strong>判断使用何种的RayMarching</p></li><li><ul><li><strong>昂贵的射线（用于smooth表面）</strong>：借助<strong>Hi-Z</strong>的精确tracing，能得到准确的命中点</li></ul></li><li><ul><li><strong>便宜的射线（用于粗糙表面）</strong>：简单的线性步进，反正之后会粗滤波</li></ul></li><li><p>使用<strong>重要性采样</strong>求RayMarching结果</p></li><li><p>时域空域光线<strong>复用</strong>（本质是计算 brdf/p(x) 的加权和），进行插值滤波</p></li></ol><h2 id="Tile评估"><a href="#Tile评估" class="headerlink" title="Tile评估"></a>Tile评估</h2><ol><li><p>将屏幕划分为多个Tile，对于每一个Tile以1/8分辨率发射射线</p></li><li><p>判断射线（的反射光线）是否击中</p></li><li><ol><li>若所有光线都没命中，则跳过这个Tile的步进</li><li>根据命中的比例和命中信息的差异，判断这个Tile中的像素需要多少个光线</li><li>根据着色点的粗糙度，决定使用何种RayMarching</li></ol></li></ol><h1 id="c-平面反射"><a href="#c-平面反射" class="headerlink" title="c). 平面反射"></a>c). 平面反射</h1><p><strong>缺点：</strong> 可能增加一倍的Draw Call；</p><p><strong>优化手段：</strong> </p><ol><li>剔除影响不明显的小物件；</li><li>如反射物为镜子之类的，可以<strong>结合Portal或者手动计算</strong>去剔除镜子外的物件；</li></ol><h1 id="d-IBL-Relection-Probe"><a href="#d-IBL-Relection-Probe" class="headerlink" title="d). IBL+Relection Probe"></a>d). IBL+Relection Probe</h1><p>略过</p><h1 id="e-Pixel-Projected-Reflection-PPR、SSPR"><a href="#e-Pixel-Projected-Reflection-PPR、SSPR" class="headerlink" title="e). Pixel Projected Reflection(PPR、SSPR)"></a>e). Pixel Projected Reflection(PPR、SSPR)</h1><p>PPR 将整个图像，按照平面的位置进行翻转，在屏幕中进行投影，即可直接得到反射的位置，写入数据并得到一张反射的贴图。</p><p><img src="/2023/11/01/%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%B0%84%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/v2-2eaa5f56c2c7d7ba4db44ca06ad73a42_r.png" alt="v2-2eaa5f56c2c7d7ba4db44ca06ad73a42_r"></p><p>因为场景中的像素，并不能完全保证覆盖整个反射平面，因此往往会产生一些缝隙。UE4中采用一种简单的修复缝隙的方式，是在写入偏移时，将目标像素周围2x2像素直接全部写入偏移值。</p><ol><li>根据深度图，还原场景深度，算出对应点世界坐标，将其投影到平面上，然后将其在屏幕中的偏移量，将偏移量进行编码，写入到 Intermediate Buffer当中；</li><li>从Intermediate Buffer中还原出屏幕空间的偏移，采样屏幕中相应坐标的像素点，将结果写入到反射图中；</li><li>使用反射图，绘制出反射面的效果。</li></ol><hr><p>【参考资料】</p><p><a href="https://zhuanlan.zhihu.com/p/313845354">游戏中的全局光照(五) Reflection Probe、SSR和PPR - 张亚坤的文章 - 知乎</a></p><p><a href="https://zhuanlan.zhihu.com/p/38303394">Unity StochasticSSR-01 - CGBull的文章 - 知乎</a></p><p><a href="https://zhuanlan.zhihu.com/p/605734440">Stochastic Screen Space Reflections论文阅读 - Reuben的文章 - 知乎</a></p>]]></content>
     
     
-      
-      
-    <summary type="html">&lt;p&gt;&lt;a href=&quot;https://zhuanlan.zhihu.com/p/313845354&quot;&gt;游戏中的全局光照(五) Reflection Probe、SSR和PPR - 张亚坤的文章 - 知乎&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://zhuanlan.</summary>
-      
+    <summary type="html">&lt;h1 id=&quot;a-SSR&quot;&gt;&lt;a href=&quot;#a-SSR&quot; class=&quot;headerlink&quot; title=&quot;a). SSR&quot;&gt;&lt;/a&gt;a). SSR&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;优点：&lt;/strong&gt; 实现简单，效果较好；&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;只能反射屏幕内的物体（屏幕空间算法的通病）；&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;解决方式：&lt;/strong&gt;SSR作为主方案，Reflection Probe作为备选项，在SSR失效的地方（如屏幕边缘）对两者做平滑过渡；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;需要Ray Marching、频繁读取纹理，可能造成IO瓶颈；&lt;/li&gt;
+&lt;li&gt;被反射物只有漫反射的时候才是完全物理正确的；&lt;/li&gt;
+&lt;li&gt;Ray Marching次数限制，容易出现物体断裂；&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;解决方法：&lt;/strong&gt; 一般会引入&lt;strong&gt;Thickness&lt;/strong&gt;来防止物体出现断裂，即ray marching的点除了深度需要大于深度图的深度值，还需要步进的步数小于Thickness；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;优化：&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Hierarchical Z；&lt;ul&gt;
+&lt;li&gt;Mip生成高效算法可参考AMD 的 Single Pass Downsampler、Unity中贴图Mip生成（Unity参考的是Nv的&lt;a href=&quot;https://github.com/Microsoft/DirectX-Graphics-Samples/blob/master/MiniEngine/Core/Shaders/GenerateMipsCS.hlsli&quot;&gt;DirectX-Graphics-Samples/MiniEngine/Core/Shaders/GenerateMipsCS.hlsli at master · microsoft/DirectX-Graphics-Samples (github.com)&lt;/a&gt;）。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Dither；&lt;/li&gt;
+&lt;li&gt;下采样；&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&quot;b-Stochastic-SSR&quot;&gt;&lt;a href=&quot;#b-Stochastic-SSR&quot; class=&quot;headerlink&quot; title=&quot;b). Stochastic SSR&quot;&gt;&lt;/a&gt;b). Stochastic SSR&lt;/h1&gt;&lt;p&gt;&lt;strong&gt;针对情况：&lt;/strong&gt; Gloosy物体（对于普通SSR来说，只可通过roughness对反射图进行blur）&lt;/p&gt;</summary>
     
     
     

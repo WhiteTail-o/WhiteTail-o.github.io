@@ -45,10 +45,7 @@
   <entry>
     <title>常见反射方案总结</title>
     <url>/2023/11/01/%E5%B8%B8%E8%A7%81%E5%8F%8D%E5%B0%84%E6%96%B9%E6%A1%88%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<p><a href="https://zhuanlan.zhihu.com/p/313845354">游戏中的全局光照(五) Reflection Probe、SSR和PPR - 张亚坤的文章 - 知乎</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/38303394">Unity StochasticSSR-01 - CGBull的文章 - 知乎</a></p>
-<p><a href="https://zhuanlan.zhihu.com/p/605734440">Stochastic Screen Space Reflections论文阅读 - Reuben的文章 - 知乎</a></p>
-<h1 id="a-SSR"><a href="#a-SSR" class="headerlink" title="a). SSR"></a>a). SSR</h1><p><strong>优点：</strong> 实现简单，效果较好；</p>
+    <content><![CDATA[<h1 id="a-SSR"><a href="#a-SSR" class="headerlink" title="a). SSR"></a>a). SSR</h1><p><strong>优点：</strong> 实现简单，效果较好；</p>
 <p><strong>缺点：</strong></p>
 <ol>
 <li>只能反射屏幕内的物体（屏幕空间算法的通病）；<ul>
@@ -72,6 +69,7 @@
 <li>下采样；</li>
 </ol>
 <h1 id="b-Stochastic-SSR"><a href="#b-Stochastic-SSR" class="headerlink" title="b). Stochastic SSR"></a>b). Stochastic SSR</h1><p><strong>针对情况：</strong> Gloosy物体（对于普通SSR来说，只可通过roughness对反射图进行blur）</p>
+<span id="more"></span>
 <p>整体思路为</p>
 <ol>
 <li><p>将屏幕划分为Tile，进行一次低分辨率的光线步进，评估Tile的重要性，需要多少射线</p>
@@ -118,6 +116,11 @@
 <li>从Intermediate Buffer中还原出屏幕空间的偏移，采样屏幕中相应坐标的像素点，将结果写入到反射图中；</li>
 <li>使用反射图，绘制出反射面的效果。</li>
 </ol>
+<hr>
+<p>【参考资料】</p>
+<p><a href="https://zhuanlan.zhihu.com/p/313845354">游戏中的全局光照(五) Reflection Probe、SSR和PPR - 张亚坤的文章 - 知乎</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/38303394">Unity StochasticSSR-01 - CGBull的文章 - 知乎</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/605734440">Stochastic Screen Space Reflections论文阅读 - Reuben的文章 - 知乎</a></p>
 ]]></content>
       <categories>
         <category>图形学</category>
