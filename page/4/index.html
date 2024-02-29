@@ -151,7 +151,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-count">50</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -162,7 +162,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-count">47</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -183,6 +183,150 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar2.jpg">
+      <meta itemprop="name" content="WhiteTail">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WhiteTail's Blog">
+      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | WhiteTail's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/" class="post-title-link" itemprop="url">HPP_Graphics_1.2.3 MVP矩阵运算</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+  
+  
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-02-15 17:23:32" itemprop="dateCreated datePublished" datetime="2023-02-15T17:23:32+08:00">2023-02-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-03-17 12:46:56" itemprop="dateModified" datetime="2023-03-17T12:46:56+08:00">2023-03-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%99%BE%E4%BA%BA%E8%AE%A1%E5%88%92/" itemprop="url" rel="index"><span itemprop="name">百人计划</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="a-简介"><a href="#a-简介" class="headerlink" title="a). 简介"></a>a). 简介</h2><p><strong>MVP矩阵</strong>分别是<strong>模型(Model)</strong>、<strong>观察(View)</strong>、<strong>投影(Projection)</strong>三个矩阵。我们的顶点坐标起始于<strong>局部空间(Local Space)</strong>,在这里它称为局部坐标(Local Coordinate),它在之后会变为世界坐标(World Coordinate),观察坐标(View Coordinate),<strong>裁剪坐标(Clip Coordinate)</strong>,并最后以屏幕坐标(Screen Coordinate)的形式结束。下面的这张图展示了整个流程以及各个变换过程做了什么：<img src="/2023/02/15/HPP_Graphics_1.2.3%20MVP%E7%9F%A9%E9%98%B5%E8%BF%90%E7%AE%97/MVP.png" alt="MVP"></p>
+<h2 id="b-M-模型空间→世界空间"><a href="#b-M-模型空间→世界空间" class="headerlink" title="b). M: 模型空间→世界空间"></a>b). M: 模型空间→世界空间</h2><ul>
+<li><p>变换顺序</p>
+<ol>
+<li>缩放</li>
+<li>旋转</li>
+<li>平移</li>
+</ol>
+<script type="math/tex; mode=display">
+\mathbf{M_{model}}=\left[\begin{array}{llll}
+1 & 0 & 0 & t x \\
+0 & 1 & 0 & t y \\
+0 & 0 & 1 & t z \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+\cos \theta & 0 & \sin \theta & 0 \\
+0 & 1 & 0 & 0 \\
+-\sin \theta & 0 & \cos \theta & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+k x & 0 & 0 & 0 \\
+0 & k y & 0 & 0 \\
+0 & 0 & k z & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]</script></li>
+</ul>
+<h2 id="c-V-世界空间→观察空间"><a href="#c-V-世界空间→观察空间" class="headerlink" title="c). V: 世界空间→观察空间"></a>c). V: 世界空间→观察空间</h2><ul>
+<li>变换顺序：<ol>
+<li>平移</li>
+<li>旋转</li>
+<li>Z分量取反（观察空间采用的是右手坐标系，而Unity则是左手坐标系）</li>
+</ol>
+</li>
+</ul>
+<script type="math/tex; mode=display">
+V=\left[\begin{array}{cccc}
+1 & 0 & 0 & 0 \\
+0 & \cos \theta & -\sin \theta & 0 \\
+0 & \sin \theta & \cos \theta & 0 \\
+0 & 0 & 0 & 1
+\end{array}\right]\left[\begin{array}{cccc}
+1 & 0 & 0 & t x \\
+0 & 1 & 0 & t y \\
+0 & 0 & 1 & t z \\
+0 & 0 & 0 & 1
+\end{array}\right]</script><h2 id="d-P-观察空间→裁剪空间"><a href="#d-P-观察空间→裁剪空间" class="headerlink" title="d). P: 观察空间→裁剪空间"></a>d). P: 观察空间→裁剪空间</h2><ul>
+<li>不是真正的投影，为投影做准备</li>
+<li><strong>目的：</strong>判断顶点是否在可见范围内</li>
+<li><strong>P矩阵：</strong>对x,y,z分量进行缩放，用w分量做范围值。如果x,y,z都在w范围内，那么该点在裁剪空间内。</li>
+</ul>
+<h3 id="d-1-正交矩阵"><a href="#d-1-正交矩阵" class="headerlink" title="d.1) 正交矩阵"></a>d.1) 正交矩阵</h3><h3 id="d-2-透视矩阵"><a href="#d-2-透视矩阵" class="headerlink" title="d.2) 透视矩阵"></a>d.2) 透视矩阵</h3><font color="red">TODO: 推导各项矩阵</font>
+
+
+
+<h2 id="e-光栅化补充"><a href="#e-光栅化补充" class="headerlink" title="e). 光栅化补充"></a>e). 光栅化补充</h2><ul>
+<li>三角形设置：得到图元的边界条件，并对边进行插值；</li>
+<li>三角形遍历：对单行进行插值</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1324,135 +1468,6 @@ E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{m
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://whitetail-o.github.io/2023/02/01/Games202_02_Real-Time%20Shadow/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar2.jpg">
-      <meta itemprop="name" content="WhiteTail">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WhiteTail's Blog">
-      <meta itemprop="description" content="现已有Games101、Games202、百人计划、Unity的SRP等笔记。">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | WhiteTail's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/01/Games202_02_Real-Time%20Shadow/" class="post-title-link" itemprop="url">Games202-2 Real-Time Shadow</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-  
-  
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2023-02-01 16:23:10" itemprop="dateCreated datePublished" datetime="2023-02-01T16:23:10+08:00">2023-02-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-02-12 21:17:17" itemprop="dateModified" datetime="2023-02-12T21:17:17+08:00">2023-02-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Games202/" itemprop="url" rel="index"><span itemprop="name">Games202</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="a-Shadow-Mapping"><a href="#a-Shadow-Mapping" class="headerlink" title="a). Shadow Mapping"></a>a). Shadow Mapping</h1><ul>
-<li>A <strong>2-Pass</strong> Algorithm<ol>
-<li>Light pass: Generate the SM(Shadow Map)</li>
-<li>Camera pass: uses the SM</li>
-</ol>
-</li>
-<li>An image-space algorithm<ul>
-<li>Pro(优点): no knowledge of scene’s geometry is required</li>
-<li>Con(缺点): causing <strong>self occlusion(自遮挡)</strong> and <strong>aliasing(走样)</strong> issues</li>
-</ul>
-</li>
-</ul>
-<h2 id="Pass-1-Render-from-Light"><a href="#Pass-1-Render-from-Light" class="headerlink" title="Pass 1: Render from Light"></a>Pass 1: Render from Light</h2><ul>
-<li>输出一张<strong>光源视角</strong>的<strong>深度图（Depth Buffer）</strong></li>
-</ul>
-<p><img src="/2023/02/01/Games202_02_Real-Time%20Shadow/SM_Pass01.png" alt="SM_Pass01"></p>
-<h2 id="Pass-2-Render-from-Eye-Camera"><a href="#Pass-2-Render-from-Eye-Camera" class="headerlink" title="Pass 2: Render from Eye(Camera)"></a>Pass 2: Render from Eye(Camera)</h2><p><img src="/2023/02/01/Games202_02_Real-Time%20Shadow/SM_Pass02.png" alt="SM_Pass02"></p>
-<ul>
-<li><p>将光源视角对应的深度转换到View Space, 与Camera视角的深度进行深度比较；</p>
-<ul>
-<li>如$Depth_{cam} &gt; Depth_{light}$ ，那说明该点<strong>在阴影中</strong>（相机可见，光源不可见）</li>
-<li>如$Depth_{cam} &lt; Depth_{light}$ ，那说明该点在<strong>不在阴影中</strong>（相机可见，光源可见）</li>
-</ul>
-</li>
-<li><p><strong>用于比较的深度值：</strong></p>
-<ul>
-<li><p>经过透视投影中的Squeez矩阵后（具体看Games101 Math笔记），z会被推向远平面</p>
-<p>$M_{\text {persp } \rightarrow \text { ortho }}=\left(\begin{array}{cccc}<br>n &amp; 0 &amp; 0 &amp; 0 \\<br>0 &amp; n &amp; 0 &amp; 0 \\<br>0 &amp; 0 &amp; n+f &amp; -nf \\<br>0 &amp; 0 &amp; 1 &amp; 0<br>\end{array}\right)$</p>
-</li>
-<li><p>用于比较的$Depth$ 可以是经过MVP中的深度值（即Depth Buffer中的深度值）；</p>
-</li>
-<li>也可以是该点在同一空间（如模型空间）中，该点到相机/光源的线性距离；</li>
-</ul>
-</li>
-</ul>
-<p><img src="/2023/02/01/Games202_02_Real-Time%20Shadow/SM_vs.png" alt="SM_vs"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/02/01/Games202_02_Real-Time%20Shadow/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
   <nav class="pagination">
     <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
@@ -1466,7 +1481,7 @@ E_{q}(x,n)=\Phi_{q}\frac{\mathrm{max}\{0,\langle n_{q}|x-x_{q}\rangle\}\mathrm{m
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
