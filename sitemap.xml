@@ -497,7 +497,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/books/index.html</loc>
+    <loc>https://whitetail-o.github.io/repository/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -506,7 +506,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/repository/index.html</loc>
+    <loc>https://whitetail-o.github.io/books/index.html</loc>
     
     <lastmod>2023-02-03</lastmod>
     
@@ -556,7 +556,14 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Ray-Tracing/</loc>
+    <loc>https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -570,7 +577,21 @@
   </url>
   
   <url>
+    <loc>https://whitetail-o.github.io/tags/Ray-Tracing/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://whitetail-o.github.io/tags/Animation/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/Games202/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -591,7 +612,14 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Games202/</loc>
+    <loc>https://whitetail-o.github.io/tags/Shadow/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/NPR/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -605,21 +633,7 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/Shadow/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://whitetail-o.github.io/tags/GI/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/NPR/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -689,13 +703,6 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/%E6%A8%A1%E5%9E%8B/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://whitetail-o.github.io/tags/HLSL/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -711,6 +718,13 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E8%89%B2%E5%BD%A9%E7%AE%A1%E7%90%86/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%A8%A1%E5%9E%8B/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -738,20 +752,6 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/tags/%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://whitetail-o.github.io/tags/%E5%BB%B6%E8%BF%9F%E6%B8%B2%E6%9F%93/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
@@ -760,6 +760,20 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E6%B8%B2%E6%9F%93%E7%AE%A1%E7%BA%BF/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E6%9B%B2%E9%9D%A2%E7%BB%86%E5%88%86%E7%9D%80%E8%89%B2%E5%99%A8/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/tags/%E5%87%A0%E4%BD%95%E7%9D%80%E8%89%B2%E5%99%A8/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -795,20 +809,6 @@
   
   <url>
     <loc>https://whitetail-o.github.io/tags/%E6%95%88%E6%9E%9C/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/tags/%E9%98%B4%E5%BD%B1/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -880,7 +880,14 @@
   </url>
   
   <url>
-    <loc>https://whitetail-o.github.io/categories/Games104/</loc>
+    <loc>https://whitetail-o.github.io/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E6%95%B4%E7%90%86/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -888,6 +895,13 @@
   
   <url>
     <loc>https://whitetail-o.github.io/categories/Games202/</loc>
+    <lastmod>2024-03-03</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://whitetail-o.github.io/categories/Games104/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -902,20 +916,6 @@
   
   <url>
     <loc>https://whitetail-o.github.io/categories/Unity/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/</loc>
-    <lastmod>2024-03-03</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://whitetail-o.github.io/categories/%E5%9B%BE%E5%BD%A2%E5%AD%A6/%E6%95%B4%E7%90%86/</loc>
     <lastmod>2024-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
